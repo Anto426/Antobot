@@ -1,9 +1,9 @@
 module.exports = {
-    name: "ban",
+    name: "kick",
     onlyStaff: true,
     data: {
-        name: "ban",
-        description: "ban utente",
+        name: "kick",
+        description: "kick utente",
         options: [
             {
                 name: "user",
@@ -27,13 +27,13 @@ module.exports = {
         if(interaction.member == utente){
             const embed = new Discord.MessageEmbed()
             .setTitle("Error")
-            .setDescription(`Tutto bene bro ti voi bannare da solo ?!`)
+            .setDescription(`Tutto bene bro ti voi kikare da solo ?!`)
             .setThumbnail(configs.embed.images.scemo)
             .setColor(configs.embed.color.red)
             return interaction.reply({ embeds: [embed]})
 
         }
-        if(!utente.bannable){
+        if(!utente.kickable){
             const embed = new Discord.MessageEmbed()
             .setTitle("Error")
             .setDescription(` Non ho il permesso di cacciare ${utente} è troppo forte`)
@@ -42,12 +42,10 @@ module.exports = {
             return interaction.reply({ embeds: [embed]})
         }
         try{
-            utente.ban({
-                reason: reason
-            });
+            utente.kick();
             const embed = new Discord.MessageEmbed()
                 .setTitle("Utente bannato")
-                .setDescription("<@" + utente + ">" + " bannato")
+                .setDescription("<@" + utente + ">" + " kickato")
                 .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
                 .setThumbnail(member.displayAvatarURL({ dynamic: true }))
                 .setColor(configs.embed.color.green)
