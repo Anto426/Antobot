@@ -13,10 +13,15 @@ module.exports = {
             }
             if(permesso == false ){
                 
-                console.log("permesso negato"
+                console.log("permesso negato")
+                .setTitle("Error")
+                .setDescription(` Non hai i permessi necessari`)
+                .setThumbnail(configs.embed.images.error)
+                .setColor(configs.embed.color.red)
+            interaction.reply({ embeds: [embed], ephemeral: true })
                 
+                return 
                 
-                return )
 
             }else{
                 console.log("permesso accordato")
