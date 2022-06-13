@@ -21,8 +21,7 @@ module.exports = {
     },
     execute(interaction) {
 
-        var member = interaction.options.getUser("user")
-        var utente = interaction.guild.members.cache.get(member.id)
+        var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason")||"Nesun motivo"
         if(interaction.member == utente){
             const embed = new Discord.MessageEmbed()
