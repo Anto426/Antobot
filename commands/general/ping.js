@@ -2,6 +2,7 @@
 module.exports = {
     name: "ping",
     onlyStaff: false,
+    onlyOwner: false,
     data: {
         name: "ping",
         description: "ping bot"

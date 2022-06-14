@@ -1,6 +1,7 @@
 module.exports = {
     name: "serverinfo",
     onlyStaff: false,
+    onlyOwner: false,
     data: {
         name: "serverinfo",
         description: "info sul server"

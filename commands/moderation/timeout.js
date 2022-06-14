@@ -22,6 +22,7 @@ function times(millis) {
 module.exports = {
     name: "timeout",
     onlyStaff: true,
+    onlyOwner: false,
     data: {
         name: "timeout",
         description: "timeout utente",

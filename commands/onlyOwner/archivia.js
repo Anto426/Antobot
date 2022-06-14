@@ -1,0 +1,34 @@
+module.exports = {
+    name: "archivia",
+    onlyStaff: true,
+    onlyOwner: true,
+    data: {
+        name: "archivia",
+        description: "archivia server",
+    },
+    execute(interaction) {
+
+        interaction.reply("Avvio potrocollo di autodistruzione")
+        let embed = new Discord.MessageEmbed()
+        .setTitle(interaction.guild.name)
+        .setDescription(interaction.guild.name + " ha chiuso i battenti")
+        .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+        .setColor(configs.embed.color.red)
+         let channel  = interaction.guild.channels.cache.find(x=>x.id == configs[interaction.guild.name].stanze.annunci)
+         console.log(channel)
+         channel.send({embeds:[embed]})
+        setTimeout(() => {
+            interaction.guild.members.cache.forEach(element => {
+                if (element.user.bot) return
+                element.send({ embeds: [embed] }).catch(() => {})
+                element.kick().catch(() => {})
+
+
+            });
+            interaction.guild.invites.fetch().then(invites => {
+                invites.each(i => i.delete())
+            })
+
+        }, 1000* 3000)
+    }
+}

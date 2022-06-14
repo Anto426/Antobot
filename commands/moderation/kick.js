@@ -1,6 +1,7 @@
 module.exports = {
     name: "kick",
     onlyStaff: true,
+    onlyOwner: false,
     data: {
         name: "kick",
         description: "kick utente",

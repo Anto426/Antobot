@@ -1,6 +1,7 @@
 module.exports = {
     name: "userinfo",
     onlyStaff: false,
+    onlyOwner: false,
     data: {
         name: "userinfo",
         description: "info di un utente",

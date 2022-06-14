@@ -1,6 +1,7 @@
 module.exports = {
     name: "unmute",
     onlyStaff: true,
+    onlyOwner: false,
     data: {
         name: "unmute",
         description: "unmute utente",
@@ -54,13 +55,6 @@ module.exports = {
             .setColor(configs.embed.color.green)
             interaction.reply({ embeds: [embed] })
         utente.roles.remove(muted).catch(() => {})
-
-
-
-
-
-
- 
 
     }
 }

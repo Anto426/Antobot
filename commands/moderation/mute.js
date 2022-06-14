@@ -1,6 +1,7 @@
 module.exports = {
     name: "mute",
     onlyStaff: true,
+    onlyOwner: false,
     data: {
         name: "mute",
         description: "mute utente",

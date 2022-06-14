@@ -1,6 +1,7 @@
 module.exports = {
     name: "ban",
     onlyStaff: true,
+    onlyOwner: false,
     data: {
         name: "ban",
         description: "ban utente",
