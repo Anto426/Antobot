@@ -39,14 +39,16 @@ module.exports = {
                 interaction.reply({ embeds: [embed] })
             return
         }
-        if(interaction.member == utente){
-            const embed = new Discord.MessageEmbed()
-            .setTitle("Error")
-            .setDescription(`Ehh bro non puoi togliertelo tu ahh`)
-            .setThumbnail(configs.embed.images.scemo)
-            .setColor(configs.embed.color.red)
-            return interaction.reply({ embeds: [embed]})
-
+        for(id in configs.owner){
+            if(interaction.member == utente && interaction.member.id != configs.owner[id]){
+                const embed = new Discord.MessageEmbed()
+                .setTitle("Error")
+                .setDescription(`Ehh bro non puoi togliertelo tu ahh`)
+                .setThumbnail(configs.embed.images.scemo)
+                .setColor(configs.embed.color.red)
+                return interaction.reply({ embeds: [embed]})
+    
+            }
         }
         const embed = new Discord.MessageEmbed()
             .setTitle("Utente smutato")

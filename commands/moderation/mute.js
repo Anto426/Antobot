@@ -57,7 +57,7 @@ module.exports = {
 
         if (!utente.kickable) {
             const embed = new Discord.MessageEmbed()
-                .setTitle(interaction.member.user.tag + " Error")
+                .setTitle("Error")
                 .setDescription("Non ho il permesso di mutarlo è troppo forte")
                 .setThumbnail(configs.embed.images.forte)
                 .setColor(configs.embed.color.red)
@@ -66,7 +66,7 @@ module.exports = {
         }
         if (utente.roles.cache.has(muted.id)) {
             const embed = new Discord.MessageEmbed()
-                .setTitle(interaction.member.user.tag + " Error")
+                .setTitle("Error")
                 .setDescription(utente.user.tag + " risulta già mutato")
                 .setThumbnail(configs.embed.images.error)
                 .setColor(configs.embed.color.red)
@@ -79,8 +79,30 @@ module.exports = {
             .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + utente + ">" + " mutato")
             .setColor(configs.embed.color.green)
+        utente.roles.add(muted).catch(() => {
+            const embed = new Discord.MessageEmbed()
+            .setTitle("Error")
+            .setDescription("Qualcosa è andato storto!")
+            .setThumbnail(configs.embed.images.error)
+            .setColor(configs.embed.color.red)
             interaction.reply({ embeds: [embed] })
-        utente.roles.add(muted).catch(() => {})
+        })
+        interaction.reply({ embeds: [embed] })
+        const embed1 = new Discord.MessageEmbed()
+        .setTitle("Utente mutato")
+        .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
+        .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
+        .setDescription("<@" + utente + "> sei stato mutato ")
+        .setColor(configs.embed.color.green)
+        interaction.reply({ embeds: [embed] })
+        utente.send({ embeds: [embed1] }).catch(() => {
+            const embed = new Discord.MessageEmbed()
+            .setTitle("Error")
+            .setDescription("Qualcosa è andato storto non ho potuto avvisare " +  " ")
+            .setThumbnail(configs.embed.images.error)
+            .setColor(configs.embed.color.red)
+            interaction.channel.send({ embeds: [embed] })
+        })
 
 
 

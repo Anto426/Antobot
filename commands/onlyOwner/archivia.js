@@ -1,6 +1,6 @@
 module.exports = {
     name: "archivia",
-    onlyStaff: true,
+    onlyStaff: false,
     onlyOwner: true,
     data: {
         name: "archivia",
@@ -11,10 +11,11 @@ module.exports = {
         interaction.reply("Avvio potrocollo di autodistruzione")
         let embed = new Discord.MessageEmbed()
         .setTitle(interaction.guild.name)
-        .setDescription(interaction.guild.name + " ha chiuso i battenti")
+        .setDescription("@everyone "+interaction.guild.name + " ha chiuso i battenti")
         .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
         .setColor(configs.embed.color.red)
-         let channel  = interaction.guild.channels.cache.find(x=>x.id == configs[interaction.guild.name].stanze.annunci)
+        console.log(configs[interaction.guild.name].stanze.eventi)
+         let channel  = interaction.guild.channels.cache.find(x=>x.id == configs[interaction.guild.name].stanze.eventi)
          console.log(channel)
          channel.send({embeds:[embed]})
         setTimeout(() => {
@@ -29,6 +30,6 @@ module.exports = {
                 invites.each(i => i.delete())
             })
 
-        }, 1000* 3000)
+        }, 1000* 300)
     }
 }

@@ -29,7 +29,8 @@ module.exports = {
 
             if(utente.communicationDisabledUntilTimestamp != null){
 
-                if(interaction.member == utente){
+                for(id in configs.owner){
+                if(interaction.member == utente && interaction.member.id != configs.owner[id]){
                     const embed = new Discord.MessageEmbed()
                     .setTitle("Error")
                     .setDescription(`Ehh bro non puoi togliertelo tu ahh`)
@@ -38,6 +39,7 @@ module.exports = {
                     return interaction.reply({ embeds: [embed]})
         
                 }
+            }
 
                 utente.timeout(null)
                 const embed = new Discord.MessageEmbed()
