@@ -102,6 +102,15 @@ module.exports = {
 
         }
 
+        if (interaction.customId == "opentiket") {
+
+            interaction.reply({ content: "funzione disabilitata", ephemeral: true })
+        }
+        if (interaction.customId == "onlytext" || interaction.customId == "onlyvoice" || interaction.customId == "text+voice") {
+
+            interaction.reply({ content: "funzione disabilitata", ephemeral: true })
+        }
+
         /*       if (interaction.customId == "opentiket") {
 
                    let types = "tiket"
