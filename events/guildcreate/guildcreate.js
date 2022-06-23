@@ -5,7 +5,7 @@
         name: "guildCreate",
         async execute(guild) {
 
-            if (guild.roles.cache.find( x.name == "MutedA")) return
+            if (guild.roles.cache.find(x.name == "MutedA")) return
             let muted = await guild.roles.create({
                 name: "MutedA",
                 permissions: [""]
@@ -15,4 +15,3 @@
             })
         }
     }
-

@@ -21,6 +21,6 @@ module.exports = {
             .addField("Server created", `\`\`\`js\n ${server.createdAt.toDateString()} \`\`\``, true)
             .addField("Boost level", `\`\`\`js\n Level ${(server.premiumTier != "NONE" ? server.premiumTier : 0) + " (Boost: " + server.premiumSubscriptionCount + ")"} \`\`\``, true)
             .setColor(configs.embed.color.green)
-        interaction.reply({ embeds: [embed], ephemeral: true })
+        interaction.reply({ embeds: [embed] })
     }
 }

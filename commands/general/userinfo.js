@@ -5,21 +5,19 @@ module.exports = {
     data: {
         name: "userinfo",
         description: "info di un utente",
-        options: [
-            {
-                name: "user",
-                description: "L'utente interessato",
-                type: "USER",
-                required: false
-            }
-        ]
+        options: [{
+            name: "user",
+            description: "L'utente interessato",
+            type: "USER",
+            required: false
+        }]
     },
     execute(interaction) {
 
         var member = interaction.options.getUser("user")
-        if(!member){
-            utente=interaction.member
-        }else{
+        if (!member) {
+            utente = interaction.member
+        } else {
             var utente = interaction.guild.members.cache.get(member.id)
 
         }
@@ -45,6 +43,6 @@ module.exports = {
             .addField("Permissions", `\`\`\`js\n ${elencoPermessi} \`\`\``, false)
             .addField("Roles", `\`\`\`js\n ${utente.roles.cache.map(ruolo => ruolo.name).join("\r")} \`\`\``, false)
             .setColor(configs.embed.color.green)
-            interaction.reply({ embeds: [embed], ephemeral: true })
+        interaction.reply({ embeds: [embed] })
     }
 }

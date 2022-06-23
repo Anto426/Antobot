@@ -4,19 +4,19 @@ const { MessageActionRow, MessageButton } = require('discord.js');
 module.exports = {
     name: `guildMemberAdd`,
     async execute(member) {
-        if(member.user.bot){
-            let role = member.guild.roles.cache.find(x=> x.id == configs[member.guild.name].role.bot)
+        if (member.user.bot) {
+            let role = member.guild.roles.cache.find(x => x.id == configs[member.guild.name].role.bot)
             member.roles.add(role)
-        }else{
-            
+        } else {
+
             let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
             let message = new Discord.MessageEmbed()
                 .setColor("RANDOM")
                 .setTitle("Welcome")
                 .setDescription(` ${member} Benvenuto su ${member.guild.name} te sei il ${humans.size} membro  ! Ti consiglio di andare a leggere il regolamento per non essere bannato !!`)
                 .setThumbnail(member.user.displayAvatarURL({ dynamic: true }));
-                let channel = member.guild.channels.cache.find(x=> x.id == configs[member.guild.name].stanze.welcome)
-                channel.send({ embeds: [message] });
+            let channel = member.guild.channels.cache.find(x => x.id == configs[member.guild.name].stanze.welcome)
+            channel.send({ embeds: [message] });
 
             let captcha = new Captcha();
             captcha.async = true
@@ -47,7 +47,7 @@ module.exports = {
                 parent: category,
                 permissionOverwrites: [{
                     id: member.id,
-                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES","READ_MESSAGE_HISTORY"],
+                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
                 }, {
                     id: member.guild.roles.everyone,
                     deny: ["VIEW_CHANNEL"]
@@ -78,37 +78,37 @@ module.exports = {
                 if (response) {
                     let embed = new Discord.MessageEmbed()
                         .setTitle(member.user.tag + " verificato")
-                        .setDescription("verifica completata con succeso alle ore " +new Date().getHours() + ":" + new Date().getMinutes())
+                        .setDescription("verifica completata con succeso alle ore " + new Date().getHours() + ":" + new Date().getMinutes())
                         .setThumbnail(configs.embed.images.succes)
                         .setColor(configs.embed.color.green)
-                        channelverifica.send({ embeds: [embed] })
-                        
-                        for(let role in configs[member.guild.name].role.rolebase ){
-                            let roles = member.guild.roles.cache.find(x=> x.id == configs[member.guild.name].role.rolebase[role])  
-                            member.roles.add(roles)
-                        }
+                    channelverifica.send({ embeds: [embed] })
+
+                    for (let role in configs[member.guild.name].role.rolebase) {
+                        let roles = member.guild.roles.cache.find(x => x.id == configs[member.guild.name].role.rolebase[role])
+                        member.roles.add(roles)
+                    }
 
                 }
             } catch (err) {
                 console.log(err)
                 let role = false
-                for(let role in configs[member.guild.name].role.rolebase ){
-                    let roles = member.guild.roles.cache.find(x=> x.id == configs[member.guild.name].role.rolebase[role])  
+                for (let role in configs[member.guild.name].role.rolebase) {
+                    let roles = member.guild.roles.cache.find(x => x.id == configs[member.guild.name].role.rolebase[role])
                     if (member.roles.cache.has(roles.id)) {
-                    role = true
+                        role = true
                     }
                 }
-                if(!role){
+                if (!role) {
                     let embed = new Discord.MessageEmbed()
-                    .setTitle("Error")
-                    .setDescription("Ci dispiace che non sei riuscito a verificarti, ma ora dovro kickarti")
-                    .setThumbnail(configs.embed.images.thor)
-                    .setColor(configs.embed.color.red)
-                await channelverifica.send({ embeds: [embed] })
-                setTimeout(async() => {
-                await member.kick()
-                }, 1000 * 10)
-            }
+                        .setTitle("Error")
+                        .setDescription("Ci dispiace che non sei riuscito a verificarti, ma ora dovro kickarti")
+                        .setThumbnail(configs.embed.images.thor)
+                        .setColor(configs.embed.color.red)
+                    await channelverifica.send({ embeds: [embed] })
+                    setTimeout(async() => {
+                        await member.kick()
+                    }, 1000 * 10)
+                }
 
             }
             let messagedelete = new Discord.MessageEmbed()
@@ -116,7 +116,7 @@ module.exports = {
                 .setDescription("Posso cancellare la chat ?")
                 .setThumbnail(configs.embed.images.load)
                 .setColor(configs.embed.color.red)
-                let row = new MessageActionRow()
+            let row = new MessageActionRow()
                 .addComponents(
                     new MessageButton()
                     .setCustomId('deletechat')
@@ -142,10 +142,10 @@ module.exports = {
 
 
 
-            
+
 
         }
-    
-    
+
+
     }
 };

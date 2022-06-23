@@ -5,8 +5,7 @@ module.exports = {
     data: {
         name: "mute",
         description: "mute utente",
-        options: [
-            {
+        options: [{
                 name: "user",
                 description: "L'utente interessato",
                 type: "USER",
@@ -15,36 +14,36 @@ module.exports = {
             {
                 name: "reason",
                 description: "motivo",
-                type:"STRING",
+                type: "STRING",
                 required: false
             }
         ]
     },
     async execute(interaction) {
         var utente = interaction.options.getMember("user")
-        var reason = interaction.options.getString("reason")||"Nesun motivo"
+        var reason = interaction.options.getString("reason") || "Nesun motivo"
 
-        if(utente.user.bot){
+        if (utente.user.bot) {
             const embed = new Discord.MessageEmbed()
-            .setTitle("Error")
-            .setDescription(`Non posso mutare/smutare i bot `)
-            .setThumbnail(configs.embed.images.error)
-            .setColor(configs.embed.color.red)
-            return interaction.reply({ embeds: [embed]})
+                .setTitle("Error")
+                .setDescription(`Non posso mutare/smutare i bot `)
+                .setThumbnail(configs.embed.images.error)
+                .setColor(configs.embed.color.red)
+            return interaction.reply({ embeds: [embed] })
 
         }
-        if(interaction.member == utente){
+        if (interaction.member == utente) {
             const embed = new Discord.MessageEmbed()
-            .setTitle("Error")
-            .setDescription(`Tutto bene bro ti voi mutarti  da solo ?!`)
-            .setThumbnail(configs.embed.images.scemo)
-            .setColor(configs.embed.color.red)
-            return interaction.reply({ embeds: [embed]})
+                .setTitle("Error")
+                .setDescription(`Tutto bene bro ti voi mutarti  da solo ?!`)
+                .setThumbnail(configs.embed.images.scemo)
+                .setColor(configs.embed.color.red)
+            return interaction.reply({ embeds: [embed] })
 
         }
 
-        let muted = interaction.guild.roles.cache.find(x=> x.name == "MutedA")
-        if(!muted){
+        let muted = interaction.guild.roles.cache.find(x => x.name == "MutedA")
+        if (!muted) {
             muted = await interaction.guild.roles.create({
                 name: "MutedA",
                 permissions: [""]
@@ -61,7 +60,7 @@ module.exports = {
                 .setDescription("Non ho il permesso di mutarlo è troppo forte")
                 .setThumbnail(configs.embed.images.forte)
                 .setColor(configs.embed.color.red)
-                interaction.reply({ embeds: [embed] })
+            interaction.reply({ embeds: [embed] })
             return
         }
         if (utente.roles.cache.has(muted.id)) {
@@ -70,7 +69,7 @@ module.exports = {
                 .setDescription(utente.user.tag + " risulta già mutato")
                 .setThumbnail(configs.embed.images.error)
                 .setColor(configs.embed.color.red)
-                interaction.reply({ embeds: [embed] })
+            interaction.reply({ embeds: [embed] })
             return
         }
         const embed = new Discord.MessageEmbed()
@@ -81,26 +80,26 @@ module.exports = {
             .setColor(configs.embed.color.green)
         utente.roles.add(muted).catch(() => {
             const embed = new Discord.MessageEmbed()
-            .setTitle("Error")
-            .setDescription("Qualcosa è andato storto!")
-            .setThumbnail(configs.embed.images.error)
-            .setColor(configs.embed.color.red)
+                .setTitle("Error")
+                .setDescription("Qualcosa è andato storto!")
+                .setThumbnail(configs.embed.images.error)
+                .setColor(configs.embed.color.red)
             interaction.reply({ embeds: [embed] })
         })
         interaction.reply({ embeds: [embed] })
         const embed1 = new Discord.MessageEmbed()
-        .setTitle("Utente mutato")
-        .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
-        .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-        .setDescription("<@" + utente + "> sei stato mutato ")
-        .setColor(configs.embed.color.green)
+            .setTitle("Utente mutato")
+            .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
+            .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
+            .setDescription("<@" + utente + "> sei stato mutato ")
+            .setColor(configs.embed.color.green)
         interaction.reply({ embeds: [embed] })
         utente.send({ embeds: [embed1] }).catch(() => {
             const embed = new Discord.MessageEmbed()
-            .setTitle("Error")
-            .setDescription("Qualcosa è andato storto non ho potuto avvisare " +  " ")
-            .setThumbnail(configs.embed.images.error)
-            .setColor(configs.embed.color.red)
+                .setTitle("Error")
+                .setDescription("Qualcosa è andato storto non ho potuto avvisare " + " ")
+                .setThumbnail(configs.embed.images.error)
+                .setColor(configs.embed.color.red)
             interaction.channel.send({ embeds: [embed] })
         })
 
@@ -109,7 +108,7 @@ module.exports = {
 
 
 
- 
+
 
     }
 }

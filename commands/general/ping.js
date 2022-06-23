@@ -1,4 +1,3 @@
-
 module.exports = {
     name: "ping",
     onlyStaff: false,
@@ -12,6 +11,6 @@ module.exports = {
             .addField("Pong", `\`\`\`js\n ${client.ws.ping}ms \`\`\``)
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setColor(configs.embed.color.green)
-        interaction.reply({ embeds: [embed], ephemeral: true })
+        interaction.reply({ embeds: [embed] })
     }
 }

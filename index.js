@@ -48,8 +48,8 @@ for (const folder of eventsFolders) {
             const event = require(`./events/${folder}/${file}`);
             client.on(event.name, (...args) => {
 
-                    event.execute(...args)
-                
+                event.execute(...args)
+
             });
         } else {
             const eventsFiles2 = fs.readdirSync(`./events/${folder}/${file}`)
@@ -60,5 +60,3 @@ for (const folder of eventsFolders) {
         }
     }
 }
-
-
