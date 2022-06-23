@@ -102,53 +102,53 @@ module.exports = {
 
         }
 
-        if (interaction.customId == "opentiket") {
+        /*       if (interaction.customId == "opentiket") {
 
-            let types = "tiket"
-            let category = client.channels.cache.get(configs[interaction.guild.name].stanze.tiket)
-            let channelname = "「🎫」" + interaction.member.user.tag
-            dir(interaction)
-            write(interaction, types)
-            let tiket = await interaction.guild.channels.create(channelname, {
-                type: 'GUILD_TEXT',
-                parent: category,
-                topic: [interaction.member.user.tag],
-                permissionOverwrites: [{
-                    id: interaction.member.id,
-                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES"],
-                }, {
-                    id: interaction.member.guild.roles.everyone,
-                    deny: ["VIEW_CHANNEL"]
-                }]
-            })
-            let embed = new Discord.MessageEmbed()
-                .setTitle("hey ciao ci dispiace che hai avuto problemi!")
-                .setDescription("<@" + interaction.member + ">" + " tiket creato con succeso alle ore " + hour + ":" + minutes + " attendi che lo staff ti risponda")
-                .setThumbnail("https://i.imgur.com/d7GeRKz.gif")
-                .setColor("#51ff00")
-            let row = new MessageActionRow()
-                .addComponents(
-                    new MessageButton()
-                    .setCustomId('closedtiket')
-                    .setStyle('DANGER')
-                    .setLabel('chiudi il ticket'),
-                );
-            tiket.send({ embeds: [embed], components: [row] })
-            let embed1 = new Discord.MessageEmbed()
-                .setTitle("tiket creato")
-                .setDescription("ticket creato con succeso alle ore " + hour + ":" + minutes + " attendi che lo staff ti risponda")
-                .setThumbnail("https://i.imgur.com/d7GeRKz.gif")
-                .setColor("#51ff00")
-            interaction.reply({
-                embeds: [embed1],
-                ephemeral: true
-            })
-
-
+                   let types = "tiket"
+                   let category = client.channels.cache.get(configs[interaction.guild.name].stanze.tiket)
+                   let channelname = "「🎫」" + interaction.member.user.tag
+                   dir(interaction)
+                   write(interaction, types)
+                   let tiket = await interaction.guild.channels.create(channelname, {
+                       type: 'GUILD_TEXT',
+                       parent: category,
+                       topic: [interaction.member.user.tag],
+                       permissionOverwrites: [{
+                           id: interaction.member.id,
+                           allow: ["VIEW_CHANNEL", "SEND_MESSAGES"],
+                       }, {
+                           id: interaction.member.guild.roles.everyone,
+                           deny: ["VIEW_CHANNEL"]
+                       }]
+                   })
+                   let embed = new Discord.MessageEmbed()
+                       .setTitle("hey ciao ci dispiace che hai avuto problemi!")
+                       .setDescription("<@" + interaction.member + ">" + " tiket creato con succeso alle ore " + hour + ":" + minutes + " attendi che lo staff ti risponda")
+                       .setThumbnail("https://i.imgur.com/d7GeRKz.gif")
+                       .setColor("#51ff00")
+                   let row = new MessageActionRow()
+                       .addComponents(
+                           new MessageButton()
+                           .setCustomId('closedtiket')
+                           .setStyle('DANGER')
+                           .setLabel('chiudi il ticket'),
+                       );
+                   tiket.send({ embeds: [embed], components: [row] })
+                   let embed1 = new Discord.MessageEmbed()
+                       .setTitle("tiket creato")
+                       .setDescription("ticket creato con succeso alle ore " + hour + ":" + minutes + " attendi che lo staff ti risponda")
+                       .setThumbnail("https://i.imgur.com/d7GeRKz.gif")
+                       .setColor("#51ff00")
+                   interaction.reply({
+                       embeds: [embed1],
+                       ephemeral: true
+                   })
 
 
 
-        }
+
+
+               }*/
 
 
 
