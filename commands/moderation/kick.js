@@ -46,10 +46,11 @@ module.exports = {
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " kickato")
                 .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
-                .setThumbnail(member.displayAvatarURL({ dynamic: true }))
+                .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setColor(configs.embed.color.green)
             interaction.reply({ embeds: [embed] })
-        } catch {
+        } catch (err) {
+            console.log(err)
             const embed = new Discord.MessageEmbed()
                 .setTitle("Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")

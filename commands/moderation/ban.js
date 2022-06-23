@@ -48,7 +48,7 @@ module.exports = {
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " bannato")
                 .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
-                .setThumbnail(member.displayAvatarURL({ dynamic: true }))
+                .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setColor(configs.embed.color.green)
             interaction.reply({ embeds: [embed] })
         } catch {
