@@ -25,7 +25,7 @@ client.login(process.env.TOKEN)
 
 //comands
 client.commands = new Discord.Collection();
-const commandsFolder = fs.readdirSync("./commands");
+global.commandsFolder = fs.readdirSync("./commands");
 for (const folder of commandsFolder) {
     const commandsFiles = fs.readdirSync(`./commands/${folder}`);
     for (const file of commandsFiles) {

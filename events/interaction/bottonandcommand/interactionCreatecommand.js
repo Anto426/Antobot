@@ -64,6 +64,16 @@ module.exports = {
 
 
             }
+            const commandsFiles = fs.readdirSync(`./commands/privaroom/`);
+            for (const file of commandsFiles) {
+                const commands2 = require(`./../../../commands/privaroom/${file}`);
+                if (commands2.name == command.name) {
+                    if (interaction.channel.name == interaction.member.user.tag || interaction.channel.topic == interaction.member.user.tag) {
+                        command.execute(interaction)
+                        return
+                    }
+                }
+            }
             if (interaction.channel.name == "「💻」comandi" || owner) {
                 command.execute(interaction)
                 return
