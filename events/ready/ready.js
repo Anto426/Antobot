@@ -17,8 +17,8 @@ module.exports = {
             })
 
 
-        } catch {
-
+        } catch (err) {
+            console.error(err)
         }
     }
 

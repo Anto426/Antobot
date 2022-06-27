@@ -67,14 +67,14 @@ module.exports = {
                 if (message.content.toUpperCase() === captcha.text) return true;
                 else channelverifica.send({ embeds: [embed] })
             }
+            textchaptcha = captcha.text
             try {
-                let response = await msg.channel.awaitMessages({
+                response = await msg.channel.awaitMessages({
                     filter,
                     max: 1,
                     time: 100000,
                     errors: ["time"],
                 })
-
                 if (response) {
                     let embed = new Discord.MessageEmbed()
                         .setTitle(member.user.tag + " verificato")
@@ -82,23 +82,18 @@ module.exports = {
                         .setThumbnail(configs.embed.images.succes)
                         .setColor(configs.embed.color.green)
                     channelverifica.send({ embeds: [embed] })
-
-                    for (let role in configs[member.guild.name].role.rolebase) {
-                        let roles = member.guild.roles.cache.find(x => x.id == configs[member.guild.name].role.rolebase[role])
-                        member.roles.add(roles)
+                    if (!verifica) {
+                        for (let role in configs[member.guild.name].role.rolebase) {
+                            let roles = member.guild.roles.cache.find(x => x.id == configs[member.guild.name].role.rolebase[role])
+                            member.roles.add(roles)
+                        }
                     }
 
                 }
             } catch (err) {
-                console.log(err)
-                let role = false
-                for (let role in configs[member.guild.name].role.rolebase) {
-                    let roles = member.guild.roles.cache.find(x => x.id == configs[member.guild.name].role.rolebase[role])
-                    if (member.roles.cache.has(roles.id)) {
-                        role = true
-                    }
-                }
-                if (!role) {
+                if (verifica) {
+
+                } else {
                     let embed = new Discord.MessageEmbed()
                         .setTitle("Error")
                         .setDescription("Ci dispiace che non sei riuscito a verificarti, ma ora dovro kickarti")

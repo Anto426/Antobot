@@ -5,8 +5,10 @@
 global.configs = require("./Config/configs.json")
 global.Discord = require('discord.js')
 global.fs = require("fs");
+global.verifica = false
 const { Client, Intents } = require('discord.js');
 const { MessageAttachment } = require("discord.js");
+const { verifica } = require('./commands/moderation/verifica.js')
 global.client = new Discord.Client({
     intents: 32767,
     partials: ['USER', 'REACTION', 'MESSAGE']

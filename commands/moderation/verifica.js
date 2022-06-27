@@ -13,7 +13,6 @@ module.exports = {
         }]
     },
     execute(interaction) {
-
         var utente = interaction.options.getMember("user")
 
         console.log(utente.roles.cache.size)
@@ -24,6 +23,8 @@ module.exports = {
                 utente.roles.add(role).catch(() => {})
 
             }
+
+            verifica = true
             const embed = new Discord.MessageEmbed()
                 .setTitle(utente.user.tag + " verificato")
                 .setDescription("verifica completata con succeso alle ore " + new Date().getHours() + ":" + new Date().getMinutes())
