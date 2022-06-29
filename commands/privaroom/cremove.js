@@ -1,20 +1,3 @@
-async function remove(interaction, type) {
-    temp = [];
-    let file = `./Database/${interaction.guild.name}/${type}.json`
-    fs.readFile(file, async function(err, content) {
-        if (err) throw err;
-        var parseJson = JSON.parse(content);
-        for (let i = 0; i < parseJson.list.length; i++) {
-            if (parseJson.list[i] != interaction.channel.topic)
-                temp.push(arr[i])
-        }
-        parseJson.list = temp
-        fs.writeFile(file, JSON.stringify(parseJson), function(err) {
-            if (err) throw err;
-        })
-    })
-
-}
 module.exports = {
     name: "cremove",
     onlyStaff: false,
@@ -31,19 +14,37 @@ module.exports = {
     },
     execute(interaction) {
 
-        remove(interaction, "room")
+        var user = interaction.options.getMember("user")
+        let name = interaction.member.user.tag
+        let role = interaction.guild.roles.cache.find(x => x.name.includes(name))
 
+        if (!user.roles.cache.has(role.id)) {
+            const embed = new Discord.MessageEmbed()
+                .setTitle("Error")
+                .setDescription("Utente gia rimosso dalla stanza")
+                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.embed.images.error)
+            message.channel.send({ embeds: [embed] })
+            return
+        }
 
         interaction.guild.channels.cache.forEach(channel => {
-            if (channel.topic == interaction.member.user.tag || channel.name.includes(interaction.member.user.tag)) {
-                channel.delete()
+            if (channel.topic == name || channel.name.includes(name)) {
+                channel.permissionOverwrites.delete(user.user.id);
             }
         });
 
-        interaction.guild.roles.cache.forEach(role => {
-            if (role.name.includes(interaction.member.user.tag)) {
-                role.delete()
-            }
-        });
+        user.roles.remove(role).catch(() => {})
+
+        let embed = new Discord.MessageEmbed()
+            .setTitle("Utente rimosso")
+            .setDescription("<@" + user.id + ">" + " rimosso dalla stanza")
+            .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+            .setColor(configs.embed.color.green)
+        interaction.reply({ embeds: [embed] })
+
+
+
+
     }
 }

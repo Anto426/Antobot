@@ -6,7 +6,7 @@
          var parseJson = JSON.parse(content);
          for (let i = 0; i < parseJson.list.length; i++) {
              if (parseJson.list[i] != interaction.channel.topic)
-                 temp.push(arr[i])
+                 temp.push(parseJson.list[i])
          }
          parseJson.list = temp
          fs.writeFile(file, JSON.stringify(parseJson), function(err) {

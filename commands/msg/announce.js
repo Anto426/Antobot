@@ -1,7 +1,7 @@
 module.exports = {
     name: "announce",
-    onlyStaff: false,
-    onlyOwner: true,
+    onlyStaff: true,
+    onlyOwner: false,
     data: {
         name: "announce",
         description: "create changlog",
