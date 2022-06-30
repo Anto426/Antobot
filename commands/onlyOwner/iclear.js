@@ -14,7 +14,7 @@ module.exports = {
         const embed = new Discord.MessageEmbed()
             .setTitle("Inviti eliminati")
             .setDescription("Tutti gli inviti sono stati eliminati")
-            .setThumbnail(utente.user.displayAvatarURL({ dynamic: true }))
+            .setThumbnail(configs.embed.images.succes)
             .setColor(configs.embed.color.green)
         interaction.reply({ embeds: [embed] })
 

@@ -85,6 +85,7 @@ module.exports = {
                 .setThumbnail(configs.embed.images.error)
                 .setColor(configs.embed.color.red)
             interaction.reply({ embeds: [embed] })
+            return
         })
         interaction.reply({ embeds: [embed] })
         const embed1 = new Discord.MessageEmbed()
@@ -93,7 +94,6 @@ module.exports = {
             .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + utente + "> sei stato mutato ")
             .setColor(configs.embed.color.green)
-        interaction.reply({ embeds: [embed] })
         utente.send({ embeds: [embed1] }).catch(() => {
             const embed = new Discord.MessageEmbed()
                 .setTitle("Error")

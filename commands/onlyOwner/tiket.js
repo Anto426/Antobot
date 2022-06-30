@@ -1,4 +1,3 @@
-const { inspect } = require(`util`)
 module.exports = {
     name: "tiket",
     onlyStaff: false,

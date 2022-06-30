@@ -5,7 +5,7 @@ module.exports = {
     onlyOwner: true,
     data: {
         name: "eval",
-        description: "eval",
+        description: "esegue del comando js",
         options: [{
             name: "comand",
             description: "comando",
@@ -18,12 +18,12 @@ module.exports = {
         let args = interaction.options.getString("comand")
 
         try {
-            evaled = await eval(args.join(' '));
+            evaled = await eval(args);
             const embed = new Discord.MessageEmbed()
                 .setTitle("Comando eseguito con successo")
                 .setColor(configs.embed.color.green)
                 .setDescription(`Non ci sono stati errori durante l 'esecuzione del comando
-            onput:\`\`\`js\n ${inspect((evaled))}  \`\`\``)
+                output :\`\`\`js\n ${inspect((evaled))}  \`\`\``)
             console.log(evaled);
             interaction.reply({ embeds: [embed] })
         } catch (error) {
