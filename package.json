@@ -16,5 +16,9 @@
         "discord.js-poll": "^1.2.1",
         "dotenv": "^16.0.1",
         "util": "^0.12.4"
+    },
+    "engines": {
+        "node": "18.x.x"
+
     }
 }
