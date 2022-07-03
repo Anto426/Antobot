@@ -19,9 +19,9 @@ module.exports = {
             const command = client.commands.get(interaction.commandName)
             if (!command) return
 
-            const commandsFiles = fs.readdirSync(`./commands/onlyOwner/`);
+            const commandsFiles = fs.readdirSync(`./commands/onlyOwner/bot`);
             for (const file of commandsFiles) {
-                const commands2 = require(`./../../../commands/onlyOwner/${file}`);
+                const commands2 = require(`./../../../commands/onlyOwner/bot/${file}`);
                 console.log(commands2.name == command.name && owner)
                 if (commands2.name == command.name) {
                     command.execute(interaction)
