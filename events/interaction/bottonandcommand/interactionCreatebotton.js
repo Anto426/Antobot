@@ -292,7 +292,7 @@ puoi usare i seguenti comandi per:
 
          if (interaction.customId == "help") {
 
-             idobject = require("../../..//commands/help/help")
+             idobject = require("./../../../commands/help/help")
              let folders = []
 
              let commandsFolder = fs.readdirSync("./commands");
@@ -313,7 +313,7 @@ puoi usare i seguenti comandi per:
                                      const command = require(`./../../../commands/${x}/${file}`);
                                      commands.set(command.name, command);
                                  } else {
-                                     const commandsFiles2 = fs.readdirSync(`./../../../commands/${x}/${file}`)
+                                     const commandsFiles2 = fs.readdirSync(`./commands/${x}/${file}`)
                                      for (const file2 of commandsFiles2) {
                                          const command = require(`./../../../commands/${x}/${file}/${file2}`);
                                          commands.set(command.name, command);

@@ -3,14 +3,14 @@ module.exports = {
     onlyStaff: false,
     onlyOwner: false,
     data: {
-        name: "ping",
+        name: "help",
         description: "Info sui comandi"
     },
     execute(interaction) {
 
 
         let folders = []
-        let msg
+
 
         let commandsFolder = fs.readdirSync("./commands");
         for (const folder of commandsFolder) {
