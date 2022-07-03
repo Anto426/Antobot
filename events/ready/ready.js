@@ -9,7 +9,6 @@ module.exports = {
         client.user.setStatus("online")
 
         try {
-            console.log(client.guilds.cache.size)
             client.guilds.cache.forEach(guild => {
                 client.commands.forEach(command => {
                     guild.commands.create(command.data)

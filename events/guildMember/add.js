@@ -132,7 +132,7 @@ module.exports = {
             await channelverifica.permissionOverwrites.delete(member.id).then((channels) => {
                 channels.setParent(category1);
             })
-            category.delete().cacth(() => {})
+            category.delete().catch(() => {})
             channelverifica.send({ embeds: [messagedelete], components: [row] })
 
 

@@ -290,9 +290,76 @@ puoi usare i seguenti comandi per:
          }
 
 
+
+         if (interaction.customId == "help") {
+
+             idobject = require("./../../../commands/general/help")
+             let folders = []
+
+             let commandsFolder = fs.readdirSync("./commands");
+             for (const folder of commandsFolder) {
+                 folders.push(folder)
+             }
+             if (idobject.interaction) {
+
+
+                 if (interaction.member.id == idobject.interaction.member.id) {
+                     interaction.deferUpdate()
+                     folders.forEach(async x => {
+                         if (interaction.values == x) {
+                             let commands = new Discord.Collection();
+                             const commandsFiles = fs.readdirSync(`./commands/${x}`);
+                             for (const file of commandsFiles) {
+                                 if (file.endsWith(".js")) {
+                                     const command = require(`./../../../commands/${x}/${file}`);
+                                     console.log(command)
+                                     commands.set(command.name, command);
+                                 } else {
+                                     const commandsFiles2 = fs.readdirSync(`./../../../commands/${x}/${file}`)
+                                     for (const file2 of commandsFiles2) {
+                                         const command = require(`./../../../commands/${x}/${file}/${file2}`);
+                                         commands.set(command.name, command);
+                                     }
+                                 }
+                             }
+
+
+                             const embed = new Discord.MessageEmbed()
+                                 .setTitle("Help")
+                                 .setDescription(`Usa il menu qui sotto per scegliere la categoria di comandi da vedere!`)
+                                 .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+
+                             try {
+                                 commands.forEach(x => {
+                                     embed
+                                         .addField("/" + x.data.name, `\`\`\`\n ${x.data.description} \`\`\``, true)
+                                 })
+                                 idobject.interaction.editReply({ embeds: [embed] })
+
+                             } catch {}
+                         }
+                     })
+                 } else {
+
+                     const embed = new Discord.MessageEmbed()
+                         .setTitle("Error")
+                         .setDescription("Non è il tuo questo menu!")
+                         .setThumbnail(configs.embed.images.error)
+                         .setColor(configs.embed.color.red)
+                     interaction.reply({ embeds: [embed], ephemeral: true })
+                 }
+             } else {
+
+                 const embed = new Discord.MessageEmbed()
+                     .setTitle("Error")
+                     .setDescription("Il bot è stato riavviato per favore crea un'altro menu")
+                     .setThumbnail(configs.embed.images.error)
+                     .setColor(configs.embed.color.red)
+                 interaction.reply({ embeds: [embed], ephemeral: true })
+             }
+
+         }
      }
-
-
 
 
  }

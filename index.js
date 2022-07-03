@@ -2,6 +2,7 @@
 // v3.2
 
 // variabili 
+global.stato = true
 global.configs = require("./Config/configs.json")
 global.Discord = require('discord.js')
 global.fs = require("fs");
@@ -25,7 +26,7 @@ client.login(process.env.TOKEN)
 
 //comands
 client.commands = new Discord.Collection();
-global.commandsFolder = fs.readdirSync("./commands");
+let commandsFolder = fs.readdirSync("./commands");
 for (const folder of commandsFolder) {
     const commandsFiles = fs.readdirSync(`./commands/${folder}`);
     for (const file of commandsFiles) {
@@ -43,21 +44,28 @@ for (const folder of commandsFolder) {
 }
 //events
 const eventsFolders = fs.readdirSync('./events');
+let events = []
 for (const folder of eventsFolders) {
     const eventsFiles = fs.readdirSync(`./events/${folder}`)
     for (const file of eventsFiles) {
         if (file.endsWith(".js")) {
             const event = require(`./events/${folder}/${file}`);
-            client.on(event.name, (...args) => {
-
-                event.execute(...args)
-
+            let events = event.name.split("-")
+            client.on(events[0], (...args) => {
+                if (stato || events[1] == "commands") {
+                    event.execute(...args)
+                }
             });
         } else {
             const eventsFiles2 = fs.readdirSync(`./events/${folder}/${file}`)
             for (const file2 of eventsFiles2) {
                 const event = require(`./events/${folder}/${file}/${file2}`);
-                client.on(event.name, (...args) => event.execute(...args));
+                let events = event.name.split("-")
+                client.on(events[0], (...args) => {
+                    if (stato || events[1] == "commands") {
+                        event.execute(...args)
+                    }
+                });
             }
         }
     }
