@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "verifica",
-        description: "verifica utente",
+        description: "Verifica utente",
         options: [{
             name: "user",
             description: "L'utente interessato",

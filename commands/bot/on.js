@@ -1,29 +1,29 @@
 module.exports = {
-    name: "off",
+    name: "on",
     onlyStaff: false,
     onlyOwner: true,
     data: {
-        name: "off",
-        description: "set bot offline"
+        name: "on",
+        description: "Accende il bot"
     },
     execute(interaction) {
-        if (!stato) {
+        if (stato) {
             const embederror = new Discord.MessageEmbed()
                 .setTitle("Error")
-                .setDescription("Il bot è gia offline")
+                .setDescription("Il bot è gia online")
                 .setThumbnail(configs.embed.images.error)
                 .setColor(configs.embed.color.red)
             interaction.reply({ embeds: [embederror] })
             return
         } else {
             const embedonline = new Discord.MessageEmbed()
-                .setTitle("Bot offline")
-                .setDescription("Il bot sta andando offline come da te richiesto")
+                .setTitle("Bot online")
+                .setDescription("Il bot sta riabilitando tutti i sistemi come richiesto")
                 .setThumbnail(configs.embed.images.succes)
                 .setColor(configs.embed.color.green)
-            client.user.setStatus("invisible");
+            client.user.setStatus("online");
 
-            stato = false;
+            stato = true;
             interaction.reply({ embeds: [embedonline] })
         }
 

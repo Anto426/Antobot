@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "serverinfo",
-        description: "info sul server"
+        description: "Informazioni sul server"
     },
     execute(interaction) {
         var server = interaction.member.guild;

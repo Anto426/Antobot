@@ -21,7 +21,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "cdelete",
-        description: "elimina stanza"
+        description: "Elimina stanza privata"
     },
     execute(interaction) {
 

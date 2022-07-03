@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "unban",
-        description: "unban utente",
+        description: "Unban utente",
         options: [{
             name: "iduser",
             description: "id dell'utente interessato",

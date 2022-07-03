@@ -4,7 +4,7 @@
      onlyOwner: false,
      data: {
          name: "clear",
-         description: "cancella messagi",
+         description: "Cancella I messagi",
          options: [{
              name: "nmessaggi",
              description: "numeri di mess da cancellare",

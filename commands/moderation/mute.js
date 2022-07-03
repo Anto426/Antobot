@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "mute",
-        description: "mute utente",
+        description: "Muta utente",
         options: [{
                 name: "user",
                 description: "L'utente interessato",

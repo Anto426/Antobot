@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "ban",
-        description: "ban utente",
+        description: "Banna utente",
         options: [{
                 name: "user",
                 description: "L'utente interessato",

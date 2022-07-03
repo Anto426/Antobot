@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: true,
     data: {
         name: "archivia",
-        description: "archivia server",
+        description: "Archivia il server rimuovendo tutti i membri",
     },
     execute(interaction) {
 

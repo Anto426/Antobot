@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "cremove",
-        description: "rimuove utente dalla stanza privata",
+        description: "Rimuovere utente dalle stanze private",
         options: [{
             name: "user",
             description: "L'utente interessato",

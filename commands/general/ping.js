@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "ping",
-        description: "ping bot"
+        description: "Ping bot"
     },
     execute(interaction) {
         var embed = new Discord.MessageEmbed()

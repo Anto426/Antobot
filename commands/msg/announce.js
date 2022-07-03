@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "announce",
-        description: "create changlog",
+        description: "Invia messagio attraverso il bot",
         options: [{
                 name: "title",
                 description: "titolo",

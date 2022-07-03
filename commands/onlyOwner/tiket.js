@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: true,
     data: {
         name: "tiket",
-        description: "create tiket"
+        description: "Crea il canale tiket"
     },
     async execute(interaction) {
         let row = new Discord.MessageActionRow()

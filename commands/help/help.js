@@ -3,16 +3,19 @@ module.exports = {
     onlyStaff: false,
     onlyOwner: false,
     data: {
-        name: "help",
-        description: "info sui comandi",
+        name: "ping",
+        description: "Info sui comandi"
     },
     execute(interaction) {
-        let folders = []
 
+
+        let folders = []
+        let msg
 
         let commandsFolder = fs.readdirSync("./commands");
         for (const folder of commandsFolder) {
-            folders.push(`-${folder}`)
+            if (folder != "help")
+                folders.push(`-${folder}`)
         }
 
 
@@ -41,13 +44,15 @@ module.exports = {
 
             ${folders.join("\n \n")}`)
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+            .setColor(configs.embed.color.purple)
         interaction.reply({ embeds: [embed], components: [row] })
 
         let iduser = interaction.member.id
 
         module.exports = {
             iduser: iduser,
-            interaction: interaction
+            interaction: interaction,
+            embed: embed
         }
     }
 }

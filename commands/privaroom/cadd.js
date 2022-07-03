@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "cadd",
-        description: "aggiungi utente dalla stanza privata",
+        description: "Aggiugere utente alle stanze private",
         options: [{
             name: "user",
             description: "L'utente interessato",

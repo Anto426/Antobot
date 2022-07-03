@@ -5,7 +5,7 @@ module.exports = {
     onlyOwner: true,
     data: {
         name: "eval",
-        description: "esegue del comando js",
+        description: "Comando per eseguire del codice js",
         options: [{
             name: "comand",
             description: "comando",

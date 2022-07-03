@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "untimeout",
-        description: "untimeout utente",
+        description: "Rimuove il timeout ad un utente",
         options: [{
             name: "user",
             description: "L'utente interessato",

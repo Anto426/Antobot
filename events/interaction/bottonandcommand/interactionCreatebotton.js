@@ -290,19 +290,18 @@ puoi usare i seguenti comandi per:
          }
 
 
-
          if (interaction.customId == "help") {
 
-             idobject = require("./../../../commands/general/help")
+             idobject = require("../../..//commands/help/help")
              let folders = []
 
              let commandsFolder = fs.readdirSync("./commands");
              for (const folder of commandsFolder) {
-                 folders.push(folder)
+                 if (folder != "help")
+                     folders.push(folder)
              }
+
              if (idobject.interaction) {
-
-
                  if (interaction.member.id == idobject.interaction.member.id) {
                      interaction.deferUpdate()
                      folders.forEach(async x => {
@@ -312,7 +311,6 @@ puoi usare i seguenti comandi per:
                              for (const file of commandsFiles) {
                                  if (file.endsWith(".js")) {
                                      const command = require(`./../../../commands/${x}/${file}`);
-                                     console.log(command)
                                      commands.set(command.name, command);
                                  } else {
                                      const commandsFiles2 = fs.readdirSync(`./../../../commands/${x}/${file}`)
@@ -326,8 +324,13 @@ puoi usare i seguenti comandi per:
 
                              const embed = new Discord.MessageEmbed()
                                  .setTitle("Help")
-                                 .setDescription(`Usa il menu qui sotto per scegliere la categoria di comandi da vedere!`)
+                                 .setDescription(`
+                                 Usa il menu qui sotto per scegliere la categoria di comandi da vedere!
+                                 
+                                 ${interaction.values.toString().toUpperCase()}
+                                 `)
                                  .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+                                 .setColor(configs.embed.color.purple)
 
                              try {
                                  commands.forEach(x => {
@@ -336,7 +339,9 @@ puoi usare i seguenti comandi per:
                                  })
                                  idobject.interaction.editReply({ embeds: [embed] })
 
-                             } catch {}
+                             } catch (err) {
+                                 console.log(err)
+                             }
                          }
                      })
                  } else {
@@ -359,6 +364,7 @@ puoi usare i seguenti comandi per:
              }
 
          }
+
      }
 
 

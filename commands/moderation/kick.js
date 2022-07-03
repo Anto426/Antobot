@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: false,
     data: {
         name: "kick",
-        description: "kick utente",
+        description: "Espelle utente ",
         options: [{
                 name: "user",
                 description: "L'utente interessato",

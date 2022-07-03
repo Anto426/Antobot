@@ -4,7 +4,7 @@ module.exports = {
     onlyOwner: true,
     data: {
         name: "iclear",
-        description: "cancella tutti gli inviti ",
+        description: "Elimina tutti gli inviti del server",
     },
     execute(interaction) {
 
