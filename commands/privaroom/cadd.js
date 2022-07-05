@@ -17,6 +17,24 @@ module.exports = {
         var user = interaction.options.getMember("user")
         let name = interaction.member.user.tag
         let role = interaction.guild.roles.cache.find(x => x.name.includes(name))
+        let file = `./Database/${interaction.guild.name}/room.json`
+        let content = fs.readFileSync(file)
+        var parseJson = JSON.parse(content)
+        let trovata = false
+        parseJson.list.forEach((x) => {
+            if (x.name == interaction.member.user.tag) { trovata = true }
+        })
+
+        if (!trovata) {
+            const embed = new Discord.MessageEmbed()
+                .setTitle("Error")
+                .setDescription("Ops!  Non hai una stanza privata da rinominare creala una <#948323558369669130>")
+                .setThumbnail(configs.embed.images.error)
+                .setColor(configs.embed.color.red)
+            interaction.reply({ embeds: [embed] })
+            return
+        }
+
         if (user.roles.cache.has(role.id)) {
             const embed = new Discord.MessageEmbed()
                 .setTitle("Error")

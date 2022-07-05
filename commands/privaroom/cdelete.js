@@ -4,15 +4,37 @@ async function remove(interaction, type) {
     fs.readFile(file, async function(err, content) {
         if (err) throw err;
         var parseJson = JSON.parse(content);
-        for (let i = 0; i < parseJson.list.length; i++) {
-            if (parseJson.list[i] != interaction.channel.topic)
-                temp.push(parseJson.list[i])
-        }
+
+        parseJson.list.forEach((x) => {
+            if (x.name != interaction.member.user.tag) {
+                temp.push(x)
+            } else {
+                for (y in x) {
+                    if (y != "name") {
+                        let channel = interaction.guild.channels.cache.get(x[y])
+                        channel.delete().catch(() => {})
+                    }
+                }
+
+
+            }
+        })
         parseJson.list = temp
         fs.writeFile(file, JSON.stringify(parseJson), function(err) {
             if (err) throw err;
         })
+
     })
+
+    if (type = "room") {
+
+        interaction.guild.roles.cache.forEach(role => {
+            if (role.name.includes(interaction.member.user.tag)) {
+                role.delete()
+            }
+        });
+
+    }
 
 }
 module.exports = {
@@ -25,22 +47,31 @@ module.exports = {
     },
     execute(interaction) {
 
+        let file = `./Database/${interaction.guild.name}/room.json`
+        let content = fs.readFileSync(file)
+        var parseJson = JSON.parse(content)
+        let trovata = false
+        parseJson.list.forEach((x) => {
+            if (x.name == interaction.member.user.tag) { trovata = true }
+        })
 
+        if (!trovata) {
+            const embed = new Discord.MessageEmbed()
+                .setTitle("Error")
+                .setDescription("Ops!  Non hai una stanza privata da rinominare creala una <#948323558369669130>")
+                .setThumbnail(configs.embed.images.error)
+                .setColor(configs.embed.color.red)
+            interaction.reply({ embeds: [embed] })
+            return
+        }
         remove(interaction, "room")
 
-
-        interaction.guild.channels.cache.forEach(channel => {
-            if (channel.topic == interaction.member.user.tag || channel.name.includes(interaction.member.user.tag)) {
-                channel.delete()
-            }
-        });
-
-        interaction.guild.roles.cache.forEach(role => {
-            if (role.name.includes(interaction.member.user.tag)) {
-                role.delete()
-            }
-        });
-
+        let embed = new Discord.MessageEmbed()
+            .setTitle("Stanza cancellata")
+            .setDescription(`Stanza cancellata con succeso per ricrearla vai in  <#948323558369669130>`)
+            .setThumbnail(configs.embed.images.succes)
+            .setColor(configs.embed.color.green)
+        interaction.reply({ embeds: [embed] })
 
     }
 }

@@ -21,7 +21,7 @@ module.exports = {
 
 
         let selectmenu = new Discord.MessageSelectMenu()
-            .setCustomId('help')
+            .setCustomId(`help-${interaction.member.id}`)
             .setPlaceholder('Nothing selected')
 
 
@@ -52,7 +52,6 @@ module.exports = {
         module.exports = {
             iduser: iduser,
             interaction: interaction,
-            embed: embed
         }
     }
 }

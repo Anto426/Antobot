@@ -37,6 +37,8 @@ for (const folder of commandsFolder) {
             for (const file2 of commandsFiles2) {
                 const command = require(`./commands/${folder}/${file}/${file2}`);
                 client.commands.set(command.name, command);
+
+
             }
         }
     }

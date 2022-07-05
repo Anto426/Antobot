@@ -2,7 +2,13 @@ module.exports = {
     name: "ready",
     async execute() {
 
-        console.log(`logged sucess in  ${client.user.tag} 😊`)
+        console.log(`
+        
+        logged to ${client.user.tag}
+
+        Numbers Guils : ${client.guilds.cache.size}
+
+        `)
         client.user.setActivity("moderare questo server 😊", {
             type: "PLAYING",
         });
@@ -12,6 +18,7 @@ module.exports = {
             client.guilds.cache.forEach(guild => {
                 client.commands.forEach(command => {
                     guild.commands.create(command.data)
+
                 })
             })
 
