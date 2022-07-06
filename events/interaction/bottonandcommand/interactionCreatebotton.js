@@ -37,9 +37,10 @@ module.exports = {
                     if (!a) {
                         let category = client.channels.cache.get(configs[interaction.guild.name].stanze.tiket)
                         let channelname = "「🎫」Tiket" + new Date().getMinutes() + new Date().getHours() + new Date().getDate() + new Date().getMonth()
-                        let channel = await functions.createchannel(interaction, channelname, "GUILD_TEXT", category, true)
-                        console.log(channel)
-                        functions.write(interaction, "ticket", channel)
+                        let channel = await functions.createchannel(interaction, channelname, "GUILD_TEXT", category, true).then(() => {
+                            functions.write(interaction, "ticket", channel)
+                        })
+
                     }
                 })
 
