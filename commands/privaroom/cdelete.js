@@ -1,42 +1,4 @@
-async function remove(interaction, type) {
-    temp = [];
-    let file = `./Database/${interaction.guild.name}/${type}.json`
-    fs.readFile(file, async function(err, content) {
-        if (err) throw err;
-        var parseJson = JSON.parse(content);
-
-        parseJson.list.forEach((x) => {
-            if (x.name != interaction.member.user.tag) {
-                temp.push(x)
-            } else {
-                for (y in x) {
-                    if (y != "name") {
-                        let channel = interaction.guild.channels.cache.get(x[y])
-                        channel.delete().catch(() => {})
-                    }
-                }
-
-
-            }
-        })
-        parseJson.list = temp
-        fs.writeFile(file, JSON.stringify(parseJson), function(err) {
-            if (err) throw err;
-        })
-
-    })
-
-    if (type = "room") {
-
-        interaction.guild.roles.cache.forEach(role => {
-            if (role.name.includes(interaction.member.user.tag)) {
-                role.delete()
-            }
-        });
-
-    }
-
-}
+let functions = require("./../../function/globalfunction")
 module.exports = {
     name: "cdelete",
     onlyStaff: false,
@@ -64,7 +26,8 @@ module.exports = {
             interaction.reply({ embeds: [embed] })
             return
         }
-        remove(interaction, "room")
+
+        functions.remove(interaction, "room")
 
         let embed = new Discord.MessageEmbed()
             .setTitle("Stanza cancellata")
