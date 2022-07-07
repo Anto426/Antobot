@@ -37,9 +37,9 @@ module.exports = {
                     if (!a) {
                         let category = client.channels.cache.get(configs[interaction.guild.name].stanze.tiket)
                         let channelname = "「🎫」Tiket" + new Date().getMinutes() + new Date().getHours() + new Date().getDate() + new Date().getMonth()
-                        let channel = await functions.createchannel(interaction, channelname, "GUILD_TEXT", category, true).then(() => {
-                            functions.write(interaction, "ticket", channel)
-                        })
+                        let channel = await functions.createchannel(interaction, channelname, "GUILD_TEXT", category, true)
+                        functions.write(interaction, "ticket", channel)
+
 
                     }
                 })
@@ -65,31 +65,31 @@ module.exports = {
                         let type2 = false
                         if (interaction.customId == "onlytext") {
                             type = "GUILD_TEXT"
-                            channelname = "「💭」" + interaction.member.user.tag
+                            channelname = "「💭」" + interaction.member.user.username
                             let channel = await functions.createchannel(interaction, channelname, type, category, false)
                             functions.write(interaction, "room", channel)
                         }
                         if (interaction.customId == "onlyvoice") {
                             type = "GUILD_VOICE"
-                            channelname = "「🔊」" + interaction.member.user.tag
+                            channelname = "「🔊」" + interaction.member.user.username
                             let channel = await functions.createchannel(interaction, channelname, type, category, false)
                             functions.write(interaction, "room", channel)
                         }
                         if (interaction.customId == "text+voice") {
                             type = "GUILD_TEXT"
-                            channelname = "「💭」" + interaction.member.user.tag
+                            channelname = "「💭」" + interaction.member.user.username
                             for (let i = 0; i < 2; i++) {
                                 let channel = await functions.createchannel(interaction, channelname, type, category, false)
                                 functions.write(interaction, "room", channel, type2)
                                 type = "GUILD_VOICE"
-                                channelname = "「🔊」" + interaction.member.user.tag
+                                channelname = "「🔊」" + interaction.member.user.username
                                 type2 = true
                             }
                         }
 
 
                         let role = await interaction.guild.roles.create({
-                            name: `private room ${interaction.member.user.tag}`,
+                            name: `private room ${interaction.member.user.username}`,
                         })
                         interaction.member.roles.add(role)
                     }

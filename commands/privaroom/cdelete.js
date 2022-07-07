@@ -20,7 +20,7 @@ module.exports = {
         if (!trovata) {
             const embed = new Discord.MessageEmbed()
                 .setTitle("Error")
-                .setDescription("Ops!  Non hai una stanza privata da rinominare creala una <#948323558369669130>")
+                .setDescription("Ops!  Non hai una stanza privata creala una <#948323558369669130>")
                 .setThumbnail(configs.embed.images.error)
                 .setColor(configs.embed.color.red)
             interaction.reply({ embeds: [embed] })

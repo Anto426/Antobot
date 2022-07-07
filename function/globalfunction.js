@@ -1,37 +1,51 @@
 async function remove(interaction, type) {
+    let member = interaction.member || interaction
     temp = [];
-    let file = `./Database/${interaction.guild.name}/${type}.json`
-    fs.readFile(file, async function(err, content) {
-        if (err) throw err;
-        var parseJson = JSON.parse(content);
+    let file = `./Database/${member.guild.name}/${type}.json`
+    let content = fs.readFileSync(file)
+    var parseJson = JSON.parse(content)
+    let trovata = false
+    parseJson.list.forEach((x) => {
+        if (x.iduser != member.id) {
+            temp.push(x)
+        } else {
+            for (y in x) {
+                trovata = true
+                console.log(y)
+                if (y != "iduser") {
 
-        parseJson.list.forEach((x) => {
-            if (x.name != interaction.member.user.tag) {
-                temp.push(x)
-            } else {
-                for (y in x) {
-                    if (y != "name") {
-                        let channel = interaction.guild.channels.cache.get(x[y])
-                        try {
-                            channel.delete()
-                        } catch {}
-                    }
+                    let channel = member.guild.channels.cache.get(x[y])
+                    try {
+                        channel.delete()
+                    } catch (err) { console.log(err) }
                 }
-
-
             }
-        })
-        parseJson.list = temp
-        fs.writeFile(file, JSON.stringify(parseJson), function(err) {
-            if (err) throw err;
-        })
 
+
+        }
+    })
+    parseJson.list = temp
+    fs.writeFile(file, JSON.stringify(parseJson), function(err) {
+        if (err) throw err;
     })
 
+    console.log(trovata)
+
+    if (!trovata) {
+
+        const embed = new Discord.MessageEmbed()
+            .setTitle("Error")
+            .setDescription("La stanza non è tua")
+            .setThumbnail(configs.embed.images.error)
+            .setColor(configs.embed.color.red)
+        interaction.reply({ embeds: [embed], ephemeral: true })
+
+    }
     if (type == "room") {
 
-        interaction.guild.roles.cache.forEach(role => {
-            if (role.name.includes(interaction.member.user.tag)) {
+        member.guild.roles.cache.forEach(role => {
+            console.log(role)
+            if (role.name.includes(member.user.username)) {
                 role.delete()
             }
         });
@@ -44,7 +58,6 @@ async function createchannel(interaction, channelname, type, category, type2) {
         let channel = await interaction.guild.channels.create(channelname, {
             type: type,
             parent: category,
-            topic: interaction.member.user.tag,
             permissionOverwrites: [{
                 id: interaction.member.id,
                 allow: ["VIEW_CHANNEL", "SEND_MESSAGES"],
@@ -135,7 +148,6 @@ async function dir(interaction) {
 
 async function read(interaction, type) {
     let file = `./Database/${interaction.guild.name}/${type}.json`
-    const name = interaction.member.user.tag
     var trovata = false
     try {
         let file = `./Database/${interaction.guild.name}/${type}.json`
@@ -143,7 +155,7 @@ async function read(interaction, type) {
         var parseJson = JSON.parse(content)
 
         parseJson.list.forEach((x) => {
-            if (x.name == interaction.member.user.tag) {
+            if (x.iduser == interaction.member.id) {
                 console.log(x)
                 trovata = true
             }
@@ -189,7 +201,7 @@ function write(interaction, type, channel, type2) {
         var parseJson = JSON.parse(content)
 
         parseJson.list.forEach((x) => {
-            if (x.name == interaction.member.user.tag) {
+            if (x.iduser == interaction.member.id) {
                 x.channelid1 = channel.id
             }
         })
@@ -199,7 +211,7 @@ function write(interaction, type, channel, type2) {
         })
     } else {
         let file = `./Database/${interaction.guild.name}/${type}.json`
-        let info = { "name": `${interaction.member.user.tag}`, "channelid": `${channel.id}` }
+        let info = { "iduser": `${interaction.member.id}`, "channelid": `${channel.id}` }
         fs.readFile(file, async function(err, content) {
             if (err) throw err;
             var parseJson = JSON.parse(content)
@@ -241,10 +253,10 @@ function rename(interaction, name, type, type2, type3) {
     let trovata = false
     let trovata2 = false
     parseJson.list.forEach((x) => {
-        if (x.name == interaction.member.user.tag) {
+        if (x.name == interaction.member.id) {
             trovata2 = true
             for (let y in x) {
-                if (y != "name") {
+                if (y != "iduser") {
                     let channel = interaction.guild.channels.cache.get(x[y])
                     if (type) {
                         if (channel.type == type) {
