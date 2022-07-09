@@ -35,7 +35,7 @@ async function remove(interaction, type) {
 
         const embed = new Discord.MessageEmbed()
             .setTitle("Error")
-            .setDescription("La stanza non è tua")
+            .setDescription("Non sei stato te a creare questa stanza o questo ticket")
             .setThumbnail(configs.embed.images.error)
             .setColor(configs.embed.color.red)
         interaction.reply({ embeds: [embed], ephemeral: true })
@@ -58,6 +58,7 @@ async function createchannel(interaction, channelname, type, category, type2) {
         let channel = await interaction.guild.channels.create(channelname, {
             type: type,
             parent: category,
+            topic: interaction.member.id,
             permissionOverwrites: [{
                 id: interaction.member.id,
                 allow: ["VIEW_CHANNEL", "SEND_MESSAGES"],

@@ -1,4 +1,4 @@
-let functions = require("./../../function/globalfunction")
+let functions = require("./../../function/roomandticket/globalfunction")
 module.exports = {
     name: "crenameall",
     onlyStaff: false,

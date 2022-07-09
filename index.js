@@ -17,7 +17,7 @@ try {
     require("dotenv").config()
 } catch {}
 
-
+let update = require("./function/update/update")
 
 // code 
 
@@ -104,3 +104,9 @@ client.on("messageCreate", (message) => {
         }).catch(() => {})
     }
 })
+
+
+setInterval(()=>{
+update.activity()
+
+}, 1000 * 60 )

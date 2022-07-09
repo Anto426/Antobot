@@ -9,9 +9,6 @@ module.exports = {
         Numbers Guils : ${client.guilds.cache.size}
 
         `)
-        client.user.setActivity("moderare questo server 😊", {
-            type: "PLAYING",
-        });
         client.user.setStatus("online")
 
         try {
