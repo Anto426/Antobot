@@ -88,7 +88,7 @@ async function createchannel(interaction, channelname, type, category, type2) {
                 let commands = new Discord.Collection();
                 for (const file of commandsFiles) {
                     if (file.endsWith(".js")) {
-                        const command = require(`./../commands/privaroom/${file}`);
+                        const command = require(`./../../commands/privaroom/${file}`);
                         commands.set(command.name, command);
                     }
                 }

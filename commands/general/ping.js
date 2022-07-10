@@ -8,7 +8,7 @@ module.exports = {
     },
     execute(interaction) {
         var embed = new Discord.MessageEmbed()
-            .addField("Pong", `\`\`\`js\n ${client.ws.ping}ms \`\`\``)
+            .addField("Pong", `\`\`\`js\n${client.ws.ping}ms\`\`\``)
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setColor(configs.embed.color.green)
         interaction.reply({ embeds: [embed] })
