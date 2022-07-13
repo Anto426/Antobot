@@ -9,15 +9,6 @@ module.exports = {
             member.roles.add(role)
         } else {
 
-            let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
-            let message = new Discord.MessageEmbed()
-                .setColor("RANDOM")
-                .setTitle("Welcome")
-                .setDescription(` ${member} Benvenuto su ${member.guild.name} te sei il ${humans.size} membro  ! Ti consiglio di andare a leggere il regolamento per non essere bannato !!`)
-                .setThumbnail(member.user.displayAvatarURL({ dynamic: true }));
-            let channel = member.guild.channels.cache.find(x => x.id == configs[member.guild.name].stanze.welcome)
-            channel.send({ embeds: [message] });
-
             let captcha = new Captcha();
             captcha.async = true
             captcha.addDecoy();
