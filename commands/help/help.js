@@ -15,7 +15,7 @@ module.exports = {
         let commandsFolder = fs.readdirSync("./commands");
         for (const folder of commandsFolder) {
             if (folder != "help")
-                folders.push(`-${folder}`)
+                folders.push(`📁 ${folder}`)
         }
 
 
@@ -28,7 +28,7 @@ module.exports = {
         folders.forEach(f => {
             selectmenu.addOptions([{
                 label: f,
-                value: `${f.replace("-","")}`,
+                value: `${f.replace("📁 ","")}`,
 
             }])
 

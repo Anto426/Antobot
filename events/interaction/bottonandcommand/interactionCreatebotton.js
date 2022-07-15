@@ -154,7 +154,7 @@ ${x.data.description}
                                     .setDescription(`
 Usa il menu qui sotto per scegliere la categoria di comandi da vedere!
 
-${interaction.values.toString().toUpperCase()}
+📁 ${interaction.values.toString().toUpperCase()}
 \`\`\`
 ${msg.join(" ").toString()}
                  \`\`\`
