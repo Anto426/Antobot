@@ -44,9 +44,14 @@ module.exports = {
                     deny: ["VIEW_CHANNEL"]
                 }]
             })
+            let embed = new Discord.MessageEmbed()
+                .setColor("RANDOM")
+                .setTitle("Welcome")
+                .setDescription(`Per verificarti nel server risolvi il captcha(hai 100 sec altrimenti verrai kikkato)`)
+                .setImage("attachment://captcha.png")
             let msg = await channelverifica.send({
-                files: [captchaAttachement],
-                content: "<@" + member.id + ">" + " Per verificarti nel server risolvi il captcha(hai 100 sec altrimenti verrai kikkato)"
+                embeds: [embed],
+                files: [captchaAttachement]
             })
             let filter = (message) => {
                 let embed = new Discord.MessageEmbed()
@@ -58,6 +63,7 @@ module.exports = {
                 if (message.content.toUpperCase() === captcha.text) return true;
                 else channelverifica.send({ embeds: [embed] })
             }
+            console.log(captcha.text)
             textchaptcha = captcha.text
             try {
                 response = await msg.channel.awaitMessages({

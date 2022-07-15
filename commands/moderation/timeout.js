@@ -19,12 +19,12 @@ function times(millis) {
 }
 
 module.exports = {
-    name: "Applica il timeout ad un utente",
+    name: "timeout",
     onlyStaff: true,
     onlyOwner: false,
     data: {
         name: "timeout",
-        description: "timeout utente",
+        description: "Applica il timeout ad un utente",
         options: [{
                 name: "user",
                 description: "L'utente interessato",
@@ -35,14 +35,48 @@ module.exports = {
                 name: "time",
                 description: "tempo",
                 type: "NUMBER",
-                required: true
+                required: true,
+                choices: [{
+                        name: "1 min",
+                        value: 1
+                    }, {
+                        name: "2 min",
+                        value: 2
+                    }, {
+                        name: "5 min",
+                        value: 5
+                    },
+                    {
+                        name: "10 min",
+                        value: 10
+                    }, {
+                        name: "15 min",
+                        value: 15
+                    }, {
+                        name: "30 min",
+                        value: 30
+                    }, {
+                        name: "1 h",
+                        value: 60
+                    }, {
+                        name: "2 h",
+                        value: 120
+                    }, {
+                        name: "1 d",
+                        value: 1440
+                    }, {
+                        name: "1 settimana ",
+                        value: 10080
+                    }
+                ]
             },
             {
                 name: "reason",
                 description: "motivo",
                 type: "STRING",
                 required: false
-            }
+            },
+
         ]
     },
     execute(interaction) {
@@ -68,40 +102,28 @@ module.exports = {
             return interaction.reply({ embeds: [embed] })
 
         }
-        if (utente.communicationDisabledUntilTimestamp == null) {
+        console.log(utente.timeouted)
 
 
 
-            utente.timeout(time, reason).catch(() => {
-                const embed = new Discord.MessageEmbed()
-                    .setTitle("Error")
-                    .setDescription("Qualcosa è andato storto o hai messo un tempo troppo lungo")
-                    .setThumbnail(configs.embed.images.error)
-                    .setColor(configs.embed.color.red)
-                interaction.channel.send({ embeds: [embed] })
-                return
 
-            })
-            const embed = new Discord.MessageEmbed()
-                .setTitle("Utente timeoutato")
-                .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
-                .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-                .setDescription("<@" + utente + ">" + " timeoutato per " + times(time))
-                .setColor(configs.embed.color.green)
-            interaction.reply({ embeds: [embed] })
-
-        } else {
-            const d = new Date(utente.communicationDisabledUntilTimestamp);
-            date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
-            console.log(date);
+        utente.timeout(time, reason).catch(() => {
             const embed = new Discord.MessageEmbed()
                 .setTitle("Error")
-                .setDescription(`${utente.toString()} ha già un timeout!`)
-                .addField("Fino a :", `\`\`\`js\n ${date} \`\`\``)
+                .setDescription("Qualcosa è andato storto")
                 .setThumbnail(configs.embed.images.error)
                 .setColor(configs.embed.color.red)
-            interaction.reply({ embeds: [embed] })
-        }
+            interaction.channel.send({ embeds: [embed] })
+            return
+
+        })
+        const embed = new Discord.MessageEmbed()
+            .setTitle("Utente timeoutato")
+            .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
+            .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
+            .setDescription("<@" + utente + ">" + " timeoutato per " + times(time))
+            .setColor(configs.embed.color.green)
+        interaction.reply({ embeds: [embed] })
 
 
 

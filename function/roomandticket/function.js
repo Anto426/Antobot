@@ -32,14 +32,14 @@ async function remove(interaction, type) {
     console.log(trovata)
 
     if (!trovata) {
-try{
-        const embed = new Discord.MessageEmbed()
-            .setTitle("Error")
-            .setDescription("Non sei stato te a creare questa stanza o questo ticket")
-            .setThumbnail(configs.embed.images.error)
-            .setColor(configs.embed.color.red)
-        interaction.reply({ embeds: [embed], ephemeral: true })
-}catch{}
+        try {
+            const embed = new Discord.MessageEmbed()
+                .setTitle("Error")
+                .setDescription("Non sei stato te a creare questa stanza o questo ticket")
+                .setThumbnail(configs.embed.images.error)
+                .setColor(configs.embed.color.red)
+            interaction.reply({ embeds: [embed], ephemeral: true })
+        } catch {}
     }
     if (type == "room") {
 
