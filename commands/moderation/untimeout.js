@@ -25,7 +25,7 @@ module.exports = {
 
         }
 
-        if (utente.communicationDisabledUntilTimestamp != null) {
+        if (utente.communicationDisabledUntilTimestamp != null || utente.communicationDisabledUntilTimestamp > Date.now()) {
 
             for (id in configs.owner) {
                 if (interaction.member == utente && interaction.member.id != configs.owner[id]) {

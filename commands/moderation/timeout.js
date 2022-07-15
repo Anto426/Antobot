@@ -1,23 +1,5 @@
-function times(millis) {
-    var minutes = Math.floor(millis / 60000).toFixed(0);
-    var hour = 0
-    var day = 0
-    if (minutes >= 60) {
-        do {
-            hour = hour + 1
-            minutes = minutes - 60
-        } while (minutes >= 60)
-    }
-    if (hour >= 24) {
-        do {
-            day = day + 1
-            hour = hour - 24
-        } while (hour >= 24)
-
-    }
-    return day + "d :" + hour + " h:" + minutes + " m"
-}
-
+const { inspect } = require(`util`)
+let functions = require("./../../function/cvalu/function")
 module.exports = {
     name: "timeout",
     onlyStaff: true,
@@ -102,30 +84,42 @@ module.exports = {
             return interaction.reply({ embeds: [embed] })
 
         }
-        console.log(utente.timeouted)
+        if (utente.communicationDisabledUntilTimestamp == null || utente.communicationDisabledUntilTimestamp < Date.now()) {
 
 
 
 
-        utente.timeout(time, reason).catch(() => {
+            utente.timeout(time, reason).catch((err) => {
+                const embed = new Discord.MessageEmbed()
+                    .setTitle("Error")
+                    .setDescription("Qualcosa è andato storto")
+                    .addField("Error:", `\`\`\`js\n ${inspect((err.toString()))}  \`\`\``)
+                    .setThumbnail(configs.embed.images.error)
+                    .setColor(configs.embed.color.red)
+                interaction.channel.send({ embeds: [embed] })
+                return
+
+            })
+            const embed = new Discord.MessageEmbed()
+                .setTitle("Utente timeoutato")
+                .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
+                .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
+                .setDescription("<@" + utente + ">" + " timeoutato per " + functions.times(time))
+                .setColor(configs.embed.color.green)
+            interaction.reply({ embeds: [embed] })
+
+        } else {
+            const d = new Date(utente.communicationDisabledUntilTimestamp);
+            date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
+            console.log(date);
             const embed = new Discord.MessageEmbed()
                 .setTitle("Error")
-                .setDescription("Qualcosa è andato storto")
+                .setDescription(`${utente.toString()} ha già un timeout!`)
+                .addField("Fino a :", `\`\`\`js\n ${date} \`\`\``)
                 .setThumbnail(configs.embed.images.error)
                 .setColor(configs.embed.color.red)
-            interaction.channel.send({ embeds: [embed] })
-            return
-
-        })
-        const embed = new Discord.MessageEmbed()
-            .setTitle("Utente timeoutato")
-            .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
-            .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-            .setDescription("<@" + utente + ">" + " timeoutato per " + times(time))
-            .setColor(configs.embed.color.green)
-        interaction.reply({ embeds: [embed] })
-
-
+            interaction.reply({ embeds: [embed] })
+        }
 
     }
 }
