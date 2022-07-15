@@ -77,14 +77,16 @@ module.exports = {
                         }
                         if (interaction.customId == "text+voice") {
                             type = "GUILD_TEXT"
-                            channelname = "「💭」" + interaction.member.user.username
-                            for (let i = 0; i < 2; i++) {
-                                let channel = await functions.createchannel(interaction, channelname, type, category, false)
+                            channelname = ["「💭」" + interaction.member.user.username, "「🔊」" + interaction.member.user.username]
+                            channelname.forEach(async x => {
+
+                                let channel = await functions.createchannel(interaction, x.toString(), type, category, false)
                                 functions.write(interaction, "room", channel, type2)
                                 type = "GUILD_VOICE"
-                                channelname = "「🔊」" + interaction.member.user.username
                                 type2 = true
-                            }
+                            })
+
+
                         }
 
 
