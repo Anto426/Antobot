@@ -40,6 +40,9 @@ module.exports = {
                 .setColor(configs.embed.color.red)
             return interaction.reply({ embeds: [embed] })
         }
+
+
+
         try {
             utente.ban({
                 reason: reason
