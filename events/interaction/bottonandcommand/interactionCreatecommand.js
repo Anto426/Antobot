@@ -36,11 +36,35 @@ module.exports = {
 
 
                         if (staf || owner) {
-
+                            let trovato = false
+                            let trovato2 = false
                             console.log("permesso accordato")
-                            command.execute(interaction)
-                            return
+                            const commandsFiles = fs.readdirSync(`./commands/moderation/moderation/`);
+                            for (const file of commandsFiles) {
+                                var commands2 = require(`./../../../commands/moderation/moderation/${file}`);
+                                if (commands2.name == command.name && command.name != "unban") {
+                                    trovato = true
+                                    if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position) {
+                                        trovato2 = true
+                                        command.execute(interaction)
+                                    }
+                                }
+                            }
 
+                            if (!trovato) {
+                                command.execute(interaction)
+                            }
+
+                            if (!trovato2) {
+                                const embed = new Discord.MessageEmbed()
+                                    .setTitle("Error")
+                                    .setDescription(` Hai un ruolo uguale o minore a ${interaction.options.getMember("user")}`)
+                                    .setThumbnail(configs.embed.images.accesdenied)
+                                    .setColor(configs.embed.color.red)
+                                interaction.reply({ embeds: [embed], ephemeral: true })
+                            }
+
+                            return
 
                         } else {
 
@@ -80,16 +104,17 @@ module.exports = {
 
 
                     }
-                    const commandsFiles = fs.readdirSync(`./commands/privaroom/`);
-                    for (const file of commandsFiles) {
-                        const commands2 = require(`./../../../commands/privaroom/${file}`);
-                        if (commands2.name == command.name) {
-                            if (interaction.channel.name == interaction.member.user.tag || interaction.channel.topic == interaction.member.user.tag) {
-                                command.execute(interaction)
-                                return
-                            }
+                }
+                const commandsFiles2 = fs.readdirSync(`./commands/privaroom/`);
+                for (const file of commandsFiles2) {
+                    const commands2 = require(`./../../../commands/privaroom/${file}`);
+                    if (commands2.name == command.name) {
+                        if (interaction.channel.name == interaction.member.user.tag || interaction.channel.topic == interaction.member.user.tag) {
+                            command.execute(interaction)
+                            return
                         }
                     }
+
                     if (interaction.channel.name == "「💻」comandi" || owner) {
                         command.execute(interaction)
                         return

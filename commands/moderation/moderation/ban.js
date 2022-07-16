@@ -29,8 +29,8 @@ module.exports = {
                 .setDescription(`Tutto bene bro ti voi bannare da solo ?!`)
                 .setThumbnail(configs.embed.images.scemo)
                 .setColor(configs.embed.color.red)
-            return interaction.reply({ embeds: [embed] })
-
+             interaction.reply({ embeds: [embed] })
+return
         }
         if (!utente.bannable) {
             const embed = new Discord.MessageEmbed()
