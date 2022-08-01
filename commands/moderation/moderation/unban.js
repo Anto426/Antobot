@@ -8,7 +8,7 @@ module.exports = {
         options: [{
             name: "iduser",
             description: "id dell'utente interessato",
-            type: "STRING",
+            type: 3,
             required: true
         }]
     },
@@ -26,14 +26,14 @@ module.exports = {
 
                 if (!a) {
                     interaction.guild.members.unban(id)
-                    const embed = new Discord.MessageEmbed()
+                    const embed = new Discord.EmbedBuilder()
                         .setTitle("Utente sbannato")
                         .setDescription("Utente sbannato")
                         .setThumbnail(configs.embed.images.succes)
                         .setColor(configs.embed.color.green)
                     interaction.reply({ embeds: [embed] })
                 } else {
-                    const embed = new Discord.MessageEmbed()
+                    const embed = new Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Utente gia sbannato")
                         .setThumbnail(configs.embed.images.error)
@@ -43,7 +43,7 @@ module.exports = {
             })
             return
         } catch {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle(message.member.user.tag + " Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")
                 .setThumbnail(configs.embed.images.error)

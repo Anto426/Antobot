@@ -8,13 +8,13 @@ module.exports = {
         options: [{
                 name: "user",
                 description: "L'utente interessato",
-                type: "USER",
+                type: 3,
                 required: true
             },
             {
                 name: "reason",
                 description: "motivo",
-                type: "STRING",
+                type: 3,
                 required: false
             }
         ]
@@ -24,16 +24,16 @@ module.exports = {
         var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason") || "Nesun motivo"
         if (interaction.member == utente) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Tutto bene bro ti voi bannare da solo ?!`)
                 .setThumbnail(configs.embed.images.scemo)
                 .setColor(configs.embed.color.red)
-             interaction.reply({ embeds: [embed] })
-return
+            interaction.reply({ embeds: [embed] })
+            return
         }
         if (!utente.bannable) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(` Non ho il permesso di cacciare ${utente} è troppo forte`)
                 .setThumbnail(configs.embed.images.forte)
@@ -47,7 +47,7 @@ return
             utente.ban({
                 reason: reason
             });
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " bannato")
                 .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
@@ -55,7 +55,7 @@ return
                 .setColor(configs.embed.color.green)
             interaction.reply({ embeds: [embed] })
         } catch {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")
                 .setThumbnail(configs.embed.images.error)

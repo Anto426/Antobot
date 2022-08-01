@@ -8,7 +8,7 @@ module.exports = {
         options: [{
             name: "user",
             description: "L'utente interessato",
-            type: "USER",
+            type: 6,
             required: false
         }]
     },
@@ -31,11 +31,11 @@ module.exports = {
                 if (utente.permissions.has(permessi[i]))
                     elencoPermessi += `- ${permessi[i]}\r`
         }
-        var embed = new Discord.MessageEmbed()
+        var embed = new Discord.EmbedBuilder()
             .setTitle(utente.user.tag)
             .setDescription("Tutte le info di questo utente")
             .setThumbnail(utente.user.displayAvatarURL({ dynamic: true }))
-            .addField("User id",`\`\`\`js\n${utente.user.id}\`\`\``, true)
+            .addField("User id", `\`\`\`js\n${utente.user.id}\`\`\``, true)
             .addField("Status", `\`\`\`js\n${utente.presence ? utente.presence.status : "offline"}\`\`\``, true)
             .addField("Is a bot?", `\`\`\`js\n${utente.user.bot ? "Yes" : "No"}\`\`\``, true)
             .addField("Account created", `\`\`\`js\n${utente.user.createdAt.toDateString()} \`\`\``, true)

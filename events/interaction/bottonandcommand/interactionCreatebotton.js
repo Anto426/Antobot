@@ -10,7 +10,7 @@ module.exports = {
 
             if (interaction.customId == "mc") {
                 for (server in configs.game.mc) {
-                    let embed = new Discord.MessageEmbed()
+                    let embed = new Discord.EmbedBuilder()
                         .setColor('#0099ff')
                         .setTitle("Ecco il tuo server")
 
@@ -145,7 +145,7 @@ ${x.data.description}
                                     `)
                                 })
 
-                                const embed = new Discord.MessageEmbed()
+                                const embed = new Discord.EmbedBuilder()
                                     .setTitle("Help")
                                     .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
                                     .setColor(configs.embed.color.purple)
@@ -165,7 +165,7 @@ ${msg.join(" ").toString()}
                         })
                     } else {
 
-                        const embed = new Discord.MessageEmbed()
+                        const embed = new Discord.EmbedBuilder()
                             .setTitle("Error")
                             .setDescription("Non è il tuo questo menu!")
                             .setThumbnail(configs.embed.images.error)
@@ -174,7 +174,7 @@ ${msg.join(" ").toString()}
                     }
                 } else {
 
-                    const embed = new Discord.MessageEmbed()
+                    const embed = new Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Il bot è stato riavviato per favore crea un'altro menu")
                         .setThumbnail(configs.embed.images.error)

@@ -8,13 +8,13 @@ module.exports = {
         options: [{
                 name: "user",
                 description: "L'utente interessato",
-                type: "USER",
+                type: 6,
                 required: true
             },
             {
                 name: "reason",
                 description: "motivo",
-                type: "STRING",
+                type: 3,
                 required: false
             }
         ]
@@ -24,7 +24,7 @@ module.exports = {
         var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason") || "Nesun motivo"
         if (interaction.member == utente) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Tutto bene bro ti voi kikare da solo ?!`)
                 .setThumbnail(configs.embed.images.scemo)
@@ -33,7 +33,7 @@ module.exports = {
 
         }
         if (!utente.kickable) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(` Non ho il permesso di cacciare ${utente} è troppo forte`)
                 .setThumbnail(configs.embed.images.forte)
@@ -42,7 +42,7 @@ module.exports = {
         }
         try {
             utente.kick();
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " kickato")
                 .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
@@ -51,7 +51,7 @@ module.exports = {
             interaction.reply({ embeds: [embed] })
         } catch (err) {
             console.log(err)
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")
                 .setThumbnail(configs.embed.images.error)

@@ -40,7 +40,7 @@ module.exports = {
             let attachment = new Discord.MessageAttachment(canvas.toBuffer(), "canvas.png")
 
 
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setColor("RANDOM")
                 .setTitle("Welcome")
                 .setDescription(`${member} Benvenuto su ${member.guild.name} te sei il ${humans.size} membro  ! Ti consiglio di andare a leggere il <#${configs[member.guild.name].stanze.regolamento}> per non essere bannato !!`)

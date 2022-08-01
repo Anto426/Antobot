@@ -13,7 +13,7 @@
         "canvas": "^2.9.3",
         "captcha-canvas": "^3.1.0",
         "discord-api-types": "^0.33.5",
-        "discord.js": "^13.8.1",
+        "discord.js": "^14.1.2",
         "discord.js-poll": "^1.2.1",
         "dotenv": "^16.0.1",
         "util": "^0.12.4"

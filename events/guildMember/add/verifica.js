@@ -44,7 +44,7 @@ module.exports = {
                     deny: ["VIEW_CHANNEL"]
                 }]
             })
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setColor("RANDOM")
                 .setTitle("Welcome")
                 .setDescription(`Per verificarti nel server risolvi il captcha(hai 100 sec altrimenti verrai kikkato)`)
@@ -54,7 +54,7 @@ module.exports = {
                 files: [captchaAttachement]
             })
             let filter = (message) => {
-                let embed = new Discord.MessageEmbed()
+                let embed = new Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Impossibile verificarti controlla di aver scritto bene il captcha !! Riprova!")
                     .setColor(configs.embed.color.red)
@@ -73,7 +73,7 @@ module.exports = {
                     errors: ["time"],
                 })
                 if (response) {
-                    let embed = new Discord.MessageEmbed()
+                    let embed = new Discord.EmbedBuilder()
                         .setTitle(member.user.tag + " verificato")
                         .setDescription("verifica completata con succeso alle ore " + new Date().getHours() + ":" + new Date().getMinutes())
                         .setThumbnail(configs.embed.images.succes)
@@ -91,7 +91,7 @@ module.exports = {
                 if (verifica) {
 
                 } else {
-                    let embed = new Discord.MessageEmbed()
+                    let embed = new Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Ci dispiace che non sei riuscito a verificarti, ma ora dovro kickarti")
                         .setThumbnail(configs.embed.images.thor)
@@ -103,7 +103,7 @@ module.exports = {
                 }
 
             }
-            let messagedelete = new Discord.MessageEmbed()
+            let messagedelete = new Discord.EmbedBuilder()
                 .setTitle("Posso cancellare la chat?")
                 .setDescription("Posso cancellare la chat ?")
                 .setThumbnail(configs.embed.images.load)

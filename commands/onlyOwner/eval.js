@@ -9,7 +9,7 @@ module.exports = {
         options: [{
             name: "comand",
             description: "comando",
-            type: "STRING",
+            type: 3,
             required: true
         }]
     },
@@ -19,7 +19,7 @@ module.exports = {
 
         try {
             evaled = await eval(args);
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Comando eseguito con successo")
                 .setColor(configs.embed.color.green)
                 .setDescription(`Non ci sono stati errori durante l 'esecuzione del comando
@@ -28,7 +28,7 @@ module.exports = {
             interaction.reply({ embeds: [embed] })
         } catch (error) {
             console.error(error);
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setColor(configs.embed.color.red)
                 .setDescription("Ho riscrontrato alcuni errori!!")

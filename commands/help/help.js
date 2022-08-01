@@ -37,7 +37,7 @@ module.exports = {
             .addComponents(
                 selectmenu
             );
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.EmbedBuilder()
             .setTitle("Help")
             .setDescription(`
             Usa il menu qui sotto per scegliere la categoria di comandi da vedere!

@@ -9,7 +9,7 @@ module.exports = {
     execute(interaction) {
 
         interaction.reply("Avvio potrocollo di autodistruzione")
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle(interaction.guild.name)
             .setDescription("@everyone " + interaction.guild.name + " ha chiuso i battenti")
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }))

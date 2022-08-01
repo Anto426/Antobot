@@ -8,7 +8,7 @@ module.exports = {
         options: [{
             name: "nmessaggi",
             description: "numeri di mess da cancellare",
-            type: "NUMBER",
+            type: 10,
             required: true
         }]
     },
@@ -16,7 +16,7 @@ module.exports = {
 
         var count = interaction.options.getNumber("nmessaggi")
         if (count > 100) {
-            let embed = new Discord.MessageEmbed()
+            let embed = new Discord.EmbedBuilder()
                 .setColor(configs.embed.images.color.red)
                 .setTitle('Error')
                 .setDescription('Non puoi cancellare più di 100 messaggi')
@@ -25,7 +25,7 @@ module.exports = {
         const myPromise = new Promise((resolve, reject) => {
             interaction.channel.bulkDelete(count).catch((err) => { console.log(err) })
             resolve(() => {
-                let embed = new Discord.MessageEmbed()
+                let embed = new Discord.EmbedBuilder()
                     .setColor(configs.embed.color.green)
                     .setTitle('Messagi cancellati')
                     .setDescription('Messagi cancellati')
@@ -36,7 +36,7 @@ module.exports = {
             })
 
             reject(() => {
-                let embed = new Discord.MessageEmbed()
+                let embed = new Discord.EmbedBuilder()
                     .setColor(configs.embed.color.red)
                     .setTitle('Error')
                     .setDescription('Qualcosa è andato storto')

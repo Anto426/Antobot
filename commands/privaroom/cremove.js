@@ -8,7 +8,7 @@ module.exports = {
         options: [{
             name: "user",
             description: "L'utente interessato",
-            type: "USER",
+            type: 6,
             required: true
         }]
     },
@@ -28,7 +28,7 @@ module.exports = {
         })
 
         if (!trovata) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Ops!  Non hai una stanza privata da rinominare creala una <#948323558369669130>")
                 .setThumbnail(configs.embed.images.error)
@@ -38,7 +38,7 @@ module.exports = {
         }
 
         if (!user.roles.cache.has(role.id)) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Utente gia rimosso dalla stanza")
                 .setColor(configs.embed.color.red)
@@ -55,7 +55,7 @@ module.exports = {
 
         user.roles.remove(role).catch(() => {})
 
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle("Utente rimosso")
             .setDescription("<@" + user.id + ">" + " rimosso dalla stanza")
             .setThumbnail(user.displayAvatarURL({ dynamic: true }))

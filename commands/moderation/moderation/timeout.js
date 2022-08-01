@@ -10,13 +10,13 @@ module.exports = {
         options: [{
                 name: "user",
                 description: "L'utente interessato",
-                type: "USER",
+                type: 6,
                 required: true
             },
             {
                 name: "time",
                 description: "tempo",
-                type: "NUMBER",
+                type: 10,
                 required: true,
                 choices: [{
                         name: "1 min",
@@ -55,7 +55,7 @@ module.exports = {
             {
                 name: "reason",
                 description: "motivo",
-                type: "STRING",
+                type: 3,
                 required: false
             },
 
@@ -67,7 +67,7 @@ module.exports = {
         var time = interaction.options.getNumber("time") * 1000 * 60
         var reason = interaction.options.getString("reason") || "Nesun motivo"
         if (utente.user.bot) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Non posso applicare il timeout ai bot `)
                 .setThumbnail(configs.embed.images.error)
@@ -76,7 +76,7 @@ module.exports = {
 
         }
         if (interaction.member == utente) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Tutto bene bro ti voi applicare il timeout da solo ?!`)
                 .setThumbnail(configs.embed.images.scemo)
@@ -90,7 +90,7 @@ module.exports = {
 
 
             utente.timeout(time, reason).catch((err) => {
-                const embed = new Discord.MessageEmbed()
+                const embed = new Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Qualcosa è andato storto")
                     .addField("Error:", `\`\`\`js\n ${inspect((err.toString()))}  \`\`\``)
@@ -100,7 +100,7 @@ module.exports = {
                 return
 
             })
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Utente timeoutato")
                 .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
@@ -112,7 +112,7 @@ module.exports = {
             const d = new Date(utente.communicationDisabledUntilTimestamp);
             date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
             console.log(date);
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`${utente.toString()} ha già un timeout!`)
                 .addField("Fino a :", `\`\`\`js\n ${date} \`\`\``)

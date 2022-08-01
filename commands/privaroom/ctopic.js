@@ -9,7 +9,7 @@ module.exports = {
         options: [{
             name: "topic",
             description: "Nuovo nome ",
-            type: "STRING",
+            type: 3,
             required: true
         }]
     },

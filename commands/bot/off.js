@@ -8,7 +8,7 @@ module.exports = {
     },
     execute(interaction) {
         if (!stato) {
-            const embederror = new Discord.MessageEmbed()
+            const embederror = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Il bot è gia offline")
                 .setThumbnail(configs.embed.images.error)
@@ -16,7 +16,7 @@ module.exports = {
             interaction.reply({ embeds: [embederror] })
             return
         } else {
-            const embedonline = new Discord.MessageEmbed()
+            const embedonline = new Discord.EmbedBuilder()
                 .setTitle("Bot offline")
                 .setDescription("Il bot sta andando offline come da te richiesto")
                 .setThumbnail(configs.embed.images.succes)

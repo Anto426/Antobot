@@ -56,7 +56,7 @@ module.exports = {
                             }
 
                             if (!trovato2) {
-                                const embed = new Discord.MessageEmbed()
+                                const embed = new Discord.EmbedBuilder()
                                     .setTitle("Error")
                                     .setDescription(` Hai un ruolo uguale o minore a ${interaction.options.getMember("user")}`)
                                     .setThumbnail(configs.embed.images.accesdenied)
@@ -69,7 +69,7 @@ module.exports = {
                         } else {
 
                             console.log("permesso negato")
-                            const embed = new Discord.MessageEmbed()
+                            const embed = new Discord.EmbedBuilder()
                                 .setTitle("Error")
                                 .setDescription(` Non hai i permessi necessari`)
                                 .setThumbnail(configs.embed.images.accesdenied)
@@ -91,7 +91,7 @@ module.exports = {
                         } else {
 
                             console.log("permesso negato")
-                            const embed = new Discord.MessageEmbed()
+                            const embed = new Discord.EmbedBuilder()
                                 .setTitle("Error")
                                 .setDescription(` Non hai i permessi necessari`)
                                 .setThumbnail(configs.embed.images.accesdenied)
@@ -120,7 +120,7 @@ module.exports = {
                         return
                     } else {
                         console.log("permesso negato")
-                        const embed = new Discord.MessageEmbed()
+                        const embed = new Discord.EmbedBuilder()
                             .setTitle("Error")
                             .setDescription(`Non hai i permessi necessari  per eseguire i comandi qui !`)
                             .setThumbnail(configs.embed.images.accesdenied)
@@ -134,7 +134,7 @@ module.exports = {
 
 
             } catch (err) {
-                const embed = new Discord.MessageEmbed()
+                const embed = new Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription(`Qualcosa è andato storto`)
                     .setThumbnail(configs.embed.images.error)

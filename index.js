@@ -7,11 +7,11 @@ global.configs = require("./Config/configs.json")
 global.Discord = require('discord.js')
 global.fs = require("fs");
 global.verifica = false
-const { Client, Intents } = require('discord.js');
+const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const { MessageAttachment } = require("discord.js");
 global.client = new Discord.Client({
     intents: 32767,
-    partials: ['USER', 'REACTION', 'MESSAGE']
+    partials: [Partials.User, Partials.Reaction, Partials.Message]
 });
 try {
     require("dotenv").config()

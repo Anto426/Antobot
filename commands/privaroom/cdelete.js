@@ -18,7 +18,7 @@ module.exports = {
         })
 
         if (!trovata) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Ops!  Non hai una stanza privata creala una <#948323558369669130>")
                 .setThumbnail(configs.embed.images.error)
@@ -29,7 +29,7 @@ module.exports = {
 
         functions.remove(interaction, "room")
 
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle("Stanza cancellata")
             .setDescription(`Stanza cancellata con succeso per ricrearla vai in  <#948323558369669130>`)
             .setThumbnail(configs.embed.images.succes)

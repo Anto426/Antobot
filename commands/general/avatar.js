@@ -8,7 +8,7 @@ module.exports = {
         options: [{
             name: "user",
             description: "L'utente interessato",
-            type: "USER",
+            type: 6,
             required: false
         }]
     },
@@ -21,7 +21,7 @@ module.exports = {
             var utente = interaction.guild.members.cache.get(member.id)
 
         }
-        var embed = new Discord.MessageEmbed()
+        var embed = new Discord.EmbedBuilder()
             .setTitle(utente.user.tag)
             .setDescription("L'avatar di questo utente")
             .setColor(configs.embed.color.green)

@@ -5,7 +5,7 @@ module.exports = {
         if (member.user.bot) {
             return
         } else {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setColor("RANDOM")
                 .setTitle("Left")
                 .setDescription(` ${member} ha abbandonati il server`)

@@ -8,25 +8,25 @@ module.exports = {
         options: [{
                 name: "title",
                 description: "titolo",
-                type: "STRING",
+                type: 3,
                 required: true,
             },
             {
                 name: "msg",
                 description: "messagio",
-                type: "STRING",
+                type: 3,
                 required: true,
             },
             {
                 name: "channel",
                 description: "channel",
-                type: "CHANNEL",
+                type: 7,
                 required: false,
             },
             {
                 name: "image",
                 description: "image",
-                type: "STRING",
+                type: 3,
                 required: false,
             },
 
@@ -37,7 +37,7 @@ module.exports = {
         let msg = interaction.options.getString("msg").split("-").join("\n")
         let image = interaction.options.getString("image")
 
-        var embed = new Discord.MessageEmbed()
+        var embed = new Discord.EmbedBuilder()
             .setTitle(title)
             .setDescription(msg)
             .setThumbnail(image)

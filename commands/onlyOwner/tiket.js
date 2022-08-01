@@ -14,7 +14,7 @@ module.exports = {
                 .setStyle('DANGER')
                 .setLabel('Apri il ticket'),
             );
-        let embed = new Discord.MessageEmbed()
+        let embed = new Discord.EmbedBuilder()
             .setTitle("Hey")
             .setDescription("Hai bisogno di supporto crea un ticket")
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }))

@@ -8,7 +8,7 @@ module.exports = {
         options: [{
             name: "user",
             description: "L'utente interessato",
-            type: "USER",
+            type: 6,
             required: true
         }]
     },
@@ -16,7 +16,7 @@ module.exports = {
 
         var utente = interaction.options.getMember("user")
         if (utente.user.bot) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`I bot non possono essere applicato il timeout`)
                 .setThumbnail(configs.embed.images.error)
@@ -29,7 +29,7 @@ module.exports = {
 
             for (id in configs.owner) {
                 if (interaction.member == utente && interaction.member.id != configs.owner[id]) {
-                    const embed = new Discord.MessageEmbed()
+                    const embed = new Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription(`Ehh bro non puoi togliertelo tu ahh`)
                         .setThumbnail(configs.embed.images.scemo)
@@ -40,7 +40,7 @@ module.exports = {
             }
 
             utente.timeout(null)
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Utente untimeoutato")
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setDescription("<@" + utente + ">" + " untimeoutato")
@@ -48,7 +48,7 @@ module.exports = {
             interaction.reply({ embeds: [embed] })
 
         } else {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`${utente.toString()} non ha un timeout!`)
                 .setThumbnail(configs.embed.images.error)
