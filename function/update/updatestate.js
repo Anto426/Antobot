@@ -6,9 +6,6 @@ async function activity() {
 
 }
 
-function msgcontroll() {
-    
-}
 
 module.exports = {
     activity: activity

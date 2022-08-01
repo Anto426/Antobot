@@ -20,7 +20,7 @@ async function createchannel(interaction, channelname, type, category, id ,allow
     return channel 
 }
 
-function vericchannel(idorname,interaction){
+function verificchannel(idorname,interaction){
     let channel = interaction.guild.channels.find(x => x.id || x.name)
     if(!channel) {
         let embed = new Discord.EmbedBuilder()
