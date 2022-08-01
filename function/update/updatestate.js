@@ -1,8 +1,8 @@
 async function activity() {
 
-    let cane = [" moderare il server", "/help"]
-    var dio = Math.floor(Math.random() * cane.length);
-    client.user.setActivity(cane[dio].toString());
+    let frasi = [" moderare il server", "/help"]
+    var x = Math.floor(Math.random() * frasi.length);
+    client.user.setActivity(x[frasi].toString());
 
 }
 
