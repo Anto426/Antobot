@@ -1,5 +1,19 @@
-async function filecheck(){
+const path = require('path')
 
+async function filecheck(file){
+    try {
+        fs.lstatSync(file).isFile()
+    } catch {
+
+
+
+        fs.writeFile(path.join(file, null), (err) => {
+            if (err) {
+                return console.log(err);
+            }
+            console.log('File created successfully!');
+        });
+    }
 }
 
 async function dircheck(interaction){
@@ -7,7 +21,7 @@ async function dircheck(interaction){
     try {
         fs.lstatSync(directory).isDirectory()
     } catch {
-        const path = require('path');
+
 
 
         fs.mkdir(path.join(`./Database/`, interaction.guild.name), (err) => {
@@ -19,3 +33,7 @@ async function dircheck(interaction){
     }
 }
 
+module.exports = {
+    filecheck:filecheck,
+    dircheck:dircheck
+}

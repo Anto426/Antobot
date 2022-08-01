@@ -27,3 +27,8 @@ async function jremove(content,fremove){
 
 }
 
+module.exports = {
+    jread:jread,
+    jwrite:jwrite,
+    jremove: jremove
+}
