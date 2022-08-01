@@ -1,54 +1,32 @@
-module.exports = {
-    name: "clear",
-    onlyStaff: true,
-    onlyOwner: false,
+odule.exports = {
+    name: 'clear',
+    description: 'Elimina i messaggi specificando la quantita.',
     data: {
         name: "clear",
-        description: "Cancella I messagi",
-        options: [{
-            name: "nmessaggi",
-            description: "numeri di mess da cancellare",
-            type: 10,
-            required: true
-        }]
+        description: "comando invita",    
+        option: [
+            {
+                name: 'n',
+                description: 'Seleziona la quantita dei messaggi da eliminare.',
+                type: 'NUMBER',
+                required: true
+            }
+        ],
     },
+
     async execute(interaction) {
+        const {  channel, options } = interaction;
 
-        var count = interaction.options.getNumber("nmessaggi")
-        if (count > 100) {
-            let embed = new Discord.EmbedBuilder()
-                .setColor(configs.embed.images.color.red)
-                .setTitle('Error')
-                .setDescription('Non puoi cancellare più di 100 messaggi')
-            return interaction.reply({ embeds: [embed] })
-        }
-        const myPromise = new Promise((resolve, reject) => {
-            interaction.channel.bulkDelete(count).catch((err) => { console.log(err) })
-            resolve(() => {
-                let embed = new Discord.EmbedBuilder()
-                    .setColor(configs.embed.color.green)
-                    .setTitle('Messagi cancellati')
-                    .setDescription('Messagi cancellati')
-                    .addField("Numero", `\`\`\`js\n ${count}\`\`\``, true)
-                interaction.reply({ embeds: [embed] }).then(() => {
-                    interaction.deleteReply()
-                })
+        const Amount = options.getNumber('amount');
+
+        const Messages = await channel.messages.fetch();
+
+        const Response = new MessageEmbed()
+        .setColor(configs.embed.color.green)
+                await channel.bulkDelete(Amount, true).then(messages => {
+                Response.setDescription(`Eliminati ${messages.size} da ${interaction.channel.name}`);
+                interaction.reply({embeds: [Response]});
             })
-
-            reject(() => {
-                let embed = new Discord.EmbedBuilder()
-                    .setColor(configs.embed.color.red)
-                    .setTitle('Error')
-                    .setDescription('Qualcosa è andato storto')
-                    .setThumbnail(configs.embed.images.error)
-                interaction.reply({ embeds: [embed] })
-
-            })
-        })
-
-
-
-
+        
     }
-
 }
