@@ -1,5 +1,5 @@
 // new version of antobot 
-// v3.2
+// v4.0
 
 // variabili 
 global.stato = true
