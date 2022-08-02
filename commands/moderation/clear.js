@@ -1,6 +1,8 @@
 odule.exports = {
     name: 'clear',
     description: 'Elimina i messaggi specificando la quantita.',
+    onlyStaff: true,
+    onlyOwner: false,
     data: {
         name: "clear",
         description: "comando invita",    
