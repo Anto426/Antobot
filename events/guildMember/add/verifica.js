@@ -1,6 +1,6 @@
 const { MessageAttachment } = require("discord.js");
 const { Captcha } = require("captcha-canvas");
-const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder,ButtonStyle } = require('discord.js');
 module.exports = {
     name: `guildMemberAdd`,
     async execute(member) {
@@ -112,7 +112,7 @@ module.exports = {
                 .addComponents(
                     new ButtonBuilder()
                     .setCustomId('deletechat')
-                    .setStyle('DANGER')
+                    .setStyle(ButtonStyle.Danger)
                     .setEmoji("<:cestino:940545919928111126>"),
                 );
             let category1 = member.guild.channels.cache.find(x => x.name == "📂Backup📂")

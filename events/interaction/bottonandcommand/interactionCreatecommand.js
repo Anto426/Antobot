@@ -1,9 +1,10 @@
 const { inspect } = require(`util`)
+const { InteractionType } = require('discord.js');
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
 
-        if (interaction.isCommand()) {
+        if (interaction.type == InteractionType.ApplicationCommand) {
             try {
                 let owner = false
                 for (let id in configs.owner) {

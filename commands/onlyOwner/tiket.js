@@ -1,3 +1,4 @@
+const { ButtonStyle } = require('discord.js');
 module.exports = {
     name: "tiket",
     permision: [],
@@ -12,7 +13,7 @@ module.exports = {
             .addComponents(
                 new Discord.ButtonBuilder()
                 .setCustomId('opentiket')
-                .setStyle('DANGER')
+                .setStyle(ButtonStyle.Danger)
                 .setLabel('Apri il ticket'),
             );
         let embed = new Discord.EmbedBuilder()

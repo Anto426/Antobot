@@ -1,7 +1,8 @@
+const { InteractionType } = require('discord.js');
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {
-        if (!interaction.isCommand()) {
+        if (interaction.type != InteractionType.ApplicationCommand) {
             if (interaction.customId == "deletechat") {
                 interaction.channel.delete()
 
