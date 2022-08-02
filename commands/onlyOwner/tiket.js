@@ -1,7 +1,8 @@
 module.exports = {
     name: "tiket",
-    opermision: [],
+    permision: [],
     onlyOwner: true,
+    onlyStaff : false,
     data: {
         name: "tiket",
         description: "Crea il canale tiket"

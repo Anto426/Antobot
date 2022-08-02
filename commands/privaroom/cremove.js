@@ -1,7 +1,8 @@
 module.exports = {
     name: "cremove",
-    opermision: [],
+    permision: [],
     onlyOwner: false,
+    onlyStaff : false,
     data: {
         name: "cremove",
         description: "Rimuovere utente dalle stanze private",

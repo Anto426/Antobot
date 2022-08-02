@@ -1,7 +1,8 @@
 module.exports = {
     name: "iclear",
-    opermision: [],
+    permision: [],
     onlyOwner: true,
+    onlyStaff : false,
     data: {
         name: "iclear",
         description: "Elimina tutti gli inviti del server",

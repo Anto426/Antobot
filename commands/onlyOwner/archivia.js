@@ -1,7 +1,8 @@
 module.exports = {
     name: "archivia",
-    opermision: [],
+    permision: [],
     onlyOwner: true,
+    onlyStaff : false,
     data: {
         name: "archivia",
         description: "Archivia il server rimuovendo tutti i membri",

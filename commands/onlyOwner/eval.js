@@ -1,8 +1,9 @@
 const { inspect } = require(`util`)
 module.exports = {
     name: "eval",
-    opermision: [],
+    permision: [],
     onlyOwner: true,
+    onlyStaff : false,
     data: {
         name: "eval",
         description: "Comando per eseguire del codice js",

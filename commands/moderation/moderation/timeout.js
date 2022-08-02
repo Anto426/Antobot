@@ -1,9 +1,11 @@
 const { inspect } = require(`util`)
+const { PermissionsBitField } = require('discord.js');
 let functions = require("../../../function/time/timefunctions")
 module.exports = {
     name: "timeout",
-    opermision: [],
+    permision: [PermissionsBitField.Flags.ModerateMembers],
     onlyOwner: false,
+    onlyStaff : false,
     data: {
         name: "timeout",
         description: "Applica il timeout ad un utente",

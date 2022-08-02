@@ -1,7 +1,9 @@
+const { PermissionsBitField } = require('discord.js')
 module.exports = {
     name: "announce",
-    opermision: [],
+    permision: [PermissionsBitField.Flags.ModerateMembers],
     onlyOwner: false,
+    onlyStaff : false,
     data: {
         name: "announce",
         description: "Invia messagio attraverso il bot",

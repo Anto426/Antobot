@@ -1,7 +1,9 @@
+const { PermissionsBitField } = require('discord.js');
 module.exports = {
     name: "untimeout",
-    opermision: [],
+    permision: [PermissionsBitField.Flags.ModerateMembers],
     onlyOwner: false,
+    onlyStaff : false,
     data: {
         name: "untimeout",
         description: "Rimuove il timeout ad un utente",

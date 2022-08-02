@@ -1,7 +1,8 @@
 module.exports = {
     name: "cadd",
-    opermision: [],
+    permision: [],
     onlyOwner: false,
+    onlyStaff : false,
     data: {
         name: "cadd",
         description: "Aggiugere utente alle stanze private",

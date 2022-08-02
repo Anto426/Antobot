@@ -1,7 +1,9 @@
+const { PermissionsBitField } = require('discord.js');
 module.exports = {
     name: "unban",
-    opermision: [],
+    permision: [PermissionsBitField.Flags.BanMembers],
     onlyOwner: false,
+    onlyStaff : false,
     data: {
         name: "unban",
         description: "Unban utente",

@@ -1,8 +1,10 @@
+const { PermissionsBitField } = require('discord.js');
 module.exports = {
     name: 'clear',
     description: 'Elimina i messaggi specificando la quantita.',
-    opermision: [],
+    permision: [PermissionsBitField.Flags.ManageMessages],
     onlyOwner: false,
+    onlyStaff : false,
     data: {
         name: "clear",
         description: "comando invita",

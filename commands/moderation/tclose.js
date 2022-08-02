@@ -1,6 +1,9 @@
+
+const { PermissionsBitField } = require('discord.js')
 module.exports = {
     name: "tclose",
-    opermision: [],
+    permision: [],
+    onlyStaff : true,
     onlyOwner: false,
     data: {
         name: "tclose",
