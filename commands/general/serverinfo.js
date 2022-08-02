@@ -21,8 +21,7 @@ module.exports = {
                 { name: 'Owner', value: `\`\`\`\n${server.members.cache.get(server.ownerId).nickname}\`\`\`` },
                 { name: `Livello di verifica:`, value: `\`\`\`\nAlto\`\`\`` },
                 { name: `Server id:`, value: `\`\`\`\n${server.id}\`\`\`` },
-                { name: `Members:`, value: ` \`\`\`\n
-                
+                { name: `Members:`, value: ` \`\`\`\n  
 Membri tot: ${server.memberCount.toString()}
                   
 Bot:${server.members.cache.filter(x => x.user.bot).size.toString()}
