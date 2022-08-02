@@ -1,4 +1,4 @@
-let functions = require("./../../function/roomandticket/function")
+
 module.exports = {
     name: `guildMemberRemove`,
     async execute(member) {
@@ -15,10 +15,6 @@ module.exports = {
             channel.send({ embeds: [embed] }).catch(() => {})
 
             let type = "ticket"
-            for (let i = 0; i < 2; i++) {
-                functions.remove(member, type)
-                type = "room"
-            }
 
 
 

@@ -1,4 +1,4 @@
-odule.exports = {
+module.exports = {
     name: 'clear',
     description: 'Elimina i messaggi specificando la quantita.',
     onlyStaff: true,

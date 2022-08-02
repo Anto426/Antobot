@@ -1,3 +1,4 @@
+
     module.exports = {
 
         name: "guildCreate",
@@ -13,8 +14,10 @@
                 name: "MutedA",
                 permissions: [""]
             })
+            
             guild.channels.cache.forEach((channel) => {
                 channel.permissionOverwrites.edit(muted, { SEND_MESSAGES: false })
             })
+
         }
     }

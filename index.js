@@ -17,7 +17,7 @@ try {
     require("dotenv").config()
 } catch {}
 
-let update = require("./function/update/update")
+let update = require("./function/update/statusupdate")
 
 // code 
 

@@ -1,10 +1,12 @@
+const { ChannelType } = require('discord.js');
 module.exports = {
     name: "voiceStateUpdate",
     async execute(oldMember, newMember) {
 
+
         let category = newMember.guild.channels.cache.find(x => x.name.includes("TEMPORANEE"))
         let member = newMember.guild.members.cache.get(newMember.id)
-        let channel = newMember.guild.channels.cache.find(x => x.type == "GUILD_VOICE" && x.parent == category && x.name == member.user.username)
+        let channel = newMember.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.parent == category && x.name == member.user.username)
         try {
 
 
@@ -14,12 +16,16 @@ module.exports = {
                         channel.setUserLimit(configs[newMember.guild.name].stanze.temporanne[x].limit)
                         member.voice.setChannel(channel)
                     } else {
-                        let channel = await newMember.guild.channels.create(member.user.username, {
-                            type: 'GUILD_VOICE',
+
+                        channel = await newMember.guild.channels.create( {
+                            name:member.user.username,
+                            type: 2,
                             parent: category,
                             userLimit: configs[newMember.guild.name].stanze.temporanne[x].limit,
 
                         })
+
+                    console.log(channel)
                         member.voice.setChannel(channel)
                         return
                     }
@@ -28,7 +34,8 @@ module.exports = {
             }
 
 
-        } catch (err) {}
+        } catch (err) {
+        }
 
 
 

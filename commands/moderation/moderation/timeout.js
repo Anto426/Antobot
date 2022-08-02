@@ -1,5 +1,5 @@
 const { inspect } = require(`util`)
-let functions = require("../../../function/cvalu/function")
+let functions = require("../../../function/time/timefunctions")
 module.exports = {
     name: "timeout",
     onlyStaff: true,

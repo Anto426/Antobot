@@ -20,7 +20,7 @@ module.exports = {
 
 
 
-        let selectmenu = new Discord.MessageSelectMenu()
+        let selectmenu = new Discord.SelectMenuBuilder()
             .setCustomId(`help-${interaction.member.id}`)
             .setPlaceholder('Nothing selected')
 
@@ -33,7 +33,7 @@ module.exports = {
             }])
 
         })
-        const row = new Discord.MessageActionRow()
+        const row = new Discord.ActionRowBuilder()
             .addComponents(
                 selectmenu
             );

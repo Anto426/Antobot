@@ -1,6 +1,6 @@
 const { MessageAttachment } = require("discord.js");
 const { Captcha } = require("captcha-canvas");
-const { MessageActionRow, MessageButton } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
 module.exports = {
     name: `guildMemberAdd`,
     async execute(member) {
@@ -108,9 +108,9 @@ module.exports = {
                 .setDescription("Posso cancellare la chat ?")
                 .setThumbnail(configs.embed.images.load)
                 .setColor(configs.embed.color.red)
-            let row = new MessageActionRow()
+            let row = new ActionRowBuilder()
                 .addComponents(
-                    new MessageButton()
+                    new ButtonBuilder()
                     .setCustomId('deletechat')
                     .setStyle('DANGER')
                     .setEmoji("<:cestino:940545919928111126>"),
