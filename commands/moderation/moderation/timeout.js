@@ -94,7 +94,7 @@ module.exports = {
                     .setTitle("Error")
                     .setDescription("Qualcosa è andato storto")
                     .addFields([
-                        { name: 'Error', value: `\`\`\`js\n ${inspect((err.toString()))}  \`\`\`` },
+                        { name: 'Error', value: `\`\`\`\n ${inspect((err.toString()))}  \`\`\`` },
                     ])
                     .setThumbnail(configs.embed.images.error)
                     .setColor(configs.embed.color.red)
@@ -105,7 +105,7 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Utente timeoutato")
                 .addFields([
-                    { name: 'Reason', value: `\`\`\`js\n ${reason} \`\`\`` },
+                    { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
                 ])
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setDescription("<@" + utente + ">" + " timeoutato per " + functions.times(time))
@@ -120,7 +120,7 @@ module.exports = {
                 .setTitle("Error")
                 .setDescription(`${utente.toString()} ha già un timeout!`)
                 .addFields([
-                    { name: 'Fino a :', value: `\`\`\`js\n ${date} \`\`\`` },
+                    { name: 'Fino a :', value: `\`\`\`\n ${date} \`\`\`` },
                 ])
                 .setThumbnail(configs.embed.images.error)
                 .setColor(configs.embed.color.red)

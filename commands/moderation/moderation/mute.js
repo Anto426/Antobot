@@ -75,7 +75,7 @@ module.exports = {
         const embed = new Discord.EmbedBuilder()
             .setTitle("Utente mutato")
             .addFields([
-                { name: 'Reason', value: `\`\`\`js\n ${reason} \`\`\`` },
+                { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
             .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + utente + ">" + " mutato")
@@ -93,7 +93,7 @@ module.exports = {
         const embed1 = new Discord.EmbedBuilder()
             .setTitle("Utente mutato")
             .addFields([
-                { name: 'Reason', value: `\`\`\`js\n ${reason} \`\`\`` },
+                { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
             .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + utente + "> sei stato mutato ")

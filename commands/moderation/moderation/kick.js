@@ -47,7 +47,7 @@ module.exports = {
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " kickato")
                 .addFields([
-                    { name: 'Reason', value: `\`\`\`js\n ${reason} \`\`\`` },
+                    { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
                 ])
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setColor(configs.embed.color.green)

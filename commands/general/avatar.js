@@ -14,12 +14,9 @@ module.exports = {
     },
     execute(interaction) {
 
-        var member = interaction.options.getUser("user")
+        var member = interaction.options.getMember("user")
         if (!member) {
             utente = interaction.member
-        } else {
-            var utente = interaction.guild.members.cache.get(member.id)
-
         }
         var embed = new Discord.EmbedBuilder()
             .setTitle(utente.user.tag)

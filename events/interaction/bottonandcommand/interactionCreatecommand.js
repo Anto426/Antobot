@@ -134,13 +134,14 @@ module.exports = {
 
 
             } catch (err) {
+                console.log(err)
                 const embed = new Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription(`Qualcosa è andato storto`)
                     .setThumbnail(configs.embed.images.error)
                     .setColor(configs.embed.color.red)
                     .addFields([
-                        { name: 'Error:', value: `\`\`\`js\n ${inspect((err.toString()))}  \`\`\`` },
+                        { name: 'Error:', value: `\`\`\`\n ${inspect((err.toString()))}  \`\`\`` },
                     ])
                 interaction.reply({ embeds: [embed], ephemeral: true })
             }

@@ -10,7 +10,7 @@ module.exports = {
     execute(interaction) {
         var embed = new Discord.EmbedBuilder()
             .addFields([
-                { name: 'Pong', value: `\`\`\`js\n${client.ws.ping}ms\`\`\`` },
+                { name: 'Pong', value: `\`\`\`\n${client.ws.ping}ms\`\`\`` },
             ])
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
             .setColor(configs.embed.color.green)

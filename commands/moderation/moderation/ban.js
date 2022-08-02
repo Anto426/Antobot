@@ -54,7 +54,7 @@ module.exports = {
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setColor(configs.embed.color.green)
                 .addFields([
-                    { name: 'Reason', value: `\`\`\`js\n ${reason} \`\`\`` },
+                    { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
                 ])
             interaction.reply({ embeds: [embed] })
         } catch {
