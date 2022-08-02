@@ -139,7 +139,9 @@ module.exports = {
                     .setDescription(`Qualcosa è andato storto`)
                     .setThumbnail(configs.embed.images.error)
                     .setColor(configs.embed.color.red)
-                    .addField("Error:", `\`\`\`js\n ${inspect((err.toString()))}  \`\`\``)
+                    .addFields([
+                        { name: 'Error:', value: `\`\`\`js\n ${inspect((err.toString()))}  \`\`\`` },
+                    ])
                 interaction.reply({ embeds: [embed], ephemeral: true })
             }
         }

@@ -45,7 +45,9 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " kickato")
-                .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
+                .addFields([
+                    { name: 'Reason', value: `\`\`\`js\n ${reason} \`\`\`` },
+                ])
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setColor(configs.embed.color.green)
             interaction.reply({ embeds: [embed] })

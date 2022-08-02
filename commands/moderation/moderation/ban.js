@@ -50,9 +50,11 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " bannato")
-                .addField("Reason", `\`\`\`js\n ${reason} \`\`\``, true)
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setColor(configs.embed.color.green)
+                .addFields([
+                    { name: 'Reason', value: `\`\`\`js\n ${reason} \`\`\`` },
+                ])
             interaction.reply({ embeds: [embed] })
         } catch {
             const embed = new Discord.EmbedBuilder()

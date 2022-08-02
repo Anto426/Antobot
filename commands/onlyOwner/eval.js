@@ -32,8 +32,10 @@ module.exports = {
                 .setTitle("Error")
                 .setColor(configs.embed.color.red)
                 .setDescription("Ho riscrontrato alcuni errori!!")
-                .addField("Input:", `\`\`\`js\n ${args}  \`\`\``)
-                .addField("Error:", `\`\`\`js\n ${inspect((error.toString()))}  \`\`\``)
+                .addFields([
+                    { name: 'Input:', value: `\`\`\`js\n ${args}  \`\`\``},
+                    { name: 'Error:', value: `\`\`\`js\n ${inspect((error.toString()))}  \`\`\``},
+                ])
                 .setThumbnail(configs.embed.images.error)
             interaction.reply({ embeds: [embed] })
         }

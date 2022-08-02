@@ -35,13 +35,17 @@ module.exports = {
             .setTitle(utente.user.tag)
             .setDescription("Tutte le info di questo utente")
             .setThumbnail(utente.user.displayAvatarURL({ dynamic: true }))
-            .addField("User id", `\`\`\`js\n${utente.user.id}\`\`\``, true)
-            .addField("Status", `\`\`\`js\n${utente.presence ? utente.presence.status : "offline"}\`\`\``, true)
-            .addField("Is a bot?", `\`\`\`js\n${utente.user.bot ? "Yes" : "No"}\`\`\``, true)
-            .addField("Account created", `\`\`\`js\n${utente.user.createdAt.toDateString()} \`\`\``, true)
-            .addField("Joined this server", `\`\`\`js\n${utente.joinedAt.toDateString()}\`\`\``, true)
-            .addField("Permissions", `\`\`\`js\n${elencoPermessi}\`\`\``, false)
-            .addField("Roles", `\`\`\`js\n${utente.roles.cache.map(ruolo => ruolo.name).join("\r")}\`\`\``, false)
+            .addFields([
+                { name: 'User id', value: `\`\`\`js\n${utente.user.id}\`\`\`` },
+                { name: 'Status', value: `\`\`\`js\n${utente.presence ? utente.presence.status : "offline"}\`\`\`` },
+                { name: 'Is a bot?', value: `\`\`\`js\n${utente.user.bot ? "Yes" : "No"}\`\`\`` },
+                { name: 'Account created', value: `\`\`\`js\n${utente.user.createdAt.toDateString()} \`\`\`` },
+                { name: 'Joined this server', value: `\`\`\`js\n${utente.joinedAt.toDateString()}\`\`\`` },
+                { name: 'Permissions', value: `\`\`\`js\n${elencoPermessi}\`\`\`` },
+                { name: 'Roles', value: `\`\`\`js\n${utente.roles.cache.map(ruolo => ruolo.name).join("\r")}\`\`\`` },
+                
+                
+            ])
             .setColor(configs.embed.color.green)
         interaction.reply({ embeds: [embed] })
     }
