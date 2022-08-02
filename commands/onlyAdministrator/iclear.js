@@ -1,6 +1,7 @@
+const { PermissionsBitField } = require('discord.js')
 module.exports = {
     name: "iclear",
-    permision: [],
+    permision: [PermissionsBitField.Flags.Administrator],
     onlyOwner: true,
     onlyStaff : false,
     data: {

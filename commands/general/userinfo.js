@@ -3,7 +3,7 @@ module.exports = {
     name: "userinfo",
     permision: [],
     onlyOwner: false,
-
+    onlyStaff : false,
     data: {
         name: "userinfo",
         description: "Informazioni di un utente",

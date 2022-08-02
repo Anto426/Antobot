@@ -2,7 +2,7 @@ module.exports = {
     name: "serverinfo",
     permision: [],
     onlyOwner: false,
-
+    onlyStaff : false,
     data: {
         name: "serverinfo",
         description: "Informazioni sul server"

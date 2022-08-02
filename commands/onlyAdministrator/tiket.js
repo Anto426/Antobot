@@ -1,7 +1,7 @@
-const { ButtonStyle } = require('discord.js');
+const { ButtonStyle ,PermissionsBitField} = require('discord.js');
 module.exports = {
     name: "tiket",
-    permision: [],
+    permision: [PermissionsBitField.Flags.Administrator],
     onlyOwner: true,
     onlyStaff : false,
     data: {
