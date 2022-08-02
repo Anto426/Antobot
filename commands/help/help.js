@@ -1,7 +1,8 @@
 module.exports = {
     name: "help",
-    onlyStaff: false,
+    permision: [],
     onlyOwner: false,
+
     data: {
         name: "help",
         description: "Info sui comandi"

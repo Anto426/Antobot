@@ -1,6 +1,6 @@
 const path = require('path')
 
-async function filecheck(file){
+async function filecheck(file) {
     try {
         fs.lstatSync(file).isFile()
     } catch {
@@ -16,7 +16,7 @@ async function filecheck(file){
     }
 }
 
-async function dircheck(interaction){
+async function dircheck(interaction) {
     let directory = `./Database/${interaction.guild.name}`
     try {
         fs.lstatSync(directory).isDirectory()
@@ -34,6 +34,6 @@ async function dircheck(interaction){
 }
 
 module.exports = {
-    filecheck:filecheck,
-    dircheck:dircheck
+    filecheck: filecheck,
+    dircheck: dircheck
 }

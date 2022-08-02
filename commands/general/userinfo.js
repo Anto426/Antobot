@@ -1,7 +1,8 @@
 module.exports = {
     name: "userinfo",
-    onlyStaff: false,
+    permision: [],
     onlyOwner: false,
+
     data: {
         name: "userinfo",
         description: "Informazioni di un utente",
@@ -43,8 +44,8 @@ module.exports = {
                 { name: 'Joined this server', value: `\`\`\`js\n${utente.joinedAt.toDateString()}\`\`\`` },
                 { name: 'Permissions', value: `\`\`\`js\n${elencoPermessi}\`\`\`` },
                 { name: 'Roles', value: `\`\`\`js\n${utente.roles.cache.map(ruolo => ruolo.name).join("\r")}\`\`\`` },
-                
-                
+
+
             ])
             .setColor(configs.embed.color.green)
         interaction.reply({ embeds: [embed] })

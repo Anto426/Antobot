@@ -1,6 +1,6 @@
 module.exports = {
     name: "iclear",
-    onlyStaff: false,
+    opermision: [],
     onlyOwner: true,
     data: {
         name: "iclear",

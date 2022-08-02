@@ -1,6 +1,6 @@
 module.exports = {
     name: "tiket",
-    onlyStaff: false,
+    opermision: [],
     onlyOwner: true,
     data: {
         name: "tiket",

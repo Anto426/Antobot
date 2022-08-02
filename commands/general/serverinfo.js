@@ -1,7 +1,8 @@
 module.exports = {
     name: "serverinfo",
-    onlyStaff: false,
+    permision: [],
     onlyOwner: false,
+
     data: {
         name: "serverinfo",
         description: "Informazioni sul server"
@@ -17,10 +18,10 @@ module.exports = {
             .setDescription("Tutte le info su questo server")
             .setThumbnail(server.iconURL({ dynamic: true }) || configs.embed.images.noimmage)
             .addFields([
-                  { name: 'Owner', value: `\`\`\`\n${server.members.cache.get(server.ownerId).nickname}\`\`\`` },
-                  { name: `Livello di verifica:`, value: `\`\`\`\nAlto\`\`\`` },                  
-                  { name: `Server id:`, value: `\`\`\`\n${server.id}\`\`\`` },                              
-                  { name: `Members:`, value: ` \`\`\`\n
+                { name: 'Owner', value: `\`\`\`\n${server.members.cache.get(server.ownerId).nickname}\`\`\`` },
+                { name: `Livello di verifica:`, value: `\`\`\`\nAlto\`\`\`` },
+                { name: `Server id:`, value: `\`\`\`\n${server.id}\`\`\`` },
+                { name: `Members:`, value: ` \`\`\`\n
                 
 Membri tot: ${server.memberCount.toString()}
                   
@@ -32,16 +33,16 @@ online: ${countingonline + countingidle}
                   
                   
                   \`\`\`` },
-                  { name: `Channels:`, value: `\`\`\`\n
+                { name: `Channels:`, value: `\`\`\`\n
 
 Canali tot:${server.channels.cache.filter(x=> x.type == "GUILD_VOICE" || x.type == "GUILD_TEXT").size.toString()}
                   
 Canali vocali:${server.channels.cache.filter(x=> x.type == "GUILD_VOICE").size.toString()} || Canali testuali: ${server.channels.cache.filter(x=> x.type == "GUILD_TEXT").size.toString()}
                   
                   \`\`\`` },
-                  { name: `Server created:`, value: `\`\`\`\n${server.id}\`\`\`` },
-                  { name: `Boost level Level:`, value: `\`\`\`\n${server.id}\`\`\`` }
-                ])
+                { name: `Server created:`, value: `\`\`\`\n${server.id}\`\`\`` },
+                { name: `Boost level Level:`, value: `\`\`\`\n${server.id}\`\`\`` }
+            ])
         interaction.reply({ embeds: [embed] })
     }
 }

@@ -1,4 +1,4 @@
-async function createchannel(interaction, channelname, type, category, id ,allow, deny, alloweveryone ,denyeveryone ,topic ) {
+async function createchannel(interaction, channelname, type, category, id, allow, deny, alloweveryone, denyeveryone, topic) {
     try {
         var channel = await interaction.guild.channels.create(channelname, {
             type: type,
@@ -7,28 +7,28 @@ async function createchannel(interaction, channelname, type, category, id ,allow
             permissionOverwrites: [{
                 id: id,
                 allow: allow,
-                deny : deny
+                deny: deny
             }, {
                 id: interaction.member.guild.roles.everyone,
-                allow: alloweveryone ,
+                allow: alloweveryone,
                 deny: denyeveryone
             }]
         })
-    }catch{
+    } catch {
 
     }
-    return channel 
+    return channel
 }
 
-function verificchannel(idorname,interaction){
+function verificchannel(idorname, interaction) {
     let channel = interaction.guild.channels.find(x => x.id || x.name)
-    if(!channel) {
+    if (!channel) {
         let embed = new Discord.EmbedBuilder()
-        .setTitle("Erroor")
-        .setImage(configs.embed.image.error)
-        .setColor(configs.embed.color.red)
-        .setDescription("Error non ho trovaato il canale")
-        return false  
+            .setTitle("Erroor")
+            .setImage(configs.embed.image.error)
+            .setColor(configs.embed.color.red)
+            .setDescription("Error non ho trovaato il canale")
+        return false
     }
-    return true 
+    return true
 }

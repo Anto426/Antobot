@@ -1,6 +1,6 @@
 module.exports = {
     name: "tclose",
-    onlyStaff: true,
+    opermision: [],
     onlyOwner: false,
     data: {
         name: "tclose",
@@ -20,15 +20,15 @@ module.exports = {
                     trovata = true
                     console.log(y)
                     if (y != "iduser") {
-    
+
                         let channel = interaction.guild.channels.cache.get(x[y])
                         try {
                             channel.delete()
                         } catch (err) { console.log(err) }
                     }
                 }
-    
-    
+
+
             }
         })
         parseJson.list = temp
@@ -36,7 +36,7 @@ module.exports = {
             if (err) throw err;
         })
 
-        
+
 
     }
 }

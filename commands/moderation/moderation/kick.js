@@ -1,7 +1,8 @@
 module.exports = {
     name: "kick",
-    onlyStaff: true,
+    permision: [],
     onlyOwner: false,
+
     data: {
         name: "kick",
         description: "Espelle utente ",

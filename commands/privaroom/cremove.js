@@ -1,6 +1,6 @@
 module.exports = {
     name: "cremove",
-    onlyStaff: false,
+    opermision: [],
     onlyOwner: false,
     data: {
         name: "cremove",

@@ -1,6 +1,6 @@
 module.exports = {
     name: "untimeout",
-    onlyStaff: true,
+    opermision: [],
     onlyOwner: false,
     data: {
         name: "untimeout",

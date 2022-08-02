@@ -2,7 +2,7 @@ const { inspect } = require(`util`)
 let functions = require("../../../function/time/timefunctions")
 module.exports = {
     name: "timeout",
-    onlyStaff: true,
+    opermision: [],
     onlyOwner: false,
     data: {
         name: "timeout",
@@ -94,7 +94,7 @@ module.exports = {
                     .setTitle("Error")
                     .setDescription("Qualcosa è andato storto")
                     .addFields([
-                        { name: 'Error', value: `\`\`\`js\n ${inspect((err.toString()))}  \`\`\``},
+                        { name: 'Error', value: `\`\`\`js\n ${inspect((err.toString()))}  \`\`\`` },
                     ])
                     .setThumbnail(configs.embed.images.error)
                     .setColor(configs.embed.color.red)

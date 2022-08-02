@@ -1,6 +1,6 @@
 module.exports = {
     name: "mute",
-    onlyStaff: true,
+    opermision: [],
     onlyOwner: false,
     data: {
         name: "mute",

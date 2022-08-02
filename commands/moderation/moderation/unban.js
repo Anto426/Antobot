@@ -1,6 +1,6 @@
 module.exports = {
     name: "unban",
-    onlyStaff: true,
+    opermision: [],
     onlyOwner: false,
     data: {
         name: "unban",

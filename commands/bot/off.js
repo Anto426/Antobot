@@ -1,7 +1,8 @@
 module.exports = {
     name: "off",
-    onlyStaff: false,
+    permision: [],
     onlyOwner: true,
+
     data: {
         name: "off",
         description: "Spegne il bot"

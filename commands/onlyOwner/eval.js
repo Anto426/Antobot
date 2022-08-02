@@ -1,7 +1,7 @@
 const { inspect } = require(`util`)
 module.exports = {
     name: "eval",
-    onlyStaff: false,
+    opermision: [],
     onlyOwner: true,
     data: {
         name: "eval",
@@ -33,8 +33,8 @@ module.exports = {
                 .setColor(configs.embed.color.red)
                 .setDescription("Ho riscrontrato alcuni errori!!")
                 .addFields([
-                    { name: 'Input:', value: `\`\`\`js\n ${args}  \`\`\``},
-                    { name: 'Error:', value: `\`\`\`js\n ${inspect((error.toString()))}  \`\`\``},
+                    { name: 'Input:', value: `\`\`\`js\n ${args}  \`\`\`` },
+                    { name: 'Error:', value: `\`\`\`js\n ${inspect((error.toString()))}  \`\`\`` },
                 ])
                 .setThumbnail(configs.embed.images.error)
             interaction.reply({ embeds: [embed] })

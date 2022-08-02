@@ -17,15 +17,15 @@ module.exports = {
                         member.voice.setChannel(channel)
                     } else {
 
-                        channel = await newMember.guild.channels.create( {
-                            name:member.user.username,
+                        channel = await newMember.guild.channels.create({
+                            name: member.user.username,
                             type: 2,
                             parent: category,
                             userLimit: configs[newMember.guild.name].stanze.temporanne[x].limit,
 
                         })
 
-                    console.log(channel)
+                        console.log(channel)
                         member.voice.setChannel(channel)
                         return
                     }
@@ -34,8 +34,7 @@ module.exports = {
             }
 
 
-        } catch (err) {
-        }
+        } catch (err) {}
 
 
 

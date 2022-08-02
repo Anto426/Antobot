@@ -1,6 +1,6 @@
 module.exports = {
     name: "avatar",
-    onlyStaff: false,
+    permision: [],
     onlyOwner: false,
     data: {
         name: "avatar",

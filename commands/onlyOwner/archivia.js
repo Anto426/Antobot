@@ -1,6 +1,6 @@
 module.exports = {
     name: "archivia",
-    onlyStaff: false,
+    opermision: [],
     onlyOwner: true,
     data: {
         name: "archivia",
