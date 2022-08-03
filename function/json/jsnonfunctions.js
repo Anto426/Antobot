@@ -6,9 +6,8 @@ async function jread(interaction, type) {
 }
 
 
-async function jwrite(interaction, type, content) {
-    let file = `./Database/${interaction.guild.name}/${type}.json`
-    fs.writeFile(file, JSON.stringify(content), function(err) {
+async function jwrite(dirfile, content) {
+    fs.writeFile(dirfile, JSON.stringify(content), function(err) {
         if (err) throw err;
     })
 
