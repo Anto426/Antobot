@@ -15,7 +15,7 @@ global.client = new Discord.Client({
 });
 try {
     require("dotenv").config()
-} catch {}
+} catch { }
 
 let update = require("./function/update/statusupdate")
 
@@ -58,7 +58,7 @@ for (const folder of eventsFolders) {
                         event.execute(...args)
                     }
                 });
-            } catch {}
+            } catch { }
         } else {
             const eventsFiles2 = fs.readdirSync(`./events/${folder}/${file}`)
             for (const file2 of eventsFiles2) {
@@ -70,7 +70,7 @@ for (const folder of eventsFolders) {
                             event.execute(...args)
                         }
                     });
-                } catch {}
+                } catch { }
             }
         }
     }
@@ -103,9 +103,9 @@ client.on("messageCreate", (message) => {
         message.channel.messages.fetch(idmessage).then(msg => {
 
             for (var i = 2; i < args.length; i++) {
-                msg.react(args[i]).catch(() => {})
+                msg.react(args[i]).catch(() => { })
             }
-        }).catch(() => {})
+        }).catch(() => { })
     }
 })
 

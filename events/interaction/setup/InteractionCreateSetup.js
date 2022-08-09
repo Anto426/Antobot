@@ -1,40 +1,53 @@
 const { InteractionType } = require('discord.js');
+
+function prova(interaction) {
+
+    interaction.guild.roles.cache.posit
+}
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {
         if (interaction.type != InteractionType.ApplicationCommand) {
-            let selectmenu = new Discord.SelectMenuBuilder()
-                .setPlaceholder('Nothing selected')
-
-
-
-
 
             if (interaction.customId == "setup") {
-                let embed = new Discord.EmbedBuilder()
-                    .setTitle("💽Setup")
+
+                const embed = new Discord.EmbedBuilder()
+                    .setTitle("Set role")
+                    .setDescription("Pinga i ruoli che faranno parte dello staff")
                     .setThumbnail(configs.embed.images.load)
                     .setColor(configs.embed.color.green)
-                    .setDescription("Ciao per prima cosa scegli i ruoli che potranno usare i comandi da moderazione")
-                selectmenu
-                    .setCustomId(`role`)
-                    .setMaxValues(interaction.guild.roles.cache.size)
 
-                interaction.guild.roles.cache.forEach(x => {
-                    selectmenu.addOptions([{
-                        label: x.name,
-                        value: x.id,
-
-                    }])
+                interaction.channel.send({ embeds: [embed] })
 
 
-                });
-                const row = new Discord.ActionRowBuilder()
-                    .addComponents(
-                        selectmenu
-                    );
+                let filter = (message) => {
+                    let embed = new Discord.EmbedBuilder()
+                        .setTitle("Error")
+                        .setDescription("Impossibile verificare i ruoli controlla di aver pingato dei ruoli")
+                        .setColor(configs.embed.color.red)
+                        .setThumbnail(configs.embed.images.error)
+                    if (message.member.user.bot) return
+                    if (message.mentions.roles.size != 0) return true;
+                    else interaction.channel.send({ embeds: [embed] })
+                }
 
-                interaction.update({ embeds: [embed], components: [row] })
+                response = await interaction.channel.awaitMessages({
+                    filter,
+                    max: 1,
+                    time: 300000,
+                    errors: ["time"],
+                })
+
+                if(response){
+
+                    console.log(response)
+                }
+
+
+
+
+
+
             }
 
 

@@ -19,7 +19,6 @@ async function dircheck(directory, namedir) {
     } catch {
 
 
-
         fs.mkdir(path.join(directory, namedir), (err) => {
             if (err) {
                 return console.log(err);

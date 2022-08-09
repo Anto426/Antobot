@@ -7,7 +7,7 @@ async function jread(interaction, type) {
 
 
 async function jwrite(dirfile, content) {
-    fs.writeFile(dirfile, JSON.stringify(content), function(err) {
+    fs.writeFile(dirfile, JSON.stringify(content), function (err) {
         if (err) throw err;
     })
 

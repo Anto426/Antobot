@@ -8,7 +8,7 @@ module.exports = {
             try {
                 let owner = false
                 for (let id in configs.owner) {
-                    if (interaction.member.id == configs.owner[id] ) { owner = true }
+                    if (interaction.member.id == configs.owner[id]) { owner = true }
                 }
                 try {
                     var staf = false
