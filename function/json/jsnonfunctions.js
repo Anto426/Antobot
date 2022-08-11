@@ -1,29 +1,40 @@
-async function jread(interaction, type) {
-    let file = `./Database/${interaction.guild.name}/${type}.json`
+async function jread(file) {
     let content = fs.readFileSync(file)
     var parseJson = JSON.parse(content)
     return parseJson
 }
 
 
-async function jwrite(dirfile, content) {
-    fs.writeFile(dirfile, JSON.stringify(content), function (err) {
+async function jwrite(file, content) {
+    fs.writeFile(file, JSON.stringify(content), function (err) {
         if (err) throw err;
     })
 
 }
 
-async function jremove(content, fremove) {
-    let temp = [];
+async function jcheck(file, element) {
+    let content = jread(file)
     content.forEach(x => {
-        for (let i in x.legth) {
-            if (x[i] != fremove) {
-                temp.push(x)
-            }
-        }
-    })
-    return temp
 
+    })
+
+}
+async function jremove(content, element) {
+    let temp = [];
+    if (content.isArray()) {
+        content.forEach(x => {
+            for (let i in x.legth) {
+                if (x[i] != element) {
+                    temp.push(x)
+                }
+            }
+        })
+        return temp
+    } else {
+        for (let i in content) {
+
+        }
+    }
 }
 
 module.exports = {
