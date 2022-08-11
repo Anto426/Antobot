@@ -1,16 +1,10 @@
 const { InteractionType } = require('discord.js');
-
-function prova(interaction) {
-
-    interaction.guild.roles.cache.posit
-}
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {
         if (interaction.type != InteractionType.ApplicationCommand) {
 
             if (interaction.customId == "setup") {
-
                 const embed = new Discord.EmbedBuilder()
                     .setTitle("Set role")
                     .setDescription("Pinga i ruoli che faranno parte dello staff")
@@ -31,16 +25,15 @@ module.exports = {
                     else interaction.channel.send({ embeds: [embed] })
                 }
 
-                response = await interaction.channel.awaitMessages({
+                role = await interaction.channel.awaitMessages({
                     filter,
                     max: 1,
                     time: 300000,
                     errors: ["time"],
                 })
 
-                if(response){
+                if(role){
 
-                    console.log(response)
                 }
 
 

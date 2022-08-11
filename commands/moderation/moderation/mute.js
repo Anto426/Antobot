@@ -34,15 +34,6 @@ module.exports = {
             return interaction.reply({ embeds: [embed] })
 
         }
-        if (interaction.member == utente) {
-            const embed = new Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(`Tutto bene bro ti voi mutarti  da solo ?!`)
-                .setThumbnail(configs.embed.images.scemo)
-                .setColor(configs.embed.color.red)
-            return interaction.reply({ embeds: [embed] })
-
-        }
 
         let muted = interaction.guild.roles.cache.find(x => x.name == "MutedA")
         if (!muted) {

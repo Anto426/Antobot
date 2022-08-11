@@ -26,15 +26,7 @@ module.exports = {
 
         var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason") || "Nesun motivo"
-        if (interaction.member == utente) {
-            const embed = new Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(`Tutto bene bro ti voi kikare da solo ?!`)
-                .setThumbnail(configs.embed.images.scemo)
-                .setColor(configs.embed.color.red)
-            return interaction.reply({ embeds: [embed] })
 
-        }
         if (!utente.kickable) {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")

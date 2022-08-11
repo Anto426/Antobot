@@ -77,15 +77,6 @@ module.exports = {
             return interaction.reply({ embeds: [embed] })
 
         }
-        if (interaction.member == utente) {
-            const embed = new Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(`Tutto bene bro ti voi applicare il timeout da solo ?!`)
-                .setThumbnail(configs.embed.images.scemo)
-                .setColor(configs.embed.color.red)
-            return interaction.reply({ embeds: [embed] })
-
-        }
         if (utente.communicationDisabledUntilTimestamp == null || utente.communicationDisabledUntilTimestamp < Date.now()) {
 
 

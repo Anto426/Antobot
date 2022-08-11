@@ -26,15 +26,6 @@ module.exports = {
 
         var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason") || "Nesun motivo"
-        if (interaction.member == utente) {
-            const embed = new Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(`Tutto bene bro ti voi bannare da solo ?!`)
-                .setThumbnail(configs.embed.images.scemo)
-                .setColor(configs.embed.color.red)
-            interaction.reply({ embeds: [embed] })
-            return
-        }
         if (!utente.bannable) {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
