@@ -7,8 +7,10 @@ const { MessageAttachment } = require("discord.js");
 let stato = true
 let settings = require("./Settings/settings.json")
 let Discord = require('discord.js')
+let owner = require("./Settings/owner.json")
 let fs = require("fs");
 let verifica = false
+
 let client = new Discord.Client({
     intents: 32767,
     partials: [Partials.User, Partials.Reaction, Partials.Message]
@@ -19,7 +21,8 @@ module.exports = {
     Discord:Discord,
     fs:fs,
     verifica:verifica,
-    client:client
+    client:client,
+    owner:owner,
 }
 try {
     require("dotenv").config()

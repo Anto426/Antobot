@@ -8,7 +8,7 @@ module.exports = {
         if (interaction.type == InteractionType.ApplicationCommand) {
             try {
                 let owner = false
-                for (let id in configs.settings.owner) {
+                for (let id in configs.owner) {
                     if (interaction.member.id == configs.settings.owner[id]) { owner = true }
                 }
                 try {
