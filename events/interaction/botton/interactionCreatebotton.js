@@ -1,5 +1,5 @@
-const jsonf = require("./../../../function/json/jsnonfunctions")
-const check = require("./../../../function/check/check")
+const jsonf = require("../../../function/json/jsnonfunctions")
+const check = require("../../../function/check/check")
 
 function createchannel () {
     
@@ -61,7 +61,7 @@ module.exports = {
 
             if (interaction.customId.split("-").includes("help")) {
 
-                idobject = require("./../../../commands/help/help")
+                idobject = require("../../../commands/help/help")
                 let folders = []
 
                 let commandsFolder = fs.readdirSync("./commands");

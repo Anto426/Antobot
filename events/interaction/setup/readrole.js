@@ -1,4 +1,4 @@
-const { InteractionType } = require('discord.js');
+/*const { InteractionType } = require('discord.js');
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {
@@ -50,4 +50,4 @@ module.exports = {
         }
 
     }
-}
+}*/

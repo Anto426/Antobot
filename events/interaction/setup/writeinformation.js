@@ -1,4 +1,4 @@
-const check = require("./../../../function/check/check")
+/*const check = require("./../../../function/check/check")
 const jsonf = require("./../../../function/json/jsnonfunctions")
 const { InteractionType } = require('discord.js');
 module.exports = {
@@ -34,4 +34,4 @@ module.exports = {
             }
         }
     }
-}
+}*/
