@@ -1,7 +1,7 @@
-const { MessageAttachment } = require("configs.Discord.js");
+const { MessageAttachment } = require("discord.js");
 const { Captcha } = require("captcha-canvas");
-const { ActionRowBuilder, ButtonBuilder,ButtonStyle } = require('configs.Discord.js');
-const configs = require("./../../index")
+const { ActionRowBuilder, ButtonBuilder,ButtonStyle } = require('discord.js');
+const configs = require("./../../../index")
 module.exports = {
     name: `guildMemberAdd`,
     async execute(member) {
