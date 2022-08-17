@@ -2,17 +2,25 @@
 // v4.0
 
 // variabili 
-global.stato = true
-global.configs = require("./Config/configs.json")
-global.Discord = require('discord.js')
-global.fs = require("fs");
-global.verifica = false
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
-const { MessageAttachment } = require("discord.js");
-global.client = new Discord.Client({
+let stato = true
+let settings = require("./Config/configs.config.json")
+let Discord = require('discord.js')
+let fs = require("fs");
+let verifica = false
+let client = new Discord.Client({
     intents: 32767,
     partials: [Partials.User, Partials.Reaction, Partials.Message]
 });
+module.exports = {
+    stato: stato,
+    settings:settings,
+    Discord:Discord,
+    fs:fs,
+    verifica:verifica,
+    client:client
+}
+const { Client, GatewayIntentBits, Partials } = require('discord.js');
+const { MessageAttachment } = require("discord.js");
 try {
     require("dotenv").config()
 } catch { }
