@@ -9,17 +9,20 @@ module.exports = {
             try {
                 let owner = false
                 for (let id in configs.owner) {
-                    if (interaction.member.id == configs.settings.owner[id]) { owner = true }
+                    if (interaction.member.id == configs.owner[id]) { owner = true }
                 }
+                let sowner = false
+                if (interaction.member.id == interaction.guild.ownerId) { sowner = true }
+
                 try {
                     var staf = false
                     for (let role in configs[interaction.guild.name].role.staff) {
                         if (interaction.member.roles.cache.has(configs[interaction.guild.name].role.staff[role])) { staf = true }
                     }
-                    for (let id in configs.settings.owner) {
-                        if (interaction.member.id == configs.settings.owner[id]) { staf = true }
+                    for (let id in configs.owner) {
+                        if (interaction.member.id == configs.owner[id]) { staf = true }
                     }
-                } catch {}
+                } catch { }
                 const command = configs.client.commands.get(interaction.commandName)
                 if (!command) return
 
@@ -37,7 +40,7 @@ module.exports = {
 
 
 
-                        if (staf || owner) {
+                        if (staf || owner || sowner) {
                             let trovato = false
                             let trovato2 = false
                             console.log("permesso accordato")
@@ -84,7 +87,7 @@ module.exports = {
 
                     if (command.onlyOwner) {
 
-                        if (owner) {
+                        if (owner || sowner) {
 
                             console.log("permesso accordato")
                             command.execute(interaction)
@@ -117,7 +120,7 @@ module.exports = {
                         }
                     }
 
-                    if (interaction.channel.name == "「💻」comandi" || owner) {
+                    if (interaction.channel.name == "「💻」comandi" || owner || sowner) {
                         command.execute(interaction)
                         return
                     } else {
