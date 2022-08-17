@@ -1,6 +1,6 @@
 const { inspect } = require(`util`)
-const { InteractionType } = require('configs.Discord.js');
-const configs = require("./../../index")
+const { InteractionType } = require('discord.js');
+const configs = require("./../../../index")
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {

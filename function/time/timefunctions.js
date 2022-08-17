@@ -19,7 +19,6 @@ function times(millis) {
 }
 
 
-const configs = require("./../../index")
 module.exports = {
     times: times
 }

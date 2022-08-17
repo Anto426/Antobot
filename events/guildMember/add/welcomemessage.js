@@ -1,6 +1,6 @@
 const { createCanvas, loadImage, registerFont } = require("canvas")
 registerFont("./canavas/Welcome/font/Glitch.ttf", { family: "glitch" })
-const configs = require("./../../index")
+const configs = require("./../../../index")
 module.exports = {
     name: `guildMemberAdd`,
     async execute(member) {

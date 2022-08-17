@@ -2,8 +2,10 @@
 // v4.0
 
 // variabili 
+const { Client, GatewayIntentBits, Partials } = require('discord.js');
+const { MessageAttachment } = require("discord.js");
 let stato = true
-let settings = require("./Config/configs.settings.json")
+let settings = require("./Settings/settings.json")
 let Discord = require('discord.js')
 let fs = require("fs");
 let verifica = false
@@ -19,8 +21,6 @@ module.exports = {
     verifica:verifica,
     client:client
 }
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
-const { MessageAttachment } = require("discord.js");
 try {
     require("dotenv").config()
 } catch { }

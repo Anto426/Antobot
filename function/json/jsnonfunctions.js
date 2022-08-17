@@ -38,7 +38,6 @@ async function jremove(content, element) {
     }
 }
 
-const configs = require("./../../index")
 module.exports = {
     jread: jread,
     jwrite: jwrite,

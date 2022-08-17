@@ -1,3 +1,4 @@
+
 async function activity() {
 
     let frasi = [" moderare il server", "/help"]
@@ -7,7 +8,7 @@ async function activity() {
 }
 
 
-const configs = require("./../../index")
+
 module.exports = {
     activity: activity
 }

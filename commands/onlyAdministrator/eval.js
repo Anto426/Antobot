@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('configs.Discord.js')
+const { PermissionsBitField } = require('discord.js')
 const { inspect } = require(`util`)
 const configs = require("./../../index")
 module.exports = {

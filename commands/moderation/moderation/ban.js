@@ -1,5 +1,5 @@
-const { PermissionsBitField } = require('configs.Discord.js');
-const configs = require("./../../index")
+const { PermissionsBitField } = require('discord.js');
+const configs = require("./../../../index")
 module.exports = {
     name: "ban",
     permision: [PermissionsBitField.Flags.BanMembers],

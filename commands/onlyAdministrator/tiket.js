@@ -1,4 +1,4 @@
-const { ButtonStyle ,PermissionsBitField} = require('configs.Discord.js');
+const { ButtonStyle ,PermissionsBitField} = require('discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "tiket",

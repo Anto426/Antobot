@@ -1,4 +1,4 @@
-const configs = require("./../../index")
+const configs = require("./../../../index")
 module.exports = {
     name: "messageReactionAdd",
     async execute(messageReaction, user) {
