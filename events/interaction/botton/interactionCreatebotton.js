@@ -1,9 +1,6 @@
 const jsonf = require("../../../function/json/jsnonfunctions")
 const check = require("../../../function/check/check")
 const configs = require("../../../index")
-function createchannel () {
-    
-}
 const { InteractionType } = require('discord.js');
 
 module.exports = {
@@ -34,30 +31,6 @@ module.exports = {
 
 
             }
-
-
-
-            if (interaction.customId == "opentiket") {
-
-                let file = `./Database/${interaction.guild.name}/ticket.json`
-                let check2 = check.filecheck(file)
-                if (check2.Promise) {
-                    let content = jsonf.jread(file)
-                } else {
-                    let content = {list:[]}
-                    content.list.push({[interaction.member.id]:"hi"})
-                    jsonf.jwrite(file,content)
-                }
-            }
-
-            if (interaction.customId == "closedtiket") { }
-
-            if (interaction.customId == "onlytext" || interaction.customId == "onlyvoice" || interaction.customId == "text+voice") {
-
-            }
-
-            if (interaction.customId == "closedroom") { }
-
 
 
             if (interaction.customId.split("-").includes("help")) {
