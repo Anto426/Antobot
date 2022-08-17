@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "kick",
@@ -29,31 +29,31 @@ module.exports = {
         var reason = interaction.options.getString("reason") || "Nesun motivo"
 
         if (!utente.kickable) {
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(` Non ho il permesso di cacciare ${utente} è troppo forte`)
-                .setThumbnail(configs.config.embed.images.forte)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.forte)
+                .setColor(configs.settings.embed.color.red)
             return interaction.reply({ embeds: [embed] })
         }
         try {
             utente.kick();
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " kickato")
                 .addFields([
                     { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
                 ])
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-                .setColor(configs.config.embed.color.green)
+                .setColor(configs.settings.embed.color.green)
             interaction.reply({ embeds: [embed] })
         } catch (err) {
             console.log(err)
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")
-                .setThumbnail(configs.config.embed.images.error)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.embed.color.red)
             interaction.reply({ embeds: [embed] })
         }
 

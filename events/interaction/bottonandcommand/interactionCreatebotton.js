@@ -4,7 +4,7 @@ const configs = require("./../../index")
 function createchannel () {
     
 }
-const { InteractionType } = require('discord.js');
+const { InteractionType } = require('configs.Discord.js');
 
 module.exports = {
     name: "interactionCreate",
@@ -16,15 +16,15 @@ module.exports = {
             }
 
             if (interaction.customId == "mc") {
-                for (server in configs.config.game.mc) {
-                    let embed = new Discord.EmbedBuilder()
+                for (server in configs.settings.game.mc) {
+                    let embed = new configs.Discord.EmbedBuilder()
                         .setColor('#0099ff')
                         .setTitle("Ecco il tuo server")
 
                     if (interaction.values[0] == server) {
                         console.log(server)
-                        embed.setThumbnail(configs.config.game.mc[server].images)
-                        embed.setDescription(configs.config.game.mc[server].server);
+                        embed.setThumbnail(configs.settings.game.mc[server].images)
+                        embed.setDescription(configs.settings.game.mc[server].server);
                         interaction.reply({ embeds: [embed] })
                         setTimeout(() => interaction.deleteReply(), 10000)
 
@@ -65,7 +65,7 @@ module.exports = {
                 idobject = require("../../../commands/help/help")
                 let folders = []
 
-                let commandsFolder = fs.readdirSync("./commands");
+                let commandsFolder = configs.fs.readdirSync("./commands");
                 for (const folder of commandsFolder) {
                     if (folder != "help")
                         folders.push(folder)
@@ -75,14 +75,14 @@ module.exports = {
                     if (interaction.customId.toString().split("-").includes(interaction.member.id)) {
                         folders.forEach(async x => {
                             if (interaction.values == x) {
-                                let commands = new Discord.Collection();
-                                const commandsFiles = fs.readdirSync(`./commands/${x}`);
+                                let commands = new configs.Discord.Collection();
+                                const commandsFiles = configs.fs.readdirSync(`./commands/${x}`);
                                 for (const file of commandsFiles) {
                                     if (file.endsWith(".js")) {
                                         const command = require(`./../../../commands/${x}/${file}`);
                                         commands.set(command.name, command);
                                     } else {
-                                        const commandsFiles2 = fs.readdirSync(`./commands/${x}/${file}`)
+                                        const commandsFiles2 = configs.fs.readdirSync(`./commands/${x}/${file}`)
                                         for (const file2 of commandsFiles2) {
                                             const command = require(`./../../../commands/${x}/${file}/${file2}`);
                                             commands.set(command.name, command);
@@ -97,10 +97,10 @@ ${x.data.description}
                                     `)
                                 })
 
-                                const embed = new Discord.EmbedBuilder()
+                                const embed = new configs.Discord.EmbedBuilder()
                                     .setTitle("Help")
-                                    .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                                    .setColor(configs.config.embed.color.purple)
+                                    .setThumbnail(configs.client.user.displayAvatarURL({ dynamic: true }))
+                                    .setColor(configs.settings.embed.color.purple)
                                     .setDescription(`
 Usa il menu qui sotto per scegliere la categoria di comandi da vedere!
 
@@ -117,20 +117,20 @@ ${msg.join(" ").toString()}
                         })
                     } else {
 
-                        const embed = new Discord.EmbedBuilder()
+                        const embed = new configs.Discord.EmbedBuilder()
                             .setTitle("Error")
                             .setDescription("Non è il tuo questo menu!")
-                            .setThumbnail(configs.config.embed.images.error)
-                            .setColor(configs.config.embed.color.red)
+                            .setThumbnail(configs.settings.embed.images.error)
+                            .setColor(configs.settings.embed.color.red)
                         interaction.reply({ embeds: [embed], ephemeral: true })
                     }
                 } else {
 
-                    const embed = new Discord.EmbedBuilder()
+                    const embed = new configs.Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Il bot è stato riavviato per favore crea un'altro menu")
-                        .setThumbnail(configs.config.embed.images.error)
-                        .setColor(configs.config.embed.color.red)
+                        .setThumbnail(configs.settings.embed.images.error)
+                        .setColor(configs.settings.embed.color.red)
                     interaction.reply({ embeds: [embed], ephemeral: true })
                 }
 

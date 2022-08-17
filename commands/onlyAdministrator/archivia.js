@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js')
+const { PermissionsBitField } = require('configs.Discord.js')
 const configs = require("./../../index")
 module.exports = {
     name: "archivia",
@@ -12,11 +12,11 @@ module.exports = {
     execute(interaction) {
 
         interaction.reply("Avvio potrocollo di autodistruzione")
-        let embed = new Discord.EmbedBuilder()
+        let embed = new configs.Discord.EmbedBuilder()
             .setTitle(interaction.guild.name)
             .setDescription("@everyone " + interaction.guild.name + " ha chiuso i battenti")
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-            .setColor(configs.config.embed.color.red)
+            .setColor(configs.settings.embed.color.red)
         console.log(configs[interaction.guild.name].stanze.eventi)
         let channel = interaction.guild.channels.cache.find(x => x.id == configs[interaction.guild.name].stanze.eventi)
         console.log(channel)

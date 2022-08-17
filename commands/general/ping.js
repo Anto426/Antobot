@@ -9,12 +9,12 @@ module.exports = {
         description: "Ping bot"
     },
     execute(interaction) {
-        var embed = new Discord.EmbedBuilder()
+        var embed = new configs.Discord.EmbedBuilder()
             .addFields([
-                { name: 'Pong', value: `\`\`\`\n${client.ws.ping}ms\`\`\`` },
+                { name: 'Pong', value: `\`\`\`\n${configs.client.ws.ping}ms\`\`\`` },
             ])
-            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setColor(configs.config.embed.color.green)
+            .setThumbnail(configs.client.user.displayAvatarURL({ dynamic: true }))
+            .setColor(configs.settings.embed.color.green)
         interaction.reply({ embeds: [embed] })
     }
 }

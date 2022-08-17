@@ -14,7 +14,7 @@ module.exports = {
         let folders = []
 
 
-        let commandsFolder = fs.readdirSync("./commands");
+        let commandsFolder = configs.fs.readdirSync("./commands");
         for (const folder of commandsFolder) {
             if (folder != "help")
                 folders.push(`📁 ${folder}`)
@@ -22,7 +22,7 @@ module.exports = {
 
 
 
-        let selectmenu = new Discord.SelectMenuBuilder()
+        let selectmenu = new configs.Discord.SelectMenuBuilder()
             .setCustomId(`help-${interaction.member.id}`)
             .setPlaceholder('Nothing selected')
 
@@ -35,18 +35,18 @@ module.exports = {
             }])
 
         })
-        const row = new Discord.ActionRowBuilder()
+        const row = new configs.Discord.ActionRowBuilder()
             .addComponents(
                 selectmenu
             );
-        const embed = new Discord.EmbedBuilder()
+        const embed = new configs.Discord.EmbedBuilder()
             .setTitle("Help")
             .setDescription(`
             Usa il menu qui sotto per scegliere la categoria di comandi da vedere!
 
             ${folders.join("\n \n")}`)
-            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setColor(configs.config.embed.color.purple)
+            .setThumbnail(configs.client.user.displayAvatarURL({ dynamic: true }))
+            .setColor(configs.settings.embed.color.purple)
         interaction.reply({ embeds: [embed], components: [row] })
 
         let iduser = interaction.member.id

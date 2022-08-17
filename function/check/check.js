@@ -3,7 +3,7 @@ const path = require('path')
 
 async function filecheck(file) {
     try {
-        fs.lstatSync(file).isFile()
+        configs.fs.lstatSync(file).isFile()
         return true
     } catch {
 
@@ -15,12 +15,12 @@ async function filecheck(file) {
 async function dircheck(directory, namedir) {
     let directory1 = `./${directory}/${namedir}`
     try {
-        fs.lstatSync(directory1).isDirectory()
+        configs.fs.lstatSync(directory1).isDirectory()
         return true
     } catch {
 
 
-        fs.mkdir(path.join(directory, namedir), (err) => {
+        configs.fs.mkdir(path.join(directory, namedir), (err) => {
             if (err) {
                 return console.log(err);
             }

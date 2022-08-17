@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js')
+const { PermissionsBitField } = require('configs.Discord.js')
 const configs = require("./../../index")
 module.exports = {
     name: "announce",
@@ -40,11 +40,11 @@ module.exports = {
         let msg = interaction.options.getString("msg").split("-").join("\n")
         let image = interaction.options.getString("image")
 
-        var embed = new Discord.EmbedBuilder()
+        var embed = new configs.Discord.EmbedBuilder()
             .setTitle(title)
             .setDescription(msg)
             .setThumbnail(image)
-            .setColor(configs.config.embed.color.green)
+            .setColor(configs.settings.embed.color.green)
         channel = interaction.options.getChannel("channel") || interaction.guild.channels.cache.find(x => x.id == configs[interaction.guild.name].stanze.eventi)
         channel.send({ embeds: [embed] })
 

@@ -20,10 +20,10 @@ module.exports = {
         if (!member) {
             utente = interaction.member
         }
-        var embed = new Discord.EmbedBuilder()
+        var embed = new configs.Discord.EmbedBuilder()
             .setTitle(utente.user.tag)
             .setDescription("L'avatar di questo utente")
-            .setColor(configs.config.embed.color.green)
+            .setColor(configs.settings.embed.color.green)
             .setImage(utente.user.displayAvatarURL({
                 dynamic: true,
                 format: "png",

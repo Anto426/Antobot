@@ -5,16 +5,16 @@ module.exports = {
 
         console.log(`
         
-        logged to ${client.user.tag}
+        logged to ${configs.client.user.tag}
 
-        Numbers Guils : ${client.guilds.cache.size}
+        Numbers Guils : ${configs.client.guilds.cache.size}
 
         `)
-        client.user.setStatus("online")
+        configs.client.user.setStatus("online")
 
         try {
-            client.guilds.cache.forEach(guild => {
-                client.commands.forEach(command => {
+            configs.client.guilds.cache.forEach(guild => {
+                configs.client.commands.forEach(command => {
                     guild.commands.create(command.data)
 
                 })

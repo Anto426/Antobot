@@ -10,7 +10,7 @@ module.exports = {
     },
     execute(interaction) {
         if (configs.stato) {
-            const embederror = new Discord.EmbedBuilder()
+            const embederror = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Il bot è gia online")
                 .setThumbnail(configs.settings.embed.images.error)
@@ -18,12 +18,12 @@ module.exports = {
             interaction.reply({ embeds: [embederror] })
             return
         } else {
-            const embedonline = new Discord.EmbedBuilder()
+            const embedonline = new configs.Discord.EmbedBuilder()
                 .setTitle("Bot online")
                 .setDescription("Il bot sta riabilitando tutti i sistemi come richiesto")
                 .setThumbnail(configs.settings.embed.images.succes)
                 .setColor(configs.settings.embed.color.green)
-            client.user.setStatus("online");
+            configs.client.user.setStatus("online");
 
             configs.stato = true;
             interaction.reply({ embeds: [embedonline] })

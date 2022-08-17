@@ -36,12 +36,12 @@ module.exports = {
             ctx.font = "50px glitch"
             ctx.fillText(`${humans.size}° membro`, 500, 400)
 
-            let channel = client.channels.cache.get(configs[member.guild.name].stanze.welcome)
+            let channel = configs.client.channels.cache.get(configs[member.guild.name].stanze.welcome)
 
-            let attachment = new Discord.MessageAttachment(canvas.toBuffer(), "canvas.png")
+            let attachment = new configs.Discord.MessageAttachment(canvas.toBuffer(), "canvas.png")
 
 
-            let embed = new Discord.EmbedBuilder()
+            let embed = new configs.Discord.EmbedBuilder()
                 .setColor("RANDOM")
                 .setTitle("Welcome")
                 .setDescription(`${member} Benvenuto su ${member.guild.name} te sei il ${humans.size} membro  ! Ti consiglio di andare a leggere il <#${configs[member.guild.name].stanze.regolamento}> per non essere bannato !!`)

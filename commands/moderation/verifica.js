@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js')
+const { PermissionsBitField } = require('configs.Discord.js')
 const configs = require("./../../index")
 module.exports = {
     name: "verifica",
@@ -28,25 +28,25 @@ module.exports = {
             }
 
             verifica = true
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle(utente.user.tag + " verificato")
                 .setDescription("verifica completata con succeso alle ore " + new Date().getHours() + ":" + new Date().getMinutes())
                 .setThumbnail(utente.user.displayAvatarURL({ dynamic: true }))
-                .setColor(configs.config.embed.color.green)
+                .setColor(configs.settings.embed.color.green)
             interaction.reply({ embeds: [embed] })
 
-            const embed1 = new Discord.EmbedBuilder()
+            const embed1 = new configs.Discord.EmbedBuilder()
                 .setTitle(utente.user.tag + " verificato")
                 .setDescription(utente.user.tag + " sei stato verificato alle  ore " + new Date().getHours() + ":" + new Date().getMinutes() + " da " + interaction.member.user.tag)
-                .setThumbnail(configs.config.embed.images.succes)
-                .setColor(configs.config.embed.color.green)
+                .setThumbnail(configs.settings.embed.images.succes)
+                .setColor(configs.settings.embed.color.green)
             utente.send({ embeds: [embed1] }).catch(() => {
 
-                const embed1 = new Discord.EmbedBuilder()
+                const embed1 = new configs.Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("impossibile informare l'utente in dm")
-                    .setThumbnail(configs.config.embed.images.error)
-                    .setColor(configs.config.embed.color.green)
+                    .setThumbnail(configs.settings.embed.images.error)
+                    .setColor(configs.settings.embed.color.green)
                 interaction.channel.send({ embeds: [embed] })
 
 

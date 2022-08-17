@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "unmute",
@@ -19,11 +19,11 @@ module.exports = {
         var utente = interaction.options.getMember("user")
 
         if (utente.user.bot) {
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Non posso mutare/smutare i bot `)
-                .setThumbnail(configs.config.embed.images.error)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.embed.color.red)
             return interaction.reply({ embeds: [embed] })
 
         }
@@ -32,30 +32,30 @@ module.exports = {
 
 
         if (!utente.roles.cache.has(muted.id)) {
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle(interaction.member.user.tag + " Error")
                 .setDescription(utente.user.tag + " risulta già smutato")
-                .setThumbnail(configs.config.embed.images.error)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.embed.color.red)
             interaction.reply({ embeds: [embed] })
             return
         }
-        for (id in configs.config.owner) {
-            if (interaction.member == utente && interaction.member.id != configs.config.owner[id]) {
-                const embed = new Discord.EmbedBuilder()
+        for (id in configs.settings.owner) {
+            if (interaction.member == utente && interaction.member.id != configs.settings.owner[id]) {
+                const embed = new configs.Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription(`Ehh bro non puoi togliertelo tu ahh`)
-                    .setThumbnail(configs.config.embed.images.scemo)
-                    .setColor(configs.config.embed.color.red)
+                    .setThumbnail(configs.settings.embed.images.scemo)
+                    .setColor(configs.settings.embed.color.red)
                 return interaction.reply({ embeds: [embed] })
 
             }
         }
-        const embed = new Discord.EmbedBuilder()
+        const embed = new configs.Discord.EmbedBuilder()
             .setTitle("Utente smutato")
             .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + utente + ">" + " smutato")
-            .setColor(configs.config.embed.color.green)
+            .setColor(configs.settings.embed.color.green)
         interaction.reply({ embeds: [embed] })
         utente.roles.remove(muted).catch(() => {})
 

@@ -1,13 +1,13 @@
 const configs = require("./../../index")
 async function jread(file) {
-    let content = fs.readFileSync(file)
+    let content = configs.fs.readFileSync(file)
     var parseJson = JSON.parse(content)
     return parseJson
 }
 
 
 async function jwrite(file, content) {
-    fs.writeFile(file, JSON.stringify(content), function (err) {
+    configs.fs.writeFile(file, JSON.stringify(content), function (err) {
         if (err) throw err;
     })
 

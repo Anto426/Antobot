@@ -1,4 +1,4 @@
-const { ChannelType } = require('discord.js');
+const { ChannelType } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "voiceStateUpdate",

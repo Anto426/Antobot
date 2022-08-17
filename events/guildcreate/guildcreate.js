@@ -4,7 +4,7 @@ module.exports = {
     name: "guildCreate",
     async execute(guild) {
 
-        client.commands.forEach(command => {
+        configs.client.commands.forEach(command => {
             guild.commands.create(command.data).catch()
 
         })

@@ -3,7 +3,7 @@
 
 // variabili 
 let stato = true
-let settings = require("./Config/configs.config.json")
+let settings = require("./Config/configs.settings.json")
 let Discord = require('discord.js')
 let fs = require("fs");
 let verifica = false

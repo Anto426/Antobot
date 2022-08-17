@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "userinfo",
@@ -32,7 +32,7 @@ module.exports = {
                 elencoPermessi = member.permissions.toArray()
             }
         }
-        var embed = new Discord.EmbedBuilder()
+        var embed = new configs.Discord.EmbedBuilder()
             .setTitle(member.user.tag)
             .setDescription("Tutte le info di questo utente")
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
@@ -47,7 +47,7 @@ module.exports = {
 
 
             ])
-            .setColor(configs.config.embed.color.green)
+            .setColor(configs.settings.embed.color.green)
         interaction.reply({ embeds: [embed] })
 
     }

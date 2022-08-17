@@ -1,4 +1,4 @@
-/*const { InteractionType } = require('discord.js');
+/*const { InteractionType } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "interactionCreate",
@@ -6,21 +6,21 @@ module.exports = {
         if (interaction.type != InteractionType.ApplicationCommand) {
 
             if (interaction.customId == "setup") {
-                const embed = new Discord.EmbedBuilder()
+                const embed = new configs.Discord.EmbedBuilder()
                     .setTitle("Set role")
                     .setDescription("Pinga i ruoli che faranno parte dello staff")
-                    .setThumbnail(configs.config.embed.images.load)
-                    .setColor(configs.config.embed.color.green)
+                    .setThumbnail(configs.settings.embed.images.load)
+                    .setColor(configs.settings.embed.color.green)
 
                 interaction.channel.send({ embeds: [embed] })
 
 
                 let filter = (message) => {
-                    let embed = new Discord.EmbedBuilder()
+                    let embed = new configs.Discord.EmbedBuilder()
                         .setTitle("Error")
-                        .setDescription("Impossibile verificare i ruoli controlla di aver pingato dei ruoli")
-                        .setColor(configs.config.embed.color.red)
-                        .setThumbnail(configs.config.embed.images.error)
+                        .setDescription("Impossibile configs.verificare i ruoli controlla di aver pingato dei ruoli")
+                        .setColor(configs.settings.embed.color.red)
+                        .setThumbnail(configs.settings.embed.images.error)
                     if (message.member.user.bot) return
                     if (message.mentions.roles.size != 0) return true;
                     else interaction.channel.send({ embeds: [embed] })

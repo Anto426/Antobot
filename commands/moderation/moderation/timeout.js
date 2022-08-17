@@ -1,5 +1,5 @@
 const { inspect } = require(`util`)
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('configs.Discord.js');
 let functions = require("../../../function/time/timefunctions")
 const configs = require("./../../index")
 module.exports = {
@@ -70,11 +70,11 @@ module.exports = {
         var time = interaction.options.getNumber("time") * 1000 * 60
         var reason = interaction.options.getString("reason") || "Nesun motivo"
         if (utente.user.bot) {
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Non posso applicare il timeout ai bot `)
-                .setThumbnail(configs.config.embed.images.error)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.embed.color.red)
             return interaction.reply({ embeds: [embed] })
 
         }
@@ -84,40 +84,40 @@ module.exports = {
 
 
             utente.timeout(time, reason).catch((err) => {
-                const embed = new Discord.EmbedBuilder()
+                const embed = new configs.Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Qualcosa è andato storto")
                     .addFields([
                         { name: 'Error', value: `\`\`\`\n ${inspect((err.toString()))}  \`\`\`` },
                     ])
-                    .setThumbnail(configs.config.embed.images.error)
-                    .setColor(configs.config.embed.color.red)
+                    .setThumbnail(configs.settings.embed.images.error)
+                    .setColor(configs.settings.embed.color.red)
                 interaction.channel.send({ embeds: [embed] })
                 return
 
             })
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Utente timeoutato")
                 .addFields([
                     { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
                 ])
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setDescription("<@" + utente + ">" + " timeoutato per " + functions.times(time))
-                .setColor(configs.config.embed.color.green)
+                .setColor(configs.settings.embed.color.green)
             interaction.reply({ embeds: [embed] })
 
         } else {
             const d = new Date(utente.communicationDisabledUntilTimestamp);
             date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
             console.log(date);
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`${utente.toString()} ha già un timeout!`)
                 .addFields([
                     { name: 'Fino a :', value: `\`\`\`\n ${date} \`\`\`` },
                 ])
-                .setThumbnail(configs.config.embed.images.error)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.embed.color.red)
             interaction.reply({ embeds: [embed] })
         }
 

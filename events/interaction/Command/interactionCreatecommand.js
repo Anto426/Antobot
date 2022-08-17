@@ -1,5 +1,5 @@
 const { inspect } = require(`util`)
-const { InteractionType } = require('discord.js');
+const { InteractionType } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "interactionCreate-commands",
@@ -8,22 +8,22 @@ module.exports = {
         if (interaction.type == InteractionType.ApplicationCommand) {
             try {
                 let owner = false
-                for (let id in configs.config.owner) {
-                    if (interaction.member.id == configs.config.owner[id]) { owner = true }
+                for (let id in configs.settings.owner) {
+                    if (interaction.member.id == configs.settings.owner[id]) { owner = true }
                 }
                 try {
                     var staf = false
                     for (let role in configs[interaction.guild.name].role.staff) {
                         if (interaction.member.roles.cache.has(configs[interaction.guild.name].role.staff[role])) { staf = true }
                     }
-                    for (let id in configs.config.owner) {
-                        if (interaction.member.id == configs.config.owner[id]) { staf = true }
+                    for (let id in configs.settings.owner) {
+                        if (interaction.member.id == configs.settings.owner[id]) { staf = true }
                     }
                 } catch {}
-                const command = client.commands.get(interaction.commandName)
+                const command = configs.client.commands.get(interaction.commandName)
                 if (!command) return
 
-                const commandsFiles = fs.readdirSync(`commands/bot`);
+                const commandsFiles = configs.fs.readdirSync(`commands/bot`);
                 for (const file of commandsFiles) {
                     const commands2 = require(`./../../../commands/bot/${file}`);
                     if (commands2.name == command.name && owner) {
@@ -32,7 +32,7 @@ module.exports = {
                     }
                 }
 
-                if (stato) {
+                if (configs.stato) {
                     if (command.onlyStaff) {
 
 
@@ -41,7 +41,7 @@ module.exports = {
                             let trovato = false
                             let trovato2 = false
                             console.log("permesso accordato")
-                            const commandsFiles = fs.readdirSync(`./commands/moderation/moderation/`);
+                            const commandsFiles = configs.fs.readdirSync(`./commands/moderation/moderation/`);
                             for (const file of commandsFiles) {
                                 var commands2 = require(`./../../../commands/moderation/moderation/${file}`);
                                 if (commands2.name == command.name && command.name != "unban") {
@@ -58,11 +58,11 @@ module.exports = {
                             }
 
                             if (!trovato2) {
-                                const embed = new Discord.EmbedBuilder()
+                                const embed = new configs.Discord.EmbedBuilder()
                                     .setTitle("Error")
                                     .setDescription(` Hai un ruolo uguale o minore a ${interaction.options.getMember("user")}`)
-                                    .setThumbnail(configs.config.embed.images.accesdenied)
-                                    .setColor(configs.config.embed.color.red)
+                                    .setThumbnail(configs.settings.embed.images.accesdenied)
+                                    .setColor(configs.settings.embed.color.red)
                                 interaction.reply({ embeds: [embed], ephemeral: true })
                             }
 
@@ -71,11 +71,11 @@ module.exports = {
                         } else {
 
                             console.log("permesso negato")
-                            const embed = new Discord.EmbedBuilder()
+                            const embed = new configs.Discord.EmbedBuilder()
                                 .setTitle("Error")
                                 .setDescription(` Non hai i permessi necessari`)
-                                .setThumbnail(configs.config.embed.images.accesdenied)
-                                .setColor(configs.config.embed.color.red)
+                                .setThumbnail(configs.settings.embed.images.accesdenied)
+                                .setColor(configs.settings.embed.color.red)
                             interaction.reply({ embeds: [embed], ephemeral: true })
 
                             return
@@ -93,11 +93,11 @@ module.exports = {
                         } else {
 
                             console.log("permesso negato")
-                            const embed = new Discord.EmbedBuilder()
+                            const embed = new configs.Discord.EmbedBuilder()
                                 .setTitle("Error")
                                 .setDescription(` Non hai i permessi necessari`)
-                                .setThumbnail(configs.config.embed.images.accesdenied)
-                                .setColor(configs.config.embed.color.red)
+                                .setThumbnail(configs.settings.embed.images.accesdenied)
+                                .setColor(configs.settings.embed.color.red)
                             interaction.reply({ embeds: [embed], ephemeral: true })
 
                             return
@@ -107,7 +107,7 @@ module.exports = {
 
                     }
                 }
-                const commandsFiles2 = fs.readdirSync(`./commands/privaroom/`);
+                const commandsFiles2 = configs.fs.readdirSync(`./commands/privaroom/`);
                 for (const file of commandsFiles2) {
                     const commands2 = require(`./../../../commands/privaroom/${file}`);
                     if (commands2.name == command.name) {
@@ -122,11 +122,11 @@ module.exports = {
                         return
                     } else {
                         console.log("permesso negato")
-                        const embed = new Discord.EmbedBuilder()
+                        const embed = new configs.Discord.EmbedBuilder()
                             .setTitle("Error")
                             .setDescription(`Non hai i permessi necessari  per eseguire i comandi qui !`)
-                            .setThumbnail(configs.config.embed.images.accesdenied)
-                            .setColor(configs.config.embed.color.red)
+                            .setThumbnail(configs.settings.embed.images.accesdenied)
+                            .setColor(configs.settings.embed.color.red)
                         interaction.reply({ embeds: [embed], ephemeral: true })
                         return
                     }
@@ -137,11 +137,11 @@ module.exports = {
 
             } catch (err) {
                 console.log(err)
-                const embed = new Discord.EmbedBuilder()
+                const embed = new configs.Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription(`Qualcosa è andato storto`)
-                    .setThumbnail(configs.config.embed.images.error)
-                    .setColor(configs.config.embed.color.red)
+                    .setThumbnail(configs.settings.embed.images.error)
+                    .setColor(configs.settings.embed.color.red)
                     .addFields([
                         { name: 'Error:', value: `\`\`\`\n ${inspect((err.toString()))}  \`\`\`` },
                     ])

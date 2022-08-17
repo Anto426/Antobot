@@ -1,5 +1,5 @@
 
-const { PermissionsBitField } = require('discord.js')
+const { PermissionsBitField } = require('configs.Discord.js')
 const configs = require("./../../index")
 module.exports = {
     name: "tclose",
@@ -14,7 +14,7 @@ module.exports = {
 
         let temp = []
         let file = `./Database/${interaction.guild.name}/ticket.json`
-        let content = fs.readFileSync(file)
+        let content = configs.fs.readFileSync(file)
         var parseJson = JSON.parse(content)
         parseJson.list.forEach((x) => {
             if (x.iduser != interaction.channel.topic) {
@@ -36,7 +36,7 @@ module.exports = {
             }
         })
         parseJson.list = temp
-        fs.writeFile(file, JSON.stringify(parseJson), function(err) {
+        configs.fs.writeFile(file, JSON.stringify(parseJson), function(err) {
             if (err) throw err;
         })
 

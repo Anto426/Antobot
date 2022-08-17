@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "ban",
@@ -28,11 +28,11 @@ module.exports = {
         var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason") || "Nesun motivo"
         if (!utente.bannable) {
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(` Non ho il permesso di cacciare ${utente} è troppo forte`)
-                .setThumbnail(configs.config.embed.images.forte)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.forte)
+                .setColor(configs.settings.embed.color.red)
             return interaction.reply({ embeds: [embed] })
         }
 
@@ -42,21 +42,21 @@ module.exports = {
             utente.ban({
                 reason: reason
             });
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Utente bannato")
                 .setDescription("<@" + utente + ">" + " bannato")
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-                .setColor(configs.config.embed.color.green)
+                .setColor(configs.settings.embed.color.green)
                 .addFields([
                     { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
                 ])
             interaction.reply({ embeds: [embed] })
         } catch {
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")
-                .setThumbnail(configs.config.embed.images.error)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.embed.color.red)
             interaction.reply({ embeds: [embed] })
         }
 

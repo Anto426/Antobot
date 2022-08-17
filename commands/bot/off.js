@@ -23,7 +23,7 @@ module.exports = {
                 .setDescription("Il bot sta andando offline come da te richiesto")
                 .setThumbnail(configs.settings.embed.images.succes)
                 .setColor(configs.settings.embed.color.green)
-            client.user.setStatus("invisible");
+            configs.client.user.setStatus("invisible");
 
             configs.stato = false;
             interaction.reply({ embeds: [embedonline] })

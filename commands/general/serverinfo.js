@@ -13,11 +13,11 @@ module.exports = {
         let countingonline = await server.members.cache.filter(x => x.presence?.status == 'online').size
         let countingidle = await server.members.cache.filter(x => x.presence?.status == 'idle').size
 
-        const embed = new Discord.EmbedBuilder()
+        const embed = new configs.Discord.EmbedBuilder()
             .setTitle(server.name)
-            .setColor(configs.config.embed.color.green)
+            .setColor(configs.settings.embed.color.green)
             .setDescription("Tutte le info su questo server")
-            .setThumbnail(server.iconURL({ dynamic: true }) || configs.config.embed.images.noimmage)
+            .setThumbnail(server.iconURL({ dynamic: true }) || configs.settings.embed.images.noimmage)
             .addFields([
                 { name: 'Owner', value: `\`\`\`\n${server.members.cache.get(server.ownerId).nickname}\`\`\`` },
                 { name: `Livello di verifica:`, value: `\`\`\`\nAlto\`\`\`` },

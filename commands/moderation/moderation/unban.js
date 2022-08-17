@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "unban",
@@ -29,28 +29,28 @@ module.exports = {
 
                 if (!a) {
                     interaction.guild.members.unban(id)
-                    const embed = new Discord.EmbedBuilder()
+                    const embed = new configs.Discord.EmbedBuilder()
                         .setTitle("Utente sbannato")
                         .setDescription("Utente sbannato")
-                        .setThumbnail(configs.config.embed.images.succes)
-                        .setColor(configs.config.embed.color.green)
+                        .setThumbnail(configs.settings.embed.images.succes)
+                        .setColor(configs.settings.embed.color.green)
                     interaction.reply({ embeds: [embed] })
                 } else {
-                    const embed = new Discord.EmbedBuilder()
+                    const embed = new configs.Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Utente gia sbannato")
-                        .setThumbnail(configs.config.embed.images.error)
-                        .setColor(configs.config.embed.color.red)
+                        .setThumbnail(configs.settings.embed.images.error)
+                        .setColor(configs.settings.embed.color.red)
                     interaction.reply({ embeds: [embed] })
                 }
             })
             return
         } catch {
-            const embed = new Discord.EmbedBuilder()
+            const embed = new configs.Discord.EmbedBuilder()
                 .setTitle(message.member.user.tag + " Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")
-                .setThumbnail(configs.config.embed.images.error)
-                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.embed.color.red)
             message.channel.send({ embeds: [embed] })
         }
 

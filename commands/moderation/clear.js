@@ -1,4 +1,4 @@
-const { PermissionsBitField } = require('discord.js');
+const { PermissionsBitField } = require('configs.Discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: 'clear',
@@ -25,7 +25,7 @@ module.exports = {
         const Messages = await channel.messages.fetch();
 
         const Response = new MessageEmbed()
-            .setColor(configs.config.embed.color.green)
+            .setColor(configs.settings.embed.color.green)
         await channel.bulkDelete(Amount, true).then(messages => {
             Response.setDescription(`Eliminati ${messages.size} da ${interaction.channel.name}`);
             interaction.reply({ embeds: [Response] });
