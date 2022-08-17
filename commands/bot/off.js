@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: "off",
     permision: [],
@@ -8,23 +9,23 @@ module.exports = {
         description: "Spegne il bot"
     },
     execute(interaction) {
-        if (!stato) {
-            const embederror = new Discord.EmbedBuilder()
+        if (!configs.stato) {
+            const embederror = new configs.Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Il bot è gia offline")
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.config.embed.color.red)
             interaction.reply({ embeds: [embederror] })
             return
         } else {
-            const embedonline = new Discord.EmbedBuilder()
+            const embedonline = new configs.settings.Discord.EmbedBuilder()
                 .setTitle("Bot offline")
                 .setDescription("Il bot sta andando offline come da te richiesto")
-                .setThumbnail(configs.embed.images.succes)
-                .setColor(configs.embed.color.green)
+                .setThumbnail(configs.settings.embed.images.succes)
+                .setColor(configs.settings.embed.color.green)
             client.user.setStatus("invisible");
 
-            stato = false;
+            configs.stato = false;
             interaction.reply({ embeds: [embedonline] })
         }
 

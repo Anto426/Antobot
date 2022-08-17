@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: "help",
     permision: [],
@@ -45,12 +46,13 @@ module.exports = {
 
             ${folders.join("\n \n")}`)
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setColor(configs.embed.color.purple)
+            .setColor(configs.config.embed.color.purple)
         interaction.reply({ embeds: [embed], components: [row] })
 
         let iduser = interaction.member.id
 
-        module.exports = {
+        const configs = require("./../../index")
+module.exports = {
             iduser: iduser,
             interaction: interaction,
         }

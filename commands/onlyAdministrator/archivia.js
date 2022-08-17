@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require('discord.js')
+const configs = require("./../../index")
 module.exports = {
     name: "archivia",
     permision: [PermissionsBitField.Flags.Administrator],
@@ -15,7 +16,7 @@ module.exports = {
             .setTitle(interaction.guild.name)
             .setDescription("@everyone " + interaction.guild.name + " ha chiuso i battenti")
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-            .setColor(configs.embed.color.red)
+            .setColor(configs.config.embed.color.red)
         console.log(configs[interaction.guild.name].stanze.eventi)
         let channel = interaction.guild.channels.cache.find(x => x.id == configs[interaction.guild.name].stanze.eventi)
         console.log(channel)

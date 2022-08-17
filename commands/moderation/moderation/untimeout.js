@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "untimeout",
     permision: [PermissionsBitField.Flags.ModerateMembers],
@@ -21,21 +22,21 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`I bot non possono essere applicato il timeout`)
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             return interaction.reply({ embeds: [embed] })
 
         }
 
         if (utente.communicationDisabledUntilTimestamp != null || utente.communicationDisabledUntilTimestamp > Date.now()) {
 
-            for (id in configs.owner) {
-                if (interaction.member == utente && interaction.member.id != configs.owner[id]) {
+            for (id in configs.config.owner) {
+                if (interaction.member == utente && interaction.member.id != configs.config.owner[id]) {
                     const embed = new Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription(`Ehh bro non puoi togliertelo tu ahh`)
-                        .setThumbnail(configs.embed.images.scemo)
-                        .setColor(configs.embed.color.red)
+                        .setThumbnail(configs.config.embed.images.scemo)
+                        .setColor(configs.config.embed.color.red)
                     return interaction.reply({ embeds: [embed] })
 
                 }
@@ -46,15 +47,15 @@ module.exports = {
                 .setTitle("Utente untimeoutato")
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setDescription("<@" + utente + ">" + " untimeoutato")
-                .setColor(configs.embed.color.green)
+                .setColor(configs.config.embed.color.green)
             interaction.reply({ embeds: [embed] })
 
         } else {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`${utente.toString()} non ha un timeout!`)
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             interaction.reply({ embeds: [embed] })
         }
 

@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "unban",
     permision: [PermissionsBitField.Flags.BanMembers],
@@ -31,15 +32,15 @@ module.exports = {
                     const embed = new Discord.EmbedBuilder()
                         .setTitle("Utente sbannato")
                         .setDescription("Utente sbannato")
-                        .setThumbnail(configs.embed.images.succes)
-                        .setColor(configs.embed.color.green)
+                        .setThumbnail(configs.config.embed.images.succes)
+                        .setColor(configs.config.embed.color.green)
                     interaction.reply({ embeds: [embed] })
                 } else {
                     const embed = new Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Utente gia sbannato")
-                        .setThumbnail(configs.embed.images.error)
-                        .setColor(configs.embed.color.red)
+                        .setThumbnail(configs.config.embed.images.error)
+                        .setColor(configs.config.embed.color.red)
                     interaction.reply({ embeds: [embed] })
                 }
             })
@@ -48,8 +49,8 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle(message.member.user.tag + " Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             message.channel.send({ embeds: [embed] })
         }
 

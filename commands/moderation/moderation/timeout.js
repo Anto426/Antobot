@@ -1,6 +1,7 @@
 const { inspect } = require(`util`)
 const { PermissionsBitField } = require('discord.js');
 let functions = require("../../../function/time/timefunctions")
+const configs = require("./../../index")
 module.exports = {
     name: "timeout",
     permision: [PermissionsBitField.Flags.ModerateMembers],
@@ -72,8 +73,8 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Non posso applicare il timeout ai bot `)
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             return interaction.reply({ embeds: [embed] })
 
         }
@@ -89,8 +90,8 @@ module.exports = {
                     .addFields([
                         { name: 'Error', value: `\`\`\`\n ${inspect((err.toString()))}  \`\`\`` },
                     ])
-                    .setThumbnail(configs.embed.images.error)
-                    .setColor(configs.embed.color.red)
+                    .setThumbnail(configs.config.embed.images.error)
+                    .setColor(configs.config.embed.color.red)
                 interaction.channel.send({ embeds: [embed] })
                 return
 
@@ -102,7 +103,7 @@ module.exports = {
                 ])
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
                 .setDescription("<@" + utente + ">" + " timeoutato per " + functions.times(time))
-                .setColor(configs.embed.color.green)
+                .setColor(configs.config.embed.color.green)
             interaction.reply({ embeds: [embed] })
 
         } else {
@@ -115,8 +116,8 @@ module.exports = {
                 .addFields([
                     { name: 'Fino a :', value: `\`\`\`\n ${date} \`\`\`` },
                 ])
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             interaction.reply({ embeds: [embed] })
         }
 

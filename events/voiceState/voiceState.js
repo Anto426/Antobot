@@ -1,4 +1,5 @@
 const { ChannelType } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "voiceStateUpdate",
     async execute(oldMember, newMember) {

@@ -1,5 +1,6 @@
 const { inspect } = require(`util`)
 const { InteractionType } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
@@ -7,16 +8,16 @@ module.exports = {
         if (interaction.type == InteractionType.ApplicationCommand) {
             try {
                 let owner = false
-                for (let id in configs.owner) {
-                    if (interaction.member.id == configs.owner[id]) { owner = true }
+                for (let id in configs.config.owner) {
+                    if (interaction.member.id == configs.config.owner[id]) { owner = true }
                 }
                 try {
                     var staf = false
                     for (let role in configs[interaction.guild.name].role.staff) {
                         if (interaction.member.roles.cache.has(configs[interaction.guild.name].role.staff[role])) { staf = true }
                     }
-                    for (let id in configs.owner) {
-                        if (interaction.member.id == configs.owner[id]) { staf = true }
+                    for (let id in configs.config.owner) {
+                        if (interaction.member.id == configs.config.owner[id]) { staf = true }
                     }
                 } catch {}
                 const command = client.commands.get(interaction.commandName)
@@ -60,8 +61,8 @@ module.exports = {
                                 const embed = new Discord.EmbedBuilder()
                                     .setTitle("Error")
                                     .setDescription(` Hai un ruolo uguale o minore a ${interaction.options.getMember("user")}`)
-                                    .setThumbnail(configs.embed.images.accesdenied)
-                                    .setColor(configs.embed.color.red)
+                                    .setThumbnail(configs.config.embed.images.accesdenied)
+                                    .setColor(configs.config.embed.color.red)
                                 interaction.reply({ embeds: [embed], ephemeral: true })
                             }
 
@@ -73,8 +74,8 @@ module.exports = {
                             const embed = new Discord.EmbedBuilder()
                                 .setTitle("Error")
                                 .setDescription(` Non hai i permessi necessari`)
-                                .setThumbnail(configs.embed.images.accesdenied)
-                                .setColor(configs.embed.color.red)
+                                .setThumbnail(configs.config.embed.images.accesdenied)
+                                .setColor(configs.config.embed.color.red)
                             interaction.reply({ embeds: [embed], ephemeral: true })
 
                             return
@@ -95,8 +96,8 @@ module.exports = {
                             const embed = new Discord.EmbedBuilder()
                                 .setTitle("Error")
                                 .setDescription(` Non hai i permessi necessari`)
-                                .setThumbnail(configs.embed.images.accesdenied)
-                                .setColor(configs.embed.color.red)
+                                .setThumbnail(configs.config.embed.images.accesdenied)
+                                .setColor(configs.config.embed.color.red)
                             interaction.reply({ embeds: [embed], ephemeral: true })
 
                             return
@@ -124,8 +125,8 @@ module.exports = {
                         const embed = new Discord.EmbedBuilder()
                             .setTitle("Error")
                             .setDescription(`Non hai i permessi necessari  per eseguire i comandi qui !`)
-                            .setThumbnail(configs.embed.images.accesdenied)
-                            .setColor(configs.embed.color.red)
+                            .setThumbnail(configs.config.embed.images.accesdenied)
+                            .setColor(configs.config.embed.color.red)
                         interaction.reply({ embeds: [embed], ephemeral: true })
                         return
                     }
@@ -139,8 +140,8 @@ module.exports = {
                 const embed = new Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription(`Qualcosa è andato storto`)
-                    .setThumbnail(configs.embed.images.error)
-                    .setColor(configs.embed.color.red)
+                    .setThumbnail(configs.config.embed.images.error)
+                    .setColor(configs.config.embed.color.red)
                     .addFields([
                         { name: 'Error:', value: `\`\`\`\n ${inspect((err.toString()))}  \`\`\`` },
                     ])

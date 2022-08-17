@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "kick",
     permision: [PermissionsBitField.Flags.KickMembers],
@@ -31,8 +32,8 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(` Non ho il permesso di cacciare ${utente} è troppo forte`)
-                .setThumbnail(configs.embed.images.forte)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.forte)
+                .setColor(configs.config.embed.color.red)
             return interaction.reply({ embeds: [embed] })
         }
         try {
@@ -44,15 +45,15 @@ module.exports = {
                     { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
                 ])
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-                .setColor(configs.embed.color.green)
+                .setColor(configs.config.embed.color.green)
             interaction.reply({ embeds: [embed] })
         } catch (err) {
             console.log(err)
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Ops! Qualcosa è andato storto!!")
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             interaction.reply({ embeds: [embed] })
         }
 

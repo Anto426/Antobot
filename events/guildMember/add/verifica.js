@@ -1,6 +1,7 @@
 const { MessageAttachment } = require("discord.js");
 const { Captcha } = require("captcha-canvas");
 const { ActionRowBuilder, ButtonBuilder,ButtonStyle } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: `guildMemberAdd`,
     async execute(member) {
@@ -57,8 +58,8 @@ module.exports = {
                 let embed = new Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Impossibile verificarti controlla di aver scritto bene il captcha !! Riprova!")
-                    .setColor(configs.embed.color.red)
-                    .setThumbnail(configs.embed.images.error)
+                    .setColor(configs.config.embed.color.red)
+                    .setThumbnail(configs.config.embed.images.error)
                 if (message.author.id !== member.id) return;
                 if (message.content.toUpperCase() === captcha.text) return true;
                 else channelverifica.send({ embeds: [embed] })
@@ -76,8 +77,8 @@ module.exports = {
                     let embed = new Discord.EmbedBuilder()
                         .setTitle(member.user.tag + " verificato")
                         .setDescription("verifica completata con succeso alle ore " + new Date().getHours() + ":" + new Date().getMinutes())
-                        .setThumbnail(configs.embed.images.succes)
-                        .setColor(configs.embed.color.green)
+                        .setThumbnail(configs.config.embed.images.succes)
+                        .setColor(configs.config.embed.color.green)
                     channelverifica.send({ embeds: [embed] })
                     if (!verifica) {
                         for (let role in configs[member.guild.name].role.rolebase) {
@@ -94,8 +95,8 @@ module.exports = {
                     let embed = new Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Ci dispiace che non sei riuscito a verificarti, ma ora dovro kickarti")
-                        .setThumbnail(configs.embed.images.thor)
-                        .setColor(configs.embed.color.red)
+                        .setThumbnail(configs.config.embed.images.thor)
+                        .setColor(configs.config.embed.color.red)
                     await channelverifica.send({ embeds: [embed] })
                     setTimeout(async() => {
                         await member.kick()
@@ -106,8 +107,8 @@ module.exports = {
             let messagedelete = new Discord.EmbedBuilder()
                 .setTitle("Posso cancellare la chat?")
                 .setDescription("Posso cancellare la chat ?")
-                .setThumbnail(configs.embed.images.load)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.load)
+                .setColor(configs.config.embed.color.red)
             let row = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()

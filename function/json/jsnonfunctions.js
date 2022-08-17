@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 async function jread(file) {
     let content = fs.readFileSync(file)
     var parseJson = JSON.parse(content)
@@ -37,6 +38,7 @@ async function jremove(content, element) {
     }
 }
 
+const configs = require("./../../index")
 module.exports = {
     jread: jread,
     jwrite: jwrite,

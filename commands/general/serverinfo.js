@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: "serverinfo",
     permision: [],
@@ -14,9 +15,9 @@ module.exports = {
 
         const embed = new Discord.EmbedBuilder()
             .setTitle(server.name)
-            .setColor(configs.embed.color.green)
+            .setColor(configs.config.embed.color.green)
             .setDescription("Tutte le info su questo server")
-            .setThumbnail(server.iconURL({ dynamic: true }) || configs.embed.images.noimmage)
+            .setThumbnail(server.iconURL({ dynamic: true }) || configs.config.embed.images.noimmage)
             .addFields([
                 { name: 'Owner', value: `\`\`\`\n${server.members.cache.get(server.ownerId).nickname}\`\`\`` },
                 { name: `Livello di verifica:`, value: `\`\`\`\nAlto\`\`\`` },

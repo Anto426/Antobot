@@ -1,4 +1,5 @@
 const { ButtonStyle ,PermissionsBitField} = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "tiket",
     permision: [PermissionsBitField.Flags.Administrator],
@@ -20,7 +21,7 @@ module.exports = {
             .setTitle("Hey")
             .setDescription("Hai bisogno di supporto crea un ticket")
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-            .setColor(configs.embed.color.red)
+            .setColor(configs.config.embed.color.red)
         interaction.channel.send({ embeds: [embed], components: [row] })
 
     }

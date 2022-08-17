@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "mute",
     permision: [PermissionsBitField.Flags.MuteMembers],
@@ -29,8 +30,8 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(`Non posso mutare/smutare i bot `)
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             return interaction.reply({ embeds: [embed] })
 
         }
@@ -51,8 +52,8 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Non ho il permesso di mutarlo è troppo forte")
-                .setThumbnail(configs.embed.images.forte)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.forte)
+                .setColor(configs.config.embed.color.red)
             interaction.reply({ embeds: [embed] })
             return
         }
@@ -60,8 +61,8 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription(utente.user.tag + " risulta già mutato")
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             interaction.reply({ embeds: [embed] })
             return
         }
@@ -72,13 +73,13 @@ module.exports = {
             ])
             .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + utente + ">" + " mutato")
-            .setColor(configs.embed.color.green)
+            .setColor(configs.config.embed.color.green)
         utente.roles.add(muted).catch(() => {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Qualcosa è andato storto!")
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             interaction.reply({ embeds: [embed] })
             return
         })
@@ -90,13 +91,13 @@ module.exports = {
             ])
             .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + utente + "> sei stato mutato ")
-            .setColor(configs.embed.color.green)
+            .setColor(configs.config.embed.color.green)
         utente.send({ embeds: [embed1] }).catch(() => {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Qualcosa è andato storto non ho potuto avvisare " + " ")
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             interaction.channel.send({ embeds: [embed] })
         })
 

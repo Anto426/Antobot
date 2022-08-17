@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require('discord.js')
+const configs = require("./../../index")
 module.exports = {
     name: "iclear",
     permision: [PermissionsBitField.Flags.Administrator],
@@ -16,8 +17,8 @@ module.exports = {
         const embed = new Discord.EmbedBuilder()
             .setTitle("Inviti eliminati")
             .setDescription("Tutti gli inviti sono stati eliminati")
-            .setThumbnail(configs.embed.images.succes)
-            .setColor(configs.embed.color.green)
+            .setThumbnail(configs.config.embed.images.succes)
+            .setColor(configs.config.embed.color.green)
         interaction.reply({ embeds: [embed] })
 
     }

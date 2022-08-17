@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: "ping",
     permision: [],
@@ -13,7 +14,7 @@ module.exports = {
                 { name: 'Pong', value: `\`\`\`\n${client.ws.ping}ms\`\`\`` },
             ])
             .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-            .setColor(configs.embed.color.green)
+            .setColor(configs.config.embed.color.green)
         interaction.reply({ embeds: [embed] })
     }
 }

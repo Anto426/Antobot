@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: "cadd",
     permision: [],
@@ -30,8 +31,8 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Ops!  Non hai una stanza privata da rinominare creala una <#948323558369669130>")
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
+                .setColor(configs.config.embed.color.red)
             interaction.reply({ embeds: [embed] })
             return
         }
@@ -40,8 +41,8 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Utente gia aggiunto alla stanza")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(configs.config.embed.color.red)
+                .setThumbnail(configs.config.embed.images.error)
             interaction.reply({ embeds: [embed] })
             return
         }
@@ -57,7 +58,7 @@ module.exports = {
             .setTitle("Utente Aggiunto")
             .setDescription("<@" + user.id + ">" + " aggiunto alla stanza")
             .setThumbnail(user.displayAvatarURL({ dynamic: true }))
-            .setColor(configs.embed.color.green)
+            .setColor(configs.config.embed.color.green)
         interaction.reply({ embeds: [embed] })
     }
 }

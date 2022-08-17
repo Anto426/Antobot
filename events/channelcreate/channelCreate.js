@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: "channelCreate",
     async execute(channel) {

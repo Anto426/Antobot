@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "userinfo",
     permision: [],
@@ -46,7 +47,7 @@ module.exports = {
 
 
             ])
-            .setColor(configs.embed.color.green)
+            .setColor(configs.config.embed.color.green)
         interaction.reply({ embeds: [embed] })
 
     }

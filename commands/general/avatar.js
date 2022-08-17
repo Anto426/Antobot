@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: "avatar",
     permision: [],
@@ -22,7 +23,7 @@ module.exports = {
         var embed = new Discord.EmbedBuilder()
             .setTitle(utente.user.tag)
             .setDescription("L'avatar di questo utente")
-            .setColor(configs.embed.color.green)
+            .setColor(configs.config.embed.color.green)
             .setImage(utente.user.displayAvatarURL({
                 dynamic: true,
                 format: "png",

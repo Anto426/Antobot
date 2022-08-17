@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: "on",
     permision: [],
@@ -8,23 +9,23 @@ module.exports = {
         description: "Accende il bot"
     },
     execute(interaction) {
-        if (stato) {
+        if (configs.stato) {
             const embederror = new Discord.EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Il bot è gia online")
-                .setThumbnail(configs.embed.images.error)
-                .setColor(configs.embed.color.red)
+                .setThumbnail(configs.settings.embed.images.error)
+                .setColor(configs.settings.embed.color.red)
             interaction.reply({ embeds: [embederror] })
             return
         } else {
             const embedonline = new Discord.EmbedBuilder()
                 .setTitle("Bot online")
                 .setDescription("Il bot sta riabilitando tutti i sistemi come richiesto")
-                .setThumbnail(configs.embed.images.succes)
-                .setColor(configs.embed.color.green)
+                .setThumbnail(configs.settings.embed.images.succes)
+                .setColor(configs.settings.embed.color.green)
             client.user.setStatus("online");
 
-            stato = true;
+            configs.stato = true;
             interaction.reply({ embeds: [embedonline] })
         }
 

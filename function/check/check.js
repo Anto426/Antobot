@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 const path = require('path')
 
 async function filecheck(file) {
@@ -29,6 +30,7 @@ async function dircheck(directory, namedir) {
         return false
     }
 }
+
 
 module.exports = {
     filecheck: filecheck,

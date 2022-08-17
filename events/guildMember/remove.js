@@ -1,3 +1,4 @@
+const configs = require("./../../index")
 module.exports = {
     name: `guildMemberRemove`,
     async execute(member) {

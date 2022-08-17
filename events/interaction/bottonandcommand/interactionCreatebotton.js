@@ -1,10 +1,11 @@
 const jsonf = require("../../../function/json/jsnonfunctions")
 const check = require("../../../function/check/check")
-
+const configs = require("./../../index")
 function createchannel () {
     
 }
 const { InteractionType } = require('discord.js');
+
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {
@@ -15,15 +16,15 @@ module.exports = {
             }
 
             if (interaction.customId == "mc") {
-                for (server in configs.game.mc) {
+                for (server in configs.config.game.mc) {
                     let embed = new Discord.EmbedBuilder()
                         .setColor('#0099ff')
                         .setTitle("Ecco il tuo server")
 
                     if (interaction.values[0] == server) {
                         console.log(server)
-                        embed.setThumbnail(configs.game.mc[server].images)
-                        embed.setDescription(configs.game.mc[server].server);
+                        embed.setThumbnail(configs.config.game.mc[server].images)
+                        embed.setDescription(configs.config.game.mc[server].server);
                         interaction.reply({ embeds: [embed] })
                         setTimeout(() => interaction.deleteReply(), 10000)
 
@@ -99,7 +100,7 @@ ${x.data.description}
                                 const embed = new Discord.EmbedBuilder()
                                     .setTitle("Help")
                                     .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                                    .setColor(configs.embed.color.purple)
+                                    .setColor(configs.config.embed.color.purple)
                                     .setDescription(`
 Usa il menu qui sotto per scegliere la categoria di comandi da vedere!
 
@@ -119,8 +120,8 @@ ${msg.join(" ").toString()}
                         const embed = new Discord.EmbedBuilder()
                             .setTitle("Error")
                             .setDescription("Non è il tuo questo menu!")
-                            .setThumbnail(configs.embed.images.error)
-                            .setColor(configs.embed.color.red)
+                            .setThumbnail(configs.config.embed.images.error)
+                            .setColor(configs.config.embed.color.red)
                         interaction.reply({ embeds: [embed], ephemeral: true })
                     }
                 } else {
@@ -128,8 +129,8 @@ ${msg.join(" ").toString()}
                     const embed = new Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Il bot è stato riavviato per favore crea un'altro menu")
-                        .setThumbnail(configs.embed.images.error)
-                        .setColor(configs.embed.color.red)
+                        .setThumbnail(configs.config.embed.images.error)
+                        .setColor(configs.config.embed.color.red)
                     interaction.reply({ embeds: [embed], ephemeral: true })
                 }
 

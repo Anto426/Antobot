@@ -1,6 +1,7 @@
 /*const check = require("./../../../function/check/check")
 const jsonf = require("./../../../function/json/jsnonfunctions")
 const { InteractionType } = require('discord.js');
+const configs = require("./../../index")
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {

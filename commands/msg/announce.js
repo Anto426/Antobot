@@ -1,4 +1,5 @@
 const { PermissionsBitField } = require('discord.js')
+const configs = require("./../../index")
 module.exports = {
     name: "announce",
     permision: [PermissionsBitField.Flags.ModerateMembers],
@@ -43,7 +44,7 @@ module.exports = {
             .setTitle(title)
             .setDescription(msg)
             .setThumbnail(image)
-            .setColor(configs.embed.color.green)
+            .setColor(configs.config.embed.color.green)
         channel = interaction.options.getChannel("channel") || interaction.guild.channels.cache.find(x => x.id == configs[interaction.guild.name].stanze.eventi)
         channel.send({ embeds: [embed] })
 

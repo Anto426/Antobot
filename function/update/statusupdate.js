@@ -7,6 +7,7 @@ async function activity() {
 }
 
 
+const configs = require("./../../index")
 module.exports = {
     activity: activity
 }

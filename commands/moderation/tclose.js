@@ -1,5 +1,6 @@
 
 const { PermissionsBitField } = require('discord.js')
+const configs = require("./../../index")
 module.exports = {
     name: "tclose",
     permision: [],
