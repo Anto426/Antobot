@@ -16,8 +16,8 @@ module.exports = {
 
                 try {
                     var staf = false
-                    for (let role in configs[interaction.guild.name].role.staff) {
-                        if (interaction.member.roles.cache.has(configs[interaction.guild.name].role.staff[role])) { staf = true }
+                    for (let role in configs.settings[interaction.guild.name].role.staff) {
+                        if (interaction.member.roles.cache.has(configs.settings[interaction.guild.name].role.staff[role])) { staf = true }
                     }
                     for (let id in configs.owner) {
                         if (interaction.member.id == configs.owner[id]) { staf = true }

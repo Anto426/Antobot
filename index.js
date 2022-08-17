@@ -86,3 +86,8 @@ for (const folder of eventsFolders) {
         }
     }
 }
+
+setInterval(() => {
+    update.activity()
+
+}, 1000 * 60)

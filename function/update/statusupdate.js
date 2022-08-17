@@ -1,4 +1,4 @@
-
+const configs = require("./../../index")
 async function activity() {
 
     let frasi = [" moderare il server", "/help"]

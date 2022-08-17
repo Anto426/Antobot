@@ -3,7 +3,7 @@ module.exports = {
     name: "help",
     permision: [],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "help",
         description: "Info sui comandi"
@@ -30,7 +30,7 @@ module.exports = {
         folders.forEach(f => {
             selectmenu.addOptions([{
                 label: f,
-                value: `${f.replace("📁 ","")}`,
+                value: `${f.replace("📁 ", "")}`,
 
             }])
 
@@ -51,8 +51,7 @@ module.exports = {
 
         let iduser = interaction.member.id
 
-        const configs = require("./../../index")
-module.exports = {
+        module.exports = {
             iduser: iduser,
             interaction: interaction,
         }
