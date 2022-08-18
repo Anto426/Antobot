@@ -9,7 +9,6 @@ async function jread(file) {
     }
 }
 
-
 async function jwrite(file, content) {
     try {
         configs.fs.writeFile(file, JSON.stringify(content), function (err) {
@@ -19,26 +18,9 @@ async function jwrite(file, content) {
 
     }
 }
-async function jremove(content, element) {
-    try {
-        let temp = [];
-        if (content.isArray()) {
-            content.forEach(x => {
-                for (let i in x.legth) {
-                    if (x[i] != element) {
-                        temp.push(x)
-                    }
-                }
-            })
-            return temp
-        }
-    } catch {
-
-    }
-}
 
 module.exports = {
     jread: jread,
     jwrite: jwrite,
-    jremove: jremove
+
 }
