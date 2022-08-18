@@ -1,4 +1,4 @@
-const jsonf = require("./../json/jsnonfunctions")
+const jsonf = require("../json/jsnonfunctions")
 
 
 async function closetticketandroom(file,member){
@@ -28,7 +28,18 @@ async function closetticketandroom(file,member){
     
 }
 
+async function findchannel(arrey,member){
+    let id =""
+    arrey.forEach(x => {
+        if (x.IDuser == member.id) {
+            id = x.IDticket
+        }
+    })
+    return id
+}
+
 
 module.exports={
-    closetticketandroom:closetticketandroom
+    closetticketandroom:closetticketandroom,
+    findchannel:findchannel
 }

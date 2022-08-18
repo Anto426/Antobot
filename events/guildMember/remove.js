@@ -14,10 +14,6 @@ module.exports = {
             let channel = member.guild.channels.cache.find(x => x.id == configs[member.guild.name].stanze.left)
             channel.send({ embeds: [embed] }).catch(() => {})
 
-            let type = "ticket"
-
-
-
 
 
 

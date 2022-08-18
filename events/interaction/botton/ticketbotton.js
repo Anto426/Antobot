@@ -2,7 +2,7 @@ const jsonf = require("../../../function/json/jsnonfunctions")
 const check = require("../../../function/check/check")
 const configs = require("../../../index")
 const arreyf = require("./../../../function/arrey/arreyfunctions")
-const fclosed = require("./../../../function/fclosed/funcionclosed")
+const froomandtiket = require("../../../function/privateroomandticket/privateroomandticketfunctions")
 const { ChannelType, PermissionsBitField, ButtonStyle } = require('discord.js');
 const { InteractionType } = require('discord.js');
 
@@ -66,12 +66,7 @@ module.exports = {
                             ticketchannel.send({ embeds: [embed], components: [row] })
                         } else {
                             let content = await jsonf.jread(file)
-                            let id
-                            content.list.forEach(x => {
-                                if (x.IDuser == interaction.member.id) {
-                                    id = x.IDticket
-                                }
-                            })
+                            let id = await froomandtiket.findchannel(content.list,interaction.member)
                             let embed = new configs.Discord.EmbedBuilder()
                                 .setTitle("Error")
                                 .setDescription("Hai gia un ticket aperto <#" + id + ">")
@@ -86,7 +81,7 @@ module.exports = {
 
                 check.filecheck(file).then(async (result) => {
                     if (result) {
-                        fclosed.closetticketandroom(file, interaction.member)
+                        froomandtiket.closetticketandroom(file, interaction.member)
                     }else{
                         interaction.channel.delete()
                     }
