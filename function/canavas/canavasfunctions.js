@@ -1,12 +1,12 @@
 const { createCanvas, loadImage, registerFont } = require("canvas")
-registerFont("./canavas/Welcome/font/Glitch.ttf", { family: "glitch" })
+registerFont("./canavas/Welcomeandleft/font/Glitch.ttf", { family: "glitch" })
 const configs = require("./../../index")
 
 async function createimage(member, title, type) {
     let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
     let canvas = await createCanvas(1700, 600)
     let ctx = await canvas.getContext("2d")
-    let img = await loadImage("./canavas/Welcome/img/backgrounds.jpg")
+    let img = await loadImage("./canavas/Welcomeandleft/img/backgrounds.jpg")
     ctx.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.height / 2)
 
 
@@ -45,3 +45,6 @@ async function createimage(member, title, type) {
 
 
 
+module.exports={
+    createimage:createimage
+}

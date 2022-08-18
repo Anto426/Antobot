@@ -1,6 +1,6 @@
-const { MessageAttachment } = require("discord.js");
+const { MessageAttachment,AttachmentBuilder,ChannelType, PermissionsBitField, ButtonStyle } = require("discord.js");
 const { Captcha } = require("captcha-canvas");
-const { ActionRowBuilder, ButtonBuilder,ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const configs = require("./../../../index")
 module.exports = {
     name: `guildMemberAdd`,
@@ -16,37 +16,39 @@ module.exports = {
             captcha.drawTrace();
             captcha.drawCaptcha();
 
-            let captchaAttachement = new MessageAttachment(
+            let captchaAttachement = new AttachmentBuilder(
                 await captcha.png,
-                "captcha.png"
+                { name:"captcha.png"}
             )
             let category = member.guild.channels.cache.find(x => x.name == "💻verifica💻")
             if (!category) {
-                category = await member.guild.channels.create('💻verifica💻', {
-                    type: 'GUILD_CATEGORY',
+                category = await member.guild.channels.create( {
+                    name : "💻verifica💻",
+                    type: ChannelType.GuildCategory,
                     permissionOverwrites: [{
                         id: member.id,
-                        allow: ["VIEW_CHANNEL", "SEND_MESSAGES"],
+                        allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages],
                     }, {
                         id: member.guild.roles.everyone,
-                        deny: ["VIEW_CHANNEL"]
+                        deny: [PermissionsBitField.Flags.ViewChannel]
                     }]
                 })
             }
             let name = "「💻」" + member.user.tag
-            let channelverifica = await member.guild.channels.create(name, {
-                type: 'GUILD_TEXT',
+            let channelverifica = await member.guild.channels.create( {
+                name: name,
+                type: ChannelType.GuildText,
                 parent: category,
                 permissionOverwrites: [{
                     id: member.id,
-                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+                    allow: [PermissionsBitField.Flags.ViewChannel, PermissionsBitField.Flags.SendMessages, PermissionsBitField.Flags.ReadMessageHistory],
                 }, {
                     id: member.guild.roles.everyone,
-                    deny: ["VIEW_CHANNEL"]
+                    deny: [PermissionsBitField.Flags.ViewChannel]
                 }]
             })
             let embed = new configs.Discord.EmbedBuilder()
-                .setColor("RANDOM")
+                .setColor(configs.settings.embed.color.green)
                 .setTitle("Welcome")
                 .setDescription(`Per verificarti nel server risolvi il captcha(hai 100 sec altrimenti verrai kikkato)`)
                 .setImage("attachment://captcha.png")
@@ -119,10 +121,10 @@ module.exports = {
             let category1 = member.guild.channels.cache.find(x => x.name == "📂Backup📂")
             if (!category1) {
                 category1 = await member.guild.channels.create('📂Backup📂', {
-                    type: 'GUILD_CATEGORY',
+                    type: ChannelType.GuildCategory,
                     permissionOverwrites: [{
                         id: member.guild.roles.everyone,
-                        deny: ["VIEW_CHANNEL"]
+                        deny: [PermissionsBitField.Flags.ViewChannel]
                     }]
                 })
             }
