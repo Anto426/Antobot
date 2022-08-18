@@ -7,7 +7,6 @@ module.exports = {
 
         if (messageReaction.message.partial) await messageReaction.message.fetch();
 
-
         for (let i in configs.settings[messageReaction.message.guild.name].role.reactrole) {
             if (messageReaction.message.id == configs.settings[messageReaction.message.guild.name].role.reactrole[i].id) {
                 for (let x in configs.settings[messageReaction.message.guild.name].role.reactrole[i].ruoli) {

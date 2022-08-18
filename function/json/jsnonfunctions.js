@@ -1,40 +1,39 @@
 const configs = require("./../../index")
 async function jread(file) {
-    let content = configs.fs.readFileSync(file)
-    var parseJson = JSON.parse(content)
-    return parseJson
+    try {
+        let content = configs.fs.readFileSync(file)
+        var parseJson = JSON.parse(content)
+        return parseJson
+    } catch {
+
+    }
 }
 
 
 async function jwrite(file, content) {
-    configs.fs.writeFile(file, JSON.stringify(content), function (err) {
-        if (err) throw err;
-    })
+    try {
+        configs.fs.writeFile(file, JSON.stringify(content), function (err) {
+            if (err) throw err;
+        })
+    } catch {
 
-}
-
-async function jcheck(file, element) {
-    let content = jread(file)
-    content.forEach(x => {
-
-    })
-
+    }
 }
 async function jremove(content, element) {
-    let temp = [];
-    if (content.isArray()) {
-        content.forEach(x => {
-            for (let i in x.legth) {
-                if (x[i] != element) {
-                    temp.push(x)
+    try {
+        let temp = [];
+        if (content.isArray()) {
+            content.forEach(x => {
+                for (let i in x.legth) {
+                    if (x[i] != element) {
+                        temp.push(x)
+                    }
                 }
-            }
-        })
-        return temp
-    } else {
-        for (let i in content) {
-
+            })
+            return temp
         }
+    } catch {
+
     }
 }
 

@@ -2,14 +2,17 @@ const configs = require("./../../index")
 const path = require('path')
 
 async function filecheck(file) {
+    let trovato = false
     try {
         configs.fs.lstatSync(file).isFile()
-        return true
+        trovato = true
     } catch {
 
         console.log("file non trovato")
-        return false
+        trovato = false
     }
+
+    return trovato
 }
 
 async function dircheck(directory, namedir) {
