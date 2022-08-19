@@ -6,12 +6,12 @@ module.exports = {
             return
         } else {
             const embed = new configs.Discord.EmbedBuilder()
-                .setColor("RANDOM")
+                .setColor(configs.settings.embed.color.red)
                 .setTitle("Left")
                 .setDescription(` ${member} ha abbandonati il server`)
                 .setThumbnail(member.user.displayAvatarURL({ dynamic: true }));
 
-            let channel = member.guild.channels.cache.find(x => x.id == configs[member.guild.name].stanze.left)
+            let channel = member.guild.channels.cache.find(x => x.id == configs.settings[member.guild.name].stanze.left)
             channel.send({ embeds: [embed] }).catch(() => {})
 
 

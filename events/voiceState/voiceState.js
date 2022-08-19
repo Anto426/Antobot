@@ -11,10 +11,10 @@ module.exports = {
         try {
 
 
-            for (let x in configs[newMember.guild.name].stanze.temporanne) {
-                if (newMember.channel.id == configs[newMember.guild.name].stanze.temporanne[x].id) {
+            for (let x in configs.settings[newMember.guild.name].stanze.temporanne) {
+                if (newMember.channel.id == configs.settings[newMember.guild.name].stanze.temporanne[x].id) {
                     if (channel) {
-                        channel.setUserLimit(configs[newMember.guild.name].stanze.temporanne[x].limit)
+                        channel.setUserLimit(configs.settings[newMember.guild.name].stanze.temporanne[x].limit)
                         member.voice.setChannel(channel)
                     } else {
 
@@ -22,7 +22,7 @@ module.exports = {
                             name: member.user.username,
                             type: 2,
                             parent: category,
-                            userLimit: configs[newMember.guild.name].stanze.temporanne[x].limit,
+                            userLimit: configs.settings[newMember.guild.name].stanze.temporanne[x].limit,
 
                         })
 
