@@ -36,9 +36,11 @@ async function createimage(member, title, type) {
         ctx.fillText(`${humans.size}° membro`, 500, 400)
     }
 
-    let attachment = new configs.Discord.MessageAttachment(canvas.toBuffer(), "canvas.png")
 
-    return attachment
+    const buffer = canvas.toBuffer("canvas.png");
+    return buffer
+
+
 
 }
 
