@@ -12,7 +12,7 @@ module.exports = {
                 .setThumbnail(member.user.displayAvatarURL({ dynamic: true }));
 
             let channel = member.guild.channels.cache.find(x => x.id == configs.settings[member.guild.name].stanze.left)
-            channel.send({ embeds: [embed] }).catch(() => {})
+            channel.send({ embeds: [embed] }).catch(() => { })
 
 
 

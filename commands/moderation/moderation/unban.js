@@ -4,7 +4,7 @@ module.exports = {
     name: "unban",
     permision: [PermissionsBitField.Flags.BanMembers],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "unban",
         description: "Unban utente",

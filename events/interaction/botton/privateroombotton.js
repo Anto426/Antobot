@@ -57,9 +57,9 @@ module.exports = {
                         if (result) {
                             let content = await jsonf.jread(file)
                             return arreyf.arreycheckelement(content.list, interaction.member.id)
- 
+
                         }
- 
+
                     }).then(async (trovato) => {
                         if (!trovato) {
 
@@ -75,22 +75,22 @@ module.exports = {
                             if (interaction.customId == "onlytext") {
                                 type = ChannelType.GuildText
                                 channelname = "「💭」" + interaction.member.user.username
-                                let channel = await createchannel(channelname,category, type)
-                                content.list.push({"IDuser": [interaction.member.id],"IDroom":[channel.id]})
-                                jsonf.jwrite(file,content)
+                                let channel = await createchannel(channelname, category, type)
+                                content.list.push({ "IDuser": [interaction.member.id], "IDroom": [channel.id] })
+                                jsonf.jwrite(file, content)
                             }
                             if (interaction.customId == "onlyvoice") {
                                 type = ChannelType.GuildVoice
                                 channelname = "「🔊」" + interaction.member.user.username
-                                let channel = await createchannel(channelname,category, type)
-                                content.list.push({"IDuser": [interaction.member.id],"IDroom":[channel.id]})
-                                jsonf.jwrite(file,content)
+                                let channel = await createchannel(channelname, category, type)
+                                content.list.push({ "IDuser": [interaction.member.id], "IDroom": [channel.id] })
+                                jsonf.jwrite(file, content)
                             }
                             if (interaction.customId == "text+voice") {
                                 type = ChannelType.GuildText
                                 channelname = "「💭」" + interaction.member.user.username
                                 for (let i = 0; i < 2; i++) {
-                                    let channel = await createchannel(channelname,category, type)
+                                    let channel = await createchannel(channelname, category, type)
                                     type = ChannelType.GuildVoice
                                     channelname = "「🔊」" + interaction.member.user.username
                                 }

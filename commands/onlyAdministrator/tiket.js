@@ -1,10 +1,10 @@
-const { ButtonStyle ,PermissionsBitField} = require('discord.js');
+const { ButtonStyle, PermissionsBitField } = require('discord.js');
 const configs = require("./../../index")
 module.exports = {
     name: "tiket",
     permision: [PermissionsBitField.Flags.Administrator],
     onlyOwner: true,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "tiket",
         description: "Crea il canale tiket"
@@ -13,9 +13,9 @@ module.exports = {
         let row = new configs.Discord.ActionRowBuilder()
             .addComponents(
                 new configs.Discord.ButtonBuilder()
-                .setCustomId('opentiket')
-                .setStyle(ButtonStyle.Danger)
-                .setLabel('Apri il ticket'),
+                    .setCustomId('opentiket')
+                    .setStyle(ButtonStyle.Danger)
+                    .setLabel('Apri il ticket'),
             );
         let embed = new configs.Discord.EmbedBuilder()
             .setTitle("Hey")

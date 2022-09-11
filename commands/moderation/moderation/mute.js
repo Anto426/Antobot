@@ -4,22 +4,22 @@ module.exports = {
     name: "mute",
     permision: [PermissionsBitField.Flags.MuteMembers],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "mute",
         description: "Muta utente",
         options: [{
-                name: "user",
-                description: "L'utente interessato",
-                type: 6,
-                required: true
-            },
-            {
-                name: "reason",
-                description: "motivo",
-                type: 3,
-                required: false
-            }
+            name: "user",
+            description: "L'utente interessato",
+            type: 6,
+            required: true
+        },
+        {
+            name: "reason",
+            description: "motivo",
+            type: 3,
+            required: false
+        }
         ]
     },
     async execute(interaction) {

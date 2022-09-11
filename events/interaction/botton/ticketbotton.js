@@ -66,7 +66,7 @@ module.exports = {
                             ticketchannel.send({ embeds: [embed], components: [row] })
                         } else {
                             let content = await jsonf.jread(file)
-                            let id = await froomandtiket.findchannel(content.list,interaction.member)
+                            let id = await froomandtiket.findchannel(content.list, interaction.member)
                             let embed = new configs.Discord.EmbedBuilder()
                                 .setTitle("Error")
                                 .setDescription("Hai gia un ticket aperto <#" + id + ">")
@@ -82,7 +82,7 @@ module.exports = {
                 check.filecheck(file).then(async (result) => {
                     if (result) {
                         froomandtiket.closetticketandroom(file, interaction.member)
-                    }else{
+                    } else {
                         interaction.channel.delete()
                     }
                 })

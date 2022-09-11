@@ -4,7 +4,7 @@ module.exports = {
     name: "untimeout",
     permision: [PermissionsBitField.Flags.ModerateMembers],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "untimeout",
         description: "Rimuove il timeout ad un utente",

@@ -5,7 +5,7 @@ module.exports = {
     description: 'Elimina i messaggi specificando la quantita.',
     permision: [PermissionsBitField.Flags.ManageMessages],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "clear",
         description: "comando invita",

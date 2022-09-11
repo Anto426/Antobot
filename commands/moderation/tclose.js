@@ -4,7 +4,7 @@ const configs = require("./../../index")
 module.exports = {
     name: "tclose",
     permision: [],
-    onlyStaff : true,
+    onlyStaff: true,
     onlyOwner: false,
     data: {
         name: "tclose",
@@ -36,7 +36,7 @@ module.exports = {
             }
         })
         parseJson.list = temp
-        configs.fs.writeFile(file, JSON.stringify(parseJson), function(err) {
+        configs.fs.writeFile(file, JSON.stringify(parseJson), function (err) {
             if (err) throw err;
         })
 

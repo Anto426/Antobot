@@ -4,7 +4,7 @@ module.exports = {
     name: "archivia",
     permision: [PermissionsBitField.Flags.Administrator],
     onlyOwner: true,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "archivia",
         description: "Archivia il server rimuovendo tutti i membri",
@@ -24,8 +24,8 @@ module.exports = {
         setTimeout(() => {
             interaction.guild.members.cache.forEach(element => {
                 if (element.user.bot) return
-                element.send({ embeds: [embed] }).catch(() => {})
-                element.kick().catch(() => {})
+                element.send({ embeds: [embed] }).catch(() => { })
+                element.kick().catch(() => { })
 
 
             });

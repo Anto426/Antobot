@@ -5,7 +5,7 @@ module.exports = {
     name: "eval",
     permision: [PermissionsBitField.Flags.Administrator],
     onlyOwner: true,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "eval",
         description: "Comando per eseguire del codice js",

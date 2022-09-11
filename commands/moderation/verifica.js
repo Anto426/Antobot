@@ -3,7 +3,7 @@ const configs = require("./../../index")
 module.exports = {
     name: "verifica",
     permision: [],
-    onlyStaff : true,
+    onlyStaff: true,
     onlyOwner: false,
     data: {
         name: "verifica",
@@ -23,7 +23,7 @@ module.exports = {
 
             for (let id in configs[interaction.guild.name].role.rolebase) {
                 let role = interaction.guild.roles.cache.find(x => x.id == configs[interaction.guild.name].role.rolebase[id])
-                utente.roles.add(role).catch(() => {})
+                utente.roles.add(role).catch(() => { })
 
             }
 

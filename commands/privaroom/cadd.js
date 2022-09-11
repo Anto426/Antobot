@@ -3,7 +3,7 @@ module.exports = {
     name: "cadd",
     permision: [],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "cadd",
         description: "Aggiugere utente alle stanze private",
@@ -52,7 +52,7 @@ module.exports = {
                 channel.permissionOverwrites.edit(user.user.id, { VIEW_CHANNEL: true });
             }
         });
-        user.roles.add(role).catch(() => {})
+        user.roles.add(role).catch(() => { })
 
         let embed = new configs.Discord.EmbedBuilder()
             .setTitle("Utente Aggiunto")

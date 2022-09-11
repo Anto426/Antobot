@@ -4,7 +4,7 @@ module.exports = {
     name: "unmute",
     permision: [PermissionsBitField.Flags.MuteMembers],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "unmute",
         description: "Smuta utente",
@@ -57,7 +57,7 @@ module.exports = {
             .setDescription("<@" + utente + ">" + " smutato")
             .setColor(configs.settings.embed.color.green)
         interaction.reply({ embeds: [embed] })
-        utente.roles.remove(muted).catch(() => {})
+        utente.roles.remove(muted).catch(() => { })
 
     }
 }

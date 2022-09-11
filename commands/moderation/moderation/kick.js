@@ -4,23 +4,23 @@ module.exports = {
     name: "kick",
     permision: [PermissionsBitField.Flags.KickMembers],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
 
     data: {
         name: "kick",
         description: "Espelle utente ",
         options: [{
-                name: "user",
-                description: "L'utente interessato",
-                type: 6,
-                required: true
-            },
-            {
-                name: "reason",
-                description: "motivo",
-                type: 3,
-                required: false
-            }
+            name: "user",
+            description: "L'utente interessato",
+            type: 6,
+            required: true
+        },
+        {
+            name: "reason",
+            description: "motivo",
+            type: 3,
+            required: false
+        }
         ]
     },
     execute(interaction) {

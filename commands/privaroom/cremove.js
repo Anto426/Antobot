@@ -3,7 +3,7 @@ module.exports = {
     name: "cremove",
     permision: [],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "cremove",
         description: "Rimuovere utente dalle stanze private",
@@ -55,7 +55,7 @@ module.exports = {
             }
         });
 
-        user.roles.remove(role).catch(() => {})
+        user.roles.remove(role).catch(() => { })
 
         let embed = new configs.Discord.EmbedBuilder()
             .setTitle("Utente rimosso")

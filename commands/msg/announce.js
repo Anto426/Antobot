@@ -4,34 +4,34 @@ module.exports = {
     name: "announce",
     permision: [PermissionsBitField.Flags.ModerateMembers],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "announce",
         description: "Invia messagio attraverso il bot",
         options: [{
-                name: "title",
-                description: "titolo",
-                type: 3,
-                required: true,
-            },
-            {
-                name: "msg",
-                description: "messagio",
-                type: 3,
-                required: true,
-            },
-            {
-                name: "channel",
-                description: "channel",
-                type: 7,
-                required: false,
-            },
-            {
-                name: "image",
-                description: "image",
-                type: 3,
-                required: false,
-            },
+            name: "title",
+            description: "titolo",
+            type: 3,
+            required: true,
+        },
+        {
+            name: "msg",
+            description: "messagio",
+            type: 3,
+            required: true,
+        },
+        {
+            name: "channel",
+            description: "channel",
+            type: 7,
+            required: false,
+        },
+        {
+            name: "image",
+            description: "image",
+            type: 3,
+            required: false,
+        },
 
         ]
     },

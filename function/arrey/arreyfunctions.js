@@ -20,7 +20,7 @@ async function arreycheckelement(arrey, element) {
             if (x[y] == element) { trovato = true }
         }
     })
-        return trovato
+    return trovato
 
 }
 
@@ -34,7 +34,7 @@ async function arreyfindlement(arrey, elementfind) {
 }
 module.exports = {
     arreyremoveelement: arreyremoveelement,
-    arreyfindlement:arreyfindlement,
-    arreycheckelement:arreycheckelement
+    arreyfindlement: arreyfindlement,
+    arreycheckelement: arreycheckelement
 
 }

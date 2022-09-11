@@ -4,23 +4,23 @@ module.exports = {
     name: "ban",
     permision: [PermissionsBitField.Flags.BanMembers],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
 
     data: {
         name: "ban",
         description: "Banna utente",
         options: [{
-                name: "user",
-                description: "L'utente interessato",
-                type: 3,
-                required: true
-            },
-            {
-                name: "reason",
-                description: "motivo",
-                type: 3,
-                required: false
-            }
+            name: "user",
+            description: "L'utente interessato",
+            type: 3,
+            required: true
+        },
+        {
+            name: "reason",
+            description: "motivo",
+            type: 3,
+            required: false
+        }
         ]
     },
     execute(interaction) {

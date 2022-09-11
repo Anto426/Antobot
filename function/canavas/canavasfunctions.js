@@ -47,6 +47,6 @@ async function createimage(member, title, type) {
 
 
 
-module.exports={
-    createimage:createimage
+module.exports = {
+    createimage: createimage
 }
