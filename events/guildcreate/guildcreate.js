@@ -16,7 +16,7 @@ module.exports = {
             })
         }
         guild.channels.cache.forEach((channel) => {
-            channel.permissionOverwrites.edit(muted, { SEND_MESSAGES: false }).catch(() => {})
+            channel.permissionOverwrites.edit(muted, { SEND_MESSAGES: false }).catch(() => { })
         })
 
     }
