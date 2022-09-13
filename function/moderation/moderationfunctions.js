@@ -1,5 +1,6 @@
-let errmsg = require("./../error/errormsg")
-async function banf(interaction, member) {
+const errmsg = require("./../error/errormsg")
+const configs = require("./../../index")
+async function banf(interaction, member,reason) {
     try {
         member.ban({
             reason: reason
@@ -13,8 +14,8 @@ async function banf(interaction, member) {
                 { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
         interaction.reply({ embeds: [embed] })
-    } catch {
-
+    } catch(err) {
+        console.error(err)
         errmsg.message(interaction)
     }
 }
@@ -22,7 +23,7 @@ async function banf(interaction, member) {
 async function kickf(interaction, member){
 
 
-    
+
 }
 
 

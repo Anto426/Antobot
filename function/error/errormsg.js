@@ -1,7 +1,6 @@
-
-
-function msg(interaction) {
-    let frasi = ["Ops! Qualcosa è andato storto!!", "Riprova sarai più fortunato , Ho riscrontrato alcuni errori durante l'esecuzione del comando"]
+const configs = require("./../../index")
+function msggeneric(interaction) {
+    let frasi = ["Ops! Qualcosa è andato storto!!", "Riprova sarai più fortunato", "Ho riscrontrato alcuni errori durante l'esecuzione del comando"]
     var x = Math.floor(Math.random() * frasi.length);
     const embed = new configs.Discord.EmbedBuilder()
         .setTitle("Error")
@@ -11,6 +10,11 @@ function msg(interaction) {
     interaction.reply({ embeds: [embed] })
 }
 
-module.exports ={ 
-    message:msg
+function msghigtlivel(interaction) {
+
+
+}
+
+module.exports = {
+    message: msggeneric
 }

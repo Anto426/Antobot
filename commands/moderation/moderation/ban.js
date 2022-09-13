@@ -14,7 +14,7 @@ module.exports = {
         options: [{
             name: "user",
             description: "L'utente interessato",
-            type: 3,
+            type: 6,
             required: true
         },
         {
@@ -36,9 +36,11 @@ module.exports = {
                 .setThumbnail(configs.settings.embed.images.forte)
                 .setColor(configs.settings.embed.color.red)
             return interaction.reply({ embeds: [embed] })
+        } else {
+            moderationf.banf(interaction, utente, reason)
         }
 
-        moderationf.banf(interaction,utente)
+
 
 
 

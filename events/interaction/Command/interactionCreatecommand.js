@@ -1,6 +1,7 @@
 const { inspect } = require(`util`)
 const { InteractionType } = require('discord.js');
 const configs = require("./../../../index")
+const errmsg = require("./../../../function/error/errormsg")
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
@@ -139,16 +140,8 @@ module.exports = {
 
 
             } catch (err) {
-                console.log(err)
-                const embed = new configs.Discord.EmbedBuilder()
-                    .setTitle("Error")
-                    .setDescription(`Qualcosa è andato storto`)
-                    .setThumbnail(configs.settings.embed.images.error)
-                    .setColor(configs.settings.embed.color.red)
-                    .addFields([
-                        { name: 'Error:', value: `\`\`\`\n ${inspect((err.toString()))}  \`\`\`` },
-                    ])
-                interaction.reply({ embeds: [embed], ephemeral: true })
+                console.error(err)
+                errmsg.message(interaction)
             }
         }
     }
