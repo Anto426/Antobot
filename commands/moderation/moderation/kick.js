@@ -39,6 +39,6 @@ module.exports = {
             return interaction.reply({ embeds: [embed] })
         }
 
-        moderationf.kickf(interaction,utente)
+        moderationf.kickf(interaction, utente)
     }
 }

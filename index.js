@@ -17,12 +17,12 @@ let client = new Discord.Client({
 });
 module.exports = {
     stato: stato,
-    settings:settings,
-    Discord:Discord,
-    fs:fs,
-    verifica:verifica,
-    client:client,
-    owner:owner,
+    settings: settings,
+    Discord: Discord,
+    fs: fs,
+    verifica: verifica,
+    client: client,
+    owner: owner,
 }
 try {
     require("dotenv").config()

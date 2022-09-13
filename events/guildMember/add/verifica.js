@@ -1,4 +1,4 @@
-const { MessageAttachment,AttachmentBuilder,ChannelType, PermissionsBitField, ButtonStyle } = require("discord.js");
+const { MessageAttachment, AttachmentBuilder, ChannelType, PermissionsBitField, ButtonStyle } = require("discord.js");
 const { Captcha } = require("captcha-canvas");
 const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const configs = require("./../../../index")
@@ -18,12 +18,12 @@ module.exports = {
 
             let captchaAttachement = new AttachmentBuilder(
                 await captcha.png,
-                { name:"captcha.png"}
+                { name: "captcha.png" }
             )
             let category = member.guild.channels.cache.find(x => x.name == "💻verifica💻")
             if (!category) {
-                category = await member.guild.channels.create( {
-                    name : "💻verifica💻",
+                category = await member.guild.channels.create({
+                    name: "💻verifica💻",
                     type: ChannelType.GuildCategory,
                     permissionOverwrites: [{
                         id: member.id,
@@ -35,7 +35,7 @@ module.exports = {
                 })
             }
             let name = "「💻」" + member.user.tag
-            let channelverifica = await member.guild.channels.create( {
+            let channelverifica = await member.guild.channels.create({
                 name: name,
                 type: ChannelType.GuildText,
                 parent: category,
@@ -100,7 +100,7 @@ module.exports = {
                         .setThumbnail(configs.settings.embed.images.thor)
                         .setColor(configs.settings.embed.color.red)
                     await channelverifica.send({ embeds: [embed] })
-                    setTimeout(async() => {
+                    setTimeout(async () => {
                         await member.kick()
                     }, 1000 * 10)
                 }
@@ -114,9 +114,9 @@ module.exports = {
             let row = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
-                    .setCustomId('deletechat')
-                    .setStyle(ButtonStyle.Danger)
-                    .setEmoji("<:cestino:940545919928111126>"),
+                        .setCustomId('deletechat')
+                        .setStyle(ButtonStyle.Danger)
+                        .setEmoji("<:cestino:940545919928111126>"),
                 );
             let category1 = member.guild.channels.cache.find(x => x.name == "📂Backup📂")
             if (!category1) {
@@ -132,7 +132,7 @@ module.exports = {
             await channelverifica.permissionOverwrites.delete(member.id).then((channels) => {
                 channels.setParent(category1);
             })
-            category.delete().catch(() => {})
+            category.delete().catch(() => { })
             channelverifica.send({ embeds: [messagedelete], components: [row] })
 
 

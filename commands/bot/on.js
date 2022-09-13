@@ -3,7 +3,7 @@ module.exports = {
     name: "on",
     permision: [],
     onlyOwner: true,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "on",
         description: "Accende il bot"

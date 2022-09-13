@@ -3,7 +3,7 @@ module.exports = {
     name: "serverinfo",
     permision: [],
     onlyOwner: false,
-    onlyStaff : false,
+    onlyStaff: false,
     data: {
         name: "serverinfo",
         description: "Informazioni sul server"
@@ -22,22 +22,24 @@ module.exports = {
                 { name: 'Owner', value: `\`\`\`\n${server.members.cache.get(server.ownerId).nickname}\`\`\`` },
                 { name: `Livello di verifica:`, value: `\`\`\`\nAlto\`\`\`` },
                 { name: `Server id:`, value: `\`\`\`\n${server.id}\`\`\`` },
-                { name: `Members:`, value: ` \`\`\`\n  
+                {
+                    name: `Members:`, value: ` \`\`\`\n  
 Membri tot: ${server.memberCount.toString()}
                   
 Bot:${server.members.cache.filter(x => x.user.bot).size.toString()}
                   
-Utenti:${server.members.cache.filter(x=> !x.user.bot).size.toString()}
+Utenti:${server.members.cache.filter(x => !x.user.bot).size.toString()}
                   
 online: ${countingonline + countingidle}
                   
                   
                   \`\`\`` },
-                { name: `Channels:`, value: `\`\`\`\n
+                {
+                    name: `Channels:`, value: `\`\`\`\n
 
-Canali tot:${server.channels.cache.filter(x=> x.type == "GUILD_VOICE" || x.type == "GUILD_TEXT").size.toString()}
+Canali tot:${server.channels.cache.filter(x => x.type == "GUILD_VOICE" || x.type == "GUILD_TEXT").size.toString()}
                   
-Canali vocali:${server.channels.cache.filter(x=> x.type == "GUILD_VOICE").size.toString()} || Canali testuali: ${server.channels.cache.filter(x=> x.type == "GUILD_TEXT").size.toString()}
+Canali vocali:${server.channels.cache.filter(x => x.type == "GUILD_VOICE").size.toString()} || Canali testuali: ${server.channels.cache.filter(x => x.type == "GUILD_TEXT").size.toString()}
                   
                   \`\`\`` },
                 { name: `Server created:`, value: `\`\`\`\n${server.id}\`\`\`` },

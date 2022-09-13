@@ -1,10 +1,7 @@
 const errmsg = require("./../error/errormsg")
-const configs = require("./../../index")
-async function banf(interaction, member,reason) {
+async function banf(interaction, member, reason) {
     try {
-        member.ban({
-            reason: reason
-        });
+
         const embed = new configs.Discord.EmbedBuilder()
             .setTitle("Utente bannato")
             .setDescription("<@" + member + ">" + " bannato")
@@ -14,13 +11,13 @@ async function banf(interaction, member,reason) {
                 { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
         interaction.reply({ embeds: [embed] })
-    } catch(err) {
+    } catch (err) {
         console.error(err)
         errmsg.message(interaction)
     }
 }
 
-async function kickf(interaction, member){
+async function kickf(interaction, member) {
 
 
 
@@ -28,8 +25,8 @@ async function kickf(interaction, member){
 
 
 
-module.exports={
-    banf:banf, 
-    kickf:kickf
-    
+module.exports = {
+    banf: banf,
+    kickf: kickf
+
 }
