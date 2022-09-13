@@ -1,5 +1,7 @@
 const { PermissionsBitField } = require('discord.js');
 const configs = require("./../../../index")
+const errmsg = require("./../../../function/error/errormsg")
+const moderationf = require("../../../function/moderation/moderationfunctions")
 module.exports = {
     name: "kick",
     permision: [PermissionsBitField.Flags.KickMembers],
@@ -36,27 +38,7 @@ module.exports = {
                 .setColor(configs.settings.embed.color.red)
             return interaction.reply({ embeds: [embed] })
         }
-        try {
-            utente.kick();
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Utente bannato")
-                .setDescription("<@" + utente + ">" + " kickato")
-                .addFields([
-                    { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
-                ])
-                .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-                .setColor(configs.settings.embed.color.green)
-            interaction.reply({ embeds: [embed] })
-        } catch (err) {
-            console.log(err)
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Ops! Qualcosa è andato storto!!")
-                .setThumbnail(configs.settings.embed.images.error)
-                .setColor(configs.settings.embed.color.red)
-            interaction.reply({ embeds: [embed] })
-        }
 
-
+        moderationf.kickf(interaction,utente)
     }
 }

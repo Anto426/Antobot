@@ -1,5 +1,7 @@
 const { PermissionsBitField } = require('discord.js');
 const configs = require("./../../../index")
+const errmsg = require("./../../../function/error/errormsg")
+const moderationf = require("../../../function/moderation/moderationfunctions")
 module.exports = {
     name: "ban",
     permision: [PermissionsBitField.Flags.BanMembers],
@@ -36,29 +38,11 @@ module.exports = {
             return interaction.reply({ embeds: [embed] })
         }
 
+        moderationf.banf(interaction,utente)
 
 
-        try {
-            utente.ban({
-                reason: reason
-            });
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Utente bannato")
-                .setDescription("<@" + utente + ">" + " bannato")
-                .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-                .setColor(configs.settings.embed.color.green)
-                .addFields([
-                    { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
-                ])
-            interaction.reply({ embeds: [embed] })
-        } catch {
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Ops! Qualcosa è andato storto!!")
-                .setThumbnail(configs.settings.embed.images.error)
-                .setColor(configs.settings.embed.color.red)
-            interaction.reply({ embeds: [embed] })
-        }
+
+
 
 
     }

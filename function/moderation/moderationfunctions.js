@@ -1,4 +1,4 @@
-let msg = require("./../error/errormsg")
+let errmsg = require("./../error/errormsg")
 async function banf(interaction, member) {
     try {
         member.ban({
@@ -15,8 +15,20 @@ async function banf(interaction, member) {
         interaction.reply({ embeds: [embed] })
     } catch {
 
-        msg.message(interaction)
+        errmsg.message(interaction)
     }
 }
 
-async function kickf(interaction, member)
+async function kickf(interaction, member){
+
+
+    
+}
+
+
+
+module.exports={
+    banf:banf, 
+    kickf:kickf
+    
+}
