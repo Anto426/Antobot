@@ -1,4 +1,5 @@
 const configs = require("./../../index")
+const errmsg = require("./../../function/msg/errormsg")
 module.exports = {
     name: "off",
     permision: [],
@@ -10,12 +11,7 @@ module.exports = {
     },
     execute(interaction) {
         if (!configs.stato) {
-            const embederror = new configs.Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Il bot è gia offline")
-                .setThumbnail(configs.settings.embed.images.error)
-                .setColor(configs.settings.config.embed.color.red)
-            interaction.reply({ embeds: [embederror] })
+            errmsg.offonmsg(interaction,false)
             return
         } else {
             const embedonline = new configs.settings.Discord.EmbedBuilder()

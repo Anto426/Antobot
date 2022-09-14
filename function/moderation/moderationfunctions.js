@@ -1,4 +1,5 @@
 const errmsg = require("./../error/errormsg")
+const configs = require("./../../index")
 async function banf(interaction, member, reason) {
     try {
 

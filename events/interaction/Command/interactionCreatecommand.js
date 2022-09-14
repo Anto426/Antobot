@@ -62,12 +62,8 @@ module.exports = {
                             }
 
                             if (!trovato2) {
-                                const embed = new configs.Discord.EmbedBuilder()
-                                    .setTitle("Error")
-                                    .setDescription(` Hai un ruolo uguale o minore a ${interaction.options.getMember("user")}`)
-                                    .setThumbnail(configs.settings.embed.images.accesdenied)
-                                    .setColor(configs.settings.embed.color.red)
-                                interaction.reply({ embeds: [embed], ephemeral: true })
+
+                                errmsg.notpermisionmsg(interaction)
                             }
 
                             return
@@ -75,12 +71,7 @@ module.exports = {
                         } else {
 
                             console.log("permesso negato")
-                            const embed = new configs.Discord.EmbedBuilder()
-                                .setTitle("Error")
-                                .setDescription(` Non hai i permessi necessari`)
-                                .setThumbnail(configs.settings.embed.images.accesdenied)
-                                .setColor(configs.settings.embed.color.red)
-                            interaction.reply({ embeds: [embed], ephemeral: true })
+                            errmsg.notpermisionmsg(interaction)
 
                             return
                         }
@@ -95,14 +86,7 @@ module.exports = {
                             return
 
                         } else {
-
-                            console.log("permesso negato")
-                            const embed = new configs.Discord.EmbedBuilder()
-                                .setTitle("Error")
-                                .setDescription(` Non hai i permessi necessari`)
-                                .setThumbnail(configs.settings.embed.images.accesdenied)
-                                .setColor(configs.settings.embed.color.red)
-                            interaction.reply({ embeds: [embed], ephemeral: true })
+                            errmsg.notpermisionmsg(interaction)
 
                             return
                         }
@@ -126,12 +110,7 @@ module.exports = {
                         return
                     } else {
                         console.log("permesso negato")
-                        const embed = new configs.Discord.EmbedBuilder()
-                            .setTitle("Error")
-                            .setDescription(`Non hai i permessi necessari  per eseguire i comandi qui !`)
-                            .setThumbnail(configs.settings.embed.images.accesdenied)
-                            .setColor(configs.settings.embed.color.red)
-                        interaction.reply({ embeds: [embed], ephemeral: true })
+                        errmsg.notpermisionmsg(interaction)
                         return
                     }
 
