@@ -53,9 +53,33 @@ function offonmsg(interaction, type) {
     interaction.reply({ embeds: [embed] })
 
 }
+function dmmessage(interaction) {
+    let frasi = ["Non ho potuto contattarlo nei dm"]
+    var x = Math.floor(Math.random() * frasi.length);
+    const embed = new configs.Discord.EmbedBuilder()
+        .setTitle("Error")
+        .setDescription(frasi[x].toString())
+        .setThumbnail(configs.settings.embed.images.error)
+        .setColor(configs.settings.embed.color.red)
+    interaction.channel.send({ embeds: [embed] })
+
+}
+function botmsg(interaction) {
+    let frasi = ["Hey non posso applicare questa azione agli altri bot"]
+    var x = Math.floor(Math.random() * frasi.length);
+    const embed = new configs.Discord.EmbedBuilder()
+        .setTitle("Error")
+        .setDescription(frasi[x].toString())
+        .setThumbnail(configs.settings.embed.images.error)
+        .setColor(configs.settings.embed.color.red)
+    interaction.channel.send({ embeds: [embed] })
+
+}
 module.exports = {
     genericmsg: genericmsg,
     tohigtmsg: tohigtmsg,
     notpermisionmsg: notpermisionmsg,
-    offonmsg: offonmsg
+    offonmsg: offonmsg,
+    dmmessage: dmmessage,
+    botmsg: botmsg
 }

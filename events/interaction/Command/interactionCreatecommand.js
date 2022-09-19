@@ -1,7 +1,7 @@
 const { inspect } = require(`util`)
 const { InteractionType } = require('discord.js');
 const configs = require("./../../../index")
-const errmsg = require("./../../../function/error/errormsg")
+const errmsg = require("../../../function/msg/errormsg")
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {

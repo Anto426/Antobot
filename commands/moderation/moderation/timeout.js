@@ -1,7 +1,8 @@
 const { inspect } = require(`util`)
 const { PermissionsBitField } = require('discord.js');
-let functions = require("../../../function/time/timefunctions")
+const timefunctions = require("../../../function/time/timefunctions")
 const configs = require("./../../../index")
+const errmsg = require("./../../../function/msg/errormsg")
 module.exports = {
     name: "timeout",
     permision: [PermissionsBitField.Flags.ModerateMembers],
@@ -70,12 +71,7 @@ module.exports = {
         var time = interaction.options.getNumber("time") * 1000 * 60
         var reason = interaction.options.getString("reason") || "Nesun motivo"
         if (utente.user.bot) {
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(`Non posso applicare il timeout ai bot `)
-                .setThumbnail(configs.settings.embed.images.error)
-                .setColor(configs.settings.embed.color.red)
-            return interaction.reply({ embeds: [embed] })
+            errmsg.botmsg(interaction)
 
         }
         if (utente.communicationDisabledUntilTimestamp == null || utente.communicationDisabledUntilTimestamp < Date.now()) {
@@ -84,15 +80,7 @@ module.exports = {
 
 
             utente.timeout(time, reason).catch((err) => {
-                const embed = new configs.Discord.EmbedBuilder()
-                    .setTitle("Error")
-                    .setDescription("Qualcosa è andato storto")
-                    .addFields([
-                        { name: 'Error', value: `\`\`\`\n ${inspect((err.toString()))}  \`\`\`` },
-                    ])
-                    .setThumbnail(configs.settings.embed.images.error)
-                    .setColor(configs.settings.embed.color.red)
-                interaction.channel.send({ embeds: [embed] })
+                errmsg.genericmsg(interaction)
                 return
 
             })
@@ -102,7 +90,7 @@ module.exports = {
                     { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
                 ])
                 .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-                .setDescription("<@" + utente + ">" + " timeoutato per " + functions.times(time))
+                .setDescription("<@" + utente + ">" + " timeoutato per " + timefunctions.times(time))
                 .setColor(configs.settings.embed.color.green)
             interaction.reply({ embeds: [embed] })
 

@@ -1,5 +1,6 @@
 const { PermissionsBitField } = require('discord.js')
 const configs = require("./../../index")
+const errmsg = require("./../../function/msg/errormsg")
 module.exports = {
     name: "iclear",
     permision: [PermissionsBitField.Flags.Administrator],
@@ -12,7 +13,7 @@ module.exports = {
     execute(interaction) {
 
         interaction.guild.invites.fetch().then(invites => {
-            invites.each(i => i.delete())
+            invites.each(i => i.delete()).catch(()=>{errmsg.genericmsg(interaction)})
         })
         const embed = new configs.Discord.EmbedBuilder()
             .setTitle("Inviti eliminati")

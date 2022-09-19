@@ -1,6 +1,6 @@
 const { PermissionsBitField } = require('discord.js');
 const configs = require("./../../../index")
-const errmsg = require("./../../../function/error/errormsg")
+const errmsg = require("./../../../function/msg/errormsg")
 const moderationf = require("../../../function/moderation/moderationfunctions")
 module.exports = {
     name: "ban",
@@ -30,22 +30,9 @@ module.exports = {
         var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason") || "Nesun motivo"
         if (!utente.bannable) {
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(` Non ho il permesso di cacciare ${utente} è troppo forte`)
-                .setThumbnail(configs.settings.embed.images.forte)
-                .setColor(configs.settings.embed.color.red)
-            return interaction.reply({ embeds: [embed] })
+            errmsg.tohigtmsg(interaction)
         } else {
             moderationf.banf(interaction, utente, reason)
         }
-
-
-
-
-
-
-
-
     }
 }

@@ -1,5 +1,6 @@
 const { PermissionsBitField } = require('discord.js')
 const configs = require("./../../index")
+const errormsg = require("./../../function/msg/errormsg")
 module.exports = {
     name: "verifica",
     permision: [],
@@ -41,13 +42,7 @@ module.exports = {
                 .setThumbnail(configs.settings.embed.images.succes)
                 .setColor(configs.settings.embed.color.green)
             utente.send({ embeds: [embed1] }).catch(() => {
-
-                const embed1 = new configs.Discord.EmbedBuilder()
-                    .setTitle("Error")
-                    .setDescription("impossibile informare l'utente in dm")
-                    .setThumbnail(configs.settings.embed.images.error)
-                    .setColor(configs.settings.embed.color.green)
-                interaction.channel.send({ embeds: [embed] })
+                errormsg.dmmessage(interaction)
 
 
             })

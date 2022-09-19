@@ -1,6 +1,6 @@
 const { PermissionsBitField } = require('discord.js');
 const configs = require("./../../../index")
-const errmsg = require("./../../../function/error/errormsg")
+const errmsg = require("./../../../function/msg/errormsg")
 const moderationf = require("../../../function/moderation/moderationfunctions")
 module.exports = {
     name: "kick",
@@ -31,12 +31,7 @@ module.exports = {
         var reason = interaction.options.getString("reason") || "Nesun motivo"
 
         if (!utente.kickable) {
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(` Non ho il permesso di cacciare ${utente} è troppo forte`)
-                .setThumbnail(configs.settings.embed.images.forte)
-                .setColor(configs.settings.embed.color.red)
-            return interaction.reply({ embeds: [embed] })
+            errmsg.tohigtmsg(interaction)
         }
 
         moderationf.kickf(interaction, utente)
