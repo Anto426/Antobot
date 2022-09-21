@@ -3,7 +3,7 @@
 
 // variabili 
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
-const { MessageAttachment } = require("discord.js");
+const { AttachmentBuilder } = require("discord.js");
 let stato = true
 let settings = require("./Settings/settings.json")
 let Discord = require('discord.js')

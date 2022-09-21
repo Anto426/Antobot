@@ -1,4 +1,4 @@
-const { MessageAttachment, AttachmentBuilder, ChannelType, PermissionsBitField, ButtonStyle } = require("discord.js");
+const { AttachmentBuilder, ChannelType, PermissionsBitField, ButtonStyle } = require("discord.js");
 const { Captcha } = require("captcha-canvas");
 const { ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const configs = require("./../../../index")
@@ -57,6 +57,7 @@ module.exports = {
                 files: [captchaAttachement]
             })
             let filter = (message) => {
+                console.log()
                 let embed = new configs.Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Impossibile verificarti controlla di aver scritto bene il captcha !! Riprova!")
@@ -127,7 +128,7 @@ module.exports = {
                         deny: [PermissionsBitField.Flags.ViewChannel]
                     }]
                 })
-            }
+            }message.content
 
             await channelverifica.permissionOverwrites.delete(member.id).then((channels) => {
                 channels.setParent(category1);

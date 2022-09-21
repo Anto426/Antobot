@@ -17,8 +17,7 @@ module.exports = {
             .setDescription("@everyone " + interaction.guild.name + " ha chiuso i battenti")
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
             .setColor(configs.settings.embed.color.red)
-        console.log(configs[interaction.guild.name].stanze.eventi)
-        let channel = interaction.guild.channels.cache.find(x => x.id == configs[interaction.guild.name].stanze.eventi)
+        let channel = interaction.guild.channels.cache.get(configs.settings[interaction.guild.name].stanze.annunci)
         console.log(channel)
         channel.send({ embeds: [embed] })
         setTimeout(() => {

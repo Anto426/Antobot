@@ -9,7 +9,8 @@ module.exports = {
         if (interaction.type == InteractionType.ApplicationCommand) {
             try {
                 let owner = false
-                for (let id in configs.owner) {
+                for (let id in configs.owner.owner) {
+                    console.log(id)
                     if (interaction.member.id == configs.owner[id]) { owner = true }
                 }
                 let sowner = false
@@ -21,7 +22,7 @@ module.exports = {
                         if (interaction.member.roles.cache.has(configs.settings[interaction.guild.name].role.staff[role])) { staf = true }
                     }
                     for (let id in configs.owner) {
-                        if (interaction.member.id == configs.owner[id]) { staf = true }
+                        if (interaction.member.id == configs.owner.owner[id]) { staf = true }
                     }
                 } catch { }
                 const command = configs.client.commands.get(interaction.commandName)
@@ -120,7 +121,6 @@ module.exports = {
 
             } catch (err) {
                 console.error(err)
-                errmsg.message(interaction)
             }
         }
     }
