@@ -29,16 +29,16 @@ module.exports = {
 
 
         const embed1 = new configs.Discord.EmbedBuilder()
-            .setTitle("B")
+            .setTitle("BUG")
             .setDescription(description)
             .setThumbnail(configs.settings.embed.images.forte)
             .setColor(configs.settings.embed.color.red)
 
 
 
-        interaction.guild.channel.find(x => x.id == configs.settings.antoslog.stanze.bugrepo).send({ embeds: [embed] })
+        interaction.guild.channel.find(x => x.id == configs.settings.antoslog.stanze.bugrepo).send({ embeds: [embed1] })
 
-        interaction.reply({ embeds: [embed1] })
+        interaction.reply({ embeds: [embed] })
 
     }
 }

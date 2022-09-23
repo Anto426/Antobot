@@ -75,11 +75,27 @@ function botmsg(interaction) {
     interaction.channel.send({ embeds: [embed] })
 
 }
+
+
+function disablefunction(interaction) {
+    let frasi = ["Ci dispiace per l'inconveniente,ma la funzione è momentaneamente disabilitata"]
+    var x = Math.floor(Math.random() * frasi.length);
+    const embed = new configs.Discord.EmbedBuilder()
+        .setTitle("Error")
+        .setDescription(frasi[x])
+        .setThumbnail(configs.settings.embed.images.error)
+        .setColor(configs.settings.embed.color.red)
+    interaction.reply({ embeds: [embed], ephemeral: true })
+
+}
+
+
 module.exports = {
     genericmsg: genericmsg,
     tohigtmsg: tohigtmsg,
     notpermisionmsg: notpermisionmsg,
     offonmsg: offonmsg,
     dmmessage: dmmessage,
-    botmsg: botmsg
+    botmsg: botmsg,
+    disablefunction:disablefunction
 }

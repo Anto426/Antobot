@@ -5,6 +5,7 @@ const arreyf = require("./../../../function/arrey/arreyfunctions")
 const froomandtiket = require("../../../function/privateroomandticket/privateroomandticketfunctions")
 const { ChannelType, PermissionsBitField, ButtonStyle } = require('discord.js');
 const { InteractionType } = require('discord.js');
+const errormsg = require("./../../../function/msg/errormsg")
 
 
 
@@ -49,7 +50,8 @@ module.exports = {
 
             if (interaction.customId == "onlytext" || interaction.customId == "onlyvoice" || interaction.customId == "text+voice") {
 
-
+                errormsg.disablefunction(interaction)
+return
                 var result1
                 check.filecheck(file)
                     .then(async (result) => {
