@@ -12,8 +12,8 @@ let fs = require("fs");
 let verifica = false
 
 let client = new Discord.Client({
-    intents: 32767,
-    partials: [Partials.User, Partials.Reaction, Partials.Message]
+    intents: 3276799,
+    partials: [Partials.User, Partials.Reaction, Partials.Message,Partials.Channel]
 });
 module.exports = {
     stato: stato,

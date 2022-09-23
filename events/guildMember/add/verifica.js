@@ -57,7 +57,7 @@ module.exports = {
                 files: [captchaAttachement]
             })
             let filter = (message) => {
-                console.log()
+                console.log(message.content)
                 let embed = new configs.Discord.EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Impossibile verificarti controlla di aver scritto bene il captcha !! Riprova!")
@@ -78,20 +78,21 @@ module.exports = {
                 })
                 if (response) {
                     let embed = new configs.Discord.EmbedBuilder()
-                        .setTitle(member.user.tag + " configs.verificato")
+                        .setTitle(member.user.tag + "verificato")
                         .setDescription("verifica completata con succeso alle ore " + new Date().getHours() + ":" + new Date().getMinutes())
                         .setThumbnail(configs.settings.embed.images.succes)
                         .setColor(configs.settings.embed.color.green)
                     channelverifica.send({ embeds: [embed] })
                     if (!configs.verifica) {
-                        for (let role in configs[member.guild.name].role.rolebase) {
-                            let roles = member.guild.roles.cache.find(x => x.id == configs[member.guild.name].role.rolebase[role])
+                        for (let role in configs.settings[member.guild.name].role.rolebase) {
+                            let roles = member.guild.roles.cache.find(x => x.id == configs.settings[member.guild.name].role.rolebase[role])
                             member.roles.add(roles)
                         }
                     }
 
                 }
             } catch (err) {
+                console.log(err)
                 if (configs.verifica) {
 
                 } else {
@@ -128,7 +129,7 @@ module.exports = {
                         deny: [PermissionsBitField.Flags.ViewChannel]
                     }]
                 })
-            }message.content
+            }
 
             await channelverifica.permissionOverwrites.delete(member.id).then((channels) => {
                 channels.setParent(category1);
