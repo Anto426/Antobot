@@ -1,6 +1,6 @@
 const { PermissionsBitField } = require('discord.js')
 const configs = require("./../../index")
-const errmsg = require("./../../function/msg/errormsg")
+const errmsg = require("../../function/msg/errormsg")
 module.exports = {
     name: "iclear",
     permision: [PermissionsBitField.Flags.Administrator],

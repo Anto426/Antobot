@@ -1,6 +1,6 @@
 const { PermissionsBitField } = require('discord.js')
 const configs = require("./../../index")
-const errormsg = require("./../../function/msg/errormsg")
+const errormsg = require("../../function/msg/errormsg")
 module.exports = {
     name: "verifica",
     permision: [],
