@@ -1,5 +1,5 @@
 const { PermissionsBitField } = require('discord.js')
-const configs = require("./../../index")
+const configs = require("../../index")
 module.exports = {
     name: "announce",
     permision: [PermissionsBitField.Flags.ModerateMembers],

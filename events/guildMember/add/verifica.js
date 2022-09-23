@@ -93,9 +93,7 @@ module.exports = {
                 }
             } catch (err) {
                 console.log(err)
-                if (configs.verifica) {
-
-                } else {
+                if (member.roles.cache.size < 2) {
                     let embed = new configs.Discord.EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Ci dispiace che non sei riuscito a verificarti, ma ora dovro kickarti")

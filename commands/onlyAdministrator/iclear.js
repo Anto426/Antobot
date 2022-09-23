@@ -14,7 +14,7 @@ module.exports = {
     execute(interaction) {
 
         interaction.guild.invites.fetch().then(invites => {
-            invites.each(i => i.delete()).catch(()=>{errmsg.genericmsg(interaction)})
+            invites.each(i => i.delete()).catch(() => { errmsg.genericmsg(interaction) })
         })
         const embed = new configs.Discord.EmbedBuilder()
             .setTitle("Inviti eliminati")

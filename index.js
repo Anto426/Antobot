@@ -9,18 +9,16 @@ let settings = require("./Settings/settings.json")
 let Discord = require('discord.js')
 let moderation = require("./Settings/moderation.json")
 let fs = require("fs");
-let verifica = false
 
 let client = new Discord.Client({
     intents: 3276799,
-    partials: [Partials.User, Partials.Reaction, Partials.Message,Partials.Channel]
+    partials: [Partials.User, Partials.Reaction, Partials.Message, Partials.Channel]
 });
 module.exports = {
     stato: stato,
     settings: settings,
     Discord: Discord,
     fs: fs,
-    verifica: verifica,
     client: client,
     moderation: moderation,
 }

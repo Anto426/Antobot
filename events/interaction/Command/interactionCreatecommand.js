@@ -8,7 +8,7 @@ module.exports = {
 
         try {
             if (interaction.type == InteractionType.ApplicationCommand) {
-                let owner = false, sowner = false, staff = false, autorizza = true,autorizza1 = true;
+                let owner = false, sowner = false, staff = false, autorizza = true, autorizza1 = true;
                 for (let id in configs.moderation.owner) {
                     if (interaction.member.id == configs.moderation.owner[id]) { owner = true }
                 }
