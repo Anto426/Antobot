@@ -1,6 +1,7 @@
 const { PermissionsBitField } = require('discord.js')
 const configs = require("./../../index")
 const errormsg = require("../../function/msg/errormsg")
+const errmsg = require("./../../function/msg/errormsg")
 module.exports = {
     name: "verifica",
     permision: [],
@@ -23,8 +24,8 @@ module.exports = {
         console.log(utente.roles.cache.size)
         if (utente.roles.cache.size == 1) {
 
-            for (let id in configs[interaction.guild.name].role.rolebase) {
-                let role = interaction.guild.roles.cache.find(x => x.id == configs[interaction.guild.name].role.rolebase[id])
+            for (let id in configs.settings[interaction.guild.name].role.rolebase) {
+                let role = interaction.guild.roles.cache.find(x => x.id == configs.settings[interaction.guild.name].role.rolebase[id])
                 utente.roles.add(role).catch(() => { })
 
             }
@@ -53,6 +54,8 @@ module.exports = {
 
 
 
+        }else{
+            errmsg.genericmsg(interaction)
         }
 
 
