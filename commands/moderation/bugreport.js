@@ -6,7 +6,7 @@ module.exports = {
     permision: [],
     onlyOwner: false,
     onlyStaff: false,
-    defaultchannel : false,
+    defaultchannel: true,
     data: {
         name: "bug",
         description: "send report bug ",

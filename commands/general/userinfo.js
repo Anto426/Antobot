@@ -5,7 +5,7 @@ module.exports = {
     permision: [],
     onlyOwner: false,
     onlyStaff: false,
-    defaultchannel : false,
+    defaultchannel: true,
     data: {
         name: "userinfo",
         description: "Informazioni di un utente",

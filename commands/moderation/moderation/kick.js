@@ -7,7 +7,7 @@ module.exports = {
     permision: [PermissionsBitField.Flags.KickMembers],
     onlyOwner: false,
     onlyStaff: false,
-    defaultchannel : false,
+    defaultchannel: true,
 
     data: {
         name: "kick",

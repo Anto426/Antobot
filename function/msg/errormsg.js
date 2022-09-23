@@ -7,7 +7,7 @@ function genericmsg(interaction) {
         .setDescription(frasi[x].toString())
         .setThumbnail(configs.settings.embed.images.error)
         .setColor(configs.settings.embed.color.red)
-    interaction.reply({ embeds: [embed] })
+    interaction.reply({ embeds: [embed], ephemeral: true })
 }
 
 function tohigtmsg(interaction) {
@@ -18,7 +18,7 @@ function tohigtmsg(interaction) {
         .setDescription(frasi[x].toString())
         .setThumbnail(configs.settings.embed.images.error)
         .setColor(configs.settings.embed.color.red)
-    interaction.reply({ embeds: [embed] })
+    interaction.reply({ embeds: [embed], ephemeral: true })
 
 }
 
@@ -31,7 +31,7 @@ function notpermisionmsg(interaction) {
         .setDescription(frasi[x].toString())
         .setThumbnail(configs.settings.embed.images.error)
         .setColor(configs.settings.embed.color.red)
-    interaction.reply({ embeds: [embed] })
+    interaction.reply({ embeds: [embed], ephemeral: true })
 
 }
 
@@ -50,7 +50,7 @@ function offonmsg(interaction, type) {
         .setDescription(string[x].toString())
         .setThumbnail(configs.settings.embed.images.error)
         .setColor(configs.settings.embed.color.red)
-    interaction.reply({ embeds: [embed] })
+    interaction.reply({ embeds: [embed], ephemeral: true })
 
 }
 function dmmessage(interaction) {
@@ -72,7 +72,7 @@ function botmsg(interaction) {
         .setDescription(frasi[x].toString())
         .setThumbnail(configs.settings.embed.images.error)
         .setColor(configs.settings.embed.color.red)
-    interaction.channel.send({ embeds: [embed] })
+    interaction.channel.send({ embeds: [embed], ephemeral: true })
 
 }
 

@@ -5,7 +5,7 @@ module.exports = {
     permision: [PermissionsBitField.Flags.ModerateMembers],
     onlyOwner: false,
     onlyStaff: false,
-    defaultchannel : false,
+    defaultchannel: true,
     data: {
         name: "untimeout",
         description: "Rimuove il timeout ad un utente",

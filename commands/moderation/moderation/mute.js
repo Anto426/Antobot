@@ -5,7 +5,7 @@ module.exports = {
     permision: [PermissionsBitField.Flags.MuteMembers],
     onlyOwner: false,
     onlyStaff: false,
-    defaultchannel : false,
+    defaultchannel: true,
     data: {
         name: "mute",
         description: "Muta utente",

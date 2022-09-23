@@ -8,15 +8,13 @@ module.exports = {
 
         try {
             if (interaction.type == InteractionType.ApplicationCommand) {
-                let owner = false, sowner = false, staff = false, autorizza = true, autorizza1 = false;
+                let owner = false, sowner = false, staff = false, autorizza = true,autorizza1 = true;
                 for (let id in configs.moderation.owner) {
-                    console.log(id)
                     if (interaction.member.id == configs.moderation.owner[id]) { owner = true }
                 }
                 if (interaction.member.id == interaction.guild.ownerId) { sowner = true }
 
                 for (let id in configs.moderation[interaction.guild.name].staff) {
-                    console.log(id)
                     if (configs.moderation[interaction.guild.name].staff[id]) { staff = true }
                 }
                 const command = configs.client.commands.get(interaction.commandName)
@@ -42,20 +40,21 @@ module.exports = {
                 for (const file of commandsFiles) {
                     var commands2 = require(`./../../../commands/moderation/moderation/${file}`);
                     if (commands2.name == command.name && command.name != "unban") {
-                        trovato = true
-                        if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position) {
-                            command.execute(interaction)
-                            return
-
+                        if (interaction.member.roles.highest.position < interaction.options.getMember("user").roles.highest.position) {
+                            autorizza = false
                         }
                     }
                 }
 
 
-                if (interaction.defaultchannel) {
+                if (command.defaultchannel) {
                     if (interaction.channel.name == "「💻」comandi" || owner || sowner) {
                         if (autorizza) {
                             command.execute(interaction)
+                            return 0
+                        }
+                        if (autorizza1) {
+                            errmsg.tohigtmsg(interaction)
                             return 0
                         }
                     } else {

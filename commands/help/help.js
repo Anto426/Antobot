@@ -4,7 +4,7 @@ module.exports = {
     permision: [],
     onlyOwner: false,
     onlyStaff: false,
-    defaultchannel : false,
+    defaultchannel: true,
     data: {
         name: "help",
         description: "Info sui comandi"
