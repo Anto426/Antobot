@@ -5,6 +5,7 @@ module.exports = {
     permision: [PermissionsBitField.Flags.ModerateMembers],
     onlyOwner: false,
     onlyStaff: false,
+    defaultchannel: true,
     data: {
         name: "announce",
         description: "Invia messagio attraverso il bot",

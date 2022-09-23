@@ -6,6 +6,7 @@ module.exports = {
     permision: [PermissionsBitField.Flags.Administrator],
     onlyOwner: true,
     onlyStaff: false,
+    defaultchannel: true,
     data: {
         name: "iclear",
         description: "Elimina tutti gli inviti del server",

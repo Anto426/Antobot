@@ -7,7 +7,7 @@ const { AttachmentBuilder } = require("discord.js");
 let stato = true
 let settings = require("./Settings/settings.json")
 let Discord = require('discord.js')
-let owner = require("./Settings/owner.json")
+let moderation = require("./Settings/moderation.json")
 let fs = require("fs");
 let verifica = false
 
@@ -22,7 +22,7 @@ module.exports = {
     fs: fs,
     verifica: verifica,
     client: client,
-    owner: owner,
+    moderation: moderation,
 }
 try {
     require("dotenv").config()

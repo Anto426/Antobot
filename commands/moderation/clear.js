@@ -6,6 +6,7 @@ module.exports = {
     permision: [PermissionsBitField.Flags.ManageMessages],
     onlyOwner: false,
     onlyStaff: false,
+    defaultchannel : false,
     data: {
         name: "clear",
         description: "comando invita",

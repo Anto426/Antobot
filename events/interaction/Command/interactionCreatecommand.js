@@ -6,123 +6,71 @@ module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
 
-        if (interaction.type == InteractionType.ApplicationCommand) {
-            try {
-                let owner = false
-                for (let id in configs.owner.owner) {
+        try {
+            if (interaction.type == InteractionType.ApplicationCommand) {
+                let owner = false, sowner = false, staff = false, autorizza = true, autorizza1 = false;
+                for (let id in configs.moderation.owner) {
                     console.log(id)
-                    if (interaction.member.id == configs.owner[id]) { owner = true }
+                    if (interaction.member.id == configs.moderation.owner[id]) { owner = true }
                 }
-                let sowner = false
                 if (interaction.member.id == interaction.guild.ownerId) { sowner = true }
 
-                try {
-                    var staf = false
-                    for (let role in configs.settings[interaction.guild.name].role.staff) {
-                        if (interaction.member.roles.cache.has(configs.settings[interaction.guild.name].role.staff[role])) { staf = true }
-                    }
-                    for (let id in configs.owner) {
-                        if (interaction.member.id == configs.owner.owner[id]) { staf = true }
-                    }
-                } catch { }
+                for (let id in configs.moderation[interaction.guild.name].staff) {
+                    console.log(id)
+                    if (configs.moderation[interaction.guild.name].staff[id]) { staff = true }
+                }
                 const command = configs.client.commands.get(interaction.commandName)
                 if (!command) return
 
-                const commandsFiles = configs.fs.readdirSync(`commands/bot`);
+                if (command.onlyOwner) {
+                    if (!owner) {
+                        autorizza = false
+                        errmsg.notpermisionmsg(interaction)
+                        return 0
+                    }
+                }
+                if (command.onlyStaff) {
+                    if (!owner || !sowner || !staff) {
+                        autorizza = false
+                        errmsg.notpermisionmsg(interaction)
+                        return 0
+                    }
+                }
+
+
+                const commandsFiles = configs.fs.readdirSync(`./commands/moderation/moderation/`);
                 for (const file of commandsFiles) {
-                    const commands2 = require(`./../../../commands/bot/${file}`);
-                    if (commands2.name == command.name && owner) {
-                        command.execute(interaction)
-                        return
-                    }
-                }
-
-                if (configs.stato) {
-                    if (command.onlyStaff) {
-
-
-
-                        if (staf || owner || sowner) {
-                            let trovato = false
-                            let trovato2 = false
-                            console.log("permesso accordato")
-                            const commandsFiles = configs.fs.readdirSync(`./commands/moderation/moderation/`);
-                            for (const file of commandsFiles) {
-                                var commands2 = require(`./../../../commands/moderation/moderation/${file}`);
-                                if (commands2.name == command.name && command.name != "unban") {
-                                    trovato = true
-                                    if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position) {
-                                        trovato2 = true
-                                        command.execute(interaction)
-                                    }
-                                }
-                            }
-
-                            if (!trovato) {
-                                command.execute(interaction)
-                            }
-
-                            if (!trovato2) {
-
-                                errmsg.notpermisionmsg(interaction)
-                            }
-
-                            return
-
-                        } else {
-
-                            console.log("permesso negato")
-                            errmsg.notpermisionmsg(interaction)
-
-                            return
-                        }
-                    }
-
-                    if (command.onlyOwner) {
-
-                        if (owner || sowner) {
-
-                            console.log("permesso accordato")
+                    var commands2 = require(`./../../../commands/moderation/moderation/${file}`);
+                    if (commands2.name == command.name && command.name != "unban") {
+                        trovato = true
+                        if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position) {
                             command.execute(interaction)
                             return
 
-                        } else {
-                            errmsg.notpermisionmsg(interaction)
-
-                            return
                         }
-
-
-
                     }
                 }
-                const commandsFiles2 = configs.fs.readdirSync(`./commands/privaroom/`);
-                for (const file of commandsFiles2) {
-                    const commands2 = require(`./../../../commands/privaroom/${file}`);
-                    if (commands2.name == command.name) {
-                        if (interaction.channel.name == interaction.member.user.tag || interaction.channel.topic == interaction.member.user.tag) {
-                            command.execute(interaction)
-                            return
-                        }
-                    }
 
+
+                if (interaction.defaultchannel) {
                     if (interaction.channel.name == "「💻」comandi" || owner || sowner) {
-                        command.execute(interaction)
-                        return
+                        if (autorizza) {
+                            command.execute(interaction)
+                            return 0
+                        }
                     } else {
                         console.log("permesso negato")
                         errmsg.notpermisionmsg(interaction)
-                        return
+                        return 0
                     }
-
-
+                } else {
+                    command.execute(interaction)
+                    return 0
                 }
-
-
-            } catch (err) {
-                console.error(err)
             }
+        } catch (err) {
+            console.log(err)
+            errmsg.genericmsg(interaction)
         }
     }
-
 }

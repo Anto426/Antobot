@@ -5,6 +5,7 @@ module.exports = {
     permision: [PermissionsBitField.Flags.Administrator],
     onlyOwner: true,
     onlyStaff: false,
+    defaultchannel: true,
     data: {
         name: "tiket",
         description: "Crea il canale tiket"

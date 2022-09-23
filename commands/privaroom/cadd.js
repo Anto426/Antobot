@@ -4,6 +4,9 @@ module.exports = {
     permision: [],
     onlyOwner: false,
     onlyStaff: false,
+    defaultchannel: false,
+
+    onlyStaff: false,
     data: {
         name: "cadd",
         description: "Aggiugere utente alle stanze private",

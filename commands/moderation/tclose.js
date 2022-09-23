@@ -6,6 +6,7 @@ module.exports = {
     permision: [],
     onlyStaff: true,
     onlyOwner: false,
+    defaultchannel: true,
     data: {
         name: "tclose",
         description: "chiude i ticket"

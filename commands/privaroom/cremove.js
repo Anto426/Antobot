@@ -4,6 +4,7 @@ module.exports = {
     permision: [],
     onlyOwner: false,
     onlyStaff: false,
+    defaultchannel: false,
     data: {
         name: "cremove",
         description: "Rimuovere utente dalle stanze private",

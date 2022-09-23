@@ -6,6 +6,7 @@ module.exports = {
     permision: [],
     onlyStaff: true,
     onlyOwner: false,
+    defaultchannel: true,
     data: {
         name: "verifica",
         description: "Verifica utente",

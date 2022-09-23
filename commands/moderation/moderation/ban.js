@@ -7,6 +7,7 @@ module.exports = {
     permision: [PermissionsBitField.Flags.BanMembers],
     onlyOwner: false,
     onlyStaff: false,
+    defaultchannel : false,
 
     data: {
         name: "ban",
