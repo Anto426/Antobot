@@ -17,7 +17,6 @@ module.exports = {
             required: true
         }],
     },
-
     async execute(interaction) {
 
         let description = interaction.option.getString("bug")

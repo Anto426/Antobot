@@ -13,7 +13,7 @@ module.exports = {
         option: [{
             name: 'n',
             description: 'Seleziona la quantita dei messaggi da eliminare.',
-            type: 'NUMBER',
+            type: 10,
             required: true
         }],
     },

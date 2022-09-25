@@ -2,6 +2,7 @@ const jsonf = require("../../../function/json/jsnonfunctions")
 const check = require("../../../function/check/check")
 const configs = require("../../../index")
 const { InteractionType } = require('discord.js');
+const game = require("./../../../Settings/game.json")
 
 module.exports = {
     name: "interactionCreate",
@@ -13,15 +14,15 @@ module.exports = {
             }
 
             if (interaction.customId == "mc") {
-                for (server in configs.settings.game.mc) {
+                for (server in game.game.mc) {
                     let embed = new configs.Discord.EmbedBuilder()
                         .setColor('#0099ff')
                         .setTitle("Ecco il tuo server")
 
                     if (interaction.values[0] == server) {
                         console.log(server)
-                        embed.setThumbnail(configs.settings.game.mc[server].images)
-                        embed.setDescription(configs.settings.game.mc[server].server);
+                        embed.setThumbnail(game.game.mc[server].images)
+                        embed.setDescription(game.game.mc[server].server);
                         interaction.reply({ embeds: [embed] })
                         setTimeout(() => interaction.deleteReply(), 10000)
 
