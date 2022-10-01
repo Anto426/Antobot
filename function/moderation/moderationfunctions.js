@@ -142,6 +142,34 @@ async function mutef(interaction, member, reason) {
     })
 }
 
+async function unmute(interaction, member) {
+    if (member.user.bot) {
+        errmsg.bot(interaction)
+        return interaction.reply({ embeds: [embed] })
+
+    }
+
+    let muted = interaction.guild.roles.cache.find(x => x.name == "MutedA")
+
+
+    if (!member.roles.cache.has(muted.id)) {
+        const embed = new configs.Discord.EmbedBuilder()
+            .setTitle(interaction.member.user.tag + " Error")
+            .setDescription(member.user.tag + " risulta già smutato")
+            .setThumbnail(configs.settings.embed.images.error)
+            .setColor(configs.settings.embed.color.red)
+        interaction.reply({ embeds: [embed] })
+        return
+    }
+    const embed = new configs.Discord.EmbedBuilder()
+        .setTitle("Utente smutato")
+        .setThumbnail(member.displayAvatarURL({ dynamic: true }))
+        .setDescription("<@" + member + ">" + " smutato")
+        .setColor(configs.settings.embed.color.green)
+    interaction.reply({ embeds: [embed] })
+    member.roles.remove(muted).catch(() => { errmsg.genericmsg(interaction) })
+}
+
 
 // timeout function 
 
@@ -186,13 +214,40 @@ async function timeoutf(interaction, member, reason) {
     }
 }
 
+async function untimioutf(interaction, member,) {
+    if (utente.user.bot) {
+        errmsg.botmsg(interaction)
+        return interaction.reply({ embeds: [embed] })
+
+    }
+
+    if (member.communicationDisabledUntilTimestamp != null || member.communicationDisabledUntilTimestamp > Date.now()) {
+        member.timeout(null)
+        const embed = new configs.Discord.EmbedBuilder()
+            .setTitle("Utente untimeoutato")
+            .setThumbnail(member.displayAvatarURL({ dynamic: true }))
+            .setDescription("<@" + member + ">" + " untimeoutato")
+            .setColor(configs.settings.embed.color.green)
+        interaction.reply({ embeds: [embed] })
+
+    } else {
+        const embed = new configs.Discord.EmbedBuilder()
+            .setTitle("Error")
+            .setDescription(`${member.toString()} non ha un timeout!`)
+            .setThumbnail(configs.settings.embed.images.error)
+            .setColor(configs.settings.embed.color.red)
+        interaction.reply({ embeds: [embed] })
+    }
+}
 
 
 module.exports = {
     banf: banf,
-    unbanf:unbanf,
+    unbanf: unbanf,
     kickf: kickf,
     mutef: mutef,
-    timeoutf: timeoutf
+    unmute: unmute,
+    timeoutf: timeoutf,
+    untimioutf:untimioutf
 
 }
