@@ -1,4 +1,3 @@
-const { inspect } = require(`util`)
 const { PermissionsBitField } = require('discord.js');
 const { timeoutf } = require('../../../function/moderation/moderationfunctions');
 module.exports = {
@@ -69,7 +68,7 @@ module.exports = {
         var utente = interaction.options.getMember("user")
         var time = interaction.options.getNumber("time") * 1000 * 60
         var reason = interaction.options.getString("reason") || "Nesun motivo"
-        timeoutf(interaction,utente,reason)
+        timeoutf(interaction, utente, time, reason)
 
     }
 }

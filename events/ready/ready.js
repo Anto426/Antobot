@@ -1,3 +1,4 @@
+const { shashcomandregisterallguild } = require("../../function/configs/comandregister")
 const configs = require("./../../index")
 module.exports = {
     name: "ready",
@@ -11,19 +12,8 @@ module.exports = {
 
         `)
         configs.client.user.setStatus("online")
-
-        try {
-            configs.client.guilds.cache.forEach(guild => {
-                configs.client.commands.forEach(command => {
-                    guild.commands.create(command.data)
-
-                })
-            })
-
-
-        } catch (err) {
-            console.error(err)
-        }
+        
+        shashcomandregisterallguild()
     }
 
 

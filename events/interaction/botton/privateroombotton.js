@@ -51,7 +51,7 @@ module.exports = {
             if (interaction.customId == "onlytext" || interaction.customId == "onlyvoice" || interaction.customId == "text+voice") {
 
                 errormsg.disablefunction(interaction)
-return
+                return
                 var result1
                 check.filecheck(file)
                     .then(async (result) => {

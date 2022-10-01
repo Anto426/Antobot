@@ -1,4 +1,5 @@
-const errmsg = require("../msg/errormsg")
+const errmsg = require("../msg/errormsg");
+const { times } = require("../time/timefunctions");
 const configs = require("./../../index")
 // Ban function 
 async function banf(interaction, member, reason) {
@@ -173,7 +174,7 @@ async function unmute(interaction, member) {
 
 // timeout function 
 
-async function timeoutf(interaction, member, reason) {
+async function timeoutf(interaction, member, time, reason) {
     if (member.user.bot) {
         errmsg.botmsg(interaction)
 
@@ -183,20 +184,25 @@ async function timeoutf(interaction, member, reason) {
 
 
 
-        member.timeout(time, reason).catch((err) => {
+        member.timeout(time, reason).then(() => {
+            const embed = new configs.Discord.EmbedBuilder()
+                .setTitle("Utente timeoutato")
+                .addFields([
+                    { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
+                ])
+                .setThumbnail(member.displayAvatarURL({ dynamic: true }))
+                .setDescription("<@" + member + ">" + " timeoutato per " + times(time))
+                .setColor(configs.settings.embed.color.green)
+            interaction.reply({ embeds: [embed] })
+
+
+        }).catch(() => {
             errmsg.genericmsg(interaction)
             return
-
         })
-        const embed = new configs.Discord.EmbedBuilder()
-            .setTitle("Utente timeoutato")
-            .addFields([
-                { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
-            ])
-            .setThumbnail(member.displayAvatarURL({ dynamic: true }))
-            .setDescription("<@" + member + ">" + " timeoutato per " + timefunctions.times(time))
-            .setColor(configs.settings.embed.color.green)
-        interaction.reply({ embeds: [embed] })
+
+
+
 
     } else {
         const d = new Date(member.communicationDisabledUntilTimestamp);
@@ -215,7 +221,7 @@ async function timeoutf(interaction, member, reason) {
 }
 
 async function untimioutf(interaction, member,) {
-    if (utente.user.bot) {
+    if (member.user.bot) {
         errmsg.botmsg(interaction)
         return interaction.reply({ embeds: [embed] })
 
@@ -248,6 +254,6 @@ module.exports = {
     mutef: mutef,
     unmute: unmute,
     timeoutf: timeoutf,
-    untimioutf:untimioutf
+    untimioutf: untimioutf
 
 }
