@@ -30,10 +30,7 @@ module.exports = {
 
         var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason") || "Nesun motivo"
-        if (!utente.bannable) {
-            errmsg.tohigtmsg(interaction)
-        } else {
-            moderationf.banf(interaction, utente, reason)
-        }
+        moderationf.banf(interaction, utente, reason)
+
     }
 }

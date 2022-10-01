@@ -1,8 +1,6 @@
 const { inspect } = require(`util`)
 const { PermissionsBitField } = require('discord.js');
-const timefunctions = require("../../../function/time/timefunctions")
-const configs = require("./../../../index")
-const errmsg = require("./../../../function/msg/errormsg")
+const { timeoutf } = require('../../../function/moderation/moderationfunctions');
 module.exports = {
     name: "timeout",
     permision: [PermissionsBitField.Flags.ModerateMembers],
@@ -71,44 +69,7 @@ module.exports = {
         var utente = interaction.options.getMember("user")
         var time = interaction.options.getNumber("time") * 1000 * 60
         var reason = interaction.options.getString("reason") || "Nesun motivo"
-        if (utente.user.bot) {
-            errmsg.botmsg(interaction)
-
-        }
-        if (utente.communicationDisabledUntilTimestamp == null || utente.communicationDisabledUntilTimestamp < Date.now()) {
-
-
-
-
-            utente.timeout(time, reason).catch((err) => {
-                errmsg.genericmsg(interaction)
-                return
-
-            })
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Utente timeoutato")
-                .addFields([
-                    { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
-                ])
-                .setThumbnail(utente.displayAvatarURL({ dynamic: true }))
-                .setDescription("<@" + utente + ">" + " timeoutato per " + timefunctions.times(time))
-                .setColor(configs.settings.embed.color.green)
-            interaction.reply({ embeds: [embed] })
-
-        } else {
-            const d = new Date(utente.communicationDisabledUntilTimestamp);
-            date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
-            console.log(date);
-            const embed = new configs.Discord.EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(`${utente.toString()} ha già un timeout!`)
-                .addFields([
-                    { name: 'Fino a :', value: `\`\`\`\n ${date} \`\`\`` },
-                ])
-                .setThumbnail(configs.settings.embed.images.error)
-                .setColor(configs.settings.embed.color.red)
-            interaction.reply({ embeds: [embed] })
-        }
+        timeoutf(interaction,utente,reason)
 
     }
 }

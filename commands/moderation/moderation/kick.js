@@ -30,11 +30,6 @@ module.exports = {
 
         var utente = interaction.options.getMember("user")
         var reason = interaction.options.getString("reason") || "Nesun motivo"
-
-        if (!utente.kickable) {
-            errmsg.tohigtmsg(interaction)
-        }
-
         moderationf.kickf(interaction, utente)
     }
 }
