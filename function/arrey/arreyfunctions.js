@@ -25,11 +25,15 @@ async function arreycheckelement(arrey, element) {
 }
 
 async function arreyfindlement(arrey, elementfind) {
-    arrey.forEach(async x => {
-        for (let y in x) {
-            if (y == elementfind) { return x[y] }
-        }
-    })
+    try {
+        console.log(arrey.length)
+            arrey.forEach(async x => {
+                for (let y in x) {
+                    if (y == elementfind) { return true }
+                }
+                return false
+            })
+    } catch(err) {return true }
 
 }
 module.exports = {
