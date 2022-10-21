@@ -55,56 +55,68 @@ module.exports = {
             if (interaction.customId == "onlytext" || interaction.customId == "onlyvoice" || interaction.customId == "text+voice") {
                 let file = `./Database/${interaction.guild.name}/room.json`
                 let directory = `./Database`
-                check.dircheck(directory, interaction.guild.name)
-                if (check.filecheck(file)) {
-                    let content = {
-                        "list": []
-                    }
-                    jsonf.jwrite(file, content)
-                }
-                let contet = jsonf.jread(file)
-                console.log(contet.list)
-                let pro = arreyf.arreyfindlement(contet.list, interaction.member.id)
-                pro.then(async (f) => {
-                    console.log(f)
-                    if (!f) {
-                        errormsg.disablefunction(interaction)
-                    } else {
-                        let category = interaction.guild.channels.cache.find(x => x.name == "🔐Stanze private🔐")
-                        let channelname = ""
-                        let type = ""
-                        if (interaction.customId == "onlytext") {
-                            type = ChannelType.GuildText
-                            channelname = "「💭」" + interaction.member.user.username
-                            let channel = await createchannel(channelname, category, type)
-                            contet.list.push({ "IDuser": [interaction.member.id], "IDroom": [channel.id] })
-                            jsonf.jwrite(file, contet)
-                        }
-                        if (interaction.customId == "onlyvoice") {
-                            type = ChannelType.GuildVoice
-                            channelname = "「🔊」" + interaction.member.user.username
-                            let channel = await createchannel(channelname, category, type)
-                            contet.list.push({ "IDuser": [interaction.member.id], "IDroom": [channel.id] })
-                            jsonf.jwrite(file, contet)
-                        }
-                        if (interaction.customId == "text+voice") {
-                            type = ChannelType.GuildText
-                            channelname = "「💭」" + interaction.member.user.username
-                            for (let i = 0; i < 2; i++) {
-                                let channel = await createchannel(channelname, category, type)
-                                type = ChannelType.GuildVoice
-                                channelname = "「🔊」" + interaction.member.user.username
+                var result1
 
+                check.filecheck(file)
+                    .then(async (result) => {
+                        result1 = result
+                        if (result) {
+                            let content = await jsonf.jread(file)
+                            return arreyf.arreycheckelement(content.list, interaction.member.id)
+                        }
+                    }).then(async (trovato) => {
+                        if (!trovato) {
+                            let content
+                            if (result1) {
+                                content = await jsonf.jread(file)
+                            } else {
+                                content = { "list": [] }
                             }
                         }
-                    }
-                })
+                    }).then(async (trovato) => {
 
+                        if (!trovato) {
+                            let category = interaction.guild.channels.cache.find(x => x.name == "🔐Stanze private🔐")
+                            let channelname = ""
+                            let type = ""
+                            if (interaction.customId == "onlytext") {
+                                type = ChannelType.GuildText
+                                channelname = "「💭」" + interaction.member.user.username
+                                createchannel(channelname, category, type)
+                                let channel = interaction.guild.channels.cache.find(x => x.name == channelname)
+                                content.list.push({ "IDuser": [interaction.member.id], "IDroom": [channel.id] })
+                                jsonf.jwrite(file, content)
+                            }
+                            if (interaction.customId == "onlyvoice") {
+                                type = ChannelType.GuildVoice
+                                channelname = "「🔊」" + interaction.member.user.username
+                                createchannel(channelname, category, type)
+                                let channel = interaction.guild.channels.cache.find(x => x.name == channelname)
+                                content.list.push({ "IDuser": [interaction.member.id], "IDroom": [channel.id] })
+                                jsonf.jwrite(file, content)
+                            }
+                            if (interaction.customId == "text+voice") {
+                                type = ChannelType.GuildText
+                                channelname = "「💭」" + interaction.member.user.username
+                                for (let i = 0; i < 2; i++) {
+                                    let channel = await createchannel(channelname, category, type)
+                                    type = ChannelType.GuildVoice
+                                    channelname = "「🔊」" + interaction.member.user.username
+
+                                }
+                            }
+                        } else {
+                            errormsg.disablefunction(interaction)
+                        }
+                    })
 
             }
 
-            if (interaction.customId == "closedroom") { }
-        }
-    }
 
+
+        }
+
+        if (interaction.customId == "closedroom") { }
+    }
 }
+

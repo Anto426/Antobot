@@ -25,16 +25,18 @@ async function arreycheckelement(arrey, element) {
 }
 
 async function arreyfindlement(arrey, elementfind) {
+    let t = false
     try {
         console.log(arrey.length)
-            arrey.forEach(async x => {
-                for (let y in x) {
-                    if (y == elementfind) { return true }
-                }
-                return false
-            })
-    } catch(err) {return true }
+        arrey.forEach(async x => {
+            for (let y in x) {
+                if (y == elementfind) { t =  true }
+            }
+            t =  false
+        })
+    } catch (err) { t =  true }
 
+    return t
 }
 module.exports = {
     arreyremoveelement: arreyremoveelement,

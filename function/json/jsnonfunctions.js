@@ -15,7 +15,6 @@ async function jwrite(file, content) {
             if (err) throw err;
         })
     } catch(err) {
-        console.log(err)
     }
 }
 
