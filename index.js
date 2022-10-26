@@ -9,6 +9,7 @@ let settings = require("./Settings/settings.json")
 let Discord = require('discord.js')
 let moderation = require("./Settings/moderation.json")
 let fs = require("fs");
+let feste = require("./Settings/feste.json")
 
 let client = new Discord.Client({
     intents: 3276799,
@@ -21,6 +22,7 @@ module.exports = {
     fs: fs,
     client: client,
     moderation: moderation,
+    feste: feste,
 }
 try {
     require("dotenv").config()

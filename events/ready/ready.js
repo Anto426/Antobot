@@ -1,4 +1,6 @@
 const { shashcomandregisterallguild } = require("../../function/configs/comandregister")
+const { feste } = require("../../function/feste/serverupdate")
+
 const configs = require("./../../index")
 module.exports = {
     name: "ready",
@@ -14,6 +16,9 @@ module.exports = {
         configs.client.user.setStatus("online")
         
         shashcomandregisterallguild()
+
+
+        feste()
     }
 
 
