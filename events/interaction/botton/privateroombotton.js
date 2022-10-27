@@ -15,10 +15,11 @@ module.exports = {
         if (interaction.type != InteractionType.ApplicationCommand) {
 
 
-            async function dubleroom(content, content2) {
+            async function dubleroom(channelname, category, type) {
                 let channel = await createchannel(channelname, category, type)
-                content.list.push(content2)
-                jsonf.jwrite(file, content)
+                let id = []
+                id.push(channel.id)
+                return id
             }
             async function createchannel(name, category, type) {
                 let roomchannel = await interaction.guild.channels.create({
@@ -49,6 +50,7 @@ module.exports = {
                         );
                     roomchannel.send({ embeds: [embed], components: [row] })
                 }
+                return roomchannel;
             }
 
 
@@ -95,11 +97,13 @@ module.exports = {
                                 content.list.push({ "IDuser": [interaction.member.id], "IDroom": [channel.id] })
                                 jsonf.jwrite(file, content)
                             }
+                            let id = []
                             if (interaction.customId == "text+voice") {
                                 type = ChannelType.GuildText
                                 channelname = "「💭」" + interaction.member.user.username
                                 for (let i = 0; i < 2; i++) {
-                                    let channel = await createchannel(channelname, category, type)
+                                    id.push(await dubleroom(channelname, category, type))
+                                    console.log(id)
                                     type = ChannelType.GuildVoice
                                     channelname = "「🔊」" + interaction.member.user.username
 
