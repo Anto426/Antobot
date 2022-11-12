@@ -1,5 +1,5 @@
 const configs = require("./../../index")
-async function createrolebasebotf() {
+async function createrolebasebotf(guild) {
     let muted = guild.roles.cache.find(x => x.name == "MutedA")
     if (!muted) {
         muted = await guild.roles.create({

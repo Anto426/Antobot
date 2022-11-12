@@ -7,19 +7,26 @@ module.exports = {
     async execute(interaction) {
 
         try {
+
+
+
             if (interaction.type == InteractionType.ApplicationCommand) {
                 let owner = false, sowner = false, staff = false, autorizza = true, autorizza1 = true;
-                for (let id in configs.moderation.owner) {
-                    if (interaction.member.id == configs.moderation.owner[id]) { owner = true }
-                }
-                if (interaction.member.id == interaction.guild.ownerId) { sowner = true }
 
-                for (let id in configs.moderation[interaction.guild.name].staff) {
-                    if (configs.moderation[interaction.guild.name].staff[id]) { staff = true }
-                }
+                try {
+                    for (let id in configs.moderation.owner) {
+                        if (interaction.member.id == configs.moderation.owner[id]) { owner = true }
+                    }
+                    
+                    if (interaction.member.id == interaction.guild.ownerId) { sowner = true }
+
+                    for (let id in configs.moderation[interaction.guild.name].staff) {
+                        if (configs.moderation[interaction.guild.name].staff[id]) { staff = true }
+                    }
+
+                } catch { }
                 const command = configs.client.commands.get(interaction.commandName)
                 if (!command) return
-
                 if (command.onlyOwner) {
                     if (!owner) {
                         autorizza = false

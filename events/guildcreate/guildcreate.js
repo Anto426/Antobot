@@ -5,7 +5,7 @@ module.exports = {
 
     name: "guildCreate",
     async execute(guild) {
-        createrolebasebotf()
+        createrolebasebotf(guild)
         shashcomandregisteroneguild(guild)
     }
 }
