@@ -97,5 +97,5 @@ module.exports = {
     offonmsg: offonmsg,
     dmmessage: dmmessage,
     botmsg: botmsg,
-    disablefunction:disablefunction
+    disablefunction: disablefunction
 }

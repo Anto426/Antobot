@@ -18,5 +18,5 @@ async function shashcomandregisteroneguild(guild) {
 }
 module.exports = {
     shashcomandregisterallguild: shashcomandregisterallguild,
-    shashcomandregisteroneguild:shashcomandregisteroneguild
+    shashcomandregisteroneguild: shashcomandregisteroneguild
 }

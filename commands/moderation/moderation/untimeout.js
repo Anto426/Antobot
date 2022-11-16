@@ -20,7 +20,7 @@ module.exports = {
     execute(interaction) {
 
         var utente = interaction.options.getMember("user")
-        untimioutf(interaction,utente)
+        untimioutf(interaction, utente)
 
 
 

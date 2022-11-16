@@ -14,7 +14,7 @@ module.exports = {
 
         `)
         configs.client.user.setStatus("online")
-        
+
         shashcomandregisterallguild()
 
 

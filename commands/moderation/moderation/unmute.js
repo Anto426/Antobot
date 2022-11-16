@@ -19,7 +19,7 @@ module.exports = {
     },
     async execute(interaction) {
         var utente = interaction.options.getMember("user")
-        unmute(interaction,utente)
+        unmute(interaction, utente)
 
     }
 }

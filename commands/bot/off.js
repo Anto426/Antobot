@@ -12,7 +12,7 @@ module.exports = {
     },
     execute(interaction) {
         if (!configs.stato) {
-            errmsg.offonmsg(interaction,false)
+            errmsg.offonmsg(interaction, false)
             return
         } else {
             const embedonline = new configs.settings.Discord.EmbedBuilder()

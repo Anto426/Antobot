@@ -4,7 +4,7 @@ async function jread(file) {
         let content = configs.fs.readFileSync(file)
         var parseJson = JSON.parse(content)
         return parseJson
-    } catch(err) {
+    } catch (err) {
         console.log(err)
     }
 }
@@ -14,7 +14,7 @@ async function jwrite(file, content) {
         configs.fs.writeFile(file, JSON.stringify(content), function (err) {
             if (err) throw err;
         })
-    } catch(err) {
+    } catch (err) {
     }
 }
 

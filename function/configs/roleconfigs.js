@@ -13,6 +13,6 @@ async function createrolebasebotf(guild) {
     })
 }
 
-module.exports={
-    createrolebasebotf:createrolebasebotf
+module.exports = {
+    createrolebasebotf: createrolebasebotf
 }
