@@ -21,7 +21,6 @@ async function feste() {
                     f.setIcon(configs.feste.default.photo)
                     f.channels.cache.forEach(x => {
                         for (let z in configs.feste.mout[i].channel) {
-                            console.log(x.name, configs.feste.mout[i].channel[z], x.name.includes(configs.feste.mout[i].channel[z]))
                             if (x.name.includes(configs.feste.mout[i].channel[z]))
                                 x.setName(x.name.replace(configs.feste.mout[i].channel[z], configs.feste.default.channel[z]))
                         }

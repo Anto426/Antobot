@@ -38,7 +38,7 @@ module.exports = {
 
 
 
-        let channel = configs.client.guilds.cache.get(configs.settings.antoslog.id).channels.cache.get(configs.settings.antoslog.stanze.bugrepo)
+        let channel = configs.guildrepo.bug
 
         channel.send({ embeds: [embed1] })
 

@@ -11,10 +11,12 @@ let moderation = require("./Settings/moderation.json")
 let fs = require("fs");
 let feste = require("./Settings/feste.json")
 
+
 let client = new Discord.Client({
     intents: 3276799,
     partials: [Partials.User, Partials.Reaction, Partials.Message, Partials.Channel]
 });
+let guildrepo
 module.exports = {
     stato: stato,
     settings: settings,
@@ -23,6 +25,7 @@ module.exports = {
     client: client,
     moderation: moderation,
     feste: feste,
+    guildrepo:guildrepo
 }
 try {
     require("dotenv").config()
