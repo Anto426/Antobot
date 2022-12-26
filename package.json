@@ -1,22 +1,23 @@
 {
-    "name": "antobot",
-    "version": "4.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "@discordjs/rest": "^0.5.0",
-        "canvas": "^2.9.3",
-        "captcha-canvas": "^3.1.0",
-        "discord-api-types": "^0.33.5",
-        "discord.js": "^14.1.2",
-        "discord.js-poll": "^1.2.1",
-        "dotenv": "^16.0.1",
-        "util": "^0.12.4"
-    },
-    "engines": {}
+  "name": "antobot",
+  "version": "5.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anto426/Antobot.git"
+  },
+  "author": "Anto426",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Anto426/Antobot/issues"
+  },
+  "homepage": "https://github.com/Anto426/Antobot#readme",
+  "dependencies": {
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3"
+  }
 }
