@@ -4,7 +4,8 @@ const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const { AttachmentBuilder } = require("discord.js");
 const Discord = require('discord.js')
 const fs = require("fs");
-const { onlinef } = require('./functions/client/general');
+const { tokenload } = require('./functions/client/tokenload');
+const { onlinef } = require('./functions/ready/ready');
 
 //client 
 global.client = new Discord.Client({
@@ -17,15 +18,7 @@ try {
     require("dotenv").config()
 } catch { }
 
-client.login(process.env.TOKEN).then(() => {
-    onlinef()
-
-}).catch((err) => {
-    console.log(err)
-    console.log("Error token invalid")
-})
-
-
+tokenload(process.env.TOKEN)
 // file config
 class config {
     constructor() {
@@ -39,7 +32,16 @@ class config {
 const configs = new config();
 
 
-exports = {
+module.exports = {
     configs
 }
+
+client.on("ready", () => {
+    onlinef()
+})
+
+
+
+
+
 
