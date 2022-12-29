@@ -28,9 +28,6 @@ Welcome To Anto's Bot V${info.version}
 -N. guild: ${client.guilds.cache.size}
     
 -Comand Load: ${client.commands.size}
-{
-${commandstring.toString().split("-")}
-}
                
 -Token: ${client.token}
     
