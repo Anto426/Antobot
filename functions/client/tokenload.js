@@ -9,18 +9,23 @@ function rep() {
 
 -Client id : ${client.user.id}
 `)
-    let scelta = prompt('This is your client y/n:');
-    switch (scelta) {
-        case "y" || "Y":
+    let scelta = prompt('This is your client y(yes)/n(no)/i(interrupt):');
+    switch (scelta.toLowerCase()) {
+        case "y":
             console.log("Client loading ....")
             boot()
             break;
-        case "n" || "N":
-            console.log("Interrupt....")
+        case "n":
+            console.log("Client reloading....")
             fs.unlinkSync(patch);
             tokenload(false)
             break;
+        case "i":
+            console.log("Interrupt....")
+            client.destroy()
+            break;
         default:
+            console.log("Err: Input non valid!")
             rep()
             break;
     }
