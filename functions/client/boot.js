@@ -8,15 +8,8 @@ const { comandregister } = require('../../functions/client/comandregister');
 async function boot() {
 
     client.user.setStatus(ActivityType.Custom)
+    
     comandload()
-    let commandstring = []
-    if (client.commands.size != 0) {
-        client.commands.forEach(element => {
-            commandstring.push(element)
-        });
-    } else {
-        commandstring.push("Null")
-    }
 
     console.log(`
 Welcome To Anto's Bot V${info.version}
