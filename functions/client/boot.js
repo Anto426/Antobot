@@ -3,26 +3,29 @@ const info = require("../../package.json");
 const { configs } = require("./../../index")
 const { comandload } = require("./../../functions/client/loadcommand");
 const { comandregister } = require('../../functions/client/comandregister');
-module.exports = {
-    name: "ready",
-    async execute() {
 
-        client.user.setStatus(ActivityType.Custom)
-        comandload()
-        let commandstring = []
-        if (client.commands.size != 0) {
-            client.commands.forEach(element => {
-                commandstring.push(element)
-            });
-        } else {
-            commandstring.push("Null")
-        }
 
-        console.log(`
+
+async function boot() {
+
+    client.user.setStatus(ActivityType.Custom)
+    comandload()
+    let commandstring = []
+    if (client.commands.size != 0) {
+        client.commands.forEach(element => {
+            commandstring.push(element)
+        });
+    } else {
+        commandstring.push("Null")
+    }
+
+    console.log(`
 Welcome To Anto's Bot V${info.version}
     
 -Client Name : ${client.user.username}
-    
+
+-Discordjs v: ${info.dependencies['discord.js']}
+
 -Client ID :  ${client.user.id}
     
 -N. guild: ${client.guilds.cache.size}
@@ -39,7 +42,9 @@ Welcome To Anto's Bot V${info.version}
     
 `,)
 
-        comandregister()
+    comandregister()
+}
 
-    }
+module.exports = {
+    boot
 }

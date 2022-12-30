@@ -10,6 +10,6 @@ function comandregister() {
 
 
 }
-module.exports= {
+module.exports = {
     comandregister
 }
