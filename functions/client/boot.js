@@ -1,6 +1,5 @@
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const info = require("../../package.json");
-const { configs } = require("./../../index")
 const { comandload } = require("./../../functions/client/loadcommand");
 const { comandregister } = require('../../functions/client/comandregister');
 

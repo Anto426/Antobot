@@ -9,7 +9,7 @@ function rep() {
 
 -Client id : ${client.user.id}
 `)
-    let scelta = prompt('This is your client n/y:');
+    let scelta = prompt('This is your client y/n:');
     switch (scelta) {
         case "y" || "Y":
             console.log("Client loading ....")
