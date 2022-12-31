@@ -4,12 +4,6 @@ const Discord = require('discord.js')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
 
-
-
-
-
-
-
 async function nexhollyday() {
     let i = 0, z = 0, timenow = 0, timenextholl = 0, festa
     while (i == 0) {
@@ -43,8 +37,6 @@ ${festa.phrase}
                 guild.channels.cache.get(cguild[guild.name].channel.serverinfo.annunce).send({ embeds: [embed] })
             }
         })
-
-
 
     }, 1000 * 60 * 2);
 
