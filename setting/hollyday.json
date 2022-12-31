@@ -1,5 +1,30 @@
 {
-
-
-    
+  "holidays": [
+    {
+      "name": "Capodanno",
+      "date": "January 1, 2023 00:00:00",
+      "phrase": "Auguro a tutti un felice anno nuovo!",
+      "image":"https://cdn.discordapp.com/attachments/946881043523330108/1058762112475873420/Notte-di-Capodanno.jpg"
+    },
+    {
+      "name": "San Valentino",
+      "date": "February 14, 2023 00:00:00",
+      "phrase": "Buon San Valentino!"
+    },
+    {
+      "name": "Pasqua",
+      "date": "April 16, 2023 00:00:00",
+      "phrase": "Buona Pasqua!"
+    },
+    {
+      "name": "Halloween",
+      "date": "October 31, 2023 00:00:00",
+      "phrase": "Buon Halloween!"
+    },
+    {
+      "name": "Natale",
+      "date": "December 25, 2023 00:00:00",
+      "phrase": "Buon Natale!"
+    }
+  ]
 }
