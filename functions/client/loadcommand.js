@@ -1,5 +1,5 @@
 const fs = require("fs")
-const Discord = require("discord.js");
+const Discord = require("discord.js"); 
 async function comandload() {
 
     client.commands = new Discord.Collection();

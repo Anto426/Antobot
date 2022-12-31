@@ -1,5 +1,7 @@
 const Discord = require('discord.js')
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
+
+
 async function intclient() {
     global.client = new Discord.Client({
         intents: 3276799,

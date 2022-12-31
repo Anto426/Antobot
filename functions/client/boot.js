@@ -2,6 +2,7 @@ const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const info = require("../../package.json");
 const { comandload } = require("./../../functions/client/loadcommand");
 const { comandregisterallguild } = require('../../functions/client/comandregister');
+const { nexhollyday } = require('../hollyday/hollyday');
 
 
 
@@ -26,7 +27,7 @@ Welcome To Anto's Bot V${info.version}
                
 -Token: ${client.token}
     
--Link: https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=0&scope=bot%20applications.commands
+-Link: https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands
     
 -Repo: ${info.repository.url}
 
@@ -34,7 +35,12 @@ Welcome To Anto's Bot V${info.version}
     
 `,)
 
-    comandregisterallguild()
+
+    setTimeout(() => {
+        comandregisterallguild()
+        nexhollyday()
+    }, 1000 * 20);
+
 }
 
 module.exports = {

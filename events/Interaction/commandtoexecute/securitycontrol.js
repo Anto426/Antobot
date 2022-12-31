@@ -11,7 +11,6 @@ module.exports = {
 
             if (interaction.user.id == interaction.guild.ownerId)
                 sowner = true
-
         } catch {
 
         }
