@@ -2,16 +2,13 @@
 // const 
 const { Client, GatewayIntentBits, Partials } = require('discord.js');
 const { AttachmentBuilder } = require("discord.js");
-const Discord = require('discord.js')
 const fs = require("fs");
+const { intclient } = require('./functions/client/intclient');
 const { tokenload } = require('./functions/client/tokenload');
+const { nexhollyday } = require('./functions/hollyday/hollyday');
 
 //client 
-global.client = new Discord.Client({
-    intents: 3276799,
-    partials: [Partials.User, Partials.Reaction, Partials.Message, Partials.Channel]
-});
-
+intclient()
 // token 
 try {
     require("dotenv").config()
@@ -19,20 +16,15 @@ try {
 
 tokenload(process.env.TOKEN)
 // file config
-class config {
-    constructor() {
-        this.emded = require("./setting/embed.json");
-        this.game = require("./setting/game.json");
-        this.hollyday = require("./setting/hollyday.json");
-        this.stato = true
-    }
-}
-const configs = new config();
+
+let stato = true
 
 
 module.exports = {
-    configs
+    stato
 }
+
+
 
 const eventsFolders = fs.readdirSync('./events');
 let events = []
@@ -44,7 +36,7 @@ for (const folder of eventsFolders) {
             let events = event.name.split("-")
             try {
                 client.on(events[0], (...args) => {
-                    if (configs.stato || events[1] == "commands") {
+                    if (stato || events[1] == "commands") {
                         event.execute(...args)
                     }
                 });
@@ -56,7 +48,7 @@ for (const folder of eventsFolders) {
                 let events = event.name.split("-")
                 try {
                     client.on(events[0], (...args) => {
-                        if (configs.stato || events[1] == "commands") {
+                        if (stato || events[1] == "commands") {
                             event.execute(...args)
                         }
                     });
