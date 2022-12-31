@@ -5,7 +5,7 @@ const { AttachmentBuilder } = require("discord.js");
 const fs = require("fs");
 const { intclient } = require('./functions/client/intclient');
 const { tokenload } = require('./functions/client/tokenload');
-const { nexhollyday } = require('./functions/hollyday/hollyday');
+global.bootstate = false
 
 //client 
 intclient()
@@ -15,14 +15,6 @@ try {
 } catch { }
 
 tokenload(process.env.TOKEN)
-// file config
-
-let stato = true
-
-
-module.exports = {
-    stato
-}
 
 
 
@@ -36,7 +28,7 @@ for (const folder of eventsFolders) {
             let events = event.name.split("-")
             try {
                 client.on(events[0], (...args) => {
-                    if (stato || events[1] == "commands") {
+                    if (bootstate || events[1] == "commands") {
                         event.execute(...args)
                     }
                 });
@@ -48,7 +40,7 @@ for (const folder of eventsFolders) {
                 let events = event.name.split("-")
                 try {
                     client.on(events[0], (...args) => {
-                        if (stato || events[1] == "commands") {
+                        if (bootstate || events[1] == "commands") {
                             event.execute(...args)
                         }
                     });
