@@ -23,7 +23,7 @@ async function nexhollyday() {
         z++
     }
     setInterval(() => {
-
+        timenow = new Date().getTime()
         let timereminig = timenextholl - timenow
         client.guilds.cache.forEach(async guild => {
             let time = await `${festa.name}:${times(timereminig)}`
