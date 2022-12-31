@@ -1,9 +1,10 @@
 const fs = require("fs")
 const prompt = require('prompt-sync')();
 const { boot } = require("./boot");
-const { inspect } = require(`util`)
+const { inspect } = require(`util`);
+const { intclient } = require("./intclient");
 const patch = "./.env"
-function rep() {
+async function rep() {
     console.log(`
 -Client Name : ${client.user.username}
 
@@ -18,6 +19,8 @@ function rep() {
         case "n":
             console.log("Client reloading....")
             fs.unlinkSync(patch);
+            client.destroy()
+            await intclient()
             tokenload(false)
             break;
         case "i":

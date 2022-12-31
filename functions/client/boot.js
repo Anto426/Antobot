@@ -1,14 +1,14 @@
 const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const info = require("../../package.json");
 const { comandload } = require("./../../functions/client/loadcommand");
-const { comandregister } = require('../../functions/client/comandregister');
+const { comandregisterallguild } = require('../../functions/client/comandregister');
 
 
 
 async function boot() {
 
     client.user.setStatus(ActivityType.Custom)
-    
+
     comandload()
 
     console.log(`
@@ -34,7 +34,7 @@ Welcome To Anto's Bot V${info.version}
     
 `,)
 
-    comandregister()
+    comandregisterallguild()
 }
 
 module.exports = {
