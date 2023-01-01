@@ -65,7 +65,7 @@ ${festa.phrase}
                     .setThumbnail(festa.image)
                     .setColor(cembed.color["Gold Fusion"])
                 guild.channels.cache.get(cguild[guild.name].channel.serverinfo.annunce).send({ embeds: [embed] })
-                nexhollyday()
+                mainhollyday()
             }
         })
 
