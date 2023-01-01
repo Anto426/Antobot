@@ -41,10 +41,6 @@ async function updatechannel() {
 }
 
 
-
-
-
-
 async function mainhollyday() {
     let festa = await nexhollyday()
     client.guilds.cache.forEach(async guild => {
