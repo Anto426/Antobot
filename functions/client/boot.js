@@ -2,7 +2,7 @@ const { Client, GatewayIntentBits, ActivityType } = require('discord.js');
 const info = require("../../package.json");
 const { comandload } = require("./../../functions/client/loadcommand");
 const { comandregisterallguild } = require('../../functions/client/comandregister');
-const { nexhollyday } = require('../hollyday/hollyday');
+const { mainhollyday } = require('../hollyday/hollyday');
 bootstate = false
 
 
@@ -39,7 +39,7 @@ Welcome To Anto's Bot V${info.version}
     setTimeout(() => {
         bootstate = true
         comandregisterallguild()
-        nexhollyday()
+        mainhollyday()
     }, 1000 * 20);
 
 }
