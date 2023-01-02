@@ -1,9 +1,8 @@
-const Discord = require('discord.js')
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
+const { Client, Partials } = require('discord.js');
 
 
 async function intclient() {
-    global.client = new Discord.Client({
+    global.client = new Client({
         intents: 3276799,
         partials: [Partials.User, Partials.Reaction, Partials.Message, Partials.Channel]
     });

@@ -1,7 +1,5 @@
 // New version of Anto bot v 5.0 
-// const 
-const { Client, GatewayIntentBits, Partials } = require('discord.js');
-const { AttachmentBuilder } = require("discord.js");
+// const
 const fs = require("fs");
 const { intclient } = require('./functions/client/intclient');
 const { tokenload } = require('./functions/client/tokenload');

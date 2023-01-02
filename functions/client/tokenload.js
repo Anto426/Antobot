@@ -10,7 +10,7 @@ async function rep() {
 
 -Client id : ${client.user.id}
 `)
-    let scelta = prompt('This is your client y(yes)/n(no)/i(interrupt):');
+    let scelta = prompt('This is your client y/n/e:');
     switch (scelta.toLowerCase()) {
         case "y":
             console.log("Client loading ....")
@@ -23,7 +23,7 @@ async function rep() {
             await intclient()
             tokenload(false)
             break;
-        case "i":
+        case "e":
             console.log("Interrupt....")
             client.destroy()
             break;
