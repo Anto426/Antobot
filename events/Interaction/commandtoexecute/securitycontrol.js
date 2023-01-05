@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js")
+const { consolelog } = require("../../../functions/log/console/consolelog")
 const cembed = require("./../../../setting/embed.json")
 module.exports = {
     name: "interactionCreate-commands",
@@ -66,14 +67,14 @@ module.exports = {
                     .setColor(cembed.color.Red)
                     .setThumbnail(cembed.immage.err)
                 interaction.reply({ embeds: [embed] })
-                console.log(err)
+                consolelog(err.toString())
             }
         } else {
             let description = ["Non hai i permessi necessari per eseguire questo comando"]
             var x = Math.floor(Math.random() * description.length);
             let embed = new EmbedBuilder()
                 .setTitle("Error")
-                .setDescription(description)
+                .setDescription(description[x])
                 .setColor(cembed.color.Black)
                 .setThumbnail(cembed.immage.accesdenied)
             interaction.reply({ embeds: [embed] })

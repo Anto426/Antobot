@@ -4,6 +4,7 @@ const { comandload } = require("./../../functions/client/loadcommand");
 const { comandregisterallguild } = require('../../functions/client/comandregister');
 const { mainhollyday } = require('../hollyday/hollyday');
 const { timeon } = require('./timeon');
+const { consolelog } = require('../log/console/consolelog');
 bootstate = false
 
 
@@ -13,7 +14,7 @@ async function boot() {
 
     comandload()
 
-    console.log(`
+    consolelog(`
 Welcome To Anto's Bot V${info.version}
     
 -Client Name : ${client.user.username}

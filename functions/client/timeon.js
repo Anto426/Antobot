@@ -7,7 +7,6 @@ async function timeon() {
     setInterval(async () => {
         timenow = new Date().getTime()
         timeonc = await times(timenow - timeon)
-        console.log(timeonc)
     }, 1000)
 
 

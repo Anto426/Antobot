@@ -1,9 +1,11 @@
+const { consolelog } = require("../log/console/consolelog")
+
 function comandregisterallguild() {
 
     client.guilds.cache.forEach(guild => {
-        console.log("I'm writinig " + client.commands.size + " in " + guild.name)
+        consolelog("I'm writinig " + client.commands.size + " command " + " in " + guild.name)
         client.commands.forEach(command => {
-            guild.commands.create(command.data).catch((err) => { console.log(err) })
+            guild.commands.create(command.data).catch((err) => { consolelog(err.toString()) })
 
         })
     })
@@ -11,9 +13,9 @@ function comandregisterallguild() {
 
 }
 function comandregisteroneguild(guild) {
-    console.log("I'm writinig " + client.commands.size + " in " + guild.name)
+    consolelog("I'm writinig " + client.commands.size + " command " + " in " + guild.name)
     client.commands.forEach(command => {
-        guild.commands.create(command.data).catch((err) => { console.log(err) })
+        guild.commands.create(command.data).catch((err) => { consolelog(err.toString()) })
 
     })
 

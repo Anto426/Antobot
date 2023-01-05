@@ -4,7 +4,6 @@ const cguild = require("./../../../setting/guild.json")
 module.exports = {
     name: "guildMemberAdd",
     async execute(member) {
-        console.log("hi")
         const embed = new Discord.EmbedBuilder()
             .setTitle(`Welcome`)
             .setDescription(`${member} Welcome to ${member.guild.name}`)
