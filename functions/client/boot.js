@@ -3,6 +3,7 @@ const info = require("../../package.json");
 const { comandload } = require("./../../functions/client/loadcommand");
 const { comandregisterallguild } = require('../../functions/client/comandregister');
 const { mainhollyday } = require('../hollyday/hollyday');
+const { timeon } = require('./timeon');
 bootstate = false
 
 
@@ -35,7 +36,7 @@ Welcome To Anto's Bot V${info.version}
     
 `,)
 
-
+    timeon()
     setTimeout(() => {
         bootstate = true
         comandregisterallguild()
