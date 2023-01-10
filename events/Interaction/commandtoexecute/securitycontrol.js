@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("discord.js")
 const { consolelog } = require("../../../functions/log/console/consolelog")
+const fs = require("fs")
 const cembed = require("./../../../setting/embed.json")
 module.exports = {
     name: "interactionCreate-commands",
@@ -15,12 +16,11 @@ module.exports = {
         if (interaction.member.id == interaction.guild.ownerId) {
             sowner = true
         }
-
         if (command.permisions.length == 0) {
             perm = true
         } else {
             command.permisions.forEach(per => {
-                if (interaction.permissions.has(per)) {
+                if (interaction.member.permissions.has(per)) {
                     staff = true
                 }
             });
@@ -48,17 +48,29 @@ module.exports = {
             })
         }
         if (owner || sowner) {
-            execute = true
+            if (!owner && sowner) {
+                const commandsFiles = fs.readdirSync(`./commands/bot/`);
+                for (const file of commandsFiles) {
+                    var commands2 = require(`./../../../commands/bot/${file}`);
+                    if (commands2.name != command.name) {
+                        execute = true
+                    }
+                }
+            } else {
+                execute = true
+            }
+
         }
 
         if (staff || perm && channel && position) {
             execute = true
         }
 
+        console.log(owner, sowner, staff, perm, channel, position, execute)
         if (execute) {
             try {
                 command.execute(interaction)
-            } catch(err) {
+            } catch (err) {
                 let description = ["Ho avuto dei problemi durante l'esecuzione del comando", "Riprova più tardi sarai più fortunato", "Opps Qualcosa è andato storto"]
                 var x = Math.floor(Math.random() * description.length);
                 let embed = new EmbedBuilder()
@@ -66,7 +78,7 @@ module.exports = {
                     .setDescription(description[x])
                     .setColor(cembed.color.Red)
                     .setThumbnail(cembed.immage.err)
-                interaction.reply({ embeds: [embed] })
+                interaction.reply({ embeds: [embed], ephemeral: true })
                 consolelog(err.toString())
             }
         } else {
@@ -77,7 +89,7 @@ module.exports = {
                 .setDescription(description[x])
                 .setColor(cembed.color.Black)
                 .setThumbnail(cembed.immage.accesdenied)
-            interaction.reply({ embeds: [embed] })
+            interaction.reply({ embeds: [embed], ephemeral: true })
 
         }
     }
