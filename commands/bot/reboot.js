@@ -25,6 +25,9 @@ module.exports = {
         bootstate = false
         await client.destroy()
         await intclient()
+        try {
+            require("dotenv").config()
+        } catch { }
         await client.login(process.env.TOKEN)
         on()
         await boot()
@@ -34,6 +37,7 @@ module.exports = {
             .setColor(cembed.color.Green)
 
         setTimeout(() => {
+            timeonc = 0
             client.guilds.cache.get(temp[0]).channels.cache.find(x => x.id == temp[1]).send({ embeds: [embed1] })
         }, 1000 * 20);
 
