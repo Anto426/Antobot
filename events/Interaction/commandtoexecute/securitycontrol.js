@@ -5,6 +5,7 @@ const cembed = require("./../../../setting/embed.json")
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
+        if (!interaction.isChatInputCommand()) return;
         let owner = false, sowner = false, staff = false, perm = false, channel = false, position = false, execute = false
         const command = client.commands.get(interaction.commandName)
         const ow = require("./../../../setting/onwer.json")
