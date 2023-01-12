@@ -11,7 +11,7 @@ module.exports = {
         options: [{
             name: "song",
             description: "Link o nome della canzone",
-            type: 6,
+            type: 3,
             required: true
         }]
     },
