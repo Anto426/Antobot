@@ -35,7 +35,7 @@ module.exports = {
 
         setTimeout(() => {
             client.guilds.cache.get(temp[0]).channels.cache.find(x => x.id == temp[1]).send({ embeds: [embed1] })
-        }, 1000 * 10);
+        }, 1000 * 20);
 
 
 
