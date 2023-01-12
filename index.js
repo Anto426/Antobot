@@ -27,7 +27,7 @@ function on() {
                 let events = event.name.split("-")
                 try {
                     client.on(events[0], (...args) => {
-                        if (bootstate || events[1] == "commands") {
+                        if (bootstate || events[1] == "statusoff") {
                             event.execute(...args)
                         }
                     });
@@ -39,7 +39,7 @@ function on() {
                     let events = event.name.split("-")
                     try {
                         client.on(events[0], (...args) => {
-                            if (bootstate || events[1] == "commands") {
+                            if (bootstate || events[1] == "statusoff") {
                                 event.execute(...args)
                             }
                         });
