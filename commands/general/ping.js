@@ -11,7 +11,7 @@ module.exports = {
         description: "Ping bot"
     },
     execute(interaction) {
-        var embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .addFields([
                 { name: `${emoji.pong} Pong`, value: `\`\`\`\n${client.ws.ping}ms\`\`\`` },
                 { name: `${emoji.ram} Ram`, value: `\`\`\`\n${(process.memoryUsage().heapUsed / 1048576).toFixed(0)}mb\`\`\`` },
