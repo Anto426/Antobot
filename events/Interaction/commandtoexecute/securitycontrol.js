@@ -8,14 +8,20 @@ module.exports = {
         let owner = false, sowner = false, staff = false, perm = false, channel = false, position = false, execute = false
         const command = client.commands.get(interaction.commandName)
         const ow = require("./../../../setting/onwer.json")
+
+        // owner
         for (let i in ow.onwerid)
             if (interaction.member.id == ow.onwerid[i]) {
                 owner = true
             }
 
+
+        // sowner
         if (interaction.member.id == interaction.guild.ownerId) {
             sowner = true
         }
+
+
         if (command.permisions.length == 0) {
             perm = true
         } else {
@@ -35,9 +41,6 @@ module.exports = {
             position = true
         }
 
-
-
-
         if (command.allowedchannels.length == 0) {
             channel = true
         } else {
@@ -47,26 +50,28 @@ module.exports = {
                 }
             })
         }
+
         if (owner || sowner) {
             if (!owner && sowner) {
-                const commandsFiles = fs.readdirSync(`./commands/bot/`);
-                for (const file of commandsFiles) {
-                    var commands2 = require(`./../../../commands/bot/${file}`);
-                    if (commands2.name != command.name) {
-                        execute = true
-                    }
-                }
-            } else {
                 execute = true
             }
-
         }
+
 
         if (staff || perm && channel && position) {
             execute = true
         }
 
-        console.log(owner, sowner, staff, perm, channel, position, execute)
+        if (execute) {
+            const commandsFiles = fs.readdirSync(`./commands/bot/`);
+            for (const file of commandsFiles) {
+                var commands2 = require(`./../../../commands/bot/${file}`);
+                if (commands2.name == command.name) {
+                    execute = false
+                }
+            }
+        }
+        console.log("Owner:" + owner, "Sowner:" + sowner, "Staff:" + staff, "Per:" + perm, "Channel:" + channel, "position:" + position, "execute:" + execute)
         if (execute) {
             try {
                 command.execute(interaction)
