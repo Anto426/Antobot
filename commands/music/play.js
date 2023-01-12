@@ -1,4 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
+const cembed = require("./../../setting/embed.json")
+const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "play",
     permisions: [],
@@ -19,8 +21,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Devi essere in un canale vocale")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
 
@@ -29,8 +31,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Devi essere in un canale vocale")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
 

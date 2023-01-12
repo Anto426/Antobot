@@ -1,4 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
+const cembed = require("./../../setting/embed.json")
+const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "stop",
     permisions: [],
@@ -13,8 +15,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Devi essere in un canale vocale")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
 
@@ -23,8 +25,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Devi essere in un canale vocale")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
 
@@ -34,24 +36,24 @@ module.exports = {
                     let embed = new EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Nessun brano è in riproduzione")
-                        .setColor(configs.embed.color.red)
-                        .setThumbnail(configs.embed.images.error)
+                        .setColor(cembed.color.Red)
+                        .setThumbnail(cembed.immage.err)
                     return interaction.reply({ embeds: [embed] })
                 })
         } catch {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Nessun brano è in riproduzione")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
 
         let embed = new EmbedBuilder()
             .setTitle("Riproduzione interrotta")
             .setDescription("Tutti i brani in coda verranno cancellati è il bot si disconnetterà")
-            .setColor(configs.embed.color.green)
-            .setThumbnail(configs.embed.images.succes)
+            .setColor(cembed.color.Green)
+            .setThumbnail(cembed.immage.load)
         return interaction.reply({ embeds: [embed] })
 
     }

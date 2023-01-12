@@ -1,4 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
+const cembed = require("./../../setting/embed.json")
+const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "skip",
     permisions: [],
@@ -14,8 +16,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Devi essere in un canale vocale")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
         const voiceChannelBot = interaction.guild.channels.cache.find(x => x.type == "GUILD_VOICE" && x.members.has(client.user.id))
@@ -23,8 +25,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Qualcuno sta ascoltando già della musica")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
         try {
@@ -33,22 +35,22 @@ module.exports = {
                     let embed = new EmbedBuilder()
                         .setTitle("Error")
                         .setDescription("Nessuna canzone in coda")
-                        .setColor(configs.embed.color.red)
-                        .setThumbnail(configs.embed.images.error)
+                        .setColor(cembed.color.Red)
+                        .setThumbnail(cembed.immage.err)
                     return interaction.reply({ embeds: [embed] })
                 })
         } catch {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Nessuna canzone in coda")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
         let embed = new EmbedBuilder()
             .setTitle("Song skipped")
-            .setThumbnail(configs.embed.images.succes)
-            .setColor(configs.embed.color.green)
+            .setThumbnail(cembed.immage.load)
+            .setColor(cembed.color.Green)
         interaction.reply({ embeds: [embed] })
     }
 }

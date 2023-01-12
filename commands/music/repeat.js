@@ -1,4 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
+const cembed = require("./../../setting/embed.json")
+const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "repeat",
     permisions: [],
@@ -30,8 +32,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Devi essere in un canale vocale")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
 
@@ -40,8 +42,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Devi essere in un canale vocale")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
 
@@ -51,8 +53,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("La lista delle canzoni è vuota!")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
         let args = interaction.options.getString("mode")
@@ -62,8 +64,8 @@ module.exports = {
             let embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setDescription("Devi specificare cosa devo ripetere!")
-                .setColor(configs.embed.color.red)
-                .setThumbnail(configs.embed.images.error)
+                .setColor(cembed.color.Red)
+                .setThumbnail(cembed.immage.err)
             return interaction.reply({ embeds: [embed] })
         }
 
@@ -87,8 +89,8 @@ module.exports = {
         let embed = new EmbedBuilder()
             .setTitle("Repet Mode")
             .addField("Stato", `\`\`\`${mode ? (mode === 2 ? 'Repeat queue' : 'Repeat song') : "off"}  \`\`\``)
-            .setColor(configs.embed.color.green)
-            .setThumbnail(configs.embed.images.succes)
+            .setColor(cembed.color.Green)
+            .setThumbnail(cembed.immage.load)
         return interaction.reply({ embeds: [embed] })
 
 
