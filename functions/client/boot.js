@@ -5,12 +5,13 @@ const { comandregisterallguild } = require('../../functions/client/comandregiste
 const { mainhollyday } = require('../hollyday/hollyday');
 const { timeon } = require('./timeon');
 const { consolelog } = require('../log/console/consolelog');
+const { statusupdate } = require('./statusupdate');
 bootstate = false
 
 
 async function boot() {
 
-    client.user.setStatus(ActivityType.Custom)
+    statusupdate()
 
     comandload()
 
