@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js")
-const cembed = require("./../../../setting/embed.json")
+const cembed = require("../../../setting/embed.json")
 module.exports = {
     name: "interactionCreate-statusoff",
     async execute(interaction) {
