@@ -10,8 +10,8 @@ module.exports = {
         description: "repeat song",
         options: [{
             name: "mode",
-            description: "Link o nome della canzone",
-            type: 6,
+            description: "mode",
+            type: 3,
             required: true,
             choices: [{
                 name: "off",
