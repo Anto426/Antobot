@@ -1,8 +1,8 @@
 const fs = require("fs")
-const Discord = require("discord.js"); 
+const { Collection } = require("discord.js");
 async function comandload() {
 
-    client.commands = new Discord.Collection();
+    client.commands = new Collection();
     let commandsFolder
     try {
         commandsFolder = fs.readdirSync("./commands");
