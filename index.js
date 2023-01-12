@@ -50,8 +50,17 @@ function on() {
     }
 
 
+    const eventsFilesdis = fs.readdirSync(`./events/Distube/`)
+    for (const file of eventsFilesdis) {
+        if (file.endsWith(".js")) {
+            const event = require(`./events/Distube/${file}`);
+            distube.on(event.name, (...args) => {
+                event.execute(...args)
 
+            })
+        }
+
+    }
 }
-
 module.exports = { on }
 

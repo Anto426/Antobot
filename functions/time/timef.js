@@ -15,6 +15,24 @@ function times(millis) {
 }
 
 
+function times0(s) {
+    let m = 0,
+        h = 0
+    while (s >= 60) {
+
+        m = m + 1
+        s = s - 60
+
+    }
+    while (m >= 60) {
+
+        h = h + 1
+        m = m - 60
+
+    }
+    return "h:" + h + " m:" + m + "s:" + s
+}
 module.exports = {
-    times: times
+    times,
+    times0
 }
