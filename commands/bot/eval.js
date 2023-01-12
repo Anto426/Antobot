@@ -29,7 +29,7 @@ module.exports = {
                 output :\`\`\`js\n ${inspect((evaled))}  \`\`\``)
             interaction.reply({ embeds: [embed] })
         } catch (error) {
-            console.error(error);
+            console.error(error.toString());
             const embed = new EmbedBuilder()
                 .setTitle("Error")
                 .setColor(cembed.color.Red)
