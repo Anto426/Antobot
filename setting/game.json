@@ -1,10 +1,11 @@
 {
   "mc": {
+    "image": "https://cdn.discordapp.com/attachments/946881043523330108/946887019861270558/16009_1.jpg",
     "server": {
       "hypixel": {
         "ip": "mc.hypixel.net",
         "emoji": "🔥",
-        "image": "https://i.imgur.com/lKWtDvZ.png"
+        "image": "https://imgur.com/8mJ9AIA"
       },
       "mineplex": {
         "ip": "us.mineplex.com",

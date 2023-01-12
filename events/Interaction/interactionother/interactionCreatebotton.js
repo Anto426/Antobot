@@ -1,14 +1,42 @@
 const { EmbedBuilder, Collection } = require('discord.js');
 const fs = require("fs")
 const cembed = require("./../../../setting/embed.json")
+const cgame = require("./../../../setting/game.json")
+
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {
 
         if (interaction.isChatInputCommand()) return;
+
+
+        if (interaction.customId.split("-").includes("mc")) {
+
+            if (interaction.customId.toString().split("-").includes(interaction.member.id)) {
+
+                let embed = new EmbedBuilder()
+                    .setColor('#0099ff')
+                    .setTitle("Ecco il tuo server")
+                    .setThumbnail(cgame.mc.server[interaction.values[0]].image)
+                    .setDescription(cgame.mc.server[interaction.values[0]].ip);
+                interaction.update({ embeds: [embed] })
+
+            }
+
+        } else {
+
+            let embed = new EmbedBuilder()
+                .setTitle("Error")
+                .setDescription("Non è il tuo questo menu!")
+                .setThumbnail(cembed.immage.err)
+                .setColor(cembed.color['Red Beech'])
+            interaction.reply({ embeds: [embed], ephemeral: true })
+        }
+
+
+
         if (interaction.customId.split("-").includes("help")) {
 
-            idobject = require("../../../commands/help/help")
             let folders = []
 
             let commandsFolder = fs.readdirSync("./commands");
@@ -71,6 +99,8 @@ ${msg.join(" ").toString()}
 
         }
 
-    }
-}
 
+    }
+
+
+}
