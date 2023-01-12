@@ -62,7 +62,7 @@ module.exports = {
             execute = true
         }
 
-        if (execute) {
+        if (execute && !owner) {
             const commandsFiles = fs.readdirSync(`./commands/bot/`);
             for (const file of commandsFiles) {
                 var commands2 = require(`./../../../commands/bot/${file}`);
