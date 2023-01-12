@@ -3,7 +3,6 @@ const { times } = require("../time/timef")
 const Discord = require('discord.js')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
-const { consolelog } = require("../log/console/consolelog")
 
 
 
@@ -35,7 +34,7 @@ async function updatechannel(guild) {
     setInterval(async () => {
         let timereminig = timenexthollyday - timenow
         let time = await `${times(timereminig)}`
-        guild.channels.cache.get(cguild["Anto's  Server"].channel.hollyday.nexthollyday).setName(time.toString()).catch((err) => { consolelog(err.toString()) })
+        guild.channels.cache.get(cguild["Anto's  Server"].channel.hollyday.nexthollyday).setName(time.toString()).catch((err) => { console.log(err.toString()) })
     }, 1000 * 60 * 5);
 
 }
@@ -44,7 +43,7 @@ async function updatechannel(guild) {
 async function mainhollyday() {
     let guild = await client.guilds.cache.get(cguild["Anto's  Server"].id)
     let festa = await nexhollyday()
-    guild.channels.cache.get(cguild[guild.name].channel.hollyday.name).setName(`${festa.name.toString()}:`).catch((err) => { consolelog(err.toString()) })
+    guild.channels.cache.get(cguild[guild.name].channel.hollyday.name).setName(`${festa.name.toString()}:`).catch((err) => { console.log(err.toString()) })
     let timenextholl = new Date(festa.date).getTime()
     updatechannel(guild)
     setInterval(() => {

@@ -1,5 +1,4 @@
 const { EmbedBuilder } = require("discord.js")
-const { consolelog } = require("../../../functions/log/console/consolelog")
 const fs = require("fs")
 const cembed = require("./../../../setting/embed.json")
 module.exports = {
@@ -85,7 +84,7 @@ module.exports = {
                     .setColor(cembed.color.Red)
                     .setThumbnail(cembed.immage.err)
                 interaction.reply({ embeds: [embed], ephemeral: true })
-                consolelog(err.toString())
+                console.log(err.toString())
             }
         } else {
             let description = ["Non hai i permessi necessari per eseguire questo comando"]
