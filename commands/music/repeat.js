@@ -88,7 +88,7 @@ module.exports = {
         queue.setRepeatMode(mode)
         let embed = new EmbedBuilder()
             .setTitle("Repet Mode")
-            .addField("Stato", `\`\`\`${mode ? (mode === 2 ? 'Repeat queue' : 'Repeat song') : "off"}  \`\`\``)
+            .addFields([{ name: "Stato", value: `\`\`\`${mode ? (mode === 2 ? 'Repeat queue' : 'Repeat song') : "off"}  \`\`\`` }])
             .setColor(cembed.color.Green)
             .setThumbnail(cembed.immage.load)
         return interaction.reply({ embeds: [embed] })

@@ -24,6 +24,7 @@ module.exports = {
         await interaction.reply({ embeds: [embed] })
         bootstate = false
         await client.destroy()
+        await distube.destroy()
         await intclient()
         try {
             require("dotenv").config()

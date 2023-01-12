@@ -20,6 +20,7 @@ module.exports = {
         await interaction.reply({ embeds: [embed] })
         await fs.unlinkSync(patch);
         await client.destroy()
+        await distube.destroy()
         process.exit()
 
 

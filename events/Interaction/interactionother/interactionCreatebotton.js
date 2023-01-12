@@ -21,16 +21,16 @@ module.exports = {
                     .setDescription(cgame.mc.server[interaction.values[0]].ip);
                 interaction.update({ embeds: [embed] })
 
+            } else {
+
+                let embed = new EmbedBuilder()
+                    .setTitle("Error")
+                    .setDescription("Non è il tuo questo menu!")
+                    .setThumbnail(cembed.immage.err)
+                    .setColor(cembed.color['Red Beech'])
+                interaction.reply({ embeds: [embed], ephemeral: true })
             }
 
-        } else {
-
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Non è il tuo questo menu!")
-                .setThumbnail(cembed.immage.err)
-                .setColor(cembed.color['Red Beech'])
-            interaction.reply({ embeds: [embed], ephemeral: true })
         }
 
 
