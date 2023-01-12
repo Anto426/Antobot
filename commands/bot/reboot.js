@@ -25,11 +25,9 @@ module.exports = {
         bootstate = false
         await client.destroy()
         await intclient()
-        try {
-            require("dotenv").config()
-        } catch { }
-        await client.login(process.env.TOKEN)
-        on()
+        await client.login(process.env.TOKEN).then(async () => {
+            await on()
+        })
         await boot()
         let embed1 = new EmbedBuilder()
             .setTitle("bot restarted successfully")
