@@ -7,7 +7,7 @@ module.exports = {
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     data: {
         name: "stop",
-        description: "stop list song",
+        description: "Stoppa la musica",
     },
     execute(interaction) {
         const voiceChannel = interaction.member.voice.channel

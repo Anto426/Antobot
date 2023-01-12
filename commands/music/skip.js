@@ -7,7 +7,7 @@ module.exports = {
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     data: {
         name: "skip",
-        description: "skip list song",
+        description: "skip canzone",
     },
     execute(interaction) {
         let queue = distube.getQueue(interaction)

@@ -7,7 +7,7 @@ module.exports = {
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     data: {
         name: "play",
-        description: "play song",
+        description: "riproduci canzone",
         options: [{
             name: "song",
             description: "Link o nome della canzone",
