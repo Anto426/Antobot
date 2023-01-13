@@ -6,6 +6,7 @@ module.exports = {
     name: "ping",
     permisions: [],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    position: false,
     data: {
         name: "ping",
         description: "Ping bot"

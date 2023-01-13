@@ -5,6 +5,7 @@ module.exports = {
     name: "skip",
     permisions: [],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    position: false,
     data: {
         name: "skip",
         description: "skip canzone",

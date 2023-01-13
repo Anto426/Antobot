@@ -2,44 +2,29 @@ const { PermissionsBitField, EmbedBuilder } = require('discord.js')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
 module.exports = {
-    name: "announce",
-    permisions: [PermissionsBitField.Flags.ManageEvents,PermissionsBitField.Flags.Administrator],
+    name: "ban",
+    permisions: [PermissionsBitField.Flags.BanMembers, PermissionsBitField.Flags.Administrator],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
-    position: false,
+    position:true,
     data: {
-        name: "announce",
-        description: "Invia messagio attraverso il bot",
+        name: "ban",
+        description: "banna utente",
         options: [{
-            name: "title",
-            description: "titolo",
-            type: 3,
+            name: "user",
+            description: "utente",
+            type: 6,
             required: true,
         },
         {
-            name: "msg",
-            description: "messagio",
-            type: 3,
-            required: true,
-        },
-        {
-            name: "channel",
-            description: "channel",
-            type: 7,
-            required: false,
-        },
-        {
-            name: "image",
-            description: "image",
+            name: "reason",
+            description: "motivo",
             type: 3,
             required: false,
-        },
-
+        }
         ]
     },
     execute(interaction) {
-        let title = interaction.options.getString("title").split("-").join("\n")
-        let msg = interaction.options.getString("msg").split("-").join("\n")
-        let image = interaction.options.getString("image")
+        let reason = interaction.options.getString("msg").split("-").join("\n")
 
         var embed = new EmbedBuilder()
             .setTitle(title)

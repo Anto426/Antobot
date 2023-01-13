@@ -5,6 +5,7 @@ module.exports = {
     name: "repeat",
     permisions: [],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    position: false,
     data: {
         name: "repeat",
         description: "ripeti song",
@@ -15,10 +16,10 @@ module.exports = {
             required: true,
             choices: [{
                 name: "off",
-                value: "Off"
+                value: "off"
             }, {
                 name: "Song",
-                value: "song"
+                value: "Song"
             }, {
                 name: "Queue",
                 value: "queue"
@@ -59,15 +60,6 @@ module.exports = {
         }
         let args = interaction.options.getString("mode")
         let mode = null
-
-        if (!args[1]) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Devi specificare cosa devo ripetere!")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
-        }
 
         switch (args) {
             case "off":

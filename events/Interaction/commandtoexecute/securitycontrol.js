@@ -32,7 +32,7 @@ module.exports = {
             });
         }
 
-        if (interaction.options.getMember("user")) {
+        if (command.position) {
             if (!owner && !sowner && staff) {
                 if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position)
                     position = true
