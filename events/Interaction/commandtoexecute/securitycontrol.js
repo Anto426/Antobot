@@ -52,9 +52,8 @@ module.exports = {
         }
 
         if (owner || sowner) {
-            if (!owner && sowner) {
-                execute = true
-            }
+            execute = true
+
         }
 
 
@@ -87,7 +86,7 @@ module.exports = {
                 console.log(err.toString())
             }
         } else {
-            let description = ["Non hai i permessi necessari per eseguire questo comando"]
+            let description = ["Non hai i permessi necessari per eseguire questo comando o la persona a cui vuoi eseguirlo ha più potere di te"]
             var x = Math.floor(Math.random() * description.length);
             let embed = new EmbedBuilder()
                 .setTitle("Error")
