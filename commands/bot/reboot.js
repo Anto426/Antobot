@@ -4,6 +4,7 @@ const { boot } = require("./../../functions/client/boot")
 const { on } = require("./../../index")
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
+const { eventload } = require("../../functions/client/loadc-e")
 let temp = []
 module.exports = {
     name: "reboot",
@@ -27,7 +28,7 @@ module.exports = {
         await client.destroy()
         await intclient()
         await client.login(process.env.TOKEN).then(async () => {
-            await on()
+            await eventload()
         })
         await boot()
         let embed1 = new EmbedBuilder()
