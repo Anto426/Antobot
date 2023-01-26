@@ -1,9 +1,10 @@
 const { PermissionsBitField, EmbedBuilder } = require('discord.js')
+const { sendto } = require('../../functions/msg/msg')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "msgpr",
-    permisions: [PermissionsBitField.Flags.ManageEvents,PermissionsBitField.Flags.Administrator],
+    permisions: [PermissionsBitField.Flags.ManageEvents, PermissionsBitField.Flags.Administrator],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     position: false,
     data: {
@@ -47,7 +48,7 @@ module.exports = {
             .setThumbnail(image)
             .setColor(cembed.color.Green)
         user = interaction.options.getMember("user")
-        user.send({ embeds: [embed] })
+        sendto(user, { embeds: [embed] })
 
         interaction.reply("Messagio inviato")
 
