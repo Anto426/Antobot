@@ -7,6 +7,7 @@ module.exports = {
     permisions: [PermissionsBitField.Flags.ManageEvents, PermissionsBitField.Flags.Administrator],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     position: false,
+    test: false,
     data: {
         name: "msgpr",
         description: "Invia messagio attraverso il bot ad una persona",
@@ -48,7 +49,7 @@ module.exports = {
             .setThumbnail(image)
             .setColor(cembed.color.Green)
         user = interaction.options.getMember("user")
-        sendto(user, { embeds: [embed] })
+        sendto(user, { embeds: [embed] }, interaction.channel)
 
         interaction.reply("Messagio inviato")
 
