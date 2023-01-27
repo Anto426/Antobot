@@ -36,7 +36,7 @@ module.exports = {
                 selectmenu
             );
         let embed = new EmbedBuilder()
-            .setTitle("Help")
+            .setTitle("Server MC")
             .setDescription(`
             Usa il menu qui sotto per ottenere ip dei server di minecraft
             ${server.join("\n \n")}`)
