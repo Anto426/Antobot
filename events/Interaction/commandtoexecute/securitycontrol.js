@@ -21,7 +21,7 @@ module.exports = {
             sowner = true
         }
 
-        if (command.test && owner) {
+        if ((!command.test) && owner) {
             test = true
         }
         if (command.permisions.length == 0) {
@@ -72,7 +72,7 @@ module.exports = {
                 }
             }
         }
-        console.log("Owner:" + owner, "Sowner:" + sowner, "Staff:" + staff, "Per:" + perm, "Channel:" + channel, "position:" + position, "execute:" + execute)
+        console.log("Owner:" + owner, "Sowner:" + sowner, "Staff:" + staff, "Per:" + perm, "Channel:" + channel, "position:" + position, "test:" + test, "execute:" + execute)
         if (execute && test) {
             try {
                 command.execute(interaction)

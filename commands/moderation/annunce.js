@@ -7,7 +7,6 @@ module.exports = {
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     position: false,
     test: false,
-
     data: {
         name: "announce",
         description: "Invia messagio attraverso il bot",
