@@ -3,9 +3,11 @@ const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "announce",
-    permisions: [PermissionsBitField.Flags.ManageEvents,PermissionsBitField.Flags.Administrator],
+    permisions: [PermissionsBitField.Flags.ManageEvents, PermissionsBitField.Flags.Administrator],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     position: false,
+    test: false,
+
     data: {
         name: "announce",
         description: "Invia messagio attraverso il bot",

@@ -8,6 +8,7 @@ module.exports = {
     permisions: [],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     position: false,
+    test: false,
     data: {
         name: "disconect",
         description: "disconette il client dal bot"

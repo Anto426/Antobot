@@ -1,11 +1,14 @@
 const { PermissionsBitField, EmbedBuilder } = require('discord.js')
+const { sendto } = require('../../functions/msg/msg')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "ban",
     permisions: [PermissionsBitField.Flags.BanMembers, PermissionsBitField.Flags.Administrator],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
-    position:true,
+    position: true,
+    test: true,
+
     data: {
         name: "ban",
         description: "banna utente",
@@ -23,19 +26,27 @@ module.exports = {
         }
         ]
     },
-    execute(interaction) {
-        let reason = interaction.options.getString("msg").split("-").join("\n")
+    async execute(interaction) {
+        let user = interaction.options.getMember("user") || "Nothing"
+        let reason = interaction.options.getString("reason")
+        let embed1 = new EmbedBuilder()
+            .setTitle("Utente Bannato")
+            .setDescription("Sei stato bannato da " + interaction.guild.toString())
+            .addFields([{ name: `Reason:`, value: `\`\`\`\n${reason}\`\`\`` }])
+            .setColor(cembed.color.Red)
+        let content = { embeds: [embed1] }
+        await sendto(user, content, interaction.channel).then(() => {
+            let embed = new EmbedBuilder()
+                .setTitle("Utente Bannato")
+                .setDescription(user.toString() + "è stato bannato con succeso")
+                .addFields([{ name: `Reason:`, value: `\`\`\`\n${reason}\`\`\`` }])
+                .setColor(cembed.color.Red)
+            interaction.reply({ embeds: [embed] })
+            setTimeout(() => {
 
-        var embed = new EmbedBuilder()
-            .setTitle(title)
-            .setDescription(msg)
-            .setThumbnail(image)
-            .setColor(cembed.color.Green)
-        channel = interaction.options.getChannel("channel") || interaction.guild.channels.cache.find(x => x.id == cguild['Anto\'s  Server'].channel.serverinfo.annunce)
-        channel.send({ embeds: [embed] })
+            }, 1000);
 
-        interaction.reply("Messagio inviato")
-
+        })
 
 
     }

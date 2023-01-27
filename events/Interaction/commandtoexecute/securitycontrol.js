@@ -5,7 +5,7 @@ module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
         if (!interaction.isChatInputCommand()) return;
-        let owner = false, sowner = false, staff = false, perm = false, channel = false, position = false, execute = false
+        let owner = false, sowner = false, staff = false, perm = false, channel = false, position = false, test = false, execute = false
         const command = client.commands.get(interaction.commandName)
         const ow = require("./../../../setting/onwer.json")
 
@@ -21,7 +21,9 @@ module.exports = {
             sowner = true
         }
 
-
+        if (command.test && owner) {
+            test = true
+        }
         if (command.permisions.length == 0) {
             perm = true
         } else {
@@ -71,7 +73,7 @@ module.exports = {
             }
         }
         console.log("Owner:" + owner, "Sowner:" + sowner, "Staff:" + staff, "Per:" + perm, "Channel:" + channel, "position:" + position, "execute:" + execute)
-        if (execute) {
+        if (execute && test) {
             try {
                 command.execute(interaction)
             } catch (err) {
@@ -86,7 +88,7 @@ module.exports = {
                 console.log(err.toString())
             }
         } else {
-            let description = ["Non hai i permessi necessari per eseguire questo comando o la persona a cui vuoi eseguirlo ha più potere di te"]
+            let description = ["Non hai i permessi necessari per eseguire questo comando o la persona a cui vuoi eseguirlo ha più potere di te o questo comando è in via di sviluppo e non è ancora pronto"]
             var x = Math.floor(Math.random() * description.length);
             let embed = new EmbedBuilder()
                 .setTitle("Error")

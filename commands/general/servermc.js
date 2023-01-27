@@ -1,4 +1,4 @@
-const { EmbedBuilder, StringSelectMenuBuilder,ActionRowBuilder } = require("discord.js")
+const { EmbedBuilder, StringSelectMenuBuilder, ActionRowBuilder } = require("discord.js")
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
 const cgame = require("./../../setting/game.json")
@@ -8,6 +8,7 @@ module.exports = {
     permisions: [],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     position: false,
+    test: false,
     data: {
         name: "servermc",
         description: "server di minecraft"
