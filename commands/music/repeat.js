@@ -9,7 +9,7 @@ module.exports = {
     test: false,
     data: {
         name: "repeat",
-        description: "ripeti song",
+        description: "ripeti canzone",
         options: [{
             name: "mode",
             description: "mode",
@@ -20,7 +20,7 @@ module.exports = {
                 value: "off"
             }, {
                 name: "Song",
-                value: "Song"
+                value: "song"
             }, {
                 name: "Queue",
                 value: "queue"
@@ -76,7 +76,6 @@ module.exports = {
             default:
                 break;
         }
-
 
         queue.setRepeatMode(mode)
         let embed = new EmbedBuilder()
