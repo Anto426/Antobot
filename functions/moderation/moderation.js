@@ -27,9 +27,12 @@ async function banf(interaction, member, reason) {
                 { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
         await sendto(member, { embeds: [embeddm] }, interaction.channel)
-        member.ban({
-            reason: reason
-        });
+        setTimeout(() => {
+            member.ban({
+                reason: reason
+            });
+        }, 1000 * 1);
+
     } catch (err) { errmsg.genericmsg(interaction) }
 }
 
@@ -90,7 +93,10 @@ async function kickf(interaction, member) {
                 { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
         await sendto(member, { embeds: [embeddm] }, interaction.channel)
-        member.kick();
+        setTimeout(() => {
+            member.kick();
+        }, 1000 * 1);
+
     } catch { }
 
 
@@ -101,7 +107,6 @@ async function kickf(interaction, member) {
 async function mutef(interaction, member, reason) {
     if (member.user.bot) {
         errmsg.botmsg(interaction)
-
     }
 
     let muted = interaction.guild.roles.cache.find(x => x.name == "MutedA")
@@ -176,7 +181,6 @@ async function unmute(interaction, member) {
     member.roles.remove(muted).catch(() => { errmsg.genericmsg(interaction) })
 }
 
-
 // timeout function 
 
 async function timeoutf(interaction, member, time, reason) {
@@ -202,9 +206,6 @@ async function timeoutf(interaction, member, time, reason) {
             errmsg.genericmsg(interaction)
             return
         })
-
-
-
 
     } else {
         const d = new Date(member.communicationDisabledUntilTimestamp);
