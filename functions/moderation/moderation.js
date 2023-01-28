@@ -59,7 +59,7 @@ async function unbanf(interaction, id) {
                 const embed = new EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Utente gia sbannato")
-                    .setThumbnail()
+                    .setThumbnail(cembed.immage.err)
                     .setColor(cembed.color.Red)
                 interaction.reply({ embeds: [embed] })
             }
