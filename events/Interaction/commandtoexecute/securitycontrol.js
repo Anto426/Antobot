@@ -72,7 +72,7 @@ module.exports = {
                 }
             }
         }
-        console.log("Owner:" + owner, "Sowner:" + sowner, "Staff:" + staff, "Per:" + perm, "Channel:" + channel, "position:" + position, "test:" + test, "execute:" + execute)
+        console.log("Owner:" + owner, "Sowner:" + sowner, "Staff:" + staff, "Per:" + perm, "Channel:" + channel, "position:" + position, "test:" + !test, "execute:" + execute)
         if (execute && test) {
             try {
                 command.execute(interaction)
