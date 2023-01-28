@@ -6,7 +6,7 @@ module.exports = {
     permisions: [PermissionsBitField.Flags.BanMembers, PermissionsBitField.Flags.Administrator],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     position: true,
-    test: true,
+    test: false,
     data: {
         name: "ban",
         description: "banna utente",
