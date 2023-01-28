@@ -37,9 +37,7 @@ module.exports = {
 
         } catch (err) { }
 
-
-
-        if (newMember.channel == null) {
+        if (newMember.channel == null || newMember.channel != channel) {
             if (oldMember.channel == channel) {
                 channel.delete()
             }
