@@ -2,7 +2,7 @@ const { EmbedBuilder } = require("discord.js")
 const errmsg = require("../msg/errormsg.js");
 const { sendto } = require("../msg/msg.js");
 const { times } = require("../time/timefunctions");
-const cembed = require("./../../setting/embed.json")
+const cembed = require("../../setting/embed.json")
 
 
 // Ban function 
