@@ -4,10 +4,6 @@ const Discord = require('discord.js')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
 
-
-
-
-
 async function nexhollyday() {
 
     let i = 0, z = 0, timenextholl = 0, festa
