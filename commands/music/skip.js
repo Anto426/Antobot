@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require('discord.js')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
+const errmsg = require("./../../functions/msg/errormsg")
 module.exports = {
     name: "skip",
     permisions: [],
@@ -15,39 +16,19 @@ module.exports = {
         let queue = distube.getQueue(interaction)
         const voiceChannel = interaction.member.voice.channel
         if (!voiceChannel) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Devi essere in un canale vocale")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            return errmsg.vocalchannel(interaction)
         }
         const voiceChannelBot = interaction.guild.channels.cache.find(x => x.type == "GUILD_VOICE" && x.members.has(client.user.id))
         if (voiceChannelBot & !voiceChannel == voiceChannelBot) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Qualcuno sta ascoltando già della musica")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            return errmsg.vocalchannel(interaction)
         }
         try {
             distube.skip(interaction)
                 .catch(() => {
-                    let embed = new EmbedBuilder()
-                        .setTitle("Error")
-                        .setDescription("Nessuna canzone in coda")
-                        .setColor(cembed.color.Red)
-                        .setThumbnail(cembed.immage.err)
-                    return interaction.reply({ embeds: [embed] })
+                    return errmsg.listvoid(interaction)
                 })
         } catch {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Nessuna canzone in coda")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            return errmsg.listvoid(interaction)
         }
         let embed = new EmbedBuilder()
             .setTitle("Song skipped")

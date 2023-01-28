@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require('discord.js')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
+const errmsg = require("./../../functions/msg/errormsg")
 module.exports = {
     name: "stop",
     permisions: [],
@@ -24,31 +25,16 @@ module.exports = {
 
         const voiceChannelBot = interaction.guild.channels.cache.find(x => x.type == "GUILD_VOICE" && x.members.has(client.user.id))
         if (voiceChannelBot && voiceChannel.id != voiceChannelBot.id) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Devi essere in un canale vocale")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            return errmsg.vocalchannel(interaction)
         }
 
         try {
             distube.stop(interaction)
                 .catch(() => {
-                    let embed = new EmbedBuilder()
-                        .setTitle("Error")
-                        .setDescription("Nessun brano è in riproduzione")
-                        .setColor(cembed.color.Red)
-                        .setThumbnail(cembed.immage.err)
-                    return interaction.reply({ embeds: [embed] })
+                    return errmsg.vocalchannel(interaction)
                 })
         } catch {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Nessun brano è in riproduzione")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            return errmsg.listvoid(interaction)
         }
 
         let embed = new EmbedBuilder()

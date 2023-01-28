@@ -1,6 +1,7 @@
 const { EmbedBuilder } = require('discord.js')
 const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
+const errmsg = require("./../../functions/msg/errormsg")
 module.exports = {
     name: "repeat",
     permisions: [],
@@ -31,33 +32,18 @@ module.exports = {
         let queue = distube.getQueue(interaction)
         const voiceChannel = interaction.member.voice.channel
         if (!voiceChannel) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Devi essere in un canale vocale")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            return errmsg.vocalchannel(interaction)
         }
 
         const voiceChannelBot = interaction.guild.channels.cache.find(x => x.type == "GUILD_VOICE" && x.members.has(client.user.id))
         if (voiceChannelBot && voiceChannel.id != voiceChannelBot.id) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Devi essere in un canale vocale")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+           return errmsg.vocalchannel(interaction)
         }
 
 
 
         if (!queue) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("La lista delle canzoni è vuota!")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            errmsg.listvoid(interaction)
         }
         let args = interaction.options.getString("mode")
         let mode = null

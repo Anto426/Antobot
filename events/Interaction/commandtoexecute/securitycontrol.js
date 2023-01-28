@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require("discord.js")
 const fs = require("fs")
-const cembed = require("./../../../setting/embed.json")
+const errmsg = require("./../../../functions/msg/errormsg")
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
@@ -77,26 +77,13 @@ module.exports = {
             try {
                 command.execute(interaction)
             } catch (err) {
-                let description = ["Ho avuto dei problemi durante l'esecuzione del comando", "Riprova più tardi sarai più fortunato", "Opps Qualcosa è andato storto"]
-                var x = Math.floor(Math.random() * description.length);
-                let embed = new EmbedBuilder()
-                    .setTitle("Error")
-                    .setDescription(description[x])
-                    .setColor(cembed.color.Red)
-                    .setThumbnail(cembed.immage.err)
-                interaction.reply({ embeds: [embed], ephemeral: true })
-                console.log(err.toString())
+                errmsg.genericmsg(interaction)
             }
         } else {
-            let description = ["Non hai i permessi necessari per eseguire questo comando o la persona a cui vuoi eseguirlo ha più potere di te o questo comando è in via di sviluppo e non è ancora pronto"]
-            var x = Math.floor(Math.random() * description.length);
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription(description[x])
-                .setColor(cembed.color.Black)
-                .setThumbnail(cembed.immage.accesdenied)
-            interaction.reply({ embeds: [embed], ephemeral: true })
-
+            if (!test)
+                errmsg.disablefunction(interaction)
+            else
+                errmsg.genericmsg(interaction)
         }
     }
 }

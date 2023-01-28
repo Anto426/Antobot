@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
-const cembed = require("./../../setting/embed.json")
 const cguild = require("./../../setting/guild.json")
+const errmsg = require("./../../functions/msg/errormsg")
 module.exports = {
     name: "play",
     permisions: [],
@@ -21,22 +21,12 @@ module.exports = {
     async execute(interaction) {
         const voiceChannel = interaction.member.voice.channel
         if (!voiceChannel) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Devi essere in un canale vocale")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            return errmsg.vocalchannel(interaction)
         }
 
         const voiceChannelBot = interaction.guild.channels.cache.find(x => x.type == "GUILD_VOICE" && x.members.has(client.user.id))
         if (voiceChannelBot && voiceChannel.id != voiceChannelBot.id) {
-            let embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setDescription("Devi essere in un canale vocale")
-                .setColor(cembed.color.Red)
-                .setThumbnail(cembed.immage.err)
-            return interaction.reply({ embeds: [embed] })
+            return errmsg.vocalchannel(interaction)
         }
 
         let song = interaction.options.getString("song")
