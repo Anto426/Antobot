@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js")
+const { EmbedBuilder, PermissionsBitField } = require("discord.js")
 const errmsg = require("../msg/errormsg.js");
 const { sendto } = require("../msg/msg.js");
 const { times } = require("../time/timef");
@@ -52,15 +52,15 @@ async function unbanf(interaction, id) {
                 const embed = new EmbedBuilder()
                     .setTitle("Utente sbannato")
                     .setDescription("Utente sbannato")
-                    .setThumbnail(configs.settings.embed.images.succes)
+                    .setThumbnail(cembed.immage.load)
                     .setColor(cembed.color["Green Blue"])
                 interaction.reply({ embeds: [embed] })
             } else {
                 const embed = new EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Utente gia sbannato")
-                    .setThumbnail(configs.settings.embed.images.error)
-                    .setColor(configs.settings.embed.color.red)
+                    .setThumbnail()
+                    .setColor(cembed.color.Red)
                 interaction.reply({ embeds: [embed] })
             }
         })
@@ -116,15 +116,20 @@ async function mutef(interaction, member, reason) {
             permissions: [""]
         })
         interaction.guild.channels.cache.forEach(channel => {
-            channel.permissionOverwrites.edit(muted, { SEND_MESSAGES: false })
+            channel.permissionOverwrites.set([
+                {
+                    id: muted.id,
+                    deny: [PermissionsBitField.Flags.SendMessages],
+                }
+            ])
         });
     }
     if (member.roles.cache.has(muted.id)) {
         const embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription(member.user.tag + " risulta già mutato")
-            .setThumbnail(configs.settings.embed.images.error)
-            .setColor(configs.settings.embed.color.red)
+            .setThumbnail(cembed.color.Red)
+            .setColor(cembed.color.Red)
         interaction.reply({ embeds: [embed] })
         return
     }
@@ -167,8 +172,8 @@ async function unmute(interaction, member) {
         const embed = new EmbedBuilder()
             .setTitle(interaction.member.user.tag + " Error")
             .setDescription(member.user.tag + " risulta già smutato")
-            .setThumbnail(configs.settings.embed.images.error)
-            .setColor(configs.settings.embed.color.red)
+            .setThumbnail(cembed.color.Red)
+            .setColor(cembed.color.Red)
         interaction.reply({ embeds: [embed] })
         return
     }
@@ -217,8 +222,8 @@ async function timeoutf(interaction, member, time, reason) {
             .addFields([
                 { name: 'Fino a :', value: `\`\`\`\n ${date} \`\`\`` },
             ])
-            .setThumbnail(configs.settings.embed.images.error)
-            .setColor(configs.settings.embed.color.red)
+            .setThumbnail(cembed.color.Red)
+            .setColor(cembed.color.Red)
         interaction.reply({ embeds: [embed] })
     }
 }
@@ -243,8 +248,8 @@ async function untimioutf(interaction, member,) {
         const embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription(`${member.toString()} non ha un timeout!`)
-            .setThumbnail(configs.settings.embed.images.error)
-            .setColor(configs.settings.embed.color.red)
+            .setThumbnail(cembed.immage.err)
+            .setColor(cembed.color.Red)
         interaction.reply({ embeds: [embed] })
     }
 }

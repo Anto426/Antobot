@@ -18,7 +18,7 @@ module.exports = {
         }]
     },
     async execute(interaction) {
-        var utente = interaction.options.getMember("user")
+        let utente = interaction.options.getMember("user")
         moderationf.unmute(interaction, utente)
 
     }

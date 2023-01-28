@@ -25,8 +25,8 @@ module.exports = {
         ]
     },
     async execute(interaction) {
-        var utente = interaction.options.getMember("user")
-        var reason = interaction.options.getString("reason") || "Nesun motivo"
+        let utente = interaction.options.getMember("user")
+        let reason = interaction.options.getString("reason") || "Nesun motivo"
         moderationf.mutef(interaction, utente, reason)
     }
 }
