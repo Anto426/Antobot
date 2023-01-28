@@ -1,5 +1,6 @@
-const { PermissionsBitField, EmbedBuilder } = require('discord.js')
+const { PermissionsBitField } = require('discord.js')
 const cguild = require("./../../setting/guild.json")
+const moderationf = require("../../functions/moderation/moderation")
 module.exports = {
     name: "unmute",
     permisions: [PermissionsBitField.Flags.ManageEvents, PermissionsBitField.Flags.Administrator],
@@ -18,7 +19,7 @@ module.exports = {
     },
     async execute(interaction) {
         var utente = interaction.options.getMember("user")
-        unmute(interaction, utente)
+        moderationf.unmute(interaction, utente)
 
     }
 }
