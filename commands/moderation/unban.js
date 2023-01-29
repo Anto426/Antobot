@@ -3,7 +3,7 @@ const cguild = require("./../../setting/guild.json")
 const moderationf = require("../../functions/moderation/moderation")
 module.exports = {
     name: "unban",
-    permisions: [PermissionsBitField.Flags.ManageEvents, PermissionsBitField.Flags.Administrator],
+    permisions: [PermissionsBitField.Flags.BanMembers, PermissionsBitField.Flags.Administrator],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
     position: true,
     test: false,

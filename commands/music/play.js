@@ -1,4 +1,3 @@
-const { EmbedBuilder } = require('discord.js')
 const cguild = require("./../../setting/guild.json")
 const errmsg = require("./../../functions/msg/errormsg")
 module.exports = {

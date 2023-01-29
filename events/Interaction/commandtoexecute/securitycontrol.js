@@ -58,8 +58,9 @@ module.exports = {
         }
 
 
-        if (staff || perm && channel && position) {
-            execute = true
+        if (staff || perm && channel) {
+            if (position)
+                execute = true
         }
 
         if (execute && !owner) {
@@ -80,9 +81,10 @@ module.exports = {
             }
         } else {
             if (!test)
-                errmsg.disablefunction(interaction)
-            else
-                errmsg.genericmsg(interaction)
+                return errmsg.disablefunction(interaction)
+            if (!position)
+                return errmsg.tohigtmsg(interaction)
+            return errmsg.notpermisionmsg(interaction)
         }
     }
 }

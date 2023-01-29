@@ -3,9 +3,9 @@ const cguild = require("./../../setting/guild.json")
 const moderationf = require("../../functions/moderation/moderation")
 module.exports = {
     name: "mute",
-    permisions: [PermissionsBitField.Flags.ManageEvents, PermissionsBitField.Flags.Administrator],
+    permisions: [PermissionsBitField.Flags.MuteMembers, PermissionsBitField.Flags.Administrator],
     allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
-    position: false,
+    position: true,
     test: false,
     data: {
         name: "mute",
