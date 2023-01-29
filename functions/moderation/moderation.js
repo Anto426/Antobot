@@ -49,14 +49,14 @@ async function unbanf(interaction, id) {
 
             if (!a) {
                 interaction.guild.members.unban(id)
-                const embed = new EmbedBuilder()
+                let embed = new EmbedBuilder()
                     .setTitle("Utente sbannato")
                     .setDescription("Utente sbannato")
                     .setThumbnail(cembed.immage.load)
                     .setColor(cembed.color["Green Blue"])
                 interaction.reply({ embeds: [embed] })
             } else {
-                const embed = new EmbedBuilder()
+                let embed = new EmbedBuilder()
                     .setTitle("Error")
                     .setDescription("Utente gia sbannato")
                     .setThumbnail(cembed.immage.err)
