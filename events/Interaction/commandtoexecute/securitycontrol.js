@@ -82,7 +82,7 @@ module.exports = {
         } else {
             if (!test)
                 return errmsg.disablefunction(interaction)
-            if (!position)
+            if (!position && staff)
                 return errmsg.tohigtmsg(interaction)
             return errmsg.notpermisionmsg(interaction)
         }
