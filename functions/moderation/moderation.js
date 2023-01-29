@@ -130,7 +130,7 @@ async function mutef(interaction, member, reason) {
             .setThumbnail(cembed.color.Red)
             .setColor(cembed.color.Red)
         return interaction.reply({ embeds: [embed] })
-        
+
     }
     let embed = new EmbedBuilder()
         .setTitle("Utente mutato")
