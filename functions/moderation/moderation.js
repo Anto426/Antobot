@@ -116,14 +116,12 @@ async function mutef(interaction, member, reason) {
             permissions: [""]
         })
         interaction.guild.channels.cache.forEach(channel => {
-            channel.permissionOverwrites.set([
-                {
-                    id: muted.id,
-                    deny: [PermissionsBitField.Flags.SendMessages],
-                }
-            ])
+            channel.permissionOverwrites.create(muted.id, {
+                [PermissionsBitField.Flags.SendMessages]: false
+            })
         });
     }
+
     if (member.roles.cache.has(muted.id)) {
         const embed = new EmbedBuilder()
             .setTitle("Error")

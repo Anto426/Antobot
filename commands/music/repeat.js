@@ -43,7 +43,7 @@ module.exports = {
 
 
         if (!queue) {
-            errmsg.listvoid(interaction)
+           return errmsg.listvoid(interaction)
         }
         let args = interaction.options.getString("mode")
         let mode = null
