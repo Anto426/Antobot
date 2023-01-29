@@ -9,7 +9,7 @@ const cembed = require("../../setting/embed.json")
 async function banf(interaction, member, reason) {
     try {
 
-        const embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle("Utente bannato")
             .setDescription("<@" + member + ">" + " bannato")
             .setThumbnail(member.displayAvatarURL({ dynamic: true }))
@@ -18,7 +18,7 @@ async function banf(interaction, member, reason) {
                 { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
         interaction.reply({ embeds: [embed] })
-        const embeddm = new EmbedBuilder()
+        let embeddm = new EmbedBuilder()
             .setTitle("Sei stato bannato dal server mi dispiace,per la prossima volta impara a rispettare le regole")
             .setDescription("<@" + member + ">" + " bannato")
             .setThumbnail(member.displayAvatarURL({ dynamic: true }))
@@ -75,7 +75,7 @@ async function kickf(interaction, member) {
     try {
         let frasi = ["La prossima volta rispetta le regole coglione " + "<@" + member + ">" + " bannato"]
         var x = Math.floor(Math.random() * frasi.length);
-        const embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle("Utente bannato")
             .setDescription(frasi[x])
             .setThumbnail(member.displayAvatarURL({ dynamic: true }))
@@ -84,7 +84,7 @@ async function kickf(interaction, member) {
                 { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
         interaction.reply({ embeds: [embed] })
-        const embeddm = new EmbedBuilder()
+        let embeddm = new EmbedBuilder()
             .setTitle("Sei stato kikato dal server mi dispiace,per la prossima volta impara a rispettare le regole")
             .setDescription("<@" + member + ">" + " kikato")
             .setThumbnail(member.displayAvatarURL({ dynamic: true }))
@@ -124,15 +124,15 @@ async function mutef(interaction, member, reason) {
 
 
     if (member.roles.cache.has(muted.id)) {
-        const embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription(member.user.tag + " risulta già mutato")
             .setThumbnail(cembed.color.Red)
             .setColor(cembed.color.Red)
-        interaction.reply({ embeds: [embed] })
-        return
+        return interaction.reply({ embeds: [embed] })
+        
     }
-    const embed = new EmbedBuilder()
+    let embed = new EmbedBuilder()
         .setTitle("Utente mutato")
         .addFields([
             { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
@@ -142,7 +142,7 @@ async function mutef(interaction, member, reason) {
         .setColor(cembed.color["Green Blue"])
 
     interaction.reply({ embeds: [embed] })
-    const embeddm = new EmbedBuilder()
+    let embeddm = new EmbedBuilder()
         .setTitle("Utente mutato")
         .addFields([
             { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
@@ -152,15 +152,14 @@ async function mutef(interaction, member, reason) {
         .setColor(cembed.color["Green Blue"])
     await sendto(member, { embeds: [embeddm] }, interaction.channel)
     member.roles.add(muted).catch(() => {
-        errmsg.genericmsg(interaction)
-        return
+        return errmsg.genericmsg(interaction)
+
     })
 }
 
 async function unmute(interaction, member) {
     if (member.user.bot) {
         errmsg.bot(interaction)
-        return interaction.reply({ embeds: [embed] })
 
     }
 
@@ -168,15 +167,15 @@ async function unmute(interaction, member) {
 
 
     if (!member.roles.cache.has(muted.id)) {
-        const embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle(interaction.member.user.tag + " Error")
             .setDescription(member.user.tag + " risulta già smutato")
-            .setThumbnail(cembed.color.Red)
+            .setThumbnail(cembed.immage.err)
             .setColor(cembed.color.Red)
-        interaction.reply({ embeds: [embed] })
-        return
+        return interaction.reply({ embeds: [embed] })
+
     }
-    const embed = new EmbedBuilder()
+    let embed = new EmbedBuilder()
         .setTitle("Utente smutato")
         .setThumbnail(member.displayAvatarURL({ dynamic: true }))
         .setDescription("<@" + member + ">" + " smutato")
@@ -195,7 +194,7 @@ async function timeoutf(interaction, member, time, reason) {
     if (member.communicationDisabledUntilTimestamp == null || member.communicationDisabledUntilTimestamp < Date.now()) {
 
         member.timeout(time, reason).then(() => {
-            const embed = new EmbedBuilder()
+            let embed = new EmbedBuilder()
                 .setTitle("Utente timeoutato")
                 .addFields([
                     { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
@@ -207,15 +206,15 @@ async function timeoutf(interaction, member, time, reason) {
 
 
         }).catch(() => {
-            errmsg.genericmsg(interaction)
-            return
+            return errmsg.genericmsg(interaction)
+
         })
 
     } else {
-        const d = new Date(member.communicationDisabledUntilTimestamp);
+        let d = new Date(member.communicationDisabledUntilTimestamp);
         date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
         console.log(date);
-        const embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription(`${member.toString()} ha già un timeout!`)
             .addFields([
@@ -236,7 +235,7 @@ async function untimioutf(interaction, member,) {
 
     if (member.communicationDisabledUntilTimestamp != null || member.communicationDisabledUntilTimestamp > Date.now()) {
         member.timeout(null)
-        const embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle("Utente untimeoutato")
             .setThumbnail(member.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + member + ">" + " untimeoutato")
@@ -244,7 +243,7 @@ async function untimioutf(interaction, member,) {
         interaction.reply({ embeds: [embed] })
 
     } else {
-        const embed = new EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription(`${member.toString()} non ha un timeout!`)
             .setThumbnail(cembed.immage.err)
