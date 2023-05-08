@@ -1,6 +1,5 @@
 const { PermissionsBitField } = require('discord.js')
 const moderationf = require("../../functions/moderation/moderation")
-const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "ban",
     permisions: [PermissionsBitField.Flags.BanMembers, PermissionsBitField.Flags.Administrator],

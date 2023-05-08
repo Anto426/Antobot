@@ -1,6 +1,5 @@
 const { EmbedBuilder } = require('discord.js')
 const cembed = require("./../../setting/embed.json")
-const cguild = require("./../../setting/guild.json")
 const errmsg = require("./../../functions/msg/errormsg")
 module.exports = {
     name: "repeat",
