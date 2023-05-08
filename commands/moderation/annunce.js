@@ -4,7 +4,7 @@ const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "announce",
     permisions: [PermissionsBitField.Flags.ManageEvents, PermissionsBitField.Flags.Administrator],
-    allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    allowedchannels: global.AllowCommands,
     position: false,
     test: false,
     data: {

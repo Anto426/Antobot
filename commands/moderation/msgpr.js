@@ -1,11 +1,10 @@
 const { PermissionsBitField, EmbedBuilder } = require('discord.js')
 const { sendto } = require('../../functions/msg/msg')
 const cembed = require("./../../setting/embed.json")
-const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "msgpr",
     permisions: [PermissionsBitField.Flags.ManageEvents, PermissionsBitField.Flags.Administrator],
-    allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    allowedchannels: global.AllowCommands,
     position: false,
     test: false,
     data: {

@@ -5,7 +5,7 @@ const errmsg = require("./../../functions/msg/errormsg")
 module.exports = {
     name: "stop",
     permisions: [],
-    allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    allowedchannels: global.AllowCommands,
     position: false,
     test: false,
     data: {

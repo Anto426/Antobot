@@ -1,11 +1,10 @@
 const { EmbedBuilder } = require('discord.js')
 const { inspect } = require(`util`)
 const cembed = require("./../../setting/embed.json")
-const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "eval",
     permisions: [],
-    allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    allowedchannels: global.AllowCommands,
     position: false,
     test: false,
     data: {

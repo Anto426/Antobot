@@ -1,11 +1,10 @@
 const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require("discord.js")
 const fs = require("fs")
 const cembed = require("./../../setting/embed.json")
-const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "help",
     permisions: [],
-    allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    allowedchannels: global.AllowCommands,
     position: false,
     test: false,
     data: {

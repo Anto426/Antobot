@@ -1,15 +1,13 @@
 const { EmbedBuilder } = require("discord.js")
 const { intclient } = require("./../../functions/client/intclient")
 const { boot } = require("./../../functions/client/boot")
-const { on } = require("./../../index")
 const cembed = require("./../../setting/embed.json")
-const cguild = require("./../../setting/guild.json")
 const { eventload } = require("../../functions/client/loadc-e")
 let temp = []
 module.exports = {
     name: "reboot",
     permisions: [],
-    allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    allowedchannels: global.AllowCommands,
     position: false,
     test: false,
     data: {

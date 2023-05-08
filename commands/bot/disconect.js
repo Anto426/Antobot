@@ -1,12 +1,11 @@
 const { EmbedBuilder } = require("discord.js")
 const cembed = require("./../../setting/embed.json")
-const cguild = require("./../../setting/guild.json")
 const fs = require("fs")
 const patch = "./.env"
 module.exports = {
     name: "disconect",
     permisions: [],
-    allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    allowedchannels: global.AllowCommands,
     position: false,
     test: false,
     data: {

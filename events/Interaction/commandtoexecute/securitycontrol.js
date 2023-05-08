@@ -46,7 +46,7 @@ module.exports = {
             channel = true
         } else {
             command.allowedchannels.forEach(chan => {
-                if (interaction.channel == chan) {
+                if (interaction.channel == chan.id) {
                     channel = true
                 }
             })

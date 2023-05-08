@@ -4,6 +4,7 @@ const { comandregisterallguild } = require('../../functions/client/comandregiste
 const { mainhollyday } = require('../hollyday/hollyday');
 const { timeon } = require('./timeon');
 const { statusupdate } = require('./statusupdate');
+const { setcommandchannel } = require("../moderation/setcomandchannels");
 bootstate = false
 
 
@@ -40,7 +41,8 @@ Welcome To Anto's Bot V${info.version}
     setTimeout(() => {
         bootstate = true
         comandregisterallguild()
-        mainhollyday()
+        setcommandchannel()
+        //mainhollyday()
     }, 1000 * 20);
 
 }

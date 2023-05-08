@@ -1,11 +1,10 @@
 const { EmbedBuilder } = require("discord.js")
 const cembed = require("./../../setting/embed.json")
 const emoji = require("./../../setting/emoji.json")
-const cguild = require("./../../setting/guild.json")
 module.exports = {
     name: "ping",
     permisions: [],
-    allowedchannels: [cguild["Anto's  Server"].channel.general.command, cguild["Anto's  Server"].channel.temp.command],
+    allowedchannels: global.AllowCommands,
     position: false,
     test: false,
     data: {
