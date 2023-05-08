@@ -10,22 +10,22 @@ module.exports = {
 
         // owner
         for (let i in ow.onwerid)
-            if (interaction.member.id == ow.onwerid[i]) {
+            if (interaction.member.id == ow.onwerid[i])
                 owner = true
-            }
+
 
 
         // sowner
-        if (interaction.member.id == interaction.guild.ownerId) {
+        if (interaction.member.id == interaction.guild.ownerId)
             sowner = true
-        }
 
-        if (command.test && !owner) {
+
+        if (command.test && !owner)
             test = false
-        }
-        if (command.permisions.length == 0) {
+
+        if (command.permisions.length == 0)
             perm = true
-        } else {
+        else {
             command.permisions.forEach(per => {
                 if (interaction.member.permissions.has(per)) {
                     staff = true
@@ -42,9 +42,9 @@ module.exports = {
             position = true
         }
 
-        if (command.allowedchannels.length == 0) {
+        if (command.allowedchannels.length == 0)
             channel = true
-        } else {
+        else {
             command.allowedchannels.forEach(chan => {
                 if (interaction.channel == chan.id) {
                     channel = true
@@ -52,10 +52,10 @@ module.exports = {
             })
         }
 
-        if (owner || sowner) {
+        if (owner || sowner)
             execute = true
 
-        }
+
 
 
         if (staff || perm && channel) {

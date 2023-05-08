@@ -5,16 +5,16 @@ module.exports = {
     async execute(oldMember, newMember) {
 
 
-        let category = newMember.guild.channels.cache.get(cguild["Anto's  Server"].channel.temp.id)
+        let category = newMember.guild.channels.cache.get(cguild[oldMember.guild.name].channel.temp.id)
         let member = newMember.guild.members.cache.get(newMember.id)
         let channel = newMember.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.parent == category && x.name == member.user.username)
         try {
 
 
-            for (let x in cguild["Anto's  Server"].channel.temp.function) {
-                if (newMember.channel.id == cguild["Anto's  Server"].channel.temp.function[x].id) {
+            for (let x in cguild[newMember.guild.name].channel.temp.function) {
+                if (newMember.channel.id == cguild[newMember.guild.name].channel.temp.function[x].id) {
                     if (channel) {
-                        channel.setUserLimit(cguild["Anto's  Server"].channel.temp.function[x].limite)
+                        channel.setUserLimit(cguild[newMember.guild.name].channel.temp.function[x].limite)
                         member.voice.setChannel(channel)
                     } else {
 
@@ -22,7 +22,7 @@ module.exports = {
                             name: member.user.username,
                             type: 2,
                             parent: category,
-                            userLimit: cguild["Anto's  Server"].channel.temp.function[x].limite,
+                            userLimit: cguild[newMember.guild.name].channel.temp.function[x].limite,
 
                         })
 
