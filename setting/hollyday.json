@@ -9,12 +9,18 @@
     {
       "name": "San Valentino",
       "date": "February 14, 2023 00:00:00",
-      "phrase": "Buon San Valentino!"
+      "phrase": "Buon San Valentino!",
+      "image": "https://cdn.discordapp.com/attachments/946881043523330108/1058762112475873420/Notte-di-Capodanno.jpg"
     },
     {
       "name": "Pasqua",
       "date": "April 16, 2023 00:00:00",
       "phrase": "Buona Pasqua!"
+    },
+    {
+      "name": "Fine Scuola",
+      "date": "June 10, 2023 00:00:00",
+      "phrase": "Buone Vacanze a tutti!"
     },
     {
       "name": "Halloween",

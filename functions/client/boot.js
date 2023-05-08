@@ -42,7 +42,7 @@ Welcome To Anto's Bot V${info.version}
         bootstate = true
         comandregisterallguild()
         setcommandchannel()
-        //mainhollyday()
+        mainhollyday()
     }, 1000 * 20);
 
 }

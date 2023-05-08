@@ -12,7 +12,7 @@ module.exports = {
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
             .setColor(cembed.color["Gold Fusion"])
 
-        member.guild.channels.cache.get(cguild[member.guild.name].channel.serverinfo.welcome).send({ embeds: [embed] })
+        member.guild.channels.cache.get(cguild[member.guild.name].channel.info.welcome).send({ embeds: [embed] })
         member.roles.add(member.guild.roles.cache.get(cguild[member.guild.name].role.user))
 
 

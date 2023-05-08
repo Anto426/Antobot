@@ -28,9 +28,11 @@ async function updatechannel(guild) {
 
     let timenexthollyday = new Date(festa.date).getTime()
     setInterval(async () => {
+        console.log("Update")
         let timereminig = timenexthollyday - timenow
         let time = await `${times(timereminig)}`
-        guild.channels.cache.get(cguild["Anto's  Server"].channel.hollyday.nexthollyday).setName(time.toString()).catch((err) => { console.log(err.toString()) })
+        console.log(`Update : ${time}`)
+        guild.channels.cache.get(cguild[guild.name].channel.hollyday.nexthollyday).setName(time.toString()).catch((err) => { console.log(err.toString()) })
     }, 1000 * 60 * 5);
 
 }

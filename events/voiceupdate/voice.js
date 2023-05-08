@@ -25,7 +25,6 @@ module.exports = {
                             userLimit: cguild[newMember.guild.name].channel.temp.function[x].limite,
 
                         })
-
                         console.log(channel)
                         member.voice.setChannel(channel)
                         return
