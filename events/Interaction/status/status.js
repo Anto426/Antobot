@@ -3,7 +3,7 @@ const cembed = require("../../../setting/embed.json")
 module.exports = {
     name: "interactionCreate-statusoff",
     async execute(interaction) {
-
+        if (!global.check) return
         let embed = new EmbedBuilder()
             .setTitle("Bot non pronto")
             .setDescription("Il bot non è ancora pronto")

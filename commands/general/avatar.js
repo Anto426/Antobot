@@ -18,11 +18,11 @@ module.exports = {
     },
     execute(interaction) {
 
-        var member = interaction.options.getMember("user")
-        if (!member) {
+        var utente = interaction.options.getMember("user")
+        if (!utente)
             utente = interaction.member
-        }
-        var embed = new EmbedBuilder()
+     
+            var embed = new EmbedBuilder()
             .setTitle(utente.user.tag)
             .setDescription("L'avatar di questo utente")
             .setColor(cembed.color.Green)

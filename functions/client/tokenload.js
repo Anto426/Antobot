@@ -14,6 +14,7 @@ async function rep() {
     switch (scelta.toLowerCase()) {
         case "y":
             console.log("Client loading ....")
+            global.check = true
             boot()
             break;
         case "n":
