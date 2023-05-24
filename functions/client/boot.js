@@ -1,7 +1,18 @@
 const info = require("../../package.json");
-const { statusupdate } = require("./clientstatus");
+const { comandload } = require("./../../functions/client/loadc-e");
+const { comandregisterallguild } = require('../../functions/client/comandregister');
+const { mainhollyday } = require('../hollyday/hollyday');
+const { timeon } = require('./timeon');
+const { statusupdate } = require('./statusupdate');
+const { setcommandchannel } = require("../moderation/setcomandchannels");
+bootstate = false
+
 
 async function boot() {
+
+    statusupdate()
+
+    comandload()
 
     console.log(`
 Welcome To Anto's Bot V${info.version}
@@ -13,19 +24,26 @@ Welcome To Anto's Bot V${info.version}
 -Client ID :  ${client.user.id}
     
 -N. guild: ${client.guilds.cache.size}
+    
+-Comand Load: ${client.commands.size}
                
 -Token: ${client.token}
     
 -Link: https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands
     
--Repo: https://github.com/Anto426
+-Repo: ${info.repository.url}
 
-By Anto426
 -------------------------------------------------------------------------------------
     
 `,)
-    statusupdate()
 
+    timeon()
+    setTimeout(() => {
+        bootstate = true
+        comandregisterallguild()
+        setcommandchannel()
+        mainhollyday()
+    }, 1000 * 20);
 
 }
 
