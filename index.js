@@ -1,19 +1,5 @@
-// New version of Anto bot v 5.0 
-// const
-const { intclient } = require('./functions/client/intclient');
-const { eventload } = require("./functions/client/loadc-e");
-const { tokenload } = require('./functions/client/tokenload');
-global.bootstate = false
-global.check = false
-global.AllowCommands = []
-//client 
-intclient()
-// token 
-try {
-    require("dotenv").config()
-} catch { }
+// New version of Anto bot v 6.0
+const { getBotInfo } = require("./functions/client/infoclient");
 
-tokenload(process.env.TOKEN)
-
-eventload()
-
+require("dotenv").config()
+getBotInfo(process.env.TOKEN);
