@@ -1,4 +1,5 @@
 const info = require("../../package.json");
+const { mainhollyday } = require("../count/hollydaycount");
 const { statusupdate } = require("./clientstatus");
 
 async function boot() {
@@ -25,6 +26,7 @@ By Anto426
     
 `,)
     statusupdate()
+    mainhollyday()
 
 
 }
