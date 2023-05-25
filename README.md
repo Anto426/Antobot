@@ -1,4 +1,4 @@
-# 💫 Anto's Bot v5.2
+# 💫 Anto's Bot v6.0
 
 This is a simple bot created by me for my ds server
 
