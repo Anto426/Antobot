@@ -17,9 +17,7 @@ ${member} benvenuto su  ${member.guild.name} spero che ti possa trovare sei il n
                 files: [canavas],
             })
         member.roles.add(member.guild.roles.cache.get(cguild[member.guild.name].role.user))
-    } catch (err) {
-        console.log(err)
-    }
+    } catch { }
 }
 async function logmember(member, cout) {
 
@@ -40,9 +38,7 @@ async function logmember(member, cout) {
             .setColor(cembed.color.verde)
         sendtoalllog({ embeds: [embed], })
 
-    } catch (err) {
-        console.log(err)
-    }
+    } catch { }
 }
 module.exports = {
     welcomeembed,
