@@ -2,10 +2,11 @@ const info = require("../../package.json");
 const { mainhollyday } = require("../count/hollydaycount");
 const { statusupdate } = require("./clientstatus");
 const { comandload, eventload } = require("./loadc-e");
+const { timeon } = require("./timeon");
 
 async function boot() {
-
-    console.log(`
+    try {
+        console.log(`
 Welcome To Anto's Bot V${info.version}
     
 -Client Name : ${client.user.username}
@@ -26,12 +27,13 @@ By Anto426
 -------------------------------------------------------------------------------------
     
 `,)
-    comandload()
-    eventload()
-    statusupdate()
-    mainhollyday()
+        timeon()
+        comandload()
+        eventload()
+        statusupdate()
+        mainhollyday()
 
-
+    } catch { }
 }
 
 module.exports = {

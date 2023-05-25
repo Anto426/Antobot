@@ -16,9 +16,7 @@ ${festa.description}
                 content: message,
                 files: [attachment],
             })
-    } catch (err) {
-        console.log(err)
-    }
+    } catch { }
 }
 
 module.exports = {

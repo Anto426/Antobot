@@ -25,7 +25,7 @@ async function comandload() {
                 }
             }
         }
-    } catch { console.log("Err:commands not load") }
+    } catch (err) { console.log("Err:commands not load", err) }
 }
 
 
@@ -41,7 +41,7 @@ function eventload() {
                     let events = event.name.split("-")
                     try {
                         client.on(events[0], (...args) => {
-                                event.execute(...args)
+                            event.execute(...args)
                         });
                     } catch { }
                 } else {
@@ -51,7 +51,7 @@ function eventload() {
                         let events = event.name.split("-")
                         try {
                             client.on(events[0], (...args) => {
-                                    event.execute(...args)
+                                event.execute(...args)
                             });
                         } catch { }
                     }
