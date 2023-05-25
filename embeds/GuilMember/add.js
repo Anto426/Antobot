@@ -1,6 +1,7 @@
 const cguild = require("./../../settings/guild.json")
-const { AttachmentBuilder } = require("discord.js")
+const { EmbedBuilder } = require("discord.js")
 const cembed = require("./../../settings/embed.json")
+const { sendtoalllog } = require("../../functions/log/sendtolog")
 async function welcomeembed(member, cout, canavas) {
 
     try {
@@ -20,35 +21,30 @@ ${member} benvenuto su  ${member.guild.name} spero che ti possa trovare sei il n
         console.log(err)
     }
 }
-async function logmember(member, cout, canavas) {
+async function logmember(member, cout) {
 
     try {
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Mese è 0-based
-        const year = today.getFullYear();
+        const day = String(new Date().getDate()).padStart(2, '0');
+        const month = String(new Date().getMonth() + 1).padStart(2, '0'); // Mese è 0-based
+        const year = new Date().getFullYear();
         const formattedDate = `${day}/${month}/${year}`;
-        const embed = new AttachmentBuilder()
+        const embed = new EmbedBuilder()
             .setTitle("Nuovo Utente")
             .addFields(
                 { name: ":bust_in_silhouette: name", value: member.user.tag },
-                { name: "id", value: member.user.tag },
-                { name: ":time: ora ", value: formattedDate }
+                { name: ":id: id", value: member.user.id },
+                { name: ":timer: ora ", value: formattedDate },
+                { name: "mebro", value: `${cout} membro` }
             )
-            .setThumbnail(festa.image)
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
             .setColor(cembed.color.verde)
-        client.guilds.cache.find(x => x.id == cguild["Anto's  Server"].id).channels.cache.get(cguild["Anto's  Server"].channel.bot["private-log"]).send(
-            {
-                embed: embed,
-            })
-        client.guilds.cache.find(x => x.id == cguild["Anto's  Server"].id).channels.cache.get(cguild["Anto's  Server"].channel.bot["public-log"]).send(
-            {
-                embed: embed,
-            })
+        sendtoalllog({ embeds: [embed], })
 
     } catch (err) {
         console.log(err)
     }
 }
 module.exports = {
-    welcomeembed
+    welcomeembed,
+    logmember
 }
