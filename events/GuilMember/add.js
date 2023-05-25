@@ -1,6 +1,6 @@
 const { createCanvas, loadImage, registerFont } = require("canvas")
 const { AttachmentBuilder } = require("discord.js");
-const { welcomeembed, logmember } = require("../../embeds/GuilMember/add");
+const { welcomeembed, logaddmember } = require("../../embeds/GuilMember/add");
 registerFont("./canavas/font/asapCondensed.ttf", { family: "asapCondensed" });
 registerFont("./canavas/font/NotoSansJP-Bold.ttf", { family: "NotoSansJP-Bold" });
 module.exports = {
@@ -44,7 +44,7 @@ module.exports = {
                 let attachment = new AttachmentBuilder(canvas.toBuffer(), { name: "canvas.png" })
 
                 welcomeembed(member, humans.size, attachment)
-                logmember(member, humans.size)
+                logaddmember(member, humans.size)
 
             }
         } catch (err) { console.log(err) }
