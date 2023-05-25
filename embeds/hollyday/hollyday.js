@@ -1,17 +1,24 @@
 const cguild = require("./../../settings/guild.json")
+const { AttachmentBuilder } = require("discord.js")
 async function congratulatioembed(festa) {
 
     try {
-        const embed = new Discord.EmbedBuilder()
-            .setTitle(festa.name)
-            .setDescription(`
-'@everyone'
-${festa.descrizione}
-`)
-            .setThumbnail(festa.image)
-            .setColor(festa.color)
-        guild.channels.cache.get(cguild["Anto's  Server"].channel.serverinfo.annunce).send({ embeds: [embed] })
-    } catch { }
+
+        const message = `
+        ╚»★${festa.title}★«╝
+${festa.description}
+        
+        
+        `
+        const attachment = new AttachmentBuilder(festa.image);
+        client.guilds.cache.find(x => x.id == cguild["Anto's  Server"].id).channels.cache.get(cguild["Anto's  Server"].channel.info.annunce).send(
+            {
+                content: message,
+                files: [attachment],
+            })
+    } catch (err) {
+        console.log(err)
+    }
 }
 
 module.exports = {

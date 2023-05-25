@@ -1,6 +1,7 @@
 const info = require("../../package.json");
 const { mainhollyday } = require("../count/hollydaycount");
 const { statusupdate } = require("./clientstatus");
+const { comandload, eventload } = require("./loadc-e");
 
 async function boot() {
 
@@ -25,6 +26,8 @@ By Anto426
 -------------------------------------------------------------------------------------
     
 `,)
+    comandload()
+    eventload()
     statusupdate()
     mainhollyday()
 

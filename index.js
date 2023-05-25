@@ -3,3 +3,5 @@ const { getBotInfo } = require("./functions/client/infoclient");
 
 require("dotenv").config()
 getBotInfo(process.env.TOKEN);
+
+

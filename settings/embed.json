@@ -1,0 +1,21 @@
+{
+  "color": {
+    "nero": "#000000",
+    "bianco": "#FFFFFF",
+    "rosso": "#FF0000",
+    "verde": "#00FF00",
+    "blu": "#0000FF",
+    "giallo": "#FFFF00",
+    "arancione": "#FFA500",
+    "viola": "#800080",
+    "rosa": "#FFC0CB",
+    "grigio": "#808080",
+    "marrone": "#A52A2A",
+    "celeste": "#00FFFF",
+    "azzurro": "#87CEEB",
+    "oro": "#FFD700",
+    "argento": "#C0C0C0",
+    "indaco": "#4B0082"
+  },
+  "image": {}
+}

@@ -1,0 +1,32 @@
+{
+  "mc": {
+    "image": "https://cdn.discordapp.com/attachments/946881043523330108/946887019861270558/16009_1.jpg",
+    "server": {
+      "hypixel": {
+        "ip": "mc.hypixel.net",
+        "emoji": "🔥",
+        "image": "https://cdn.discordapp.com/attachments/946881043523330108/946881473024237630/hypixel.png"
+      },
+      "mineplex": {
+        "ip": "us.mineplex.com",
+        "emoji": "💎",
+        "image": "https://cdn.discordapp.com/attachments/946881043523330108/1110930253666336839/Mineplex_logo_29.webp"
+      },
+      "thehive": {
+        "ip": "play.hivemc.com",
+        "emoji": "🐝",
+        "image": "https://cdn.discordapp.com/attachments/946881043523330108/1110930402970972211/download.jpg"
+      },
+      "lunarclient": {
+        "ip": "play.lunarclient.com",
+        "emoji": "🌙",
+        "image": "https://cdn.discordapp.com/attachments/946881043523330108/1110930253368528967/uLTLhANK_400x400.jpg"
+      },
+      "coral.mc": {
+        "ip": "coral.mc",
+        "emoji": "🐠",
+        "image": "https://cdn.discordapp.com/attachments/946881043523330108/946881288219025448/logo.png"
+      }
+    }
+  }
+}

@@ -27,7 +27,7 @@ async function updatecount(festa, channelcount) {
             let time = await `${times(timereminig)}`
             console.log(`Update : ${time}`)
             channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
-        }, 1000);
+        }, 1000 * 60 * 5);
     } catch { }
 
 }
@@ -41,6 +41,7 @@ async function sendcongratulations(festa) {
             congratulatioembed(festa)
             return mainhollyday()
         }
+
 
 
     }, 1000 * 60)
