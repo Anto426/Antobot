@@ -62,11 +62,6 @@ async function mainhollyday() {
             .catch(console.error);
         updatecount(festa.date, channelcount)
         sendcongratulations(festa)
-        client.on('messageCreate', message => {
-            if (message.content === '!test') {
-                congratulatioembed(festa)
-            }
-        });
     } catch { }
 
 
