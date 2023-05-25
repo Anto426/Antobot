@@ -4,6 +4,8 @@ This is a simple bot created by me for my ds server
 
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=plastic&logo=javascript&logoColor=%23F7DF1E)
 
+
+# BETA
 # ╚»★Nuova versione di Anto's Bot★«╝
 
 -Riscritto Da 0 con una nuova architettura
