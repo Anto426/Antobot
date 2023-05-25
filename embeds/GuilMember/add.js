@@ -25,10 +25,10 @@ async function logaddmember(member, cout) {
         const embed = new EmbedBuilder()
             .setTitle("Nuovo Utente")
             .addFields(
-                { name: ":bust_in_silhouette: name", value: member.user.tag },
-                { name: ":id: id", value: member.user.id },
-                { name: ":timer: ora ", value: `${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}` },
-                { name: ":1234: mebro", value: `${cout} membro` }
+                { name: ":bust_in_silhouette: NAME", value: member.user.tag },
+                { name: ":id: ID", value: `\`\`\`\n${member.user.id} membro\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}\`\`\`` },
+                { name: ":1234: MEMBRO", value: `\`\`\`\n${cout} membro\`\`\`` }
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
             .setColor(cembed.color.verde)

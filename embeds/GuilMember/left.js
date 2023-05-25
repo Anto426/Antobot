@@ -7,9 +7,9 @@ async function logleftmember(member) {
         const embed = new EmbedBuilder()
             .setTitle("Utente Uscito")
             .addFields(
-                { name: ":bust_in_silhouette: name", value: member.user.tag },
-                { name: ":id: id", value: member.user.id },
-                { name: ":timer: ora ", value: `${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}` },
+                { name: ":bust_in_silhouette: NAME", value: member.user.tag },
+                { name: ":id: ID", value: `\`\`\`\n${member.user.id}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}\`\`\`` },
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
             .setColor(cembed.color.rosso)
