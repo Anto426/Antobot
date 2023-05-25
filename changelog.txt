@@ -4,3 +4,5 @@
 -Tolto il supposto per Distube(comandi musicali)
 -Riscritti e Aggiornati gli embed
 -Aggiornato il count delle feste 
+-Aggiunti i log
+-aggiuto il supporto a canavas
