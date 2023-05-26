@@ -13,7 +13,7 @@ async function logleftmember(member) {
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
             .setColor(cembed.color.rosso)
-        sendtoalllog({ embeds: [embed],})
+        sendtoalllog({ embeds: [embed], })
 
     } catch { }
 }
