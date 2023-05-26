@@ -2,7 +2,7 @@ const { serverinfoembed } = require('../../embeds/commands/general/general');
 module.exports = {
     name: "serverinfo",
     permisions: [],
-    allowedchannels: global.AllowCommands,
+    allowedchannels: [],
     position: false,
     test: false,
     data: {

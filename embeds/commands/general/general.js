@@ -18,13 +18,13 @@ async function pingembed(interaction) {
 }
 
 
-async function avatarembed(interaction) {
+async function avatarembed(interaction, member) {
     try {
         var embed = new EmbedBuilder()
-            .setTitle(interaction.memmber.user.tag)
+            .setTitle(member.user.tag)
             .setDescription("L'avatar di questo utente")
             .setColor(cembed.color.verde)
-            .setImage(interaction.memmber.user.displayAvatarURL({
+            .setImage(member.user.displayAvatarURL({
                 dynamic: true,
                 format: "png",
                 size: 512

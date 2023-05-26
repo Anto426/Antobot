@@ -4,7 +4,7 @@ const cembed = require("./../../settings/embed.json")
 module.exports = {
     name: "help",
     permisions: [],
-    allowedchannels: global.AllowCommands,
+    allowedchannels: [],
     position: false,
     test: false,
     data: {

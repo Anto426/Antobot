@@ -3,7 +3,7 @@ const cembed = require("./../../settings/embed.json");
 module.exports = {
     name: "servermc",
     permisions: [],
-    allowedchannels: global.AllowCommands,
+    allowedchannels: [],
     position: false,
     test: false,
     data: {

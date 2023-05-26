@@ -2,7 +2,7 @@ const { userinfoembed } = require('../../embeds/commands/general/general');
 module.exports = {
     name: "userinfo",
     permisions: [],
-    allowedchannels: global.AllowCommands,
+    allowedchannels: [],
     position: false,
     test: false,
     data: {

@@ -2,7 +2,7 @@ const { avatarembed } = require('../../embeds/commands/general/general');
 module.exports = {
     name: "avatar",
     permisions: [],
-    allowedchannels: global.AllowCommands,
+    allowedchannels: [],
     position: false,
     test: false,
     data: {
@@ -21,7 +21,7 @@ module.exports = {
             if (!utente)
                 utente = interaction.member
 
-            avatarembed(interaction)
+            avatarembed(interaction, utente)
         } catch { }
     }
 }
