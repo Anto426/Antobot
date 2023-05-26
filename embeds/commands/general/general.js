@@ -38,12 +38,12 @@ async function serverinfoembed(interaction) {
         let countingonline = await interaction.guild.members.cache.filter(x => x.presence?.status == 'online').size
         let countingidle = await interaction.guild.members.cache.filter(x => x.presence?.status == 'idle').size
         const embed = new EmbedBuilder()
-            .setTitle(server.name)
+            .setTitle(interaction.guild.name)
             .setColor(cembed.color.verde)
             .setDescription("Tutte le info su questo server")
-            .setThumbnail(server.iconURL({ dynamic: true }) || configs.settings.embed.images.noimmage)
+            .setThumbnail(interaction.guild.iconURL({ dynamic: true }) || configs.settings.embed.images.noimmage)
             .addFields([
-                { name: 'Owner', value: `\`\`\`\n${interaction.guild.members.cache.get(server.ownerId).nickname}\`\`\`` },
+                { name: 'Owner', value: `\`\`\`\n${interaction.guild.members.cache.get(interaction.guild.ownerId).nickname}\`\`\`` },
                 { name: `Server id:`, value: `\`\`\`\n${interaction.guil.id}\`\`\`` },
                 {
                     name: `Members:`, value: ` \`\`\`\n  
