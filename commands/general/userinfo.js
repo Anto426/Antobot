@@ -1,5 +1,3 @@
-const { PermissionsBitField, EmbedBuilder } = require('discord.js');
-const cembed = require("./../../setting/embed.json");
 const { userinfoembed } = require('../../embeds/commands/general/general');
 module.exports = {
     name: "userinfo",

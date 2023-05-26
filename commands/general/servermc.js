@@ -1,3 +1,5 @@
+const { EmbedBuilder } = require('discord.js');
+const cembed = require("./../../settings/embed.json");
 module.exports = {
     name: "servermc",
     permisions: [],
@@ -36,7 +38,7 @@ module.exports = {
             Usa il menu qui sotto per ottenere ip dei server di minecraft
             ${server.join("\n \n")}`)
             .setThumbnail(cgame.mc.image)
-            .setColor(cembed.color.Purple)
+            .setColor(cembed.color.viola)
         interaction.reply({ embeds: [embed], components: [row] })
     }
 }

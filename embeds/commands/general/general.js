@@ -39,7 +39,7 @@ async function serverinfoembed(interaction) {
         let countingidle = await interaction.guild.members.cache.filter(x => x.presence?.status == 'idle').size
         const embed = new EmbedBuilder()
             .setTitle(server.name)
-            .setColor(cembed.color.Green)
+            .setColor(cembed.color.verde)
             .setDescription("Tutte le info su questo server")
             .setThumbnail(server.iconURL({ dynamic: true }) || configs.settings.embed.images.noimmage)
             .addFields([
@@ -87,7 +87,7 @@ async function userinfoembed(interaction, member, elencoPermessi) {
 
 
             ])
-            .setColor(cembed.color.Green)
+            .setColor(cembed.color.verde)
         interaction.reply({ embeds: [embed] })
     } catch (err) { genericerr(interaction, err) }
 }

@@ -1,5 +1,3 @@
-const { EmbedBuilder } = require('discord.js');
-const cembed = require("./../../setting/embed.json");
 const { serverinfoembed } = require('../../embeds/commands/general/general');
 module.exports = {
     name: "serverinfo",
