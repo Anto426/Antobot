@@ -11,7 +11,7 @@ async function logjoinvocal(member, channel) {
                 { name: ":id: ID UTENTE ", value: `\`\`\`\n${member.user.id}\`\`\`` },
                 { name: ":mega: CANALE", value: `\`\`\`\n${channel.name}\`\`\`` },
                 { name: ":id: ID CANALE", value: `\`\`\`\n${channel.id}\`\`\`` },
-                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
             .setColor(cembed.color.verde)
@@ -32,7 +32,7 @@ async function logchangevocal(member, newchannel, oldchannel) {
                 { name: ":id: ID VECCHIO CANALE", value: `\`\`\`\n${oldchannel.id}\`\`\`` },
                 { name: ":mega: NUOVO CANALE", value: `\`\`\`\n${newchannel.name}\`\`\`` },
                 { name: ":id: ID NUOVO CANALE", value: `\`\`\`\n${newchannel.id}\`\`\`` },
-                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
             .setColor(cembed.color.giallo)
@@ -52,7 +52,7 @@ async function logforcechangevocal(member, mover, newchannel, oldchannel) {
                 { name: ":id: ID VECCHIO CANALE", value: `\`\`\`\n${oldchannel.id}\`\`\`` },
                 { name: ":mega: NUOVO CANALE", value: `\`\`\`\n${newchannel.name}\`\`\`` },
                 { name: ":id: ID NUOVO CANALE", value: `\`\`\`\n${newchannel.id}\`\`\`` },
-                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
                 { name: ":bust_in_silhouette: DA", value: `\`\`\`\n${mover}\`\`\`` },
 
             )
@@ -72,7 +72,7 @@ async function logquitvocal(member, oldchannel) {
                 { name: ":id: ID UTENTE", value: `\`\`\`\n${member.user.id}\`\`\`` },
                 { name: ":mega: VECCHIO CANALE", value: `\`\`\`\n${oldchannel.name}\`\`\`` },
                 { name: ":id: ID VECCHIO CANALE", value: `\`\`\`\n${oldchannel.id}\`\`\`` },
-                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
 
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))

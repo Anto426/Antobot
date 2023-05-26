@@ -63,16 +63,17 @@ module.exports = {
                 if (position)
                     execute = true
             }
-
-            if (execute && !owner) {
-                const commandsFiles = fs.readdirSync(`./commands/bot/`);
-                for (const file of commandsFiles) {
-                    var commands2 = require(`./../../../commands/bot/${file}`);
-                    if (commands2.name == command.name) {
-                        execute = false
+            try {
+                if (execute && !owner) {
+                    const commandsFiles = fs.readdirSync(`./commands/bot/`);
+                    for (const file of commandsFiles) {
+                        var commands2 = require(`./../../../commands/bot/${file}`);
+                        if (commands2.name == command.name) {
+                            execute = false
+                        }
                     }
                 }
-            }
+            } catch { }
             console.log("Owner:" + owner, "Sowner:" + sowner, "Staff:" + staff, "Per:" + perm, "Channel:" + channel, "position:" + position, "test:" + !test, "execute:" + execute)
             if (execute && test) {
                 try {

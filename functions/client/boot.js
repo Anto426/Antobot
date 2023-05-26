@@ -33,7 +33,7 @@ By Anto426
         statusupdate()
         mainhollyday()
 
-    } catch { }
+    } catch(err) { console.log(err)}
 }
 
 module.exports = {
