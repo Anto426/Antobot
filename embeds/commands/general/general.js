@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, StringSelectMenuBuilder, ChannelType } = require("discord.js")
+const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, ChannelType } = require("discord.js")
 const cembed = require("./../../../settings/embed.json")
 const { genericerr } = require("../../err/error")
 async function pingembed(interaction) {
