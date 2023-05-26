@@ -1,6 +1,6 @@
 const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require("discord.js")
 const fs = require("fs")
-const cembed = require("./../../setting/embed.json")
+const cembed = require("./../../settings/embed.json")
 module.exports = {
     name: "help",
     permisions: [],
@@ -50,7 +50,7 @@ module.exports = {
             Usa il menu qui sotto per scegliere la categoria di comandi da vedere!
             ${folders.join("\n \n")}`)
                 .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-                .setColor(cembed.color.Purple)
+                .setColor(cembed.color.viola)
             interaction.reply({ embeds: [embed], components: [row] })
 
         } catch { }
