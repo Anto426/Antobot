@@ -7,5 +7,8 @@ require("dotenv").config()
 
 intclient()
 client.login(process.env.TOKEN)
+
+global.options = { timeZone: 'Europe/Rome' };
+
 setTimeout(() => { boot() }, 5000)
 

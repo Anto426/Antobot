@@ -9,7 +9,7 @@ async function logleftmember(member) {
             .addFields(
                 { name: ":bust_in_silhouette: NAME", value: member.user.tag },
                 { name: ":id: ID", value: `\`\`\`\n${member.user.id}\`\`\`` },
-                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleTimeString()}\n${new Date().toLocaleDateString()}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n${new Date().toLocaleDateString('it-IT', optionsdate)}\`\`\`` },
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
             .setColor(cembed.color.rosso)
