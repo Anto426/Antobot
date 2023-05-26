@@ -23,9 +23,9 @@ async function avatarembed(interaction, member) {
 
 
         const banner = new ButtonBuilder()
-            .setCustomId('Success')
+            .setCustomId('banner')
             .setLabel('Banner')
-            .setStyle(ButtonStyle.Danger);
+            .setStyle(ButtonStyle.Success);
 
         let row = new ActionRowBuilder()
             .addComponents(
