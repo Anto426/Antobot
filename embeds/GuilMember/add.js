@@ -27,7 +27,7 @@ async function logaddmember(member, cout) {
             .addFields(
                 { name: ":bust_in_silhouette: NAME", value: member.user.tag },
                 { name: ":id: ID", value: `\`\`\`\n${member.user.id} membro\`\`\`` },
-                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n${new Date().toLocaleDateString('it-IT', optionsdate)}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
                 { name: ":1234: MEMBRO", value: `\`\`\`\n${cout} membro\`\`\`` }
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
