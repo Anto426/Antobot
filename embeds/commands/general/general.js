@@ -1,4 +1,4 @@
-const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require("discord.js")
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, StringSelectMenuBuilder, ChannelType } = require("discord.js")
 const cembed = require("./../../../settings/embed.json")
 const { genericerr } = require("../../err/error")
 async function pingembed(interaction) {
@@ -54,7 +54,7 @@ async function serverinfoembed(interaction) {
             .setTitle(interaction.guild.name)
             .setColor(cembed.color.verde)
             .setDescription("Tutte le info su questo server")
-            .setThumbnail(interaction.guild.iconURL({ dynamic: true }) || configs.settings.embed.images.noimmage)
+            .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
             .addFields([
                 { name: 'Owner', value: `\`\`\`\n${interaction.guild.members.cache.get(interaction.guild.ownerId).nickname}\`\`\`` },
                 { name: `Server id:`, value: `\`\`\`\n${interaction.guil.id}\`\`\`` },
@@ -71,12 +71,12 @@ online: ${countingonline + countingidle}
                 {
                     name: `Channels:`, value: `\`\`\`\n
 
-Canali tot:${interaction.guild.channels.cache.filter(x => x.type == "GUILD_VOICE" || x.type == "GUILD_TEXT").size.toString()}
+Canali tot:${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice || x.type == ChannelType.GuildText).size.toString()}
                   
-Canali vocali:${interaction.guild.channels.cache.filter(x => x.type == "GUILD_VOICE").size.toString()} || Canali testuali: ${server.channels.cache.filter(x => x.type == "GUILD_TEXT").size.toString()}
+Canali vocali:${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()} || Canali testuali: ${server.channels.cache.filter(x => x.type == ChannelType.GuildText).size.toString()}
                                    \`\`\`` },
                 { name: `Server created:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` },
-                { name: `Boost level Level:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` }
+                { name: `Boost level:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` }
             ])
         interaction.reply({ embeds: [embed] })
     } catch (err) { genericerr(interaction, err) }
