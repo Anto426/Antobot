@@ -48,6 +48,7 @@ module.exports = {
                 .setTitle("Help")
                 .setDescription(`
             Usa il menu qui sotto per scegliere la categoria di comandi da vedere!
+            
             ${folders.join("\n \n")}`)
                 .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
                 .setColor(cembed.color.viola)

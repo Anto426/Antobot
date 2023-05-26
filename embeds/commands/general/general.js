@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require("discord.js")
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require("discord.js")
 const cembed = require("./../../../settings/embed.json")
 const { genericerr } = require("../../err/error")
 async function pingembed(interaction) {
@@ -20,6 +20,19 @@ async function pingembed(interaction) {
 
 async function avatarembed(interaction, member) {
     try {
+
+
+        const banner = new ButtonBuilder()
+            .setCustomId('Success')
+            .setLabel('Confirm Ban')
+            .setStyle(ButtonStyle.Danger);
+
+        let row = new ActionRowBuilder()
+            .addComponents(
+                banner
+            );
+
+
         var embed = new EmbedBuilder()
             .setTitle(member.user.tag)
             .setDescription("L'avatar di questo utente")
@@ -29,7 +42,7 @@ async function avatarembed(interaction, member) {
                 format: "png",
                 size: 512
             }))
-        interaction.reply({ embeds: [embed] })
+        interaction.reply({ embeds: [embed], components: [row] })
     } catch (err) { genericerr(interaction, err) }
 }
 
