@@ -24,7 +24,7 @@ async function avatarembed(interaction, member) {
 
         const banner = new ButtonBuilder()
             .setCustomId('Success')
-            .setLabel('Confirm Ban')
+            .setLabel('Banner')
             .setStyle(ButtonStyle.Danger);
 
         let row = new ActionRowBuilder()
