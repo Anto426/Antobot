@@ -8,7 +8,8 @@ function Cautor(interaction) {
             notyourbootn(interaction)
             return false
         }
-    } catch { return false }
+    } catch (err) { console.log(err); return false }
 }
 
 module.exports = { Cautor }
+

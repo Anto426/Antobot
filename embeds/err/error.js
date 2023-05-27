@@ -106,7 +106,7 @@ function vocalchannel(interaction) {
             .setDescription("Devi essere in un canale vocale")
             .setColor(cembed.color.rosso)
             .setThumbnail(cembed.immage.err)
-        interaction.reply({ embeds: [embed] })
+            interaction.reply({ embeds: [embed], ephemeral: true })
     } catch { }
 }
 function listvoid(interaction) {
@@ -116,7 +116,7 @@ function listvoid(interaction) {
             .setDescription("La lista delle canzoni è vuota!")
             .setColor(cembed.color.rosso)
             .setThumbnail(cembed.immage.err)
-        interaction.reply({ embeds: [embed] })
+            interaction.reply({ embeds: [embed], ephemeral: true })
     } catch { }
 }
 function anotheplay() {
@@ -126,19 +126,19 @@ function anotheplay() {
             .setDescription("Qualcuno sta ascoltando già della musica")
             .setColor(cembed.color.rosso)
             .setThumbnail(cembed.immage.err)
-        interaction.reply({ embeds: [embed] })
+            interaction.reply({ embeds: [embed], ephemeral: true })
     } catch { }
 }
 
-function notyourbootn() {
+function notyourbootn(interaction) {
     try {
         let embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription("Non è il tuo bootone questo")
             .setColor(cembed.color.rosso)
-            .setThumbnail(cembed.immage.err)
-        interaction.reply({ embeds: [embed] })
-    } catch { }
+            .setThumbnail(cembed.image.error)
+        interaction.reply({ embeds: [embed], ephemeral: true })
+    } catch (err) { console.log(err) }
 }
 
 module.exports = {

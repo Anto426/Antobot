@@ -1,22 +1,23 @@
-const { serverinfoembed } = require("../../../embeds/commands/general/general");
+const { servermcembed } = require("../../../embeds/commands/general/general");
+const { Cautor } = require("../../../functions/interaction/checkautorinteraction");
+const { createrowmc } = require("../../../functions/row/createrow");
 module.exports = {
     name: "interactionCreate",
     async execute(interaction) {
 
         try {
             if (interaction.isChatInputCommand()) return;
-        
             if (interaction.customId.split("-").includes("mc")) {
 
                 if (Cautor(interaction)) {
-
-                    serverinfoembed(interaction)
-
+                    let server = []
+                    let row = createrowmc(interaction, server)
+                    servermcembed(interaction, row)
                 }
 
             }
 
-        } catch { }
+        } catch (err) { console.log(err) }
     }
 }
 

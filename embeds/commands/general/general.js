@@ -109,15 +109,19 @@ async function userinfoembed(interaction, member, elencoPermessi) {
     } catch (err) { genericerr(interaction, err) }
 }
 
-async function servermcembed(interaction) {
+async function servermcembed(interaction, row) {
     try {
         let embed = new EmbedBuilder()
-            .setColor('#0099ff')
-            .setTitle("Ecco il tuo server")
+            .setTitle(cgame.mc.server[interaction.values[0]].emoji + " " + interaction.values[0])
+            .setDescription("Ecco ip del tuo server:")
+            .addFields({ name: `ip:`, value: `\`\`\`\n${cgame.mc.server[interaction.values[0]].ip.toString()}\n\`\`\`` })
             .setThumbnail(cgame.mc.server[interaction.values[0]].image)
-            .setDescription(cgame.mc.server[interaction.values[0]].ip);
-        interaction.update({ embeds: [embed] })
-    } catch (err) { genericerr(interaction, err) }
+            .setColor(cembed.color.viola)
+        interaction.update({ embeds: [embed], components: [row] })
+    } catch (err) {
+        console.log(err)
+        genericerr(interaction, err)
+    }
 }
 
 

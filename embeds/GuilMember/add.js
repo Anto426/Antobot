@@ -25,7 +25,7 @@ async function logaddmember(member, cout) {
         const embed = new EmbedBuilder()
             .setTitle("Nuovo Utente")
             .addFields(
-                { name: ":bust_in_silhouette: NAME", value: member.user.tag },
+                { name: ":bust_in_silhouette: NAME", value: `\`\`\`\n${member.user.tag}\n\`\`\`` },
                 { name: ":id: ID", value: `\`\`\`\n${member.user.id} membro\`\`\`` },
                 { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
                 { name: ":1234: MEMBRO", value: `\`\`\`\n${cout} membro\`\`\`` }
