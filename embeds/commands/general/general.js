@@ -95,7 +95,7 @@ async function userinfoembed(interaction, member, elencoPermessi) {
                 { name: ':bust_in_silhouette: User id', value: `\`\`\`\n${member.user.id}\`\`\`` },
                 { name: ':online: Status', value: `\`\`\`\n${member.presence ? member.presence.status : "offline"}\`\`\`` },
                 { name: ':robot: Is a bot?', value: `\`\`\`\n${member.user.bot ? "Yes" : "No"}\`\`\`` },
-                { name: ':date: Account created', value: `\`\`\`\n${member.user.createdAt.toDateString()} \`\`\`` },
+                { name: ':date: Account created', value: `\`\`\`\n${moment(member.user.createdAt.toDateString()).locale('it').format('LL')} \`\`\`` },
                 { name: ':date: Joined this server', value: `\`\`\`\n${member.joinedAt.toDateString()}\`\`\`` },
                 { name: ':star: Permissions', value: `\`\`\`\n${elencoPermessi.join("\n")}\`\`\`` },
                 { name: ':gear: Roles', value: `\`\`\`\n${member.roles.cache.map(ruolo => ruolo.name).join("\r")}\`\`\`` },
