@@ -104,7 +104,7 @@ function vocalchannel(interaction) {
         let embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription("Devi essere in un canale vocale")
-            .setColor(cembed.color.Red)
+            .setColor(cembed.color.rosso)
             .setThumbnail(cembed.immage.err)
         interaction.reply({ embeds: [embed] })
     } catch { }
@@ -114,7 +114,7 @@ function listvoid(interaction) {
         let embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription("La lista delle canzoni è vuota!")
-            .setColor(cembed.color.Red)
+            .setColor(cembed.color.rosso)
             .setThumbnail(cembed.immage.err)
         interaction.reply({ embeds: [embed] })
     } catch { }
@@ -124,7 +124,7 @@ function anotheplay() {
         let embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription("Qualcuno sta ascoltando già della musica")
-            .setColor(cembed.color.Red)
+            .setColor(cembed.color.rosso)
             .setThumbnail(cembed.immage.err)
         interaction.reply({ embeds: [embed] })
     } catch { }
