@@ -130,6 +130,17 @@ function anotheplay() {
     } catch { }
 }
 
+function notyourbootn() {
+    try {
+        let embed = new EmbedBuilder()
+            .setTitle("Error")
+            .setDescription("Non è il tuo bootone questo")
+            .setColor(cembed.color.rosso)
+            .setThumbnail(cembed.immage.err)
+        interaction.reply({ embeds: [embed] })
+    } catch { }
+}
+
 module.exports = {
     genericerr,
     tohigtmsg,
@@ -140,5 +151,6 @@ module.exports = {
     disablefunction,
     vocalchannel,
     listvoid,
-    anotheplay
+    anotheplay,
+    notyourbootn
 }

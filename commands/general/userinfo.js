@@ -7,7 +7,7 @@ module.exports = {
     test: false,
     data: {
         name: "userinfo",
-        description: "Informazioni di un utente",
+        description: "comando per avere informazioni su un utente",
         options: [{
             name: "user",
             description: "L'utente interessato",

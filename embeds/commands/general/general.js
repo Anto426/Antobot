@@ -1,5 +1,6 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, ChannelType } = require("discord.js")
 const cembed = require("./../../../settings/embed.json")
+const cgame = require("./../../../settings/games.json")
 const { genericerr } = require("../../err/error")
 async function pingembed(interaction) {
     try {
@@ -79,7 +80,10 @@ Canali vocali:${interaction.guild.channels.cache.filter(x => x.type == ChannelTy
                 { name: `Boost level:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` }
             ])
         interaction.reply({ embeds: [embed] })
-    } catch (err) { genericerr(interaction, err) }
+    } catch (err) {
+        console.log(err)
+        genericerr(interaction, err)
+    }
 }
 
 
@@ -105,7 +109,20 @@ async function userinfoembed(interaction, member, elencoPermessi) {
     } catch (err) { genericerr(interaction, err) }
 }
 
+async function servermcembed(interaction) {
+    try {
+        let embed = new EmbedBuilder()
+            .setColor('#0099ff')
+            .setTitle("Ecco il tuo server")
+            .setThumbnail(cgame.mc.server[interaction.values[0]].image)
+            .setDescription(cgame.mc.server[interaction.values[0]].ip);
+        interaction.update({ embeds: [embed] })
+    } catch (err) { genericerr(interaction, err) }
+}
 
 
 
-module.exports = { pingembed, avatarembed, serverinfoembed, userinfoembed }
+
+
+
+module.exports = { pingembed, avatarembed, serverinfoembed, userinfoembed, servermcembed }

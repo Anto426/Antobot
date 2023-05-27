@@ -8,7 +8,7 @@ module.exports = {
     test: false,
     data: {
         name: "ping",
-        description: "Ping bot"
+        description: "Ping è un comando di rete utilizzato per testare la connettività e misurare la latenza tra due dispositivi."
     },
     execute(interaction) {
         pingembed(interaction)

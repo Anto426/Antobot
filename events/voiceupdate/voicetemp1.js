@@ -2,7 +2,7 @@ const cguild = require("../../settings/guild.json")
 module.exports = {
     name: "voiceStateUpdate",
     async execute(oldMember, newMember) {
-        let category = newMember.guild.channels.cache.get(cguild[oldMember.guild.name].channel.temp.id)
+        let category = newMember.guild.channels.cache.get(cguild["Anto's  Server"].channel.temp.id)
         let member = newMember.guild.members.cache.get(newMember.id)
         let channel = newMember.guild.channels.cache.find(x => x.parent == category && x.name == member.user.username)
         try {

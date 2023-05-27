@@ -8,7 +8,7 @@ module.exports = {
     test: false,
     data: {
         name: "servermc",
-        description: "server di minecraft"
+        description: "comando per ottenere ip di minecraft"
     },
     execute(interaction) {
 
