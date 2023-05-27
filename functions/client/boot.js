@@ -1,6 +1,7 @@
 const info = require("../../package.json");
 const { mainhollyday } = require("../count/hollydaycount");
 const { statusupdate } = require("./clientstatus");
+const { comandregisterguild } = require("./comandregister");
 const { comandload, eventload } = require("./loadc-e");
 const { timeon } = require("./timeon");
 
@@ -29,11 +30,12 @@ By Anto426
 `,)
         timeon()
         comandload()
+        comandregisterguild()
         eventload()
         statusupdate()
         mainhollyday()
 
-    } catch(err) { console.log(err)}
+    } catch (err) { console.log(err) }
 }
 
 module.exports = {
