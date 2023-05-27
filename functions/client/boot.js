@@ -2,7 +2,7 @@ const info = require("../../package.json");
 const { mainhollyday } = require("../count/hollydaycount");
 const { statusupdate } = require("./clientstatus");
 const { comandregisterguild } = require("./comandregister");
-const { eventload } = require("./loadc-e");
+const { eventload, comandload } = require("./loadc-e");
 const { timeon } = require("./timeon");
 
 async function boot() {
@@ -29,7 +29,7 @@ By Anto426
     
 `,)
         timeon()
-
+        await comandload()
         comandregisterguild()
         eventload()
         statusupdate()
