@@ -92,13 +92,13 @@ async function userinfoembed(interaction, member, elencoPermessi) {
             .setDescription("Tutte le info di questo utente")
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
             .addFields([
-                { name: 'User id', value: `\`\`\`\n${member.user.id}\`\`\`` },
-                { name: 'Status', value: `\`\`\`\n${member.presence ? member.presence.status : "offline"}\`\`\`` },
-                { name: 'Is a bot?', value: `\`\`\`\n${member.user.bot ? "Yes" : "No"}\`\`\`` },
-                { name: 'Account created', value: `\`\`\`\n${member.user.createdAt.toDateString()} \`\`\`` },
-                { name: 'Joined this server', value: `\`\`\`\n${member.joinedAt.toDateString()}\`\`\`` },
-                { name: 'Permissions', value: `\`\`\`\n${elencoPermessi.join("\n")}\`\`\`` },
-                { name: 'Roles', value: `\`\`\`\n${member.roles.cache.map(ruolo => ruolo.name).join("\r")}\`\`\`` },
+                { name: ':bust_in_silhouette: User id', value: `\`\`\`\n${member.user.id}\`\`\`` },
+                { name: ':online: Status', value: `\`\`\`\n${member.presence ? member.presence.status : "offline"}\`\`\`` },
+                { name: ':robot: Is a bot?', value: `\`\`\`\n${member.user.bot ? "Yes" : "No"}\`\`\`` },
+                { name: ':date: Account created', value: `\`\`\`\n${member.user.createdAt.toDateString()} \`\`\`` },
+                { name: ':date: Joined this server', value: `\`\`\`\n${member.joinedAt.toDateString()}\`\`\`` },
+                { name: ':star: Permissions', value: `\`\`\`\n${elencoPermessi.join("\n")}\`\`\`` },
+                { name: ':gear: Roles', value: `\`\`\`\n${member.roles.cache.map(ruolo => ruolo.name).join("\r")}\`\`\`` },
 
 
             ])
