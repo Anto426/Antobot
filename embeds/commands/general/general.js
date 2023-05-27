@@ -1,6 +1,7 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, ChannelType } = require("discord.js")
 const cembed = require("./../../../settings/embed.json")
 const cgame = require("./../../../settings/games.json")
+const moment = require('moment');
 const { genericerr } = require("../../err/error")
 async function pingembed(interaction) {
     try {
@@ -54,30 +55,27 @@ async function serverinfoembed(interaction) {
         const embed = new EmbedBuilder()
             .setTitle(interaction.guild.name)
             .setColor(cembed.color.verde)
-            .setDescription("Tutte le info su questo server")
+            .setDescription(`Ecco tutte le info  su ${interaction.guild.name} :`)
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }) || cembed.image.notimmage)
             .addFields([
-                { name: 'Owner', value: `\`\`\`\n${interaction.guild.members.cache.get(interaction.guild.ownerId).nickname}\`\`\`` },
-                { name: `Server id:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` },
+                { name: `:id: Server id:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`\n` },
+                { name: ':crown: Owner', value: `\`\`\`\n${interaction.guild.members.cache.find(x => x.id == interaction.guild.ownerId).user.username}\`\`\`` },
                 {
-                    name: `Members:`, value: ` \`\`\`\n  
-Membri tot: ${interaction.guild.memberCount.toString()}
-                  
-Bot:${interaction.guild.members.cache.filter(x => x.user.bot).size.toString()}
-                  
-Utenti:${interaction.guild.members.cache.filter(x => !x.user.bot).size.toString()}
-                  
-online: ${countingonline + countingidle}      
-                  \`\`\`` },
+                    name: `:people_hugging: Members:`, value: ` 
+Membri tot: \`\`\`\n${interaction.guild.memberCount.toString()}\`\`\` 
+:robot: Bot: \`\`\`\n${interaction.guild.members.cache.filter(x => x.user.bot).size.toString()}\`\`\`       
+:bust_in_silhouette: Utenti:\`\`\`\n${interaction.guild.members.cache.filter(x => !x.user.bot).size.toString()}\`\`\`      
+<:online:896799521521168384> online: \`\`\`\n${countingonline + countingidle}\`\`\`
+                  ` },
                 {
-                    name: `Channels:`, value: `\`\`\`\n
+                    name: `:bar_chart: Channels:`, value: `
 
-Canali tot:${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice || x.type == ChannelType.GuildText).size.toString()}
-                  
-Canali vocali:${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()} || Canali testuali: ${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildText).size.toString()}
-                                   \`\`\`` },
-                { name: `Server created:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` },
-                { name: `Boost level:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` }
+Canali tot:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice || x.type == ChannelType.GuildText).size.toString()} \`\`\`
+:voice: Canali vocali:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()}\`\`\` 
+:ledger: Canali testuali:\`\`\`\n ${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildText).size.toString()} \`\`\`
+                                  ` },
+                { name: `:date: Server created:`, value: `\`\`\`\n${moment(interaction.guild.createdAt).locale('it').format('LL')}\`\`\`` },
+                { name: `:star: Boost level:`, value: `\`\`\`\n${interaction.guild.premiumTier}\`\`\`` }
             ])
         interaction.reply({ embeds: [embed] })
     } catch (err) {

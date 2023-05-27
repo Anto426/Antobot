@@ -30,7 +30,7 @@ async function logaddmember(member, cout) {
                 { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
                 { name: ":1234: MEMBRO", value: `\`\`\`\n${cout} membro\`\`\`` }
             )
-            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 })|| cembed.image.notimmage)
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }) || cembed.image.notimmage)
             .setColor(cembed.color.verde)
         sendtoalllog({ embeds: [embed], })
 
