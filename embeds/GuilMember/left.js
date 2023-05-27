@@ -11,7 +11,7 @@ async function logleftmember(member) {
                 { name: ":id: ID", value: `\`\`\`\n${member.user.id}\`\`\`` },
                 { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
             )
-            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 })|| cembed.image.notimmage)
             .setColor(cembed.color.rosso)
         sendtoalllog({ embeds: [embed], })
 

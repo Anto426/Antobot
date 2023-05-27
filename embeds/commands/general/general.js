@@ -12,7 +12,7 @@ async function pingembed(interaction) {
 
             ])
             .setTitle("Pong ecco il ping del bot")
-            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+            .setThumbnail(client.user.displayAvatarURL({ dynamic: true }) || cembed.image.notimmage)
             .setColor(cembed.color.verde)
         interaction.reply({ embeds: [embed] })
     } catch (err) { genericerr(interaction, err) }
@@ -42,7 +42,7 @@ async function avatarembed(interaction, member) {
                 dynamic: true,
                 format: "png",
                 size: 512
-            }))
+            }) || cembed.image.notimmage)
         interaction.reply({ embeds: [embed], components: [row] })
     } catch (err) { genericerr(interaction, err) }
 }
@@ -55,10 +55,10 @@ async function serverinfoembed(interaction) {
             .setTitle(interaction.guild.name)
             .setColor(cembed.color.verde)
             .setDescription("Tutte le info su questo server")
-            .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+            .setThumbnail(interaction.guild.iconURL({ dynamic: true }) || cembed.image.notimmage)
             .addFields([
                 { name: 'Owner', value: `\`\`\`\n${interaction.guild.members.cache.get(interaction.guild.ownerId).nickname}\`\`\`` },
-                { name: `Server id:`, value: `\`\`\`\n${interaction.guil.id}\`\`\`` },
+                { name: `Server id:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` },
                 {
                     name: `Members:`, value: ` \`\`\`\n  
 Membri tot: ${interaction.guild.memberCount.toString()}
@@ -74,7 +74,7 @@ online: ${countingonline + countingidle}
 
 Canali tot:${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice || x.type == ChannelType.GuildText).size.toString()}
                   
-Canali vocali:${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()} || Canali testuali: ${server.channels.cache.filter(x => x.type == ChannelType.GuildText).size.toString()}
+Canali vocali:${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()} || Canali testuali: ${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildText).size.toString()}
                                    \`\`\`` },
                 { name: `Server created:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` },
                 { name: `Boost level:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`` }

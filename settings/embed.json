@@ -18,6 +18,8 @@
     "indaco": "#4B0082"
   },
   "image": {
-    "error": "https://cdn.discordapp.com/attachments/946881043523330108/1111228944662929459/comp_3.gif"
+    "error": "https://cdn.discordapp.com/attachments/946881043523330108/1111228944662929459/comp_3.gif",
+    "notimmage": "https://cdn.discordapp.com/attachments/946881043523330108/1112040461104844841/images.png",
+    "boost": "https://cdn.discordapp.com/attachments/946881043523330108/1111279528749314128/qq911bvdqwu51.gif"
   }
 }
