@@ -81,10 +81,32 @@ async function logquitvocal(member, oldchannel) {
 
     } catch { }
 }
+
+async function logkickvocal(member, oldchannel) {
+
+    try {
+        const embed = new EmbedBuilder()
+            .setTitle(`Utente kikato dalla vocale`)
+            .addFields(
+                { name: ":bust_in_silhouette: NAME", value: `\`\`\`\n${member.user.tag}\`\`\`` },
+                { name: ":id: ID UTENTE", value: `\`\`\`\n${member.user.id}\`\`\`` },
+                { name: ":mega: VECCHIO CANALE", value: `\`\`\`\n${oldchannel.name}\`\`\`` },
+                { name: ":id: ID VECCHIO CANALE", value: `\`\`\`\n${oldchannel.id}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
+                { name: ":bust_in_silhouette: DA", value: `\`\`\`\n${mover}\`\`\`` },
+
+            )
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
+            .setColor(cembed.color.rosso)
+        sendtoprlog({ embeds: [embed], })
+
+    } catch { }
+}
 module.exports = {
     logjoinvocal,
     logchangevocal,
     logquitvocal,
-    logforcechangevocal
+    logforcechangevocal,
+    logkickvocal
 }
 

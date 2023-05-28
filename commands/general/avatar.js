@@ -20,7 +20,6 @@ module.exports = {
             var utente = interaction.options.getMember("user")
             if (!utente)
                 utente = interaction.member
-
             avatarembed(interaction, utente)
         } catch { }
     }

@@ -1,5 +1,5 @@
 const cgame = require("./../../settings/games.json")
-const { ActionRowBuilder, StringSelectMenuBuilder } = require('discord.js');
+const { ActionRowBuilder, StringSelectMenuBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
 function createrowmc(interaction, server) {
     let selectmenu = new StringSelectMenuBuilder()
         .setCustomId(`mc-${interaction.member.id}`)
@@ -23,5 +23,32 @@ function createrowmc(interaction, server) {
     return row
 
 }
+function createrowbanner(interaction, member) {
+    const banner = new ButtonBuilder()
+        .setCustomId(`banner-${interaction.member.id}-${member.id}`)
+        .setLabel('Banner')
+        .setStyle(ButtonStyle.Success);
 
-module.exports = { createrowmc }
+    let row = new ActionRowBuilder()
+        .addComponents(
+            banner
+        );
+    return row
+
+}
+function createrowavatar(interaction, member) {
+    const banner = new ButtonBuilder()
+        .setCustomId(`avatar-${interaction.member.id}-${member.id}`)
+        .setLabel('Avatar')
+        .setStyle(ButtonStyle.Success);
+
+    let row = new ActionRowBuilder()
+        .addComponents(
+            banner
+        );
+
+    return row
+
+}
+
+module.exports = { createrowmc, createrowbanner, createrowavatar }

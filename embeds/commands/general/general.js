@@ -1,8 +1,12 @@
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, ChannelType } = require("discord.js")
+const { EmbedBuilder, ChannelType } = require("discord.js")
+const axios = require('axios');
+const moment = require('moment');
+
+
 const cembed = require("./../../../settings/embed.json")
 const cgame = require("./../../../settings/games.json")
-const moment = require('moment');
-const { genericerr } = require("../../err/error")
+const { genericerr } = require("../../err/error");
+const { createrowavatar, createrowbanner } = require("../../../functions/row/createrow");
 async function pingembed(interaction) {
     try {
         let embed = new EmbedBuilder()
@@ -23,17 +27,7 @@ async function pingembed(interaction) {
 async function avatarembed(interaction, member) {
     try {
 
-
-        const banner = new ButtonBuilder()
-            .setCustomId('banner')
-            .setLabel('Banner')
-            .setStyle(ButtonStyle.Success);
-
-        let row = new ActionRowBuilder()
-            .addComponents(
-                banner
-            );
-
+        let row = createrowbanner(interaction, member)
 
         var embed = new EmbedBuilder()
             .setTitle(member.user.tag)
@@ -44,8 +38,40 @@ async function avatarembed(interaction, member) {
                 format: "png",
                 size: 512
             }) || cembed.image.notimmage)
-        interaction.reply({ embeds: [embed], components: [row] })
+        if (interaction.isChatInputCommand())
+            interaction.reply({ embeds: [embed], components: [row] })
+        else
+            interaction.update({ embeds: [embed], components: [row] })
+
     } catch (err) { genericerr(interaction, err) }
+}
+async function bannerembed(interaction, member) {
+    try {
+        let row = createrowavatar(interaction, member)
+        axios.get(`https://discord.com/api/v10/users/${member.id}`, {
+            headers: {
+                Authorization: `Bot ${client.token}`
+            }
+        })
+            .then(response => {
+                const { banner, accent_color } = response.data
+                if (banner) {
+                    const extension = banner.startsWith("a_") ? `.gif` : `.png`;
+                    const url = `https://cdn.discordapp.com/banners/${member.id}/${banner}${extension}?size=512`
+                    console.log(url)
+                    var embed = new EmbedBuilder()
+                        .setTitle(member.user.tag)
+                        .setDescription("Il banner di questo utente")
+                        .setColor(cembed.color.verde)
+                        .setImage(url)
+                    interaction.update({ embeds: [embed], components: [row] })
+                } else if (accent_color) { }
+            })
+
+    } catch (err) {
+        console.log(err)
+        genericerr(interaction, err)
+    }
 }
 
 async function serverinfoembed(interaction) {
@@ -127,4 +153,6 @@ async function servermcembed(interaction, row) {
 
 
 
-module.exports = { pingembed, avatarembed, serverinfoembed, userinfoembed, servermcembed }
+
+
+module.exports = { pingembed, avatarembed, bannerembed, serverinfoembed, userinfoembed, servermcembed }
