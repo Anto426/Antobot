@@ -66,18 +66,20 @@ async function bannerembed(interaction, member) {
                     const url = `https://cdn.discordapp.com/banners/${member.id}/${banner}${extension}?size=512`
                     embed.setImage(url)
                     interaction.update({ embeds: [embed], components: [row] })
-                } else if (accent_color || banner_color) {
-                    let canvas = await createCanvas(1024, 408)
-                    let ctx = await canvas.getContext('2d')
+                } else {
+                    console.log(accent_color || banner_color)
+                    if (accent_color || banner_color) {
+                        let canvas = await createCanvas(1024, 408)
+                        let ctx = await canvas.getContext('2d')
 
-                    ctx.fillStyle = accent_color || banner_color
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    let attachment = new AttachmentBuilder(canvas.toBuffer(), { name: 'canvas.png' })
-                    embed
-                        .setImage('attachment://canvas.png');
-                    interaction.update({ embeds: [embed], files: [attachment], components: [row] })
+                        ctx.fillStyle = accent_color || banner_color
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        let attachment = new AttachmentBuilder(canvas.toBuffer(), { name: 'canvas.png' })
+                        embed
+                            .setImage('attachment://canvas.png');
+                        interaction.update({ embeds: [embed], files: [attachment], components: [row] })
+                    }
                 }
-
 
             })
 
