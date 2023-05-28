@@ -97,7 +97,7 @@ Membri tot: \`\`\`\n${interaction.guild.memberCount.toString()}\`\`\`
                     name: `:bar_chart: Channels:`, value: `
 
 Canali tot:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice || x.type == ChannelType.GuildText).size.toString()} \`\`\`
-:voice: Canali vocali:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()}\`\`\` 
+:mega:  Canali vocali:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()}\`\`\` 
 :ledger: Canali testuali:\`\`\`\n ${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildText).size.toString()} \`\`\`
                                   ` },
                 { name: `:date: Server created:`, value: `\`\`\`\n${moment(interaction.guild.createdAt).locale('it').format('LL')}\`\`\`` },
