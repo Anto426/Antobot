@@ -9,7 +9,7 @@ function nexhollyday() {
     try {
         let cont = 0, check = false, x = {}
         do {
-            if (new Date().getTime() < new Date(new Date().getFullYear(), chollyday.holidays[cont].date.mouth, chollyday.holidays[cont].date.day)) {
+            if (new Date().getTime(optionsdate) < new Date(new Date().getFullYear(), chollyday.holidays[cont].date.mouth, chollyday.holidays[cont].date.day)) {
                 x = chollyday.holidays[cont]
                 check = true
             }
@@ -23,7 +23,7 @@ async function updatecount(festa, channelcount) {
 
     try {
         setInterval(async () => {
-            let timereminig = new Date(new Date().getFullYear(), festa.mouth, festa.day) - new Date().getTime()
+            let timereminig = new Date(new Date().getFullYear(), festa.mouth, festa.day) - new Date().getTime(optionsdate)
             let time = await `${times(timereminig)}`
             console.log(`Update : ${time}`)
             channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
@@ -35,7 +35,7 @@ async function updatecount(festa, channelcount) {
 async function sendcongratulations(festa) {
     setInterval(() => {
 
-        let timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime()
+        let timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime(optionsdate)
         if (timereminig <= 0) {
             console.log(festa.title)
             congratulatioembed(festa)

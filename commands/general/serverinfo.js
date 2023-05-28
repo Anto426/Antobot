@@ -7,7 +7,7 @@ module.exports = {
     test: false,
     data: {
         name: "serverinfo",
-        description: "Informazioni sul server"
+        description: "comando per avere informazioni sul server"
     },
     async execute(interaction) {
         serverinfoembed(interaction)

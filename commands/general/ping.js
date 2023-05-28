@@ -8,7 +8,7 @@ module.exports = {
     test: false,
     data: {
         name: "ping",
-        description: "Ping bot"
+        description: "test latenza bot"
     },
     execute(interaction) {
         pingembed(interaction)

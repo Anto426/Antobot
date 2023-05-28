@@ -1,7 +1,8 @@
 const info = require("../../package.json");
 const { mainhollyday } = require("../count/hollydaycount");
 const { statusupdate } = require("./clientstatus");
-const { comandload, eventload } = require("./loadc-e");
+const { comandregisterguild } = require("./comandregister");
+const { eventload, comandload } = require("./loadc-e");
 const { timeon } = require("./timeon");
 
 async function boot() {
@@ -28,12 +29,13 @@ By Anto426
     
 `,)
         timeon()
-        comandload()
+        await comandload()
+        comandregisterguild()
         eventload()
         statusupdate()
         mainhollyday()
 
-    } catch(err) { console.log(err)}
+    } catch (err) { console.log(err) }
 }
 
 module.exports = {

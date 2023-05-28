@@ -7,11 +7,11 @@ async function logleftmember(member) {
         const embed = new EmbedBuilder()
             .setTitle("Utente Uscito")
             .addFields(
-                { name: ":bust_in_silhouette: NAME", value: member.user.tag },
+                { name: ":bust_in_silhouette: NAME", value: `\`\`\`\n${member.user.tag}\`\`\`` },
                 { name: ":id: ID", value: `\`\`\`\n${member.user.id}\`\`\`` },
                 { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
             )
-            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }))
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 })|| cembed.image.notimmage)
             .setColor(cembed.color.rosso)
         sendtoalllog({ embeds: [embed], })
 

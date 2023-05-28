@@ -36,26 +36,29 @@ function eventload() {
         for (const folder of eventsFolders) {
             const eventsFiles = fs.readdirSync(`./events/${folder}`)
             for (const file of eventsFiles) {
-                if (file.endsWith(".js")) {
-                    const event = require(`./../../events/${folder}/${file}`);
-                    let events = event.name.split("-")
-                    try {
-                        client.on(events[0], (...args) => {
-                            event.execute(...args)
-                        });
-                    } catch { }
-                } else {
-                    const eventsFiles2 = fs.readdirSync(`./events/${folder}/${file}`)
-                    for (const file2 of eventsFiles2) {
-                        const event = require(`./../../events/${folder}/${file}/${file2}`);
+                try {
+                    if (file.endsWith(".js")) {
+                        const event = require(`./../../events/${folder}/${file}`);
                         let events = event.name.split("-")
                         try {
                             client.on(events[0], (...args) => {
                                 event.execute(...args)
                             });
                         } catch { }
+
+                    } else {
+                        const eventsFiles2 = fs.readdirSync(`./events/${folder}/${file}`)
+                        for (const file2 of eventsFiles2) {
+                            const event = require(`./../../events/${folder}/${file}/${file2}`);
+                            let events = event.name.split("-")
+                            try {
+                                client.on(events[0], (...args) => {
+                                    event.execute(...args)
+                                });
+                            } catch { }
+                        }
                     }
-                }
+                } catch { }
             }
 
         }
