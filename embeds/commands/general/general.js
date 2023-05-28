@@ -11,9 +11,9 @@ async function pingembed(interaction) {
     try {
         let embed = new EmbedBuilder()
             .addFields([
-                { name: `:lacrosse: Pong`, value: `\`\`\`\n${client.ws.ping}ms\`\`\`` },
-                { name: `:computer: Ram`, value: `\`\`\`\n${(process.memoryUsage().heapUsed / 1048576).toFixed(0)}mb\`\`\`` },
-                { name: `:timer: Time`, value: `\`\`\`\n${global.timeonc}\`\`\`` },
+                { name: `:lacrosse: PONG`, value: `\`\`\`\n${client.ws.ping}ms\`\`\`` },
+                { name: `:computer: RAM USATA`, value: `\`\`\`\n${(process.memoryUsage().heapUsed / 1048576).toFixed(0)}mb\`\`\`` },
+                { name: `:timer: TEMPO ACCESO`, value: `\`\`\`\n${global.timeonc}\`\`\`` },
 
             ])
             .setTitle("Pong ecco il ping del bot")
@@ -84,24 +84,24 @@ async function serverinfoembed(interaction) {
             .setDescription(`Ecco tutte le info  su ${interaction.guild.name} :`)
             .setThumbnail(interaction.guild.iconURL({ dynamic: true }) || cembed.image.notimmage)
             .addFields([
-                { name: `:id: Server id:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`\n` },
-                { name: ':crown: Owner', value: `\`\`\`\n${interaction.guild.members.cache.find(x => x.id == interaction.guild.ownerId).user.username}\`\`\`` },
+                { name: `:id: SERVER ID:`, value: `\`\`\`\n${interaction.guild.id}\`\`\`\n` },
+                { name: ':crown: OWNER', value: `\`\`\`\n${interaction.guild.members.cache.find(x => x.id == interaction.guild.ownerId).user.username}\`\`\`` },
                 {
-                    name: `:people_hugging: Members:`, value: ` 
-Membri tot: \`\`\`\n${interaction.guild.memberCount.toString()}\`\`\` 
-:robot: Bot: \`\`\`\n${interaction.guild.members.cache.filter(x => x.user.bot).size.toString()}\`\`\`       
-:bust_in_silhouette: Utenti:\`\`\`\n${interaction.guild.members.cache.filter(x => !x.user.bot).size.toString()}\`\`\`      
-<:online:896799521521168384> online: \`\`\`\n${countingonline + countingidle}\`\`\`
+                    name: `:people_hugging: MEMBERS:`, value: ` 
+MEMBRI TOT: \`\`\`\n${interaction.guild.memberCount.toString()}\`\`\` 
+:robot: BOT: \`\`\`\n${interaction.guild.members.cache.filter(x => x.user.bot).size.toString()}\`\`\`       
+:bust_in_silhouette: UTENTI:\`\`\`\n${interaction.guild.members.cache.filter(x => !x.user.bot).size.toString()}\`\`\`      
+<:online:896799521521168384> ONLINE: \`\`\`\n${countingonline + countingidle}\`\`\`
                   ` },
                 {
-                    name: `:bar_chart: Channels:`, value: `
+                    name: `:bar_chart: CANALI:`, value: `
 
-Canali tot:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice || x.type == ChannelType.GuildText).size.toString()} \`\`\`
-:mega:  Canali vocali:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()}\`\`\` 
-:ledger: Canali testuali:\`\`\`\n ${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildText).size.toString()} \`\`\`
+CANALI TOT:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice || x.type == ChannelType.GuildText).size.toString()} \`\`\`
+:mega:  CANALI VOCALI:\`\`\`\n${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildVoice).size.toString()}\`\`\` 
+:ledger: CANALI TESTUALI:\`\`\`\n ${interaction.guild.channels.cache.filter(x => x.type == ChannelType.GuildText).size.toString()} \`\`\`
                                   ` },
-                { name: `:date: Server created:`, value: `\`\`\`\n${moment(interaction.guild.createdAt).locale('it').format('LL')}\`\`\`` },
-                { name: `:star: Boost level:`, value: `\`\`\`\n${interaction.guild.premiumTier}\`\`\`` }
+                { name: `:date: SERVER CREATO:`, value: `\`\`\`\n${moment(interaction.guild.createdAt).locale('it').format('LL')}\`\`\`` },
+                { name: `:star: LIVELLO BOOST:`, value: `\`\`\`\n${interaction.guild.premiumTier}\`\`\`` }
             ])
         interaction.reply({ embeds: [embed] })
     } catch (err) {
@@ -118,13 +118,13 @@ async function userinfoembed(interaction, member, elencoPermessi) {
             .setDescription("Tutte le info di questo utente")
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
             .addFields([
-                { name: ':bust_in_silhouette: User id', value: `\`\`\`\n${member.user.id}\`\`\`` },
-                { name: ':online: Status', value: `\`\`\`\n${member.presence ? member.presence.status : "offline"}\`\`\`` },
-                { name: ':robot: Is a bot?', value: `\`\`\`\n${member.user.bot ? "Yes" : "No"}\`\`\`` },
-                { name: ':date: Account created', value: `\`\`\`\n${moment(member.user.createdAt).locale('it').format('LL')} \`\`\`` },
-                { name: ':date: Joined this server', value: `\`\`\`\n${moment(member.joinedAt).locale('it').format('LL')}\`\`\`` },
-                { name: ':star: Permissions', value: `\`\`\`\n${elencoPermessi.join("\n")}\`\`\`` },
-                { name: ':gear: Roles', value: `\`\`\`\n${member.roles.cache.map(ruolo => ruolo.name).join("\r")}\`\`\`` },
+                { name: ':bust_in_silhouette: USER ID', value: `\`\`\`\n${member.user.id}\`\`\`` },
+                { name: ':online: STATUS', value: `\`\`\`\n${member.presence ? member.presence.status : "offline"}\`\`\`` },
+                { name: ':robot: BOT ?', value: `\`\`\`\n${member.user.bot ? "Yes" : "No"}\`\`\`` },
+                { name: ':date: ACCOUNT CREATO', value: `\`\`\`\n${moment(member.user.createdAt).locale('it').format('LL')} \`\`\`` },
+                { name: ':date: ENTRATO NEL SERVER', value: `\`\`\`\n${moment(member.joinedAt).locale('it').format('LL')}\`\`\`` },
+                { name: ':star: PERMESSI', value: `\`\`\`\n${elencoPermessi.join("\n")}\`\`\`` },
+                { name: ':gear: RUOLI', value: `\`\`\`\n${member.roles.cache.map(ruolo => ruolo.name).join("\r")}\`\`\`` },
 
 
             ])
