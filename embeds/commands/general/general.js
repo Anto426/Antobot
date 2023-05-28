@@ -1,4 +1,5 @@
-const { EmbedBuilder, ChannelType } = require("discord.js")
+const { EmbedBuilder, ChannelType, AttachmentBuilder } = require("discord.js")
+const { createCanvas } = require('canvas')
 const axios = require('axios');
 const moment = require('moment');
 
@@ -40,9 +41,9 @@ async function avatarembed(interaction, member) {
             }) || cembed.image.notimmage)
         if (interaction.isChatInputCommand())
             interaction.reply({ embeds: [embed], components: [row] })
-        else
-            interaction.update({ embeds: [embed], components: [row] })
-
+        else {
+            interaction.update({ embeds: [embed], files: [], components: [row] })
+        }
     } catch (err) { genericerr(interaction, err) }
 }
 async function bannerembed(interaction, member) {
@@ -53,19 +54,31 @@ async function bannerembed(interaction, member) {
                 Authorization: `Bot ${client.token}`
             }
         })
-            .then(response => {
-                const { banner, accent_color } = response.data
+            .then(async response => {
+                var embed = new EmbedBuilder()
+                    .setTitle(member.user.tag)
+                    .setDescription("Il banner di questo utente")
+                    .setColor(cembed.color.verde)
+
+                const { banner, accent_color, banner_color } = response.data
                 if (banner) {
                     const extension = banner.startsWith("a_") ? `.gif` : `.png`;
                     const url = `https://cdn.discordapp.com/banners/${member.id}/${banner}${extension}?size=512`
-                    console.log(url)
-                    var embed = new EmbedBuilder()
-                        .setTitle(member.user.tag)
-                        .setDescription("Il banner di questo utente")
-                        .setColor(cembed.color.verde)
-                        .setImage(url)
+                    embed.setImage(url)
                     interaction.update({ embeds: [embed], components: [row] })
-                } else if (accent_color) { }
+                } else if (accent_color || banner_color) {
+                    let canvas = await createCanvas(1024, 408)
+                    let ctx = await canvas.getContext('2d')
+
+                    ctx.fillStyle = accent_color || banner_color
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    let attachment = new AttachmentBuilder(canvas.toBuffer(), { name: 'canvas.png' })
+                    embed
+                        .setImage('attachment://canvas.png');
+                    interaction.update({ embeds: [embed], files: [attachment], components: [row] })
+                }
+
+
             })
 
     } catch (err) {
