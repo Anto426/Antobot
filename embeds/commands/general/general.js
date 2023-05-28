@@ -119,7 +119,7 @@ async function userinfoembed(interaction, member, elencoPermessi) {
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
             .addFields([
                 { name: ':bust_in_silhouette: USER ID', value: `\`\`\`\n${member.user.id}\`\`\`` },
-                { name: ':online: STATUS', value: `\`\`\`\n${member.presence ? member.presence.status : "offline"}\`\`\`` },
+                { name: '<:online:1112363943957115001> STATUS', value: `\`\`\`\n${member.presence ? member.presence.status : "offline"}\`\`\`` },
                 { name: ':robot: BOT ?', value: `\`\`\`\n${member.user.bot ? "Yes" : "No"}\`\`\`` },
                 { name: ':date: ACCOUNT CREATO', value: `\`\`\`\n${moment(member.user.createdAt).locale('it').format('LL')} \`\`\`` },
                 { name: ':date: ENTRATO NEL SERVER', value: `\`\`\`\n${moment(member.joinedAt).locale('it').format('LL')}\`\`\`` },
