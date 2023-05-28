@@ -91,7 +91,7 @@ async function serverinfoembed(interaction) {
 MEMBRI TOT: \`\`\`\n${interaction.guild.memberCount.toString()}\`\`\` 
 :robot: BOT: \`\`\`\n${interaction.guild.members.cache.filter(x => x.user.bot).size.toString()}\`\`\`       
 :bust_in_silhouette: UTENTI:\`\`\`\n${interaction.guild.members.cache.filter(x => !x.user.bot).size.toString()}\`\`\`      
-<:online:896799521521168384> ONLINE: \`\`\`\n${countingonline + countingidle}\`\`\`
+<:online:1112363943957115001> ONLINE: \`\`\`\n${countingonline + countingidle}\`\`\`
                   ` },
                 {
                     name: `:bar_chart: CANALI:`, value: `
