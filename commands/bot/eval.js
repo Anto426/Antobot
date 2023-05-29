@@ -22,7 +22,7 @@ module.exports = {
         let args = interaction.options.getString("comand")
 
         try {
-            evaled = await eval(args).catch(() => { });
+            evaled = await eval(args);
             const embed = new EmbedBuilder()
                 .setTitle("Comando eseguito con successo")
                 .setColor(cembed.color.verde)
