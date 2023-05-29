@@ -39,7 +39,7 @@ module.exports = {
                     { name: 'Input:', value: `\`\`\`js\n ${args}  \`\`\`` },
                     { name: 'Error:', value: `\`\`\`js\n ${inspect((error.toString()))}  \`\`\`` },
                 ])
-                .setThumbnail(cembed.immage.err)
+                .setThumbnail(cembed.image.error)
             interaction.reply({ embeds: [embed] })
         }
 
