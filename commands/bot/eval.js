@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require('discord.js')
 const { inspect } = require(`util`)
-const cembed = require("./../../setting/embed.json")
+const cembed = require("./../../settings/embed.json")
 module.exports = {
     name: "eval",
     permisions: [],
@@ -25,7 +25,7 @@ module.exports = {
             evaled = await eval(args).catch(() => { });
             const embed = new EmbedBuilder()
                 .setTitle("Comando eseguito con successo")
-                .setColor(cembed.color['Green Blue'])
+                .setColor(cembed.color.verde)
                 .setDescription(`Non ci sono stati errori durante l 'esecuzione del comando
                 output :\`\`\`js\n ${inspect((evaled))}  \`\`\``)
             interaction.reply({ embeds: [embed] })
@@ -33,7 +33,7 @@ module.exports = {
             console.error(error.toString());
             const embed = new EmbedBuilder()
                 .setTitle("Error")
-                .setColor(cembed.color.Red)
+                .setColor(cembed.color.rosso)
                 .setDescription("Ho riscrontrato alcuni errori!!")
                 .addFields([
                     { name: 'Input:', value: `\`\`\`js\n ${args}  \`\`\`` },
