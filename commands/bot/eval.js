@@ -27,7 +27,9 @@ module.exports = {
                 .setTitle("Comando eseguito con successo")
                 .setColor(cembed.color.verde)
                 .setDescription(`Non ci sono stati errori durante l 'esecuzione del comando
+
                 output :\`\`\`js\n ${inspect((evaled))}  \`\`\``)
+                .setThumbnail(client.user.displayAvatarURL({ dynamic: true }) || cembed.image.notimmage)
             interaction.reply({ embeds: [embed] })
         } catch (error) {
             console.error(error.toString());

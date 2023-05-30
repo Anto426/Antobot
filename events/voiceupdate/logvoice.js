@@ -1,5 +1,6 @@
 const { logquitvocal, logjoinvocal, logchangevocal, logforcechangevocal } = require("../../embeds/voiceupdate/logvoice")
 const { AuditLogEvent, Events } = require('discord.js');
+let lasttimestap
 module.exports = {
     name: "voiceStateUpdate",
     async execute(oldMember, newMember) {
@@ -26,18 +27,18 @@ module.exports = {
             if (oldMember.channelId !== newMember.channelId && newMember.channel !== null) {
                 const auditLogs = await newMember.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberMove });
                 const lastAuditLog = auditLogs.entries.reduce((prev, current) => {
-                  return (prev.createdTimestamp > current.createdTimestamp) ? prev : current;
+                    return (prev.createdTimestamp > current.createdTimestamp) ? prev : current;
                 });
                 const moveLog = lastAuditLog;
-                console.log(moveLog.action);
-                
-                if (moveLog && moveLog.executor.id !== newMember.id) {
-                  const executor = await newMember.guild.members.fetch(moveLog.executor.id);
-                  logforcechangevocal(member, executor.user.tag, newMember.channel, oldMember.channel);
+
+                if (moveLog && moveLog.executor.id !== newMember.id && moveLog != lasttimestap) {
+                    lasttimestap = moveLog;
+                    const executor = await newMember.guild.members.fetch(moveLog.executor.id);
+                    logforcechangevocal(member, executor.user.tag, newMember.channel, oldMember.channel);
                 } else {
-                  logchangevocal(member, newMember.channel, oldMember.channel);
+                    logchangevocal(member, newMember.channel, oldMember.channel);
                 }
-              }
+            }
         } catch (error) {
             console.error(error);
         }
