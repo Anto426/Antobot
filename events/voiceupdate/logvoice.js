@@ -24,20 +24,26 @@ module.exports = {
         } catch { }
 
         try {
-            if (oldMember.channelId !== newMember.channelId && newMember.channel !== null) {
-                const auditLogs = await newMember.guild.fetchAuditLogs({ limit: 1, type: AuditLogEvent.MemberMove });
-                const lastAuditLog = auditLogs.entries.reduce((prev, current) => {
-                    return (prev.createdTimestamp > current.createdTimestamp) ? prev : current;
-                });
-                const moveLog = lastAuditLog;
 
-                if (moveLog && moveLog.executor.id !== newMember.id && moveLog.createdTimestamp != lasttimestap) {
-                    lasttimestap = moveLog.createdTimestamp;
-                    const executor = await newMember.guild.members.fetch(moveLog.executor.id);
-                    logforcechangevocal(member, executor.user.tag, newMember.channel, oldMember.channel);
-                } else {
-                    logchangevocal(member, newMember.channel, oldMember.channel);
-                }
+
+
+
+            if (oldMember.channelId !== newMember.channelId && newMember.channel !== null) {
+                newMember.guild.fetchAuditLogs()
+                    .then(async logs => {
+                        let moveLog = logs.entries
+                            .filter(e => e.action === AuditLogEvent.MemberMove)
+                            .sort((a, b) => b.createdAt - a.createdAt)
+                            .first()
+                        if (moveLog.executor.id !== newMember.id && moveLog.createdTimestamp != lasttimestap) {
+                            lasttimestap = await moveLog.createdTimestamp;
+                            const executor = await newMember.guild.members.fetch(moveLog.executor.id);
+                            logforcechangevocal(member, executor.user.tag, newMember.channel, oldMember.channel);
+                        } else {
+                            logchangevocal(member, newMember.channel, oldMember.channel);
+                        }
+                    })
+
             }
         } catch (error) {
             console.error(error);
