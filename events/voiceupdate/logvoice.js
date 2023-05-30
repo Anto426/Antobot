@@ -31,8 +31,8 @@ module.exports = {
                 });
                 const moveLog = lastAuditLog;
 
-                if (moveLog && moveLog.executor.id !== newMember.id && moveLog != lasttimestap) {
-                    lasttimestap = moveLog;
+                if (moveLog && moveLog.executor.id !== newMember.id && moveLog.createdTimestamp != lasttimestap) {
+                    lasttimestap = moveLog.createdTimestamp;
                     const executor = await newMember.guild.members.fetch(moveLog.executor.id);
                     logforcechangevocal(member, executor.user.tag, newMember.channel, oldMember.channel);
                 } else {
