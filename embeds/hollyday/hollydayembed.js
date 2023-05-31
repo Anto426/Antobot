@@ -1,4 +1,4 @@
-const cguild = require("./../../settings/guild.json")
+const cguild = require("../../settings/guild.json")
 const { AttachmentBuilder } = require("discord.js")
 async function congratulatioembed(festa) {
 

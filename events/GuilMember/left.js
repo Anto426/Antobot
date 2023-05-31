@@ -1,4 +1,4 @@
-const { logleftmember } = require("../../embeds/GuilMember/left")
+const { logleftmember } = require("../../embeds/GuilMember/leftembed")
 
 module.exports = {
     name: "guildMemberRemove",

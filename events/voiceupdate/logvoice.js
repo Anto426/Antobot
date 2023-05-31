@@ -1,5 +1,5 @@
-const { logquitvocal, logjoinvocal, logchangevocal, logforcechangevocal } = require("../../embeds/voiceupdate/logvoice")
-const { AuditLogEvent, Events } = require('discord.js');
+const { logjoinvocalembed, logquitvocalembed, logforcechangevocalembed, logchangevocalembed } = require("../../embeds/voiceupdate/logvoiceembed")
+const { AuditLogEvent } = require('discord.js');
 let lasttimestap
 module.exports = {
     name: "voiceStateUpdate",
@@ -9,7 +9,7 @@ module.exports = {
         try {
 
             if (newMember.channel != null && oldMember.channel == null) {
-                logjoinvocal(member, newMember.channel)
+                logjoinvocalembed(member, newMember.channel)
             }
 
 
@@ -17,7 +17,7 @@ module.exports = {
         try {
 
             if (oldMember.channel != null && newMember.channel == null) {
-                logquitvocal(member, oldMember.channel)
+                logquitvocalembed(member, oldMember.channel)
             }
 
 
@@ -38,9 +38,9 @@ module.exports = {
                         if (moveLog.executor.id !== newMember.id && moveLog.createdTimestamp != lasttimestap) {
                             lasttimestap = await moveLog.createdTimestamp;
                             const executor = await newMember.guild.members.fetch(moveLog.executor.id);
-                            logforcechangevocal(member, executor.user.tag, newMember.channel, oldMember.channel);
+                            logforcechangevocalembed(member, executor.user.tag, newMember.channel, oldMember.channel);
                         } else {
-                            logchangevocal(member, newMember.channel, oldMember.channel);
+                            logchangevocalembed(member, newMember.channel, oldMember.channel);
                         }
                     })
 

@@ -1,6 +1,4 @@
-const { EmbedBuilder } = require('discord.js')
-const { inspect } = require(`util`)
-const cembed = require("./../../settings/embed.json")
+const { evalsembed, evalfembed } = require('../../embeds/commands/bot/eval')
 module.exports = {
     name: "eval",
     permisions: [],
@@ -23,26 +21,11 @@ module.exports = {
 
         try {
             evaled = await eval(args);
-            const embed = new EmbedBuilder()
-                .setTitle("Comando eseguito con successo")
-                .setColor(cembed.color.verde)
-                .setDescription(`Non ci sono stati errori durante l 'esecuzione del comando
+            evalsembed(interaction)
 
-                output :\`\`\`js\n ${inspect((evaled))}  \`\`\``)
-                .setThumbnail(client.user.displayAvatarURL({ dynamic: true }) || cembed.image.notimmage)
-            interaction.reply({ embeds: [embed] })
         } catch (error) {
             console.error(error.toString());
-            const embed = new EmbedBuilder()
-                .setTitle("Error")
-                .setColor(cembed.color.rosso)
-                .setDescription("Ho riscrontrato alcuni errori!!")
-                .addFields([
-                    { name: 'Input:', value: `\`\`\`js\n ${args}  \`\`\`` },
-                    { name: 'Error:', value: `\`\`\`js\n ${inspect((error.toString()))}  \`\`\`` },
-                ])
-                .setThumbnail(cembed.image.error)
-            interaction.reply({ embeds: [embed] })
+            evalfembed(interaction, args, error)
         }
 
     }

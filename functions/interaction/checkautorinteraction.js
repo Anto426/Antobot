@@ -1,4 +1,5 @@
-const { notyourbootn } = require("../../embeds/err/error")
+const { notyourbootn } = require("../../embeds/err/interaction/interaction");
+
 
 function Cautor(interaction) {
     try {

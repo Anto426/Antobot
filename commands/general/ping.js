@@ -1,4 +1,5 @@
-const { pingembed } = require("../../embeds/commands/general/general")
+const { pingembed } = require("../../embeds/commands/general/pingembed")
+
 
 module.exports = {
     name: "ping",

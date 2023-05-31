@@ -1,6 +1,6 @@
 const { createCanvas, loadImage, registerFont } = require("canvas")
 const { AttachmentBuilder } = require("discord.js");
-const { welcomeembed, logaddmember } = require("../../embeds/GuilMember/add");
+const { welcomeembed, logaddmember } = require("../../embeds/GuilMember/addembed");
 registerFont("./canavas/font/asapCondensed.ttf", { family: "asapCondensed" });
 registerFont("./canavas/font/NotoSansJP-Bold.ttf", { family: "NotoSansJP-Bold" });
 module.exports = {

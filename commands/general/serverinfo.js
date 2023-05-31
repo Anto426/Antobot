@@ -1,4 +1,5 @@
-const { serverinfoembed } = require('../../embeds/commands/general/general');
+const { serverinfoembed } = require("../../embeds/commands/general/serverinfoembed")
+
 module.exports = {
     name: "serverinfo",
     permisions: [],

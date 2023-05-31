@@ -1,4 +1,5 @@
-const { avatarembed } = require('../../embeds/commands/general/general');
+const { avatarembed } = require("../../embeds/commands/general/avatarembed")
+
 module.exports = {
     name: "avatar",
     permisions: [],

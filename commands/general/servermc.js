@@ -1,6 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
-const cgame = require("./../../settings/games.json")
-const cembed = require("./../../settings/embed.json");
+const { servermcembeddef } = require('../../embeds/commands/general/servermcembed');
 const { createrowmc } = require('../../functions/row/createrow');
 module.exports = {
     name: "servermc",
@@ -15,14 +13,6 @@ module.exports = {
     execute(interaction) {
         let server = []
         let row = createrowmc(interaction, server)
-        let embed = new EmbedBuilder()
-            .setTitle("Server MC")
-            .setDescription(`
-            Usa il menu qui sotto per ottenere ip dei server di minecraft
-
-            ${server.join("\n \n")}`)
-            .setThumbnail(cgame.mc.image)
-            .setColor(cembed.color.viola)
-        interaction.reply({ embeds: [embed], components: [row] })
+        servermcembeddef(interaction, row, server)
     }
 }

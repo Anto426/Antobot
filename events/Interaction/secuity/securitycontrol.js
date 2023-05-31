@@ -1,5 +1,6 @@
 const fs = require("fs");
-const { genericerr } = require("../../../embeds/err/error");
+const { genericerr, disablefunctionembed } = require("../../../embeds/err/generic");
+const { notpermisionmsgerr, tohigtmsgerr } = require("../../../embeds/err/command/permission");
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
@@ -83,10 +84,10 @@ module.exports = {
                 }
             } else {
                 if (!test)
-                    return disablefunction(interaction)
+                    return disablefunctionembed(interaction)
                 if (!position && staff)
-                    return tohigtmsg(interaction)
-                return notpermisionmsg(interaction)
+                    return tohigtmsgerr(interaction)
+                return notpermisionmsgerr(interaction)
             }
         } catch (err) { genericerr(interaction, err) }
     }

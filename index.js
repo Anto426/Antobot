@@ -7,4 +7,4 @@ global.optionsdate = { timeZone: 'Europe/Rome' };
 
 intclient()
 client.login(process.env.TOKEN)
-setTimeout(() => { boot() }, 5000)
+setTimeout(() => { boot() }, 6000)

@@ -1,4 +1,4 @@
-const { congratulatioembed } = require("../../embeds/hollyday/hollyday");
+const { congratulatioembed } = require("../../embeds/hollyday/hollydayembed");
 const { times } = require("../time/timef")
 const cguild = require("./../../settings/guild.json")
 const chollyday = require("./../../settings/hollyday.json")

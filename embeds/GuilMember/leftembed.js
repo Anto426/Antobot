@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js")
-const cembed = require("./../../settings/embed.json")
+const cembed = require("../../settings/embed.json")
 const { sendtoalllog } = require("../../functions/log/sendtolog")
 async function logleftmember(member) {
 

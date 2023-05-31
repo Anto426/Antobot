@@ -35,7 +35,10 @@ By Anto426
         statusupdate()
         mainhollyday()
 
-    } catch (err) { console.log(err) }
+    } catch (err) {
+        console.log(err)
+        boot()
+    }
 }
 
 module.exports = {

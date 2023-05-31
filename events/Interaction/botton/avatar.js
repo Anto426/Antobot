@@ -1,4 +1,5 @@
-const { bannerembed, avatarembed } = require("../../../embeds/commands/general/general");
+
+const { avatarembed, bannerembed } = require('../../../embeds/commands/general/avatarembed');
 const { Cautor } = require('../../../functions/interaction/checkautorinteraction');
 module.exports = {
     name: "interactionCreate",

@@ -1,8 +1,8 @@
 const { EmbedBuilder, Collection } = require('discord.js');
 const fs = require("fs")
 const cembed = require("./../../../settings/embed.json")
-const cgame = require("./../../../settings/games.json");
 const { Cautor } = require('../../../functions/interaction/checkautorinteraction');
+const { genericerr } = require('../../../embeds/err/generic');
 
 module.exports = {
     name: "interactionCreate",
@@ -67,7 +67,7 @@ ${msg.join(" ").toString()}
             }
 
 
-        } catch { }
+        } catch (err) { genericerr(interaction, err) }
 
     }
 }

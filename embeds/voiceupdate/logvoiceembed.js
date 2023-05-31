@@ -1,7 +1,7 @@
 const { EmbedBuilder } = require("discord.js")
-const cembed = require("./../../settings/embed.json")
+const cembed = require("../../settings/embed.json")
 const { sendtoprlog } = require("../../functions/log/sendtolog")
-async function logjoinvocal(member, channel) {
+async function logjoinvocalemed(member, channel) {
 
     try {
         const embed = new EmbedBuilder()
@@ -20,7 +20,7 @@ async function logjoinvocal(member, channel) {
     } catch { }
 }
 
-async function logchangevocal(member, newchannel, oldchannel) {
+async function logchangevocalembed(member, newchannel, oldchannel) {
 
     try {
         const embed = new EmbedBuilder()
@@ -40,7 +40,7 @@ async function logchangevocal(member, newchannel, oldchannel) {
 
     } catch { }
 }
-async function logforcechangevocal(member, mover, newchannel, oldchannel) {
+async function logforcechangevocalembed(member, mover, newchannel, oldchannel) {
 
     try {
         const embed = new EmbedBuilder()
@@ -62,7 +62,7 @@ async function logforcechangevocal(member, mover, newchannel, oldchannel) {
 
     } catch { }
 }
-async function logquitvocal(member, oldchannel) {
+async function logquitvocalembed(member, oldchannel) {
 
     try {
         const embed = new EmbedBuilder()
@@ -82,7 +82,7 @@ async function logquitvocal(member, oldchannel) {
     } catch { }
 }
 
-async function logkickvocal(member, oldchannel) {
+async function logkickvocalemed(member, oldchannel) {
 
     try {
         const embed = new EmbedBuilder()
@@ -103,10 +103,10 @@ async function logkickvocal(member, oldchannel) {
     } catch { }
 }
 module.exports = {
-    logjoinvocal,
-    logchangevocal,
-    logquitvocal,
-    logforcechangevocal,
-    logkickvocal
+    logjoinvocalembed,
+    logchangevocalembed,
+    logquitvocalembed,
+    logforcechangevocalembed,
+    logkickvocalemed
 }
 

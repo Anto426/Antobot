@@ -1,5 +1,6 @@
-const { userinfoembed } = require('../../embeds/commands/general/general');
-const { PermissionsBitField } = require("discord.js")
+
+const { PermissionsBitField } = require("discord.js");
+const { userinfoembed } = require("../../embeds/commands/general/userifoembed");
 module.exports = {
     name: "userinfo",
     permisions: [],
