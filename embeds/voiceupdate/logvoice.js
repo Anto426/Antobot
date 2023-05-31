@@ -1,4 +1,4 @@
-const { EmbedBuilder, NewsChannel } = require("discord.js")
+const { EmbedBuilder } = require("discord.js")
 const cembed = require("./../../settings/embed.json")
 const { sendtoprlog } = require("../../functions/log/sendtolog")
 async function logjoinvocal(member, channel) {
