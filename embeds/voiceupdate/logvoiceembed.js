@@ -103,7 +103,7 @@ async function logkickvocalemed(member, oldchannel) {
     } catch { }
 }
 module.exports = {
-    logjoinvocalembed,
+    logjoinvocalemed,
     logchangevocalembed,
     logquitvocalembed,
     logforcechangevocalembed,

@@ -1,4 +1,4 @@
-const { logjoinvocalembed, logquitvocalembed, logforcechangevocalembed, logchangevocalembed } = require("../../embeds/voiceupdate/logvoiceembed")
+const { logjoinvocalemed, logquitvocalembed, logchangevocalembed, logforcechangevocalembed } = require("../../embeds/voiceupdate/logvoiceembed")
 const { AuditLogEvent } = require('discord.js');
 let lasttimestap
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
         try {
 
             if (newMember.channel != null && oldMember.channel == null) {
-                logjoinvocalembed(member, newMember.channel)
+                logjoinvocalemed(member, newMember.channel)
             }
 
 
@@ -46,7 +46,7 @@ module.exports = {
 
             }
         } catch (error) {
-            console.error(error);
+            console.log(error);
         }
     }
 }
