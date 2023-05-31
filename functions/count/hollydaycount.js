@@ -27,6 +27,7 @@ async function updatecount(festa, channelcount) {
             let time = await `${times(timereminig)}`
             console.log(`Update : ${time}`)
             channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
+
         }, 1000 * 60 * 5);
     } catch { }
 
@@ -39,13 +40,17 @@ async function sendcongratulations(festa) {
         if (timereminig <= 0) {
             console.log(festa.title)
             congratulatioembed(festa)
-            return mainhollyday()
+            clearInterval(countInterval);
+            clearInterval(congratulationsInterval);
+            mainhollyday()
+
         }
 
 
 
     }, 1000 * 60)
 }
+
 
 async function mainhollyday() {
 
@@ -54,14 +59,15 @@ async function mainhollyday() {
         const channelname = guild.channels.cache.find(x => x.id == cguild["Anto's  Server"].channel.hollyday.name)
         const channelcount = guild.channels.cache.find(x => x.id == cguild["Anto's  Server"].channel.hollyday.count)
         let festa = nexhollyday()
-
         if (!guild || !channelname || !channelcount || !festa)
             return
         channelname.setName(festa.name)
             .then(updatedChannel => console.log(`Il nome del canale è stato aggiornato a ${updatedChannel.name}`))
             .catch(console.error);
-        updatecount(festa.date, channelcount)
-        sendcongratulations(festa)
+
+        countInterval = updatecount(festa.date, channelcount);
+        congratulationsInterval = sendcongratulations(festa);
+
     } catch { }
 
 
