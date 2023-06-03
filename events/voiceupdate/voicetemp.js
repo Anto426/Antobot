@@ -27,22 +27,25 @@ module.exports = {
                 }
             }
         } catch (err) { }
-        try {
-            for (let x in cguild["Anto's  Server"].channel.temp.function) {
-                if (newMember.channel.id != cguild["Anto's  Server"].channel.temp.function[x].id) {
-                    if (newMember.channel != oldMember.channel || newMember.channel == null && oldMember.channel == channel.id) {
-                        if (oldMember.channel == channel) {
-                            const intervalId = setInterval(async () => {
-                                if (channel.members.size == 0) {
-                                    channel.delete()
-                                }
+
+        for (let x in cguild["Anto's  Server"].channel.temp.function) {
+
+            if (newMember.channel == null || newMember.channel.id != cguild["Anto's  Server"].channel.temp.function[x].id) {
+                if (newMember.channel != oldMember.channel && oldMember.channel == channel.id) {
+                    if (oldMember.channel == channel) {
+                        const intervalId = setInterval(async () => {
+                            if (channel.members.size == 0) {
+                                channel.delete()
                                 clearInterval(intervalId);
-                            }, 1000 * 5);
-                        }
-                        return
+                            }
+                            if (channel.members.has(oldMember.id))
+                                clearInterval(intervalId);
+                        }, 1000 * 5);
                     }
+                    return
                 }
             }
-        } catch (err) { }
+        }
+
     }
 }

@@ -37,7 +37,10 @@ By Anto426
 
     } catch (err) {
         console.log(err)
-        boot()
+        setTimeout(() => {
+            boot()
+        }, 1000 * 6)
+
     }
 }
 
