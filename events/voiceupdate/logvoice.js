@@ -8,7 +8,7 @@ module.exports = {
         let member = newMember.guild.members.cache.get(newMember.id)
         try {
 
-            if (newMember.channel != null && oldMember.channel == null) {
+            if (newMember && newMember.channel != null && oldMember.channel == null) {
                 logjoinvocalemed(member, newMember.channel)
             }
 
@@ -16,7 +16,7 @@ module.exports = {
         } catch { }
         try {
 
-            if (oldMember.channel != null && newMember.channel == null) {
+            if (oldMember && oldMember.channel != null && newMember.channel == null) {
                 logquitvocalembed(member, oldMember.channel)
             }
 
@@ -28,7 +28,7 @@ module.exports = {
 
 
 
-            if (oldMember.channelId !== newMember.channelId && newMember.channel !== null) {
+            if (newMember && oldMember && oldMember.channelId !== newMember.channelId) {
                 newMember.guild.fetchAuditLogs()
                     .then(async logs => {
                         let moveLog = logs.entries
