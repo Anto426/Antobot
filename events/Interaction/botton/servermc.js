@@ -1,5 +1,5 @@
 
-const { servermcembeddef } = require("../../../embeds/commands/general/servermcembed");
+const { servermcembedint } = require("../../../embeds/commands/general/servermcembed");
 const { genericerr } = require("../../../embeds/err/generic");
 const { Cautor } = require("../../../functions/interaction/checkautorinteraction");
 const { createrowmc } = require("../../../functions/row/createrow");
@@ -14,7 +14,7 @@ module.exports = {
                 if (Cautor(interaction)) {
                     let server = []
                     let row = createrowmc(interaction, server)
-                    servermcembeddef(interaction, row)
+                    servermcembedint(interaction, row, server)
                 }
 
             }

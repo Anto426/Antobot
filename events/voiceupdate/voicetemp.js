@@ -6,13 +6,12 @@ module.exports = {
         let member = newMember.guild.members.cache.get(newMember.id)
         let channel = newMember.guild.channels.cache.find(x => x.parent == category && x.name == member.user.username)
         try {
-
-
             for (let x in cguild["Anto's  Server"].channel.temp.function) {
                 if (newMember.channel.id == cguild["Anto's  Server"].channel.temp.function[x].id) {
                     if (channel) {
                         channel.setUserLimit(cguild["Anto's  Server"].channel.temp.function[x].limite)
                         member.voice.setChannel(channel)
+                        return
                     } else {
 
                         channel = await newMember.guild.channels.create({
@@ -26,18 +25,24 @@ module.exports = {
                         return
                     }
                 }
-
             }
         } catch (err) { }
         try {
-            if (newMember.channel == null) {
-                if (oldMember.channel == channel) {
-                    channel.delete()
+            for (let x in cguild["Anto's  Server"].channel.temp.function) {
+                if (newMember.channel.id != cguild["Anto's  Server"].channel.temp.function[x].id) {
+                    if (newMember.channel != oldMember.channel || newMember.channel == null && oldMember.channel == channel.id) {
+                        if (oldMember.channel == channel) {
+                            const intervalId = setInterval(async () => {
+                                if (channel.members.size == 0) {
+                                    channel.delete()
+                                }
+                                clearInterval(intervalId);
+                            }, 1000 * 5);
+                        }
+                        return
+                    }
                 }
             }
         } catch (err) { }
-
-
-
     }
 }

@@ -7,10 +7,10 @@ async function servermcembedint(interaction, row) {
     try {
         let embed = new EmbedBuilder()
             .setTitle(cgame.mc.server[interaction.values[0]].emoji + " " + interaction.values[0])
-            .setDescription("Ecco ip del tuo server:")
+            .setDescription(`Ecco il tuo server spero ti sia stato di aiuto`)
             .addFields({ name: `ip:`, value: `\`\`\`\n${cgame.mc.server[interaction.values[0]].ip.toString()}\n\`\`\`` })
             .setThumbnail(cgame.mc.server[interaction.values[0]].image)
-            .setColor(cembed.color.viola)
+            .setColor(cgame.mc.server[interaction.values[0]].color)
         interaction.update({ embeds: [embed], components: [row] })
     } catch (err) {
         console.log(err)
