@@ -35,7 +35,7 @@ module.exports = {
                             .filter(e => e.action === AuditLogEvent.MemberMove)
                             .sort((a, b) => b.createdAt - a.createdAt)
                             .first()
-                        if (moveLog.executor.id !== newMember.id && moveLog.createdTimestamp != lasttimestap) {
+                        if (mover || moveLog.executor.id !== newMember.id && moveLog.createdTimestamp != lasttimestap) {
                             lasttimestap = await moveLog.createdTimestamp;
                             const executor = await newMember.guild.members.fetch(moveLog.executor.id);
                             logforcechangevocalembed(member, executor.user.tag, newMember.channel, oldMember.channel);
@@ -45,7 +45,7 @@ module.exports = {
                     })
 
             }
-        } catch  {
+        } catch {
         }
     }
 }
