@@ -40,7 +40,7 @@ module.exports = {
                             }
                             if (channel.members.has(oldMember.id))
                                 clearInterval(intervalId);
-                        }, 1000 * 5);
+                        }, 1000 * 5 * 60);
                     }
                     return
                 }
