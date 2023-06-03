@@ -36,10 +36,9 @@ module.exports = {
                             channel.delete()
                             clearInterval(intervalId);
                         }
-                        console.log(channel)
                         if (channel.members.has(oldMember.id))
                             clearInterval(intervalId);
-                    }, 1000 );
+                    }, 1000 * 5 * 60).catch(() => { })
 
                     return
                 }
