@@ -39,7 +39,7 @@ module.exports = {
                             } else if (channel.members.has(oldMember.id))
                                 clearInterval(intervalId);
                         } catch (err) { console.log(err) }
-                    }, 1000 * 60)
+                    }, 1000 * 60 * 5)
                     return
                 }
             }
