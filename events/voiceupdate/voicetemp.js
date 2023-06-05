@@ -34,7 +34,7 @@ module.exports = {
                     const intervalId = setInterval(async () => {
                         try {
                             if (channel.members.size == 0) {
-                                channel.delete().catch(() => { })
+                                channel.delete().catch(() => { clearInterval(intervalId); })
                                 clearInterval(intervalId);
                             } else if (channel.members.has(oldMember.id))
                                 clearInterval(intervalId);
