@@ -1,5 +1,6 @@
 const { createCanvas, loadImage, registerFont } = require("canvas")
 const { AttachmentBuilder } = require("discord.js");
+const cguild = require("../../settings/guild.json")
 const { welcomeembed, logaddmember } = require("../../embeds/GuilMember/addembed");
 registerFont("./canavas/font/asapCondensed.ttf", { family: "asapCondensed" });
 registerFont("./canavas/font/NotoSansJP-Bold.ttf", { family: "NotoSansJP-Bold" });
@@ -43,9 +44,13 @@ module.exports = {
 
                 let attachment = new AttachmentBuilder(canvas.toBuffer(), { name: "canvas.png" })
 
+                member.roles.add(member.guild.roles.cache.get(cguild["Anto's  Server"].role.user))
+
                 welcomeembed(member, humans.size, attachment)
                 logaddmember(member, humans.size)
 
+            } else {
+                member.roles.add(member.guild.roles.cache.get(cguild["Anto's  Server"].role.bot))
             }
         } catch (err) { console.log(err) }
     }

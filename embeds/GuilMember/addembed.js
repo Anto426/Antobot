@@ -16,7 +16,7 @@ ${member} benvenuto su  ${member.guild.name} spero che ti possa trovare bene sei
                 content: message,
                 files: [canavas],
             })
-        member.roles.add(member.guild.roles.cache.get(cguild[member.guild.name].role.user))
+        
     } catch { }
 }
 async function logaddmember(member, cout) {
