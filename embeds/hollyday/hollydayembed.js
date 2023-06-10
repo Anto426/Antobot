@@ -7,7 +7,7 @@ async function congratulatioembed(festa) {
         const message = `
         ╚»★${festa.title}★«╝
 @everyone 
-@here 
+@here
 ${festa.description}
         
         
