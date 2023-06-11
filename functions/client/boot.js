@@ -1,5 +1,3 @@
-const { congratulatioembed } = require("../../embeds/hollyday/hollydayembed");
-const chollyday = require("../../settings/hollyday.json")
 const info = require("../../package.json");
 const { mainhollyday } = require("../count/hollydaycount");
 const { statusupdate } = require("./clientstatus");
@@ -30,7 +28,7 @@ By Anto426
 -------------------------------------------------------------------------------------
     
 `,)
-        congratulatioembed(chollyday.holidays[3])
+
         timeon()
         await comandload()
         comandregisterguild()
