@@ -21,9 +21,10 @@ function nexhollyday() {
 
 async function updatecount(festa, channelcount) {
     try {
+        let timereminig
         do {
             setTimeout(() => {
-                var timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime()
+                timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime()
                 let time = `${times(timereminig)}`
                 console.log(`Update : ${time}`)
                 channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
@@ -36,10 +37,10 @@ async function updatecount(festa, channelcount) {
 }
 
 async function sendcongratulations(festa) {
-
+    let timereminig
     do {
         setTimeout(() => {
-            var timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime()
+            timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime()
             if (timereminig <= 0) {
                 console.log(festa.title)
                 congratulatioembed(festa)
