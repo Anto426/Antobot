@@ -1,4 +1,4 @@
-const { evalsembed, evalfembed } = require('../../embeds/commands/bot/eval')
+const { evalsembed, evalfembed } = require('../../embeds/commands/bot/evalembed')
 module.exports = {
     name: "eval",
     permisions: [],

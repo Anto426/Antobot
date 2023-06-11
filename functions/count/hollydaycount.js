@@ -20,35 +20,34 @@ function nexhollyday() {
 }
 
 async function updatecount(festa, channelcount) {
-
     try {
-        setInterval(async () => {
-            let timereminig = new Date(new Date().getFullYear(), festa.mouth, festa.day) - new Date().getTime()
-            let time = `${times(timereminig)}`
-            console.log(`Update : ${time}`)
-            channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
+        do {
+            setTimeout(() => {
+                let timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime()
+                let time = `${times(timereminig)}`
+                console.log(`Update : ${time}`)
+                channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
+                return
 
-        }, 1000 * 60 * 5);
+            }, 1000 * 60 * 5)
+        } while (timereminig > 0)
     } catch { }
 
 }
 
 async function sendcongratulations(festa) {
-    setInterval(() => {
 
-        let timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime()
-        if (timereminig <= 0) {
-            console.log(festa.title)
-            congratulatioembed(festa)
-            clearInterval(countInterval);
-            clearInterval(congratulationsInterval);
-            mainhollyday()
-
-        }
-
-
-
-    }, 1000 * 60)
+    do {
+        setTimeout(() => {
+            let timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime()
+            if (timereminig <= 0) {
+                console.log(festa.title)
+                congratulatioembed(festa)
+                mainhollyday()
+                return
+            }
+        }, 1000 * 60)
+    } while (timereminig > 0)
 }
 
 

@@ -5,7 +5,6 @@ function createrowmc(interaction, server) {
         .setCustomId(`mc-${interaction.member.id}`)
         .setPlaceholder('Nothing selected')
 
-
     for (let temp in cgame.mc.server) {
         server.push(`${cgame.mc.server[temp].emoji} ${temp}`)
         selectmenu.addOptions([{
@@ -24,27 +23,27 @@ function createrowmc(interaction, server) {
 
 }
 function createrowbanner(interaction, member) {
-    const banner = new ButtonBuilder()
+    const bannerbotton = new ButtonBuilder()
         .setCustomId(`banner-${interaction.member.id}-${member.id}`)
         .setLabel('Banner')
         .setStyle(ButtonStyle.Success);
 
     let row = new ActionRowBuilder()
         .addComponents(
-            banner
+            bannerbotton
         );
     return row
 
 }
 function createrowavatar(interaction, member) {
-    const banner = new ButtonBuilder()
+    const avatarbotton = new ButtonBuilder()
         .setCustomId(`avatar-${interaction.member.id}-${member.id}`)
         .setLabel('Avatar')
         .setStyle(ButtonStyle.Success);
 
     let row = new ActionRowBuilder()
         .addComponents(
-            banner
+            avatarbotton
         );
 
     return row
