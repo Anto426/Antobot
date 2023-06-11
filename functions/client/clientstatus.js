@@ -1,7 +1,7 @@
 async function statusupdate() {
 
     setInterval(async () => {
-        let frasi = ["moderare il server", "/help"]
+        let frasi = ["a moderare il server", "a /help"]
         var x = Math.floor(Math.random() * frasi.length);
         client.user.setActivity(frasi[x].toString());
 
