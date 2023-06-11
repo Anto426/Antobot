@@ -24,12 +24,11 @@ async function updatecount(festa, channelcount) {
         let timereminig
         do {
             setTimeout(() => {
-                timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime() - 3600000
+                timereminig = new Date(new Date().getFullYear(), festa.mouth, festa.day) - new Date().getTime() - 3600000
                 let time = `${times(timereminig)}`
                 console.log(`Update : ${time}`)
                 channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
                 return
-
             }, 1000 * 60 * 5)
         } while (timereminig > 0)
     } catch { }
@@ -37,18 +36,20 @@ async function updatecount(festa, channelcount) {
 }
 
 async function sendcongratulations(festa) {
-    let timereminig
-    do {
-        setTimeout(() => {
-            timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime() - 3600000
-            if (timereminig <= 0) {
-                console.log(festa.title)
-                congratulatioembed(festa)
-                mainhollyday()
-                return
-            }
-        }, 1000 * 60)
-    } while (timereminig > 0)
+    try {
+        let timereminig
+        do {
+            setTimeout(() => {
+                timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime() - 3600000
+                if (timereminig <= 0) {
+                    console.log(festa.title)
+                    congratulatioembed(festa)
+                    mainhollyday()
+                    return
+                }
+            }, 1000 * 60)
+        } while (timereminig > 0)
+    } catch { }
 }
 
 
