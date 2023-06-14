@@ -11,7 +11,7 @@ async function boostembed(newmeber) {
             .setDescription(newmeber + `grazie di aver boostato il server`)
             .setThumbnail(cembed.image.boost)
             .setColor(cembed.color.viola)
-        newmeber.guild.channels.cache.find(x => x.id == cguild["Anto's  Server"].channel.info.boost).se({ embeds: [embed] })
+        newmeber.guild.channels.cache.find(x => x.id == cguild["Anto's  Server"].channel.info.boost).send({ embeds: [embed] })
     } catch (err) { genericerr(newmeber, err) }
 }
 
