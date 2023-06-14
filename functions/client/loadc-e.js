@@ -44,7 +44,7 @@ function eventload() {
                             client.on(events[0], (...args) => {
                                 event.execute(...args)
                             });
-                        } catch { }
+                        } catch (err) { console.log(err) }
 
                     } else {
                         const eventsFiles2 = fs.readdirSync(`./events/${folder}/${file}`)
@@ -55,10 +55,10 @@ function eventload() {
                                 client.on(events[0], (...args) => {
                                     event.execute(...args)
                                 });
-                            } catch { }
+                            } catch (err) { console.log(err) }
                         }
                     }
-                } catch { }
+                } catch (err) { console.log(err) }
             }
 
         }

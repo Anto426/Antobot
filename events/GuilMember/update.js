@@ -1,10 +1,11 @@
 const { boostembed } = require("../../embeds/boost/boostembed")
 
+
 module.exports = {
-    name: "guildMemberUpdate",
+    name: 'guildMemberUpdate',
     async execute(oldMember, newMember) {
         try {
-            if (!oldMember.premiumSice && newMember.premiumSice)
+            if (oldMember.premiumSince == null && newMember.premiumSince != null)
                 boostembed(newMember)
         } catch (err) { console.log(err) }
     }
