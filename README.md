@@ -17,6 +17,7 @@ BETA CHANGLOG N2
 
 -risolti numerosi bug
 
+
 BETA CHANGLOG N1
 -Riscritto Da 0 con una nuova architettura
 
