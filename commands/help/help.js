@@ -1,6 +1,7 @@
 const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require("discord.js")
 const fs = require("fs")
 const cembed = require("./../../settings/embed.json")
+const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "help",
     permisions: [],
