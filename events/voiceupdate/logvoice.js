@@ -6,6 +6,7 @@ module.exports = {
     async execute(oldMember, newMember) {
 
         let member = newMember.guild.members.cache.get(newMember.id)
+        
         try {
 
             if (newMember && newMember.channel != null && oldMember.channel == null) {
@@ -14,6 +15,8 @@ module.exports = {
 
 
         } catch { }
+
+
         try {
 
             if (oldMember && oldMember.channel != null && newMember.channel == null) {
@@ -24,9 +27,6 @@ module.exports = {
         } catch { }
 
         try {
-
-
-
 
             if (newMember && oldMember && oldMember.channelId !== newMember.channelId) {
                 newMember.guild.fetchAuditLogs()
@@ -45,7 +45,6 @@ module.exports = {
                     })
 
             }
-        } catch {
-        }
+        } catch { }
     }
 }

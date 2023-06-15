@@ -1,3 +1,4 @@
+const { Stopiterval } = require("../../functions/iterval/interval")
 const cguild = require("../../settings/guild.json")
 module.exports = {
     name: "voiceStateUpdate",
@@ -28,18 +29,20 @@ module.exports = {
                     }
             }
         } catch (err) { }
+
+
         try {
             for (let x in cguild["Anto's  Server"].channel.temp.function) {
                 if (newMember.channel != newMember.guild.channels.cache.find(y => y.id == cguild["Anto's  Server"].channel.temp.function[x].id) && oldMember.channel == channel) {
-                    const intervalId = setInterval(async () => {
+                    let intervalid = setInterval(async () => {
                         try {
                             if (channel.members.size == 0) {
-                                channel.delete().catch(() => { clearInterval(intervalId); })
-                                clearInterval(intervalId);
+                                channel.delete().catch(() => { Stopiterval(intervalid) })
+                                Stopiterval(intervalid)
                             } else if (channel.members.has(oldMember.id))
-                                clearInterval(intervalId);
+                                Stopiterval(intervalid)
                         } catch (err) { console.log(err) }
-                    }, 1000 * 60 * 5)
+                    }, 1000)
                     return
                 }
             }
