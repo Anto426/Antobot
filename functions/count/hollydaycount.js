@@ -1,4 +1,5 @@
 const { congratulatioembed } = require("../../embeds/hollyday/hollydayembed");
+const { Stopiterval } = require("../iterval/interval");
 const { times } = require("../time/timef")
 const cguild = require("./../../settings/guild.json")
 const chollyday = require("./../../settings/hollyday.json")
@@ -21,34 +22,28 @@ function nexhollyday() {
 
 async function updatecount(festa, channelcount) {
     try {
-        let timereminig
-        do {
-            setTimeout(() => {
-                timereminig = new Date(new Date().getFullYear(), festa.mouth, festa.day) - new Date().getTime() - 3600000
-                let time = `${times(timereminig)}`
-                console.log(`Update : ${time}`)
-                channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
-                return
-            }, 1000 * 60 * 5)
-        } while (timereminig > 0)
+
+        let timereminig = new Date(new Date().getFullYear(), festa.mouth, festa.day) - new Date().getTime() - 3600000
+        let time = `${times(timereminig)}`
+        console.log(`Update : ${time}`)
+        channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
+        return
+
     } catch { }
 
 }
 
-async function sendcongratulations(festa) {
+async function sendcongratulations(festa, id1, id2) {
     try {
-        let timereminig
-        do {
-            setTimeout(() => {
-                timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime() - 3600000
-                if (timereminig <= 0) {
-                    console.log(festa.title)
-                    congratulatioembed(festa)
-                    mainhollyday()
-                    return
-                }
-            }, 1000 * 60)
-        } while (timereminig > 0)
+        let timereminig = new Date(new Date().getFullYear(), festa.date.mouth, festa.date.day) - new Date().getTime() - 3600000
+        if (timereminig <= 0) {
+            console.log(festa.title)
+            congratulatioembed(festa)
+            Stopiterval(id1)
+            Stopiterval(id2)
+            mainhollyday()
+        }
+
     } catch { }
 }
 
@@ -66,8 +61,8 @@ async function mainhollyday() {
             .then(updatedChannel => console.log(`Il nome del canale è stato aggiornato a ${updatedChannel.name}`))
             .catch(console.error);
 
-        countInterval = updatecount(festa.date, channelcount);
-        congratulationsInterval = sendcongratulations(festa);
+        countIntervalid = setInterval(() => { updatecount(festa.date, channelcount) }, 60 * 5 * 1000);
+        congratulationsIntervalid = setInterval(() => { sendcongratulations(festa, countIntervalid, congratulationsIntervalid) }, 60 * 1000);
 
     } catch { }
 
