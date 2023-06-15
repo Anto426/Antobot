@@ -1,9 +1,9 @@
 const { serverinfoembed } = require("../../embeds/commands/general/serverinfoembed")
-
+const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "serverinfo",
     permisions: [],
-    allowedchannels: [],
+    allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
     position: false,
     test: false,
     data: {

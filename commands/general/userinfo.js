@@ -1,10 +1,10 @@
-
 const { PermissionsBitField } = require("discord.js");
 const { userinfoembed } = require("../../embeds/commands/general/userifoembed");
+const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "userinfo",
     permisions: [],
-    allowedchannels: [],
+    allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
     position: false,
     test: false,
     data: {

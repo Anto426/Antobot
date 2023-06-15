@@ -4,7 +4,7 @@ const cembed = require("./../../settings/embed.json")
 module.exports = {
     name: "help",
     permisions: [],
-    allowedchannels: [],
+    allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
     position: false,
     test: false,
     data: {

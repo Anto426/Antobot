@@ -1,8 +1,9 @@
 const { evalsembed, evalfembed } = require('../../embeds/commands/bot/evalembed')
+const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "eval",
     permisions: [],
-    allowedchannels: [],
+    allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
     position: false,
     test: false,
     data: {

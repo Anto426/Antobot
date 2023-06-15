@@ -1,9 +1,9 @@
 const { avatarembed } = require("../../embeds/commands/general/avatarembed")
-
+const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "avatar",
     permisions: [],
-    allowedchannels: [],
+    allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
     position: false,
     test: false,
     data: {

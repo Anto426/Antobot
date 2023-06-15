@@ -1,10 +1,10 @@
 const { pingembed } = require("../../embeds/commands/general/pingembed")
-
+const cguild = require("./../../settings/guild.json")
 
 module.exports = {
     name: "ping",
     permisions: [],
-    allowedchannels: [],
+    allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
     position: false,
     test: false,
     data: {

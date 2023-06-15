@@ -1,9 +1,10 @@
 const { servermcembeddef } = require('../../embeds/commands/general/servermcembed');
 const { createrowmc } = require('../../functions/row/createrow');
+const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "servermc",
     permisions: [],
-    allowedchannels: [],
+    allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
     position: false,
     test: false,
     data: {
