@@ -42,7 +42,7 @@ module.exports = {
                             } else if (channel.members.has(oldMember.id))
                                 Stopiterval(intervalid)
                         } catch (err) { console.log(err) }
-                    }, 1000)
+                    }, 1000 * 60 * 5)
                     return
                 }
             }
