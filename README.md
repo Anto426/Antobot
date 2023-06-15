@@ -8,6 +8,16 @@ This is a simple bot created by me for my ds server
 # BETA
 # ╚»★Nuova versione di Anto's Bot★«╝
 
+
+BETA CHANGLOG N2
+
+-aggiornati i canali temporani
+
+-aggiunti nuovi server minecraft
+
+-risolti numerosi bug
+
+BETA CHANGLOG N1
 -Riscritto Da 0 con una nuova architettura
 
 -Risolti numerosissimi Bug
