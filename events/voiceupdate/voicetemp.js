@@ -6,6 +6,8 @@ module.exports = {
         let category = newMember.guild.channels.cache.get(cguild["Anto's  Server"].channel.temp.id)
         let member = newMember.guild.members.cache.get(newMember.id)
         let channel = newMember.guild.channels.cache.find(x => x.parent == category && x.name == member.user.username)
+
+        if (!category && !member && !channel) return
         try {
             for (let x in cguild["Anto's  Server"].channel.temp.function) {
                 if (newMember)
@@ -37,13 +39,13 @@ module.exports = {
                     let intervalid = setInterval(async () => {
                         try {
                             if (channel.members.size == 0) {
-                                channel.delete().catch(() => { Stopiterval(intervalid) })
+                                channel.delete().catch(() => { })
                                 Stopiterval(intervalid)
+                                return
                             } else if (channel.members.has(oldMember.id))
                                 Stopiterval(intervalid)
                         } catch (err) { console.log(err) }
                     }, 1000 * 60 * 5)
-                    return
                 }
             }
         } catch (err) { console.log(err) }
