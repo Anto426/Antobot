@@ -27,7 +27,6 @@ async function updatecount(festa, channelcount) {
         let time = `${times(timereminig)}`
         console.log(`Update : ${time}`)
         channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) })
-        return
 
     } catch { }
 
