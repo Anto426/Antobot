@@ -1,10 +1,7 @@
-
-const fs = require("fs")
-const cembed = require("./../../../settings/embed.json")
 const { Cautor } = require('../../../functions/interaction/checkautorinteraction');
 const { genericerr } = require('../../../embeds/err/generic');
 const { createrowcaptcha } = require("../../../functions/row/createrow");
-const { captchaembed } = require("../../../embeds/moderation/captcha");
+const { captchaembed, captchaembedsucc, captchaembednotv } = require("../../../embeds/moderation/captcha");
 const { welcomeembed, logaddmember, logaddmembernotv } = require("../../../embeds/GuilMember/addembed");
 
 module.exports = {
@@ -27,18 +24,26 @@ module.exports = {
             }
 
             if (interaction.customId.split("-").includes("capcha")) {
+
                 if (Cautor(interaction)) {
+
+                    const category = interaction.guild.channels.cache.find(x => x.name == "╚»★«╝ verifica ╚»★«╝")
+                    const category1 = interaction.guild.channels.cache.find(x => x.name == "╚»★«╝ Backup ╚»★«╝")
+
                     if (interaction.customId.split("-")[3] == "t") {
                         let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
+                        captchaembedsucc(interaction.member, interaction.channel)
                         welcomeembed(interaction.member, humans.size)
                         logaddmember(interaction.member, humans.size)
                     } else {
+                        captchaembednotv(interaction.member, interaction.channel)
                         logaddmembernotv(interaction.member)
-                        member.kick()
+                        setTimeout(() => {
+                            member.kick()
+                        }, 60 * 1000)
+
                     }
-                    let category = interaction.guild.channels.cache.find(x => x.name == "╚»★«╝ verifica ╚»★«╝")
-                    let channelverifica = interaction.guild.channels.cache.find(x => x.name == "—͟͞͞🔍】" + member.user.tag)
-                    let category1 = interaction.guild.channels.cache.find(x => x.name == "╚»★«╝ Backup ╚»★«╝")
+
                     if (!category1) {
                         category1 = await interaction.guild.channels.create('╚»★«╝ Backup ╚»★«╝', {
                             type: ChannelType.GuildCategory,
@@ -48,11 +53,11 @@ module.exports = {
                             }]
                         })
                     }
-                    await channelverifica.permissionOverwrites.delete(member.id).then((channels) => {
+                    await interaction.channel.permissionOverwrites.delete(member.id).then((channels) => {
                         channels.setParent(category1);
                     })
                     category.delete().catch(() => { })
-                    channelverifica.send({ embeds: [messagedelete], components: [row] })
+                    interaction.channel.send({ embeds: [messagedelete], components: [row] })
 
 
                 }
