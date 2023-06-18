@@ -15,13 +15,13 @@ function times(millis) {
 }
 
 
-function times0(s) {
+function times0(millis) {
     let m = 0,
         h = 0
-    while (s >= 60) {
+    while (millis >= 60) {
 
         m += 1
-        s -= 60
+        millis -= 60
 
     }
     while (m >= 60) {
