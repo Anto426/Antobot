@@ -1,3 +1,4 @@
+const { randomChar, randomarrsort } = require("../random/random");
 const cgame = require("./../../settings/games.json")
 const { ActionRowBuilder, StringSelectMenuBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
 function createrowmc(interaction, server) {
@@ -50,4 +51,45 @@ function createrowavatar(interaction, member) {
 
 }
 
-module.exports = { createrowmc, createrowbanner, createrowavatar }
+
+function createrowstartcaptcha(member, capchatext) {
+
+    row.addComponents(
+        new ButtonBuilder()
+            .setCustomId(`capchastart-${member.id}-${capchatext}`)
+            .setLabel(Textmatt[i])
+            .setStyle('SUCCESS')
+    );
+
+    return row
+
+}
+
+function createrowcaptcha(member, capchatext) {
+    Textmatt = []
+    for (let i = 0; i < 4; i++) {
+        temp = ``;
+        for (let z = 0; z < 5; z++)
+            temp += randomChar();
+        Textmatt.push(temp)
+    }
+    Textmatt.push(capchatext)
+    randomarrsort(Textmatt)
+    let row = new ActionRowBuilder()
+    for (let i = 0; i < 5; i++) {
+        let check = "f"
+        if (Textmatt[i] == capchatext)
+            check = "t"
+
+        row.addComponents(
+            new ButtonBuilder()
+                .setCustomId(`capcha-${member.id}-${Textmatt[i]}-${check}`)
+                .setLabel(Textmatt[i])
+                .setStyle('SUCCESS')
+        );
+    }
+
+    return row
+
+}
+module.exports = { createrowmc, createrowbanner, createrowavatar, createrowstartcaptcha, createrowcaptcha }
