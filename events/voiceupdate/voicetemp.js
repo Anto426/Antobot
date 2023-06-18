@@ -44,7 +44,7 @@ module.exports = {
                                 return
                             } else if (channel.members.has(oldMember.id))
                                 Stopiterval(intervalid)
-                        } catch (err) { console.log(err) }
+                        } catch (err) { if(channel) return Stopiterval(intervalid) }
                     }, 1000 * 60 * 5)
                 }
             }
