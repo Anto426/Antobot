@@ -75,7 +75,25 @@ async function logaddmember(member, cout) {
 
     } catch { }
 }
+
+async function logaddmembernotv(member) {
+
+    try {
+        const embed = new EmbedBuilder()
+            .setTitle("Nuovo Utente Non Verificato")
+            .addFields(
+                { name: ":bust_in_silhouette: NAME", value: `\`\`\`\n${member.user.tag}\n\`\`\`` },
+                { name: ":id: ID", value: `\`\`\`\n${member.user.id}\`\`\`` },
+                { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
+            )
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }) || cembed.image.notimmage)
+            .setColor(cembed.color.verde)
+        sendtoalllog({ embeds: [embed], })
+
+    } catch { }
+}
 module.exports = {
     welcomeembed,
-    logaddmember
+    logaddmember,
+    logaddmembernotv
 }

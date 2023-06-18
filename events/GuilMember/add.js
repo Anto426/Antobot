@@ -58,7 +58,7 @@ module.exports = {
 
                 } else {
 
-                    let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot); P
+                    let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
                     welcomeembed(member, humans.size)
                     logaddmember(member, humans.size)
                 }
