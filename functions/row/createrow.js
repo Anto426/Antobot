@@ -112,4 +112,23 @@ function createrowstartchanneldelete() {
     return row
 
 }
-module.exports = { createrowmc, createrowbanner, createrowavatar, createrowstartcaptcha, createrowcaptcha,createrowstartchanneldelete }
+
+function updaterowdisablebooton(oldrow) {
+
+    let newrow = new ActionRowBuilder()
+    oldrow.components.forEach(x => {
+        newrow.addComponents(
+            new ButtonBuilder()
+                .setCustomId(`${x.customId}`)
+                .setLabel(`${x.label}`)
+                .setStyle(`${x.style}`)
+                .setDisabled(true)
+        );
+
+    });
+
+    return newrow
+
+}
+
+module.exports = { createrowmc, createrowbanner, createrowavatar, createrowstartcaptcha, createrowcaptcha, createrowstartchanneldelete, updaterowdisablebooton }

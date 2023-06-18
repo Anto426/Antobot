@@ -48,7 +48,7 @@ async function captchaembedsucc(member, interaction) {
         interaction.reply({ embeds: [embed] })
 
 
-    } catch { }
+    } catch (err) { }
 }
 
 async function captchaembednotv(member, channel) {
