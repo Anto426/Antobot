@@ -9,10 +9,13 @@ function randomFloat(min, max) {
 
 
 function randomChar() {
-    var min = 33;
-    var max = 127;
-    var randomInt = getRandomInt(min, max);
-    return String.fromCharCode(randomInt);
+    var min = 65;
+    var max = 122;
+    var int = randomInt(min, max);
+    if (int > 90 && int < 97) {
+        return randomChar();
+    }
+    return String.fromCharCode(int);
 }
 
 function randomarrsort(arr) {

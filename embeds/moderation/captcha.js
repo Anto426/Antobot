@@ -7,11 +7,10 @@ async function captchastartembed(member, capcha, row, channel) {
 
     try {
         let embed = new EmbedBuilder()
-            .setTitle("Verifica il captcha")
+            .setTitle("Verifica")
             .setDescription(member.user.tag + " per entrare nel  server dovrai risolvere questo captcha quando sei proto clicca su questo pulsante")
             .setColor(cembed.color.rosso)
             .setImage('attachment://captcha.png')
-            .setColor(cembed.color.rosso)
 
         channel.send({ embeds: [embed], files: [capcha], components: [row] })
 
@@ -21,46 +20,32 @@ async function captchastartembed(member, capcha, row, channel) {
 
 
 
-async function captchaembed(member, row, channel) {
+async function captchaembed(member, row, interaction) {
 
     try {
 
-        channel.messages.fetch({ limit: 5 }).then(messages => {
-            const botMessages = messages.filter(msg => msg.author.bot && msg.author.id === client.user.id);
-            const lastBotMessage = botMessages.first();
+        let embed = new EmbedBuilder()
+            .setTitle("Verifica il captcha")
+            .setDescription(member.user.tag + " capcha iniziato")
+            .setColor(cembed.color.rosso)
 
-            let embed = new EmbedBuilder()
-                .setTitle("Verifica il captcha")
-                .setDescription(member.user.tag + " capcha iniziato")
-                .setColor(cembed.color.rosso)
-                (cembed.image.error)
-                .setColor(cembed.color.rosso)
-
-            lastBotMessage.reply({ embeds: [embed], components: [row] })
-
-
-        })
-
-
-
-
-
+        interaction.reply({ embeds: [embed], components: [row] })
 
 
     } catch { }
 }
 
 
-async function captchaembedsucc(member, channel) {
+async function captchaembedsucc(member, interaction) {
 
     try {
         let embed = new EmbedBuilder()
-            .setTitle(member.user.tag + " verificato")
+            .setTitle(`${member} verificato`)
             .setDescription("verifica completata con succeso alle ore " + new Date().getHours() + ":" + new Date().getMinutes())
-            .setColor(cembed.color.rosso)
+            .setColor(cembed.color.verde)
             .setThumbnail(cembed.image.error)
 
-        channel.send({ embeds: [embed] })
+        interaction.reply({ embeds: [embed] })
 
 
     } catch { }
@@ -79,7 +64,7 @@ async function captchaembednotv(member, channel) {
     } catch { }
 }
 
-async function captchadelbackup(member, channel) {
+async function captchadelbackup(channel, row) {
 
     try {
         let embed = new EmbedBuilder()
@@ -87,7 +72,7 @@ async function captchadelbackup(member, channel) {
             .setDescription("Posso cancellare la chat ?")
             .setColor(cembed.color.giallo)
             .setThumbnail(cembed.image.error)
-
+        channel.send({ embeds: [embed], components: [row] })
 
     } catch { }
 }

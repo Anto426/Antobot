@@ -12,7 +12,6 @@ async function welcomeembed(member, count) {
         registerFont("./canavas/font/NotoSansJP-Bold.ttf", { family: "NotoSansJP-Bold" });
 
 
-
         let canvas = await createCanvas(1700, 600)
         let ctx = await canvas.getContext("2d")
         let img = await loadImage("./canavas/image/background.jpg")
@@ -41,12 +40,12 @@ async function welcomeembed(member, count) {
         ctx.font = "50px asapCondensed"
         ctx.fillText(`${count}° membro`, 500, 400)
 
-        let attachment = new AttachmentBuilder(canvas1.toBuffer(), { name: "welcomecanavas.png" })
+        let attachment = new AttachmentBuilder(canvas.toBuffer(), { name: "welcomecanavas.png" })
 
 
         const message = `
         ╚»★Benvenuto su ${member.guild.name}★«╝
-${member} benvenuto su  ${member.guild.name} spero che ti possa trovare bene sei il nostro ${cout} memebro
+${member} benvenuto su  ${member.guild.name} spero che ti possa trovare bene sei il nostro ${count} memebro
         
         
         `
@@ -58,7 +57,7 @@ ${member} benvenuto su  ${member.guild.name} spero che ti possa trovare bene sei
 
     } catch (err) { console.log(err) }
 }
-async function logaddmember(member, cout) {
+async function logaddmember(member, count) {
 
     try {
         const embed = new EmbedBuilder()
@@ -67,7 +66,7 @@ async function logaddmember(member, cout) {
                 { name: ":bust_in_silhouette: NAME", value: `\`\`\`\n${member.user.tag}\n\`\`\`` },
                 { name: ":id: ID", value: `\`\`\`\n${member.user.id}\`\`\`` },
                 { name: ":timer: ORA ", value: `\`\`\`\n${new Date().toLocaleString('it-IT', optionsdate)}\n\`\`\`` },
-                { name: ":1234: MEMBRO", value: `\`\`\`\n${cout} membro\`\`\`` }
+                { name: ":1234: MEMBRO", value: `\`\`\`\n${count} membro\`\`\`` }
             )
             .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 4096 }) || cembed.image.notimmage)
             .setColor(cembed.color.verde)

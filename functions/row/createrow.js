@@ -2,6 +2,7 @@ const { randomChar, randomarrsort } = require("../random/random");
 const cgame = require("./../../settings/games.json")
 const { ActionRowBuilder, StringSelectMenuBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
 function createrowmc(interaction, server) {
+
     let selectmenu = new StringSelectMenuBuilder()
         .setCustomId(`mc-${interaction.member.id}`)
         .setPlaceholder('Nothing selected')
@@ -54,12 +55,15 @@ function createrowavatar(interaction, member) {
 
 function createrowstartcaptcha(member, capchatext) {
 
-    row.addComponents(
-        new ButtonBuilder()
-            .setCustomId(`capchastart-${member.id}-${capchatext}`)
-            .setLabel(Textmatt[i])
-            .setStyle('SUCCESS')
-    );
+    const captchastartbotton = new ButtonBuilder()
+        .setCustomId(`capchastart-${member.id}-${capchatext}`)
+        .setLabel(`Start`)
+        .setStyle(ButtonStyle.Success)
+
+    let row = new ActionRowBuilder()
+        .addComponents(
+            captchastartbotton
+        );
 
     return row
 
@@ -85,11 +89,27 @@ function createrowcaptcha(member, capchatext) {
             new ButtonBuilder()
                 .setCustomId(`capcha-${member.id}-${Textmatt[i]}-${check}`)
                 .setLabel(Textmatt[i])
-                .setStyle('SUCCESS')
+                .setStyle(ButtonStyle.Success)
         );
     }
 
     return row
 
 }
-module.exports = { createrowmc, createrowbanner, createrowavatar, createrowstartcaptcha, createrowcaptcha }
+
+function createrowstartchanneldelete() {
+
+    const channelceleteboton = new ButtonBuilder()
+        .setCustomId(`channeldelete`)
+        .setLabel(`Canella il canale`)
+        .setStyle(ButtonStyle.Danger)
+
+    let row = new ActionRowBuilder()
+        .addComponents(
+            channelceleteboton
+        );
+
+    return row
+
+}
+module.exports = { createrowmc, createrowbanner, createrowavatar, createrowstartcaptcha, createrowcaptcha,createrowstartchanneldelete }

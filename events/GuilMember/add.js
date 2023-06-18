@@ -1,4 +1,5 @@
-const { ChannelType, PermissionFlagsBits } = require("discord.js");
+const { ChannelType, PermissionFlagsBits, AttachmentBuilder } = require("discord.js");
+const { Captcha } = require('captcha-canvas');
 const cguild = require("../../settings/guild.json")
 const csetting = require("./../../settings/settings.json")
 const { welcomeembed, logaddmember } = require("../../embeds/GuilMember/addembed");
@@ -15,7 +16,8 @@ module.exports = {
                 if (csetting.captcha) {
                     let category = member.guild.channels.cache.find(x => x.name == "╚»★«╝ verifica ╚»★«╝")
                     if (!category) {
-                        category = await member.guild.channels.create('╚»★«╝ verifica ╚»★«╝', {
+                        category = await member.guild.channels.create({
+                            name: '╚»★«╝ verifica ╚»★«╝',
                             type: ChannelType.GuildCategory,
                             permissionOverwrites: [{
                                 id: member.id,
@@ -27,7 +29,8 @@ module.exports = {
                         })
                     }
                     let name = "—͟͞͞🔍】" + member.user.tag
-                    let channelverifica = await member.guild.channels.create(name, {
+                    let channelverifica = await member.guild.channels.create({
+                        name: name,
                         type: ChannelType.GuildText,
                         parent: category,
                         permissionOverwrites: [{
@@ -47,13 +50,14 @@ module.exports = {
                     captcha.drawCaptcha();
 
 
-                    let captchaAttachement = new MessageAttachment(
-                        await captcha.png,
-                        "captcha.png"
+                    let captchaAttachement = new AttachmentBuilder(
+                        await captcha.png, { name: 'captcha.png' }
                     )
-                    let row = createrowstartcaptcha(member, captcha.text)
+
+                    let row = createrowstartcaptcha(member, captcha.text.toString())
 
                     captchastartembed(member, captchaAttachement, row, channelverifica)
+
 
 
                 } else {
