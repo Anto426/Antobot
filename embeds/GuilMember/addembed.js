@@ -56,7 +56,7 @@ ${member} benvenuto su  ${member.guild.name} spero che ti possa trovare bene sei
                 files: [attachment],
             })
 
-    } catch { }
+    } catch (err) { console.log(err) }
 }
 async function logaddmember(member, cout) {
 

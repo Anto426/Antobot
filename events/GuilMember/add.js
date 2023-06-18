@@ -53,7 +53,7 @@ module.exports = {
                     )
                     let row = createrowstartcaptcha(member, captcha.text)
 
-                    captchastartembed(member, captcha, row, channelverifica)
+                    captchastartembed(member, captchaAttachement, row, channelverifica)
 
 
                 } else {
@@ -61,6 +61,7 @@ module.exports = {
                     let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
                     welcomeembed(member, humans.size)
                     logaddmember(member, humans.size)
+                    member.roles.add(member.guild.roles.cache.get(cguild["Anto's  Server"].role.user))
                 }
             } else {
                 member.roles.add(member.guild.roles.cache.get(cguild["Anto's  Server"].role.bot))
