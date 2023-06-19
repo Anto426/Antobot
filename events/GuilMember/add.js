@@ -13,8 +13,8 @@ module.exports = {
 
         try {
             if (!member.user.bot) {
-
-                registerFont("./canavas/font/LexendZetta.ttf", { family: "Lexend Zetta" });
+                registerFont("./canavas/font/asapCondensed.ttf", { family: "asapCondensed" });
+                registerFont("./canavas/font/NotoSansJP-Bold.ttf", { family: "NotoSansJP-Bold" });
                 if (csetting.captcha) {
                     let category = member.guild.channels.cache.find(x => x.name == "╚»★«╝ verifica ╚»★«╝")
                     if (!category) {
@@ -65,7 +65,7 @@ module.exports = {
                     ctx.textBaseline = "middle"
 
 
-                    ctx.font = `150px "Lexend Zetta"`
+                    ctx.font = "150px asapCondensed", "100px NotoSansJP-Bold"
                     ctx.fillText(captchatext, 500, canvas.height / 2)
 
                     let captchaAttachement = new AttachmentBuilder(canvas.toBuffer(), { name: "captcha.png" })
