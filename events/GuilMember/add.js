@@ -1,10 +1,11 @@
 const { ChannelType, PermissionFlagsBits, AttachmentBuilder } = require("discord.js");
-const { Captcha } = require('captcha-canvas');
+const { createCanvas, loadImage, registerFont } = require("canvas")
 const cguild = require("../../settings/guild.json")
 const csetting = require("./../../settings/settings.json")
 const { welcomeembed, logaddmember } = require("../../embeds/GuilMember/addembed");
 const { createrowstartcaptcha } = require("../../functions/row/createrow");
 const { captchastartembed } = require("../../embeds/moderation/captcha");
+const { randomChar } = require("../../functions/random/random");
 
 module.exports = {
     name: "guildMemberAdd",
@@ -13,6 +14,7 @@ module.exports = {
         try {
             if (!member.user.bot) {
 
+                registerFont("./canavas/font/LexendZetta.ttf", { family: "Lexend Zetta" });
                 if (csetting.captcha) {
                     let category = member.guild.channels.cache.find(x => x.name == "╚»★«╝ verifica ╚»★«╝")
                     if (!category) {
@@ -41,20 +43,34 @@ module.exports = {
                             deny: [PermissionFlagsBits.ViewChannel]
                         }]
                     })
+                    let captchatext = ``;
+                    for (let z = 0; z < 5; z++)
+                        captchatext += randomChar();
+
+                    let canvas = await createCanvas(1700, 600)
+                    let ctx = await canvas.getContext("2d")
+                    let img = await loadImage("./canavas/image/background.jpg")
+                    ctx.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.height / 2)
+                    ctx.fillStyle = "rgba(0,0,0,0.30)"
+                    ctx.fillRect(70, 70, canvas.width - 70 - 70, canvas.height - 70 - 70)
+
+                    ctx.save()
+                    ctx.beginPath()
+                    ctx.arc(150 + 300 / 2, canvas.height / 2, 150, 0, 2 * Math.PI, false)
+                    ctx.clip()
+                    ctx.restore()
 
 
-                    let captcha = new Captcha();
-                    captcha.async = true
-                    captcha.addDecoy();
-                    captcha.drawTrace();
-                    captcha.drawCaptcha();
+                    ctx.fillStyle = "#fff"
+                    ctx.textBaseline = "middle"
 
 
-                    let captchaAttachement = new AttachmentBuilder(
-                        await captcha.png, { name: 'captcha.png' }
-                    )
+                    ctx.font = `300px "Lexend Zetta"`
+                    ctx.fillText(captchatext, 500, canvas.height / 2)
 
-                    let row = createrowstartcaptcha(member, captcha.text.toString())
+                    let captchaAttachement = new AttachmentBuilder(canvas.toBuffer(), { name: "captcha.png" })
+
+                    let row = createrowstartcaptcha(member, captchatext)
 
                     captchastartembed(member, captchaAttachement, row, channelverifica)
 
