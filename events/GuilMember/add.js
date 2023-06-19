@@ -66,7 +66,7 @@ module.exports = {
 
 
                     ctx.font = `300px "Lexend Zetta"`
-                    ctx.fillText(captchatext, 300, canvas.height / 2)
+                    ctx.fillText(captchatext, 200, canvas.height / 2)
 
                     let captchaAttachement = new AttachmentBuilder(canvas.toBuffer(), { name: "captcha.png" })
 
