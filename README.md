@@ -7,6 +7,9 @@ This is a simple bot created by me for my ds server
 
 # ╚»★Nuova versione di Anto's Bot★«╝
 
+# BETA CHANGLOG N3
+
+-aggiuto il captcha
 
 # BETA CHANGLOG N2
 
