@@ -65,7 +65,7 @@ module.exports = {
                     ctx.textBaseline = "middle"
 
 
-                    ctx.font = "150px asapCondensed", "100px NotoSansJP-Bold"
+                    ctx.font = "250px asapCondensed", "100px NotoSansJP-Bold"
                     ctx.fillText(captchatext, 500, canvas.height / 2)
 
                     let captchaAttachement = new AttachmentBuilder(canvas.toBuffer(), { name: "captcha.png" })
