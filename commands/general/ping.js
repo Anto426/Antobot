@@ -1,4 +1,5 @@
 const { pingembed } = require("../../embeds/commands/general/pingembed")
+const { genericerr } = require("../../embeds/err/generic")
 const cguild = require("./../../settings/guild.json")
 
 module.exports = {
@@ -12,6 +13,9 @@ module.exports = {
         description: "test latenza bot"
     },
     execute(interaction) {
-        pingembed(interaction)
+        try {
+            pingembed(interaction)
+        } catch (err) { genericerr(interaction, err) }
+
     }
 }

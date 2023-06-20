@@ -3,7 +3,7 @@ const { ChannelType, PermissionFlagsBits } = require('discord.js');
 const { genericerr } = require('../../../embeds/err/generic');
 const cguild = require("./../../../settings/guild.json")
 const { createrowcaptcha, createrowstartchanneldelete } = require("../../../functions/row/createrow");
-const { captchaembed, captchaembedsucc, captchaembednotv, captchadelbackup } = require("../../../embeds/moderation/captcha");
+const { captchaembed, captchaembedsucc, captchaembednotv, captchadelbackup } = require("../../../embeds/moderation/captchaembed");
 const { welcomeembed, logaddmember, logaddmembernotv } = require("../../../embeds/GuilMember/addembed");
 const { disablebotton } = require('../../../functions/interaction/disablebotton');
 

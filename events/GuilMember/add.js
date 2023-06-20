@@ -4,7 +4,7 @@ const cguild = require("../../settings/guild.json")
 const csetting = require("./../../settings/settings.json")
 const { welcomeembed, logaddmember } = require("../../embeds/GuilMember/addembed");
 const { createrowstartcaptcha } = require("../../functions/row/createrow");
-const { captchastartembed } = require("../../embeds/moderation/captcha");
+const { captchastartembed } = require("../../embeds/moderation/captchaembed");
 const { randomChar } = require("../../functions/random/random");
 
 module.exports = {

@@ -1,4 +1,5 @@
-const { evalsembed, evalfembed } = require('../../embeds/commands/bot/evalembed')
+const { evalsembed, evalfembed } = require('../../embeds/commands/bot/evalembed');
+const { genericerr } = require('../../embeds/err/generic');
 const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "eval",
@@ -18,16 +19,17 @@ module.exports = {
     },
     async execute(interaction) {
 
-        let args = interaction.options.getString("comand")
-
         try {
-            evaled = await eval(args);
-            evalsembed(interaction)
+            let args = interaction.options.getString("comand")
 
-        } catch (error) {
-            console.error(error.toString());
-            evalfembed(interaction, args, error)
-        }
+            try {
+                evaled = await eval(args);
+                evalsembed(interaction)
 
+            } catch (error) {
+                console.error(error.toString());
+                evalfembed(interaction, args, error)
+            }
+        } catch (err) { genericerr(interaction, err) }
     }
 }

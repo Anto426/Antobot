@@ -1,4 +1,5 @@
 const { avatarembed } = require("../../embeds/commands/general/avatarembed")
+const { genericerr } = require("../../embeds/err/generic")
 const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "avatar",
@@ -22,6 +23,6 @@ module.exports = {
             if (!utente)
                 utente = interaction.member
             avatarembed(interaction, utente)
-        } catch { }
+        } catch (err) { genericerr(interaction, err) }
     }
 }

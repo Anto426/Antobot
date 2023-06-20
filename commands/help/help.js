@@ -2,6 +2,7 @@ const { EmbedBuilder, ActionRowBuilder, StringSelectMenuBuilder } = require("dis
 const fs = require("fs")
 const cembed = require("./../../settings/embed.json")
 const cguild = require("./../../settings/guild.json")
+const { genericerr } = require("../../embeds/err/generic")
 module.exports = {
     name: "help",
     permisions: [],
@@ -55,6 +56,6 @@ module.exports = {
                 .setColor(cembed.color.viola)
             interaction.reply({ embeds: [embed], components: [row] })
 
-        } catch { }
+        } catch (err) { genericerr(interaction, err) }
     }
 }

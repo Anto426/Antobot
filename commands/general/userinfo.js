@@ -1,6 +1,7 @@
 const { PermissionsBitField } = require("discord.js");
 const { userinfoembed } = require("../../embeds/commands/general/userifoembed");
-const cguild = require("./../../settings/guild.json")
+const cguild = require("./../../settings/guild.json");
+const { genericerr } = require("../../embeds/err/generic");
 module.exports = {
     name: "userinfo",
     permisions: [],
@@ -19,23 +20,23 @@ module.exports = {
     },
     execute(interaction) {
 
-        let member = interaction.options.getMember("user")
-        if (!member)
-            member = interaction.member
+        try {
+            let member = interaction.options.getMember("user")
+            if (!member)
+                member = interaction.member
 
 
-        let elencoPermessi = [];
-        if (member.id == interaction.guild.ownerId) {
-            elencoPermessi.push("👑 Owner");
-        } else {
-            if (member.permissions.has(PermissionsBitField.Flags.Administrator)) {
-                elencoPermessi.push("👑 ADMINISTRATOR");
+            let elencoPermessi = [];
+            if (member.id == interaction.guild.ownerId) {
+                elencoPermessi.push("👑 Owner");
             } else {
-                elencoPermessi = member.permissions.toArray()
+                if (member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+                    elencoPermessi.push("👑 ADMINISTRATOR");
+                } else {
+                    elencoPermessi = member.permissions.toArray()
+                }
             }
-        }
-        userinfoembed(interaction, member, elencoPermessi)
-
-
+            userinfoembed(interaction, member, elencoPermessi)
+        } catch (err) { genericerr(interaction, err) }
     }
 }
