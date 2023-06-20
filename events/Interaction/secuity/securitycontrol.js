@@ -6,7 +6,7 @@ module.exports = {
     async execute(interaction) {
         try {
             if (!interaction.isChatInputCommand()) return;
-            let owner = false, sowner = false, staff = false, perm = false, channel = false, position = false, test = true, execute = false
+            let owner = false, sowner = false, staff = false, perm = false, channel = false, position = false, exposition = false, test = true, execute = false
             const command = client.commands.get(interaction.commandName)
             const ow = require("./../../../settings/onwer.json")
 
@@ -39,6 +39,9 @@ module.exports = {
                 if (!owner && !sowner && staff) {
                     if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position)
                         position = true
+                } else {
+                    if (interaction.options.getMember("user").id != interaction.guild.ownerId)
+                        exposition = true
                 }
             } else {
                 position = true
@@ -54,7 +57,7 @@ module.exports = {
                 })
             }
 
-            if (owner || sowner) {
+            if (owner || sowner && exposition) {
                 execute = true
 
             }
