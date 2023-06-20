@@ -11,25 +11,34 @@ module.exports = {
             const command = client.commands.get(interaction.commandName)
 
             //Class
-            class containers {
+            class checks {
                 constructor() {
                     this.owner = false;
                     this.sowner = false;
                     this.mowner = false
-                    this.msowner = false;
                     this.mbot = false;
                     this.test = command.test;
                     this.staff = false;
                     this.perm = false;
                     this.you = false;
-                    this.position = false;
+                    this.usposition = false;
+                    this.botposition = false;
                     this.channel = false
+                    this.execute = false;
+                    this.pspecial = false;
+                }
+            }
+
+            class conteniers {
+                constructor() {
+                    this.test = command.test;
                     this.execute = false;
                 }
             }
 
-            let container = new containers
+            let check = new checks()
 
+            let container = new conteniers()
 
             //check interaction.author
             // owner
@@ -37,7 +46,7 @@ module.exports = {
                 const ow = require("./../../../settings/onwer.json")
                 for (let i in ow.onwerid)
                     if (interaction.member.id == ow.onwerid[i]) {
-                        container.owner = true
+                        check.owner = true
                     }
             } catch {
                 console.log("errore non ho potuto controllare l'owner")
@@ -45,7 +54,7 @@ module.exports = {
 
             // sowner
             if (interaction.member.id == interaction.guild.ownerId) {
-                container.sowner = true
+                check.sowner = true
             }
 
             //check interaction.member
@@ -56,116 +65,106 @@ module.exports = {
                     const ow = require("./../../../settings/onwer.json")
                     for (let i in ow.onwerid)
                         if (interaction.options.getMember("user").id == ow.onwerid[i]) {
-                            container.mowner = true
+                            check.mowner = true
                         }
                 } catch {
                     console.log("errore non ho potuto controllare l'owner")
                 }
 
-                // sowner
-                if (interaction.options.getMember("user").id == interaction.guild.ownerId) {
-                    container.sowner = true
+                // bot id 
+                if (interaction.options.getMember("user").id == client.user.id) {
+                    check.mbot = true
                 }
 
-                // bot id 
-                if (interaction.options.getMember("user").id == client.id) {
-                    container.bot = true
-                }
 
                 if (interaction.options.getMember("user").id == interaction.member.id) {
-                    container.you = true
+                    check.you = true
                 }
 
             }
 
             if (container.test && !container.owner) {
-                container.test = false
+                check.test = false
             }
 
 
             try {
-                if (command.permisions.length == 0) {
-                    container.perm = true
-                } else {
-                    command.permisions.forEach(per => {
-                        if (interaction.member.permissions.has(per)) {
-                            container.staff = true
-                        }
-                    });
-                }
+
+                command.permisions.forEach(per => {
+                    if (interaction.member.permissions.has(per)) {
+                        check.staff = true
+                    }
+                });
+
             } catch {
                 console.log("errore non ho potuto controllare i permessi del comando")
-                container.perm = true
+                check.perm = true
             }
 
 
             if (command.position) {
-                if (!container.owner && !container.sowner && container.staff) {
-                    if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position)
-                        container.position = true
-                }
-            } else {
-                container.position = true
+
+                if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position)
+                    check.usposition = true
+                if (interaction.guild.members.cache.find(x => x.id == client.user.id).roles.highest.position > interaction.options.getMember("user").roles.highest.position)
+                    check.botposition = true
             }
+
             try {
-                if (command.allowedchannels.length == 0) {
-                    container.channel = true
-                } else {
-                    command.allowedchannels.forEach(chan => {
-                        if (interaction.channel == chan) {
-                            container.channel = true
-                        }
-                    })
-                }
+                command.allowedchannels.forEach(chan => {
+                    if (interaction.channel.id == chan) {
+                        check.channel = true
+                    }
+                })
             } catch {
                 console.log("errore non ho potuto controllare i canali del comando")
-                container.channel = true
-            }
-
-
-            if (container.owner || container.sowner && !container.mowner && !container.msowner) {
-                container.execute = true
-            } else {
-                if (container.staff || container.perm && container.channel && container.bot && container.you) {
-                    if (container.position) {
-                        container.execute = true
-                    } else {
-                        container.position = false
-                    }
-                }
+                check.channel = true
             }
 
             try {
-                if (container.execute && !container.owner) {
+                if (check.owner) {
                     const commandsFiles = fs.readdirSync(`./commands/bot/`);
                     for (const file of commandsFiles) {
                         var commands2 = require(`./../../../commands/bot/${file}`);
                         if (commands2.name == command.name) {
-                            container.execute = false
+                            check.pspecial = true
                         }
+                    }
+
+                    if (check.owner && !check.mowner && !check.you && check.botposition) {
+                        container.execute = true
+                    } else {
+                        if ((check.staff || check.per) && check.botposition && check.usposition && check.channel && !container.test && !check.you) {
+                            container.execute = true
+                        }
+                    }
+
+
+
+                    if (container.execute) {
+                        await command.execute(interaction)
+                    } else {
+                        if (!check.permisions || !check.channel)
+                            return notpermisionmsgerr(interaction)
+                        if (check.test)
+                            return disablefunctionembed(interaction)
+                        if (!check.position || !check.botposition)
+                            return tohigtmsgerr(interaction)
+                        if (!check.you)
+                            return nottoyou(interaction)
                     }
                 }
             } catch { }
 
 
-            if (container.execute && container.test) {
-                try {
-                    command.execute(interaction)
-                } catch (err) {
-                    genericerr(interaction, err)
-                }
-            } else {
-                console.log(container.position)
-                if (container.you)
-                    return nottoyou(interaction)
-                if (!container.position && container.staff)
-                    return disablefunctionembed(interaction)
 
-                if (!container.position && container.staff)
-                    return tohigtmsgerr(interaction)
-                return notpermisionmsgerr(interaction)
 
-            }
+
+
+
+
+
+
         } catch (err) { genericerr(interaction, err) }
     }
 }
