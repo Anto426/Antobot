@@ -85,22 +85,22 @@ module.exports = {
             }
 
 
-            if (command.permisions.size == 0) {
-                check.perm = true
-            } else {
-                try {
 
+            try {
+                if (command.permisions.length == 0) {
+                    check.perm = true
+                } else {
                     command.permisions.forEach(per => {
                         if (interaction.member.permissions.has(per)) {
                             check.staff = true
                         }
                     });
-
-                } catch {
-                    console.log("errore non ho potuto controllare i permessi del comando")
-                    check.perm = true
                 }
+            } catch {
+                console.log("errore non ho potuto controllare i permessi del comando")
+                check.perm = true
             }
+
 
 
             if (command.position) {
@@ -114,7 +114,7 @@ module.exports = {
             }
 
 
-            if (command.permisions.size == 0) {
+            if (command.allowedchannels.size == 0) {
                 check.channel = true
             } else {
                 try {
@@ -150,6 +150,7 @@ module.exports = {
                 if (check.owner && !check.you && !check.mbot && check.botposition) {
                     container.execute = true
                 } else {
+                    console.log(((check.staff || check.perm)), check.usposition, check.botposition, check.channel, !container.test, !check.you, !check.pspecial)
                     if (((check.staff || check.perm)) && check.usposition && check.botposition && check.channel && !container.test && !check.you && !check.pspecial) {
                         container.execute = true
                     }
@@ -160,7 +161,6 @@ module.exports = {
                 if (container.execute) {
                     await command.execute(interaction)
                 } else {
-                    console.log("hi")
                     if (!check.owner && (!check.perm || !check.staff) || !check.channel)
                         return notpermisionmsgerr(interaction)
                     if (!check.owner && check.test)
