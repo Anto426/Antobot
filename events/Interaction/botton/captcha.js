@@ -31,6 +31,7 @@ module.exports = {
 
                     let category = interaction.guild.channels.cache.find(x => x.name == "╚»★«╝ verifica ╚»★«╝")
                     let category1 = interaction.guild.channels.cache.find(x => x.name == "╚»★«╝ Backup ╚»★«╝")
+                    let channelverifica = interaction.channel
                     disablebotton(interaction)
 
                     if (interaction.customId.split("-")[3] == "t") {
@@ -40,7 +41,7 @@ module.exports = {
                         welcomeembed(interaction.member, humans.size)
                         interaction.member.roles.add(interaction.guild.roles.cache.get(cguild["Anto's  Server"].role.user))
                     } else {
-                        captchaembednotv(interaction.member, interaction.channel)
+                        captchaembednotv(interaction.member, channelverifica)
                         logaddmembernotv(interaction.member)
                         setTimeout(() => {
                             interaction.member.kick()
@@ -58,13 +59,13 @@ module.exports = {
                                 }]
                             })
                         }
-                        await interaction.channel.permissionOverwrites.delete(interaction.member.id).then((channels) => {
+                        await channelverifica.permissionOverwrites.delete(interaction.member.id).then((channels) => {
                             channels.setParent(category1);
                         })
                         category.delete().catch(() => { })
 
                         let row = createrowstartchanneldelete()
-                        captchadelbackup(interaction.channel, row)
+                        captchadelbackup(channelverifica, row)
 
                     }, 60 * 1000)
 
