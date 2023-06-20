@@ -24,7 +24,7 @@ async function mutembede(interaction, member) {
             .setDescription(member.user.tag + " risulta già mutato")
             .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
-        interaction.reply({ embeds: [embed] })
+        interaction.reply({ embeds: [embed], ephemeral: true })
     } catch { }
 }
 

@@ -1,8 +1,9 @@
 const { EmbedBuilder } = require("discord.js")
 const cembed = require("../../settings/embed.json")
+const { times } = require("../../functions/time/timef")
 
 
-async function timeoutembeds(interaction, member, reason) {
+async function timeoutembeds(interaction, member, reason, time) {
     try {
         let embed = new EmbedBuilder()
             .setTitle("Utente timeoutato")
@@ -26,7 +27,7 @@ async function timeoutembede(interaction, member, date) {
             ])
             .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
-        interaction.reply({ embeds: [embed] })
+        interaction.reply({ embeds: [embed], ephemeral: true })
     } catch { }
 }
 
@@ -48,7 +49,7 @@ async function untimeoutembede(interaction, member) {
             .setDescription(`${member.toString()} non ha un timeout!`)
             .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
-        interaction.reply({ embeds: [embed] })
+        interaction.reply({ embeds: [embed], ephemeral: true })
     } catch { }
 }
 

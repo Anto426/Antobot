@@ -16,7 +16,7 @@ async function timeoutf(interaction, member, time, reason) {
 
             member.timeout(time, reason).then(() => {
 
-                timeoutembeds(interaction, member, reason)
+                timeoutembeds(interaction, member, reason, time)
 
             }).catch(() => {
                 errmsg.genericmsg(interaction)
@@ -29,8 +29,7 @@ async function timeoutf(interaction, member, time, reason) {
         } else {
             const d = new Date(member.communicationDisabledUntilTimestamp);
             date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
-            timeoutembede(interaction, member, reason)
-            console.log(date);
+            timeoutembede(interaction, member, date)
 
         }
     } catch (err) { genericerr(interaction, err) }

@@ -25,7 +25,7 @@ async function unbanmbeds(interaction) {
             .setThumbnail(null)
             .setColor(cembed.color.verde)
         interaction.reply({ embeds: [embed] })
-    } catch(err) {console.log(err) }
+    } catch (err) { console.log(err) }
 }
 
 async function unbanmbede(interaction) {
@@ -35,8 +35,8 @@ async function unbanmbede(interaction) {
             .setDescription("Utente gia sbannato")
             .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
-        interaction.reply({ embeds: [embed] })
-    } catch(err) {console.log(err) }
+        interaction.reply({ embeds: [embed], ephemeral: true })
+    } catch (err) { console.log(err) }
 }
 
 
