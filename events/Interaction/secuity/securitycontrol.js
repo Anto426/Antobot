@@ -15,16 +15,13 @@ module.exports = {
                 constructor() {
                     this.owner = false;
                     this.sowner = false;
-                    this.mowner = false
                     this.mbot = false;
-                    this.test = command.test;
                     this.staff = false;
                     this.perm = false;
                     this.you = false;
                     this.usposition = false;
-                    this.botposition = false;
+                    this.botposition = true;
                     this.channel = false
-                    this.execute = false;
                     this.pspecial = false;
                 }
             }
@@ -88,17 +85,21 @@ module.exports = {
             }
 
 
-            try {
-
-                command.permisions.forEach(per => {
-                    if (interaction.member.permissions.has(per)) {
-                        check.staff = true
-                    }
-                });
-
-            } catch {
-                console.log("errore non ho potuto controllare i permessi del comando")
+            if (command.permisions.size == 0) {
                 check.perm = true
+            } else {
+                try {
+
+                    command.permisions.forEach(per => {
+                        if (interaction.member.permissions.has(per)) {
+                            check.staff = true
+                        }
+                    });
+
+                } catch {
+                    console.log("errore non ho potuto controllare i permessi del comando")
+                    check.perm = true
+                }
             }
 
 
@@ -106,19 +107,27 @@ module.exports = {
 
                 if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position)
                     check.usposition = true
-                if (interaction.guild.members.cache.find(x => x.id == client.user.id).roles.highest.position > interaction.options.getMember("user").roles.highest.position)
-                    check.botposition = true
+                if (interaction.guild.members.cache.find(x => x.id == client.user.id).roles.highest.position < interaction.options.getMember("user").roles.highest.position)
+                    check.botposition = false
             }
 
-            try {
-                command.allowedchannels.forEach(chan => {
-                    if (interaction.channel.id == chan) {
-                        check.channel = true
-                    }
-                })
-            } catch {
-                console.log("errore non ho potuto controllare i canali del comando")
+
+            if (command.permisions.size == 0) {
                 check.channel = true
+            } else {
+                try {
+
+                    command.allowedchannels.forEach(x => {
+                        if (interaction.channel.id == x) {
+                            return check.channel = true
+                        }
+                    })
+
+
+                } catch {
+                    console.log("errore non ho potuto controllare i canali del comando")
+                    check.channel = true
+                }
             }
 
             try {
@@ -131,28 +140,32 @@ module.exports = {
                         }
                     }
 
-                    if (check.owner && !check.mowner && !check.you && check.botposition) {
+
+
+                }
+
+
+                if (check.owner && !check.you && !check.mbot && check.botposition) {
+                    container.execute = true
+                } else {
+                    if (((check.staff || check.perm)) && check.usposition && check.botposition && check.channel && !container.test && !check.you && !check.pspecial) {
                         container.execute = true
-                    } else {
-                        if ((check.staff || check.per) && check.botposition && check.usposition && check.channel && !container.test && !check.you) {
-                            container.execute = true
-                        }
                     }
+                }
 
 
 
-                    if (container.execute) {
-                        await command.execute(interaction)
-                    } else {
-                        if (!check.permisions || !check.channel)
-                            return notpermisionmsgerr(interaction)
-                        if (check.test)
-                            return disablefunctionembed(interaction)
-                        if (!check.position || !check.botposition)
-                            return tohigtmsgerr(interaction)
-                        if (!check.you)
-                            return nottoyou(interaction)
-                    }
+                if (container.execute) {
+                    await command.execute(interaction)
+                } else {
+                    if (!check.owner && (!check.perm || !check.staff) || !check.channel)
+                        return notpermisionmsgerr(interaction)
+                    if (!check.owner && check.test)
+                        return disablefunctionembed(interaction)
+                    if (!check.owner && !check.position || !check.botposition)
+                        return tohigtmsgerr(interaction)
+                    if (check.you)
+                        return nottoyou(interaction)
                 }
             } catch { }
 
