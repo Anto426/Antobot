@@ -16,7 +16,7 @@ async function captchastartembed(member, capcha, row, channel) {
         channel.send({ embeds: [embed], files: [capcha], components: [row] })
 
 
-    } catch { }
+    } catch (err) { genericerr(interaction, err) }
 }
 
 
@@ -34,7 +34,7 @@ async function captchaembed(member, row, interaction) {
         interaction.reply({ embeds: [embed], components: [row] })
 
 
-    } catch { }
+    } catch (err) { genericerr(interaction, err) }
 }
 
 
@@ -50,7 +50,7 @@ async function captchaembedsucc(member, interaction) {
         interaction.reply({ embeds: [embed] })
 
 
-    } catch (err) { }
+    } catch (err) { genericerr(interaction, err) }
 }
 
 async function captchaembednotv(member, channel) {
@@ -63,7 +63,7 @@ async function captchaembednotv(member, channel) {
             .setThumbnail(cembed.image.error)
 
         channel.send({ embeds: [embed] })
-    } catch { }
+    } catch (err) { genericerr(interaction, err) }
 }
 
 async function captchadelbackup(channel, row) {
