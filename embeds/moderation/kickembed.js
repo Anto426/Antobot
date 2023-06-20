@@ -12,7 +12,7 @@ async function kickembeds(interaction, member, reason) {
                 { name: 'Reason', value: `\`\`\`\n ${reason} \`\`\`` },
             ])
         interaction.reply({ embeds: [embed] })
-    } catch { }
+    } catch (err) { genericerr(interaction, err) }
 }
 
 module.exports = { kickembeds }

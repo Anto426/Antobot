@@ -3,7 +3,7 @@ const { timeoutf } = require('../../functions/moderation/timeout');
 const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "timeout",
-    permision: [PermissionsBitField.Flags.ModerateMembers],
+    permisions: [PermissionsBitField.Flags.ModerateMembers],
     allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
     position: true,
     test: false,
@@ -64,8 +64,6 @@ module.exports = {
         },
 
         ]
-
-
     },
     execute(interaction) {
         try {

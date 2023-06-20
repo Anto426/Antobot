@@ -19,24 +19,24 @@ async function banembeds(interaction, member, reason) {
 
 async function unbanmbeds(interaction) {
     try {
-        let embed = new configs.Discord.EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle("Utente sbannato")
             .setDescription("Utente sbannato")
             .setThumbnail(null)
             .setColor(cembed.color.verde)
         interaction.reply({ embeds: [embed] })
-    } catch { }
+    } catch(err) {console.log(err) }
 }
 
 async function unbanmbede(interaction) {
     try {
-        let embed = new configs.Discord.EmbedBuilder()
+        let embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription("Utente gia sbannato")
             .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
         interaction.reply({ embeds: [embed] })
-    } catch { }
+    } catch(err) {console.log(err) }
 }
 
 

@@ -160,11 +160,12 @@ module.exports = {
                 if (container.execute) {
                     await command.execute(interaction)
                 } else {
+                    console.log("hi")
                     if (!check.owner && (!check.perm || !check.staff) || !check.channel)
                         return notpermisionmsgerr(interaction)
                     if (!check.owner && check.test)
                         return disablefunctionembed(interaction)
-                    if (!check.owner && !check.position || !check.botposition)
+                    if ((!check.mbot || !check.owner) || !check.usposition || check.botposition)
                         return tohigtmsgerr(interaction)
                     if (check.you)
                         return nottoyou(interaction)
@@ -180,6 +181,8 @@ module.exports = {
 
 
 
-        } catch (err) { genericerr(interaction, err) }
+        } catch (err) {
+            genericerr(interaction, err)
+        }
     }
 }

@@ -11,13 +11,13 @@ async function mutembeds(interaction, member, reason) {
             ])
             .setThumbnail(member.displayAvatarURL({ dynamic: true }))
             .setDescription("<@" + member + ">" + " mutato")
-            .setColor(configs.settings.embed.color.green)
+            .setColor(cembed.color.verde)
         interaction.reply({ embeds: [embed] })
     } catch { }
 }
 
 
-async function mutembede(interaction) {
+async function mutembede(interaction, member) {
     try {
         const embed = new EmbedBuilder()
             .setTitle("Error")
@@ -40,7 +40,7 @@ async function unmutembeds(interaction, member) {
             .setDescription("<@" + member + ">" + " smutato")
             .setColor(cembed.color.verde)
         interaction.reply({ embeds: [embed] })
-        member.roles.remove(muted).catch(() => { errmsg.genericmsg(interaction) })
+
     } catch { }
 }
 
