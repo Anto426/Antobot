@@ -19,7 +19,7 @@ module.exports = {
                     this.staff = false;
                     this.perm = false;
                     this.you = false;
-                    this.usposition = false;
+                    this.usposition = true;
                     this.botposition = true;
                     this.channel = false
                     this.pspecial = false;
@@ -106,8 +106,8 @@ module.exports = {
             if (command.position) {
                 if (interaction.options.getMember("user")) {
 
-                    if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position)
-                        check.usposition = true
+                    if (interaction.member.roles.highest.position < interaction.options.getMember("user").roles.highest.position)
+                        check.usposition = false
                     if (interaction.guild.members.cache.find(x => x.id == client.user.id).roles.highest.position < interaction.options.getMember("user").roles.highest.position)
                         check.botposition = false
                 }
