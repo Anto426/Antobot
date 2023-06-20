@@ -15,7 +15,7 @@ function genericerr(interaction, err) {
             .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
         interaction.reply({ embeds: [embed], ephemeral: true })
-    } catch (err1) { console.log(err1) }
+    } catch { }
 }
 
 function disablefunctionembed(interaction) {

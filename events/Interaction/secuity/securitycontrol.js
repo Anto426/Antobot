@@ -1,96 +1,170 @@
 const fs = require("fs");
 const { genericerr, disablefunctionembed } = require("../../../embeds/err/generic");
-const { notpermisionmsgerr, tohigtmsgerr } = require("../../../embeds/err/command/permission");
+const { notpermisionmsgerr, tohigtmsgerr, nottoyou } = require("../../../embeds/err/command/permission");
+
 module.exports = {
     name: "interactionCreate-commands",
     async execute(interaction) {
         try {
             if (!interaction.isChatInputCommand()) return;
-            let owner = false, sowner = false, staff = false, perm = false, channel = false, position = false, exposition = false, test = true, execute = false
+
             const command = client.commands.get(interaction.commandName)
-            const ow = require("./../../../settings/onwer.json")
 
-            // owner
-            for (let i in ow.onwerid)
-                if (interaction.member.id == ow.onwerid[i]) {
-                    owner = true
+            //Class
+            class containers {
+                constructor() {
+                    this.owner = false;
+                    this.sowner = false;
+                    this.mowner = false
+                    this.msowner = false;
+                    this.mbot = false;
+                    this.test = command.test;
+                    this.staff = false;
+                    this.perm = false;
+                    this.you = false;
+                    this.position = false;
+                    this.channel = false
+                    this.execute = false;
                 }
+            }
 
+            let container = new containers
+
+
+            //check interaction.author
+            // owner
+            try {
+                const ow = require("./../../../settings/onwer.json")
+                for (let i in ow.onwerid)
+                    if (interaction.member.id == ow.onwerid[i]) {
+                        container.owner = true
+                    }
+            } catch {
+                console.log("errore non ho potuto controllare l'owner")
+            }
 
             // sowner
             if (interaction.member.id == interaction.guild.ownerId) {
-                sowner = true
+                container.sowner = true
             }
 
-            if (command.test && !owner) {
-                test = false
+            //check interaction.member
+            if (interaction.options.getMember("user")) {
+
+                // owner
+                try {
+                    const ow = require("./../../../settings/onwer.json")
+                    for (let i in ow.onwerid)
+                        if (interaction.options.getMember("user").id == ow.onwerid[i]) {
+                            container.mowner = true
+                        }
+                } catch {
+                    console.log("errore non ho potuto controllare l'owner")
+                }
+
+                // sowner
+                if (interaction.options.getMember("user").id == interaction.guild.ownerId) {
+                    container.sowner = true
+                }
+
+                // bot id 
+                if (interaction.options.getMember("user").id == client.id) {
+                    container.bot = true
+                }
+
+                if (interaction.options.getMember("user").id == interaction.member.id) {
+                    container.you = true
+                }
+
             }
-            if (command.permisions.length == 0) {
-                perm = true
-            } else {
-                command.permisions.forEach(per => {
-                    if (interaction.member.permissions.has(per)) {
-                        staff = true
-                    }
-                });
+
+            if (container.test && !container.owner) {
+                container.test = false
             }
+
+
+            try {
+                if (command.permisions.length == 0) {
+                    container.perm = true
+                } else {
+                    command.permisions.forEach(per => {
+                        if (interaction.member.permissions.has(per)) {
+                            container.staff = true
+                        }
+                    });
+                }
+            } catch {
+                console.log("errore non ho potuto controllare i permessi del comando")
+                container.perm = true
+            }
+
 
             if (command.position) {
-                if (!owner && !sowner && staff) {
+                if (!container.owner && !container.sowner && container.staff) {
                     if (interaction.member.roles.highest.position > interaction.options.getMember("user").roles.highest.position)
-                        position = true
-                } else {
-                    if (interaction.options.getMember("user").id != interaction.guild.ownerId)
-                        exposition = true
+                        container.position = true
                 }
             } else {
-                position = true
-            }
-
-            if (command.allowedchannels.length == 0) {
-                channel = true
-            } else {
-                command.allowedchannels.forEach(chan => {
-                    if (interaction.channel == chan) {
-                        channel = true
-                    }
-                })
-            }
-
-            if (owner || sowner && exposition) {
-                execute = true
-
-            }
-
-
-            if (staff || perm && channel) {
-                if (position)
-                    execute = true
+                container.position = true
             }
             try {
-                if (execute && !owner) {
+                if (command.allowedchannels.length == 0) {
+                    container.channel = true
+                } else {
+                    command.allowedchannels.forEach(chan => {
+                        if (interaction.channel == chan) {
+                            container.channel = true
+                        }
+                    })
+                }
+            } catch {
+                console.log("errore non ho potuto controllare i canali del comando")
+                container.channel = true
+            }
+
+
+            if (container.owner || container.sowner && !container.mowner && !container.msowner) {
+                container.execute = true
+            } else {
+                if (container.staff || container.perm && container.channel && container.bot && container.you) {
+                    if (container.position) {
+                        container.execute = true
+                    } else {
+                        container.position = false
+                    }
+                }
+            }
+
+            try {
+                if (container.execute && !container.owner) {
                     const commandsFiles = fs.readdirSync(`./commands/bot/`);
                     for (const file of commandsFiles) {
                         var commands2 = require(`./../../../commands/bot/${file}`);
                         if (commands2.name == command.name) {
-                            execute = false
+                            container.execute = false
                         }
                     }
                 }
             } catch { }
-            console.log("Owner:" + owner, "Sowner:" + sowner, "Staff:" + staff, "Per:" + perm, "Channel:" + channel, "position:" + position, "test:" + !test, "execute:" + execute)
-            if (execute && test) {
+
+
+            if (container.execute && container.test) {
                 try {
                     command.execute(interaction)
                 } catch (err) {
                     genericerr(interaction, err)
                 }
             } else {
-                if (!test)
+                console.log(container.position)
+                if (container.you)
+                    return nottoyou(interaction)
+                if (!container.position && container.staff)
                     return disablefunctionembed(interaction)
-                if (!position && staff)
+
+                if (!container.position && container.staff)
                     return tohigtmsgerr(interaction)
                 return notpermisionmsgerr(interaction)
+
             }
         } catch (err) { genericerr(interaction, err) }
     }

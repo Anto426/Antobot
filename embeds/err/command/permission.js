@@ -7,7 +7,17 @@ function tohigtmsgerr(interaction) {
         const embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription(frasi[x].toString())
-            .setThumbnail(cembed.immage.err)
+            .setThumbnail(cembed.image.error)
+            .setColor(cembed.color.rosso)
+        interaction.reply({ embeds: [embed], ephemeral: true })
+    } catch { }
+}
+function nottoyou(interaction) {
+    try {
+        const embed = new EmbedBuilder()
+            .setTitle("Error")
+            .setDescription(`Non puoi utlizzare il comando su di te`)
+            .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
         interaction.reply({ embeds: [embed], ephemeral: true })
     } catch { }
@@ -19,10 +29,10 @@ function notpermisionmsgerr(interaction) {
         const embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription(frasi[x].toString())
-            .setThumbnail(cembed.immage.err)
+            .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
         interaction.reply({ embeds: [embed], ephemeral: true })
-    } catch { }
+    } catch (err) { }
 }
 function botmsgerr(interaction) {
     try {
@@ -31,7 +41,7 @@ function botmsgerr(interaction) {
         const embed = new EmbedBuilder()
             .setTitle("Error")
             .setDescription(frasi[x].toString())
-            .setThumbnail(cembed.immage.err)
+            .setThumbnail(cembed.image.error)
             .setColor(cembed.color.rosso)
         interaction.channel.send({ embeds: [embed], ephemeral: true })
     } catch { }
@@ -39,6 +49,7 @@ function botmsgerr(interaction) {
 
 module.exports = {
     tohigtmsgerr,
+    nottoyou,
     notpermisionmsgerr,
     botmsgerr
 
