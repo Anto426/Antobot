@@ -6,7 +6,7 @@ module.exports = {
     async execute(oldMember, newMember) {
 
         let member = newMember.guild.members.cache.get(newMember.id)
-        
+
         try {
 
             if (newMember && newMember.channel != null && oldMember.channel == null) {

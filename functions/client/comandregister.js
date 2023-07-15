@@ -14,6 +14,7 @@ async function comanddeleteguild() {
         console.log("ho riscontrato alcuni errrori nel cancellare i comandi  ", err)
     }
 }
+
 async function comandregisterguild() {
     try {
 

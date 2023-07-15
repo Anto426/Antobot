@@ -31,9 +31,9 @@ By Anto426
 
         timeon()
         await comandload()
-        comandregisterguild()
-        eventload()
-        statusupdate()
+        await comandregisterguild()
+        await eventload()
+        await statusupdate()
         mainhollyday()
 
     } catch (err) {

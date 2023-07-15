@@ -29,7 +29,7 @@ async function comandload() {
 }
 
 
-function eventload() {
+async function eventload() {
     try {
         const eventsFolders = fs.readdirSync('./events');
         let events = []

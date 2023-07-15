@@ -16,20 +16,17 @@ async function timeoutf(interaction, member, time, reason) {
 
             member.timeout(time, reason).then(() => {
 
-                timeoutembeds(interaction, member, reason, time)
+                return timeoutembeds(interaction, member, reason, time)
 
-            }).catch(() => {
-                errmsg.genericmsg(interaction)
+            }).catch((err) => {
+                genericerr(interaction, err)
                 return
             })
-
-
-
 
         } else {
             const d = new Date(member.communicationDisabledUntilTimestamp);
             date = d.getHours() + ":" + d.getMinutes() + ", " + d.toDateString();
-            timeoutembede(interaction, member, date)
+            return timeoutembede(interaction, member, date)
 
         }
     } catch (err) { genericerr(interaction, err) }
@@ -40,11 +37,8 @@ async function untimioutf(interaction, member,) {
 
     try {
         if (member.user.bot) {
-            errmsg.botmsg(interaction)
-            return interaction.reply({ embeds: [embed] })
-
+            return botmsgerr(int)
         }
-
         if (member.communicationDisabledUntilTimestamp != null || member.communicationDisabledUntilTimestamp > Date.now()) {
             member.timeout(null)
             untimeoutembeds(interaction, member)

@@ -173,14 +173,6 @@ module.exports = {
             } catch { }
 
 
-
-
-
-
-
-
-
-
         } catch (err) {
             genericerr(interaction, err)
         }

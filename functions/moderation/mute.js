@@ -21,7 +21,7 @@ async function mutef(interaction, member, reason) {
         }
         if (member.roles.cache.has(muted.id)) {
             mutembede(interaction, member)
-    
+
         } else {
             member.roles.add(muted).catch(() => {
                 genericerr(interaction)
@@ -41,7 +41,7 @@ async function unmutef(interaction, member) {
 
     try {
         if (member.user.bot) {
-            genericerr(interaction)
+            return botmsgerr(interaction)
         }
 
         let muted = interaction.guild.roles.cache.find(x => x.name == "MutedA")
