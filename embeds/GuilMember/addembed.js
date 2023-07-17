@@ -45,7 +45,7 @@ async function welcomeembed(member, count) {
 
         const message = `
         ╚»★Benvenuto su ${member.guild.name}★«╝
-${member} benvenuto su  ${member.guild.name} spero che ti possa trovare bene sei il nostro ${count} memebro
+${member} benvenuto su  ${member.guild.name} spero che ti possa trovare bene sei il nostro ${count} membro
         
         
         `
