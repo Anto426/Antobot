@@ -20,6 +20,7 @@
     "fs": "^0.0.1-security",
     "moment": "^2.29.4",
     "prompt-sync": "^4.2.0",
+    "simple-git": "^3.20.0",
     "skia-canvas": "^1.0.1",
     "util": "^0.12.5"
   },
