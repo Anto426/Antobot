@@ -1,6 +1,9 @@
 const { randomChar, randomarrsort } = require("../random/random");
 const cgame = require("./../../settings/games.json")
+
+
 const { ActionRowBuilder, StringSelectMenuBuilder, ButtonStyle, ButtonBuilder } = require('discord.js');
+const { jsonddypendencebufferolyf } = require("../ddypendence/ddypendence");
 function createrowmc(interaction, server) {
 
     let selectmenu = new StringSelectMenuBuilder()
@@ -24,6 +27,64 @@ function createrowmc(interaction, server) {
     return row
 
 }
+function createrowgitol(interaction) {
+    return new Promise((resolve, reject) => {
+
+        let ex = []
+        let selectmenu = new StringSelectMenuBuilder()
+            .setCustomId(`ol-${interaction.member.id}`)
+            .setPlaceholder('Nothing selected');
+
+
+        try {
+            jsonddypendencebufferolyf("https://raw.githubusercontent.com/anto624/Olimpiadi/main/InfoDatabase.json", process.env.GITTOKEN).then((data) => {
+                const jsonData = JSON.parse(data);
+
+
+                for (let temp in jsonData) {
+
+                    ex.push(`${jsonData[temp].emoji} ${jsonData[temp].name} : ${jsonData[temp].score} ${jsonData[temp].livel}`);
+                    selectmenu.addOptions([{
+                        label: `${jsonData[temp].emoji} ${jsonData[temp].name} `,
+                        value: temp,
+                    }]);
+                }
+
+                const row = new ActionRowBuilder()
+                    .addComponents(
+                        selectmenu
+                    );
+
+                console.log(row);
+                resolve({ row, ex });
+            })
+
+        } catch (error) {
+            reject(error);
+        }
+    })
+        .catch((error) => {
+            console.error('Errore durante il download del file JSON:', error);
+            reject(error);
+        });
+};
+
+function createbottongitol(interaction, name) {
+    let download = new ButtonBuilder()
+        .setCustomId(`old-${interaction.member.id}-${name}`)
+        .setLabel('Download')
+        .setStyle(ButtonStyle.Danger);
+
+    let row = new ActionRowBuilder()
+        .addComponents(
+            download
+        );
+    return row
+
+
+};
+
+
 function createrowbanner(interaction, member) {
     const bannerbotton = new ButtonBuilder()
         .setCustomId(`banner-${interaction.member.id}-${member.id}`)
@@ -131,4 +192,4 @@ function updaterowdisablebooton(oldrow) {
 
 }
 
-module.exports = { createrowmc, createrowbanner, createrowavatar, createrowstartcaptcha, createrowcaptcha, createrowstartchanneldelete, updaterowdisablebooton }
+module.exports = { createrowmc, createrowbanner, createrowavatar, createrowstartcaptcha, createrowcaptcha, createrowstartchanneldelete, updaterowdisablebooton, createrowgitol, createbottongitol }

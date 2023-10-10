@@ -22,6 +22,7 @@ async function servermcembedint(interaction, row) {
 async function servermcembeddef(interaction, row, server) {
     try {
 
+        console.log(server)
         let embed = new EmbedBuilder()
             .setTitle("Server MC")
             .setDescription(`
