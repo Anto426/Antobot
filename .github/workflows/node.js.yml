@@ -16,6 +16,8 @@ jobs:
         node-version: [20.x]
 
     steps:
+    - name: Stop Node.js process
+      run: sudo pkill node
 
     - name: Checkout repository
       uses: actions/checkout@v2
