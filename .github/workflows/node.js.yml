@@ -8,8 +8,9 @@ jobs:
   build:
     runs-on: self-hosted
     env:
-      TOKEN: ${{ secrets.TOKEN }}
-      GITTOKEN: ${{ secrets.GITTOKEN }}
+      TOKEN: ${{ vars.TOKEN }}
+      GITTOKEN: ${{ vars.GITTOKEN }}
+
     strategy:
       matrix:
         node-version: [20.x]
@@ -28,7 +29,7 @@ jobs:
       run: npm install
 
     - name: Run Node.js application
-      run: node index.js
+      run: node .
 
     - name: Complete task
       run: echo "Task completed successfully."
