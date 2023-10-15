@@ -10,7 +10,7 @@ on:
 jobs:
   build:
 
-    runs-on: self-host
+    runs-on: antos
 
     strategy:
       matrix:
