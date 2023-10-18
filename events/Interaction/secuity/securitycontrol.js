@@ -31,6 +31,7 @@ module.exports = {
                 constructor() {
                     this.test = command.test;
                     this.execute = false;
+                    this.ol = false;
                 }
             }
 
@@ -89,6 +90,8 @@ module.exports = {
             try {
                 if (command.getMol && interaction.member.roles.cache.find(x => x.id == "1161398433714798653")) {
                     check.ol = true;
+                    container.ol = true
+
                 }
 
             } catch {
@@ -160,7 +163,7 @@ module.exports = {
                     container.execute = true
                 } else {
                     console.log(((check.staff || check.perm)), check.usposition, check.botposition, check.channel, !container.test, !check.you, !check.pspecial)
-                    if (((check.staff || check.perm)) && check.usposition && check.botposition && check.channel && !container.test && !check.you && !check.pspecial && check.ol) {
+                    if (((check.staff || check.perm)) && check.usposition && check.botposition && check.channel && !container.test && !check.you && !check.pspecial && (check.ol || !container.ol)) {
                         container.execute = true
                     }
                 }
@@ -170,7 +173,7 @@ module.exports = {
                 if (container.execute) {
                     await command.execute(interaction)
                 } else {
-                    if (!check.owner && (!check.perm || !check.staff) || !check.channel)
+                    if (!check.owner && (!check.perm || !check.staff) || !check.channel || (!check.ol || container.ol))
                         return notpermisionmsgerr(interaction)
                     if (!check.owner && check.test)
                         return disablefunctionembed(interaction)
