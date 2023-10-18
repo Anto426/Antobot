@@ -23,6 +23,7 @@ module.exports = {
                     this.botposition = true;
                     this.channel = false
                     this.pspecial = false;
+                    this.ol = false;
                 }
             }
 
@@ -68,6 +69,7 @@ module.exports = {
                     console.log("errore non ho potuto controllare l'owner")
                 }
 
+
                 // bot id 
                 if (interaction.options.getMember("user").id == client.user.id) {
                     check.mbot = true
@@ -84,7 +86,14 @@ module.exports = {
                 check.test = false
             }
 
+            try {
+                if (command.getMol && interaction.member.roles.cache.find(x => x.id == "1161398433714798653")) {
+                    check.ol = true;
+                }
 
+            } catch {
+                console.log("errore non ho potuto controllare se aveva il permesso delle olimpiadi o meno")
+            }
 
             try {
                 if (command.permisions.length == 0) {
@@ -151,7 +160,7 @@ module.exports = {
                     container.execute = true
                 } else {
                     console.log(((check.staff || check.perm)), check.usposition, check.botposition, check.channel, !container.test, !check.you, !check.pspecial)
-                    if (((check.staff || check.perm)) && check.usposition && check.botposition && check.channel && !container.test && !check.you && !check.pspecial) {
+                    if (((check.staff || check.perm)) && check.usposition && check.botposition && check.channel && !container.test && !check.you && !check.pspecial && check.ol) {
                         container.execute = true
                     }
                 }
