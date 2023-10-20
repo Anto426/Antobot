@@ -17,8 +17,8 @@ jobs:
         node-version: [20.x]
 
     steps:
-    - name: Stop Node.js process
-      run: sudo pkill node
+    - name: Stop Systemctl module "Antobot"
+      run: sudo systemctl stop antobot
 
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -31,8 +31,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run Node.js application
-      run: node . &
+    - name: Start Systemctl module "Antobot"
+      run: sudo systemctl start antobot
 
     - name: Complete task
       run: echo "Task completed successfully."
