@@ -1,9 +1,9 @@
 async function statusupdate() {
 
     setInterval(async () => {
-        let frasi = ["a moderare il server", "a /help"]
-        var x = Math.floor(Math.random() * frasi.length);
-        client.user.setActivity(frasi[x].toString());
+        frasi = require("./../../settings/status.json")
+        var x = Math.floor(Math.random() * frasi["1"].length);
+        client.user.setActivity(frasi["1"][x].toString());
 
     }, 5000 * 60)
 

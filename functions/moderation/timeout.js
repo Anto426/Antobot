@@ -32,7 +32,7 @@ async function timeoutf(interaction, member, time, reason) {
     } catch (err) { genericerr(interaction, err) }
 }
 
-async function untimioutf(interaction, member,) {
+async function untimioutf(interaction, member) {
 
 
     try {
