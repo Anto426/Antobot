@@ -9,13 +9,14 @@ module.exports = {
     test: false,
     data: {
         name: "allowolc",
-        description: "Add white list",
+        description: "Aggiunge persona alla white list per le olimpiadi ",
         options: [{
-            name: "comand",
-            description: "comando",
-            type: 3,
+            name: "user",
+            description: "L'utente interessato",
+            type: 6,
             required: true
-        }]
+        }
+        ]
     },
     execute(interaction) {
         try {
