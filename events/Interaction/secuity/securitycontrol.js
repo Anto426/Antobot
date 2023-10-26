@@ -1,6 +1,8 @@
 const fs = require("fs");
 const { genericerr, disablefunctionembed } = require("../../../embeds/err/generic");
 const { notpermisionmsgerr, tohigtmsgerr, nottoyou } = require("../../../embeds/err/command/permission");
+const { checkv } = require("../../../functions/check/check");
+const { jsonwr } = require("../../../functions/json/jsonf");
 
 module.exports = {
     name: "interactionCreate-commands",
@@ -88,7 +90,7 @@ module.exports = {
             }
 
             try {
-                if (command.getMol && interaction.member.roles.cache.find(x => x.id == "1161398433714798653")) {
+                if (command.getMol && checkv(jsonwr("./settings/whitelist.json"), interaction.member.id)) {
                     check.ol = true;
                     container.ol = true
 

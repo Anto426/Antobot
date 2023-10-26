@@ -20,8 +20,11 @@ module.exports = {
     },
     execute(interaction) {
         try {
-            jsonwu("./settings/whitelist.json", interaction.options.getMember("user").id)
-            interaction.member.reply(interaction.options.getMember("user") + " aggiunto alla whitelist")
+            if (jsonwu("./settings/whitelist.json", interaction.options.getMember("user").id)) {
+                interaction.reply(interaction.options.getMember("user").user.tag + " aggiunto con successo")
+            } else {
+                interaction.reply(interaction.options.getMember("user").user.tag + " gia presente nella lista")
+            }
         } catch (err) { genericerr(interaction, err) }
     }
 }
