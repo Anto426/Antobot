@@ -1,4 +1,3 @@
-const { json } = require("@distube/yt-dlp")
 const { jsonwu } = require("../../functions/json/jsonf")
 
 module.exports = {
