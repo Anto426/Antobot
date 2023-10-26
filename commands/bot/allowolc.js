@@ -1,5 +1,6 @@
 const { jsonwu } = require("../../functions/json/jsonf")
-
+const { genericerr } = require('../../embeds/err/generic');
+const cguild = require("./../../settings/guild.json")
 module.exports = {
     name: "allowolc",
     permisions: [],
@@ -8,14 +9,13 @@ module.exports = {
     test: false,
     data: {
         name: "allowolc",
-        description: "Aggiunto alla white list ",
+        description: "Add white list",
         options: [{
-            name: "user",
-            description: "L'utente interessato",
-            type: 6,
+            name: "comand",
+            description: "comando",
+            type: 3,
             required: true
-        }
-        ]
+        }]
     },
     execute(interaction) {
         try {
