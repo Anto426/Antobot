@@ -4,7 +4,7 @@ module.exports = {
     name: "allowolc",
     permisions: [],
     allowedchannels: cguild['Anto\'s  Server'].channel.allowchannel,
-    position: true,
+    position: false,
     test: false,
     data: {
         name: "allowolc",
