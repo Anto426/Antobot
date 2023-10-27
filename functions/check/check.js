@@ -1,16 +1,37 @@
-function checkv(arr, valu) {
+function checkvas(arr, valu) {
+    return new Promise((resolve, reject) => {
+        console.log(arr)
+        if (arr && arr.length != 0) {
 
-    if (arr != null) return;
-    for (var i in arr) {
-        if (i == valu) {
-            return true
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i] === valu) {
+                    resolve(true);
+                }
+            }
+        } else {
+            return false;
+
         }
-    }
-    return false
+    });
+}
 
+function checkvs(arr, valu) {
+
+    if (arr.length != 0) {
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] === valu) {
+                return true;
+            }
+        }
+    } else {
+        return false;
+    }
 }
 
 
+
+
 module.exports = {
-    checkv
+    checkvs,
+    checkvas
 }

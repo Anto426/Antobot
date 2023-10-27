@@ -1,15 +1,15 @@
 const fs = require("fs");
-const { checkv } = require("../check/check");
+const { checkvs } = require("../check/check");
 
 
-function jsonwu(filePath, newData) {
+function jsonwu(filePath, parr, newData) {
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             console.error('Errore nella lettura del file:', err);
         } else {
             try {
                 const obj = JSON.parse(data);
-                if (!checkv(obj.list, newData)) {
+                if (checkvs(obj[parr], newData)) {
                     console.log("Valore gia presente");
                     return false;
                 }
@@ -31,10 +31,11 @@ function jsonwu(filePath, newData) {
 }
 
 
-function jsonwr(filePath) {
+function jsonrs(filePath) {
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             console.error('Errore nella lettura del file:', err);
+            return null
         } else {
             try {
                 let obj = JSON.parse(data);
@@ -48,7 +49,28 @@ function jsonwr(filePath) {
 }
 
 
+function jsonras(filePath) {
+    return new Promise((resolve, reject) => {
+        fs.readFile(filePath, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Errore nella lettura del file:', err);
+                reject(err);
+            } else {
+                try {
+                    let obj = JSON.parse(data);
+                    resolve(obj);
+                } catch (error) {
+                    console.error('Errore:', error);
+                    reject(error);
+                }
+            }
+        });
+    });
+}
+
+
 module.exports = {
     jsonwu,
-    jsonwr
+    jsonrs,
+    jsonras
 }

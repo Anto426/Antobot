@@ -20,8 +20,8 @@ module.exports = {
     },
     execute(interaction) {
         try {
-            if (jsonwu("./settings/whitelist.json", interaction.options.getMember("user").id)) {
-                interaction.reply(interaction.options.getMember("user").user.tag + " aggiunto con successo")
+            if (jsonwu("./settings/whitelist.json", "list", interaction.options.getMember("user").id)) {
+                interaction.reply(interaction.options.getMember("user").user.tag + " aggiunto con successo ")
             } else {
                 interaction.reply(interaction.options.getMember("user").user.tag + " gia presente nella lista")
             }
