@@ -1,7 +1,7 @@
 const fs = require("fs");
 const { genericerr, disablefunctionembed } = require("../../../embeds/err/generic");
 const { notpermisionmsgerr, tohigtmsgerr, nottoyou } = require("../../../embeds/err/command/permission");
-const { checkv, checkvas } = require("../../../functions/check/check");
+const { checkvas } = require("../../../functions/check/check");
 const { jsonras } = require("../../../functions/json/jsonf");
 
 module.exports = {
@@ -181,7 +181,7 @@ module.exports = {
 
                 }
 
-                setTimeout(async() => {
+                setTimeout(async () => {
                     console.log(check.owner, ((check.staff || check.perm)), check.usposition, check.botposition, check.channel, !container.test, !check.you, !check.pspecial)
 
                     if (check.owner && !check.you && !check.mbot && check.botposition) {

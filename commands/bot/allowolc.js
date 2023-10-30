@@ -1,4 +1,4 @@
-const { jsonwu } = require("../../functions/json/jsonf")
+const { jsonwasu } = require("../../functions/json/jsonf")
 const { genericerr } = require('../../embeds/err/generic');
 const cguild = require("./../../settings/guild.json")
 module.exports = {
@@ -18,9 +18,9 @@ module.exports = {
         }
         ]
     },
-    execute(interaction) {
+    async execute(interaction) {
         try {
-            if (jsonwu("./settings/whitelist.json", "list", interaction.options.getMember("user").id)) {
+            if (await jsonwasu("./settings/whitelist.json", "list", interaction.options.getMember("user").id)) {
                 interaction.reply(interaction.options.getMember("user").user.tag + " aggiunto con successo ")
             } else {
                 interaction.reply(interaction.options.getMember("user").user.tag + " gia presente nella lista")
