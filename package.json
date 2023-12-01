@@ -1,34 +1,16 @@
 {
   "name": "antobot",
-  "version": "6.0.0",
-  "description": "This is a simple bot created by me for my ds server",
+  "version": "6.1.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Anto426"
-  },
   "author": "Anto426",
+  "repo": "https://github.com/Anto426/Antobot",
   "license": "ISC",
   "dependencies": {
-    "archiver": "^6.0.1",
-    "axios": "^1.4.0",
-    "canvas": "^2.11.2",
-    "discord.js": "^14.11.0",
-    "dotenv": "^16.0.3",
-    "fs": "^0.0.1-security",
-    "fs-extra": "^11.1.1",
-    "moment": "^2.29.4",
-    "node-7z": "^3.0.0",
-    "prompt-sync": "^4.2.0",
-    "simple-git": "^3.20.0",
-    "skia-canvas": "^1.0.1",
-    "util": "^0.12.5",
-    "zlib": "^1.0.5"
-  },
-  "engines": {
-    "node": "20.x.x"
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1"
   }
 }
