@@ -21,7 +21,7 @@ class Info {
     log() {
         try {
             for (let attributo of Object.getOwnPropertyNames(this)) {
-                consolelog(`${attributo.toUpperCase()}: ${this[attributo]}\n`);
+                consolelog(`${attributo.charAt(0).toUpperCase()}: ${this[attributo]}\n`);
             }
         } catch {
             consolelog("Errore nel caricamento del log iniziale")
