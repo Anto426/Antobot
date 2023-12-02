@@ -1,7 +1,7 @@
 const { writecommand } = require("../commands/writecommands");
 const { Info } = require("../log/bootlog");
 const { consolelog } = require("../log/consolelog");
-const { setTimezoneEurope } = require("../time/settimezone");
+const { time } = require("./../time/time")
 const { intitialclient } = require("./initclient");
 const { loadeventsandcommand } = require("./loadcommand&events");
 require("dotenv").config()
@@ -16,19 +16,17 @@ function loging() {
                 }, 400)
             } catch (err) {
                 console.log(err)
-
             }
         })
         .catch((err) => {
             console.log(err)
             consolelog("Errore il Token non è valido il bot verrà killato")
             process.exit(-1)
-
         })
 }
 
 function boot() {
-    setTimezoneEurope()
+    new time().setTimezoneEurope()
     intitialclient()
         .then(() => {
             new loadeventsandcommand().loadall()
