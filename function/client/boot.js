@@ -26,7 +26,7 @@ function loging() {
 }
 
 function boot() {
-    new time().setTimezoneEurope()
+    new time('Europe/Rome').setTimezone()
     intitialclient()
         .then(() => {
             new loadeventsandcommand().loadall()

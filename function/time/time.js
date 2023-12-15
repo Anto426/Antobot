@@ -1,7 +1,11 @@
 class time {
 
     constructor() {
+        this.timezone
+    }
 
+    setTimezone(timezone){
+        this.timezone = timezone
     }
 
     getCurrentTime() {
@@ -15,8 +19,8 @@ class time {
     }
 
 
-    setTimezoneEurope() {
-        process.env.TZ = 'Europe/Rome';
+    setTimezone() {
+        process.env.TZ = this.timezone;
     }
 }
 

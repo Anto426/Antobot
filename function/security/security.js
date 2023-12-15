@@ -31,5 +31,10 @@ class securyty extends check {
             })
 
     }
+    
 
+}
+
+module.exports = {
+    securyty
 }

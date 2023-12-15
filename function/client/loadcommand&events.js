@@ -42,22 +42,30 @@ class loadeventsandcommand {
     loadevents() {
         this.load("events", dirpatch.events)
             .then(() => {
+                consolelog(Array.from(client.events.entries()));
                 client.events.forEach(x => {
-                    client.on(x, (...args) => {
+                    client.on(x.name, (...args) => {
                         x.execute(...args)
                     });
                 });
             })
             .catch((err) => {
+                consolelog(err)
                 consolelog("Errore non ho caricato gli eventi")
+                client.events.delete();
             })
 
     }
 
     loadall() {
-        return new Promise(async (resolve) => {
-            await this.loadcommand()
-            await this.loadevents()
+        return new Promise(async (resolve, reject) => {
+            try {
+                this.loadcommand()
+                this.loadevents()
+                resolve(0)
+            } catch {
+                reject(-1)
+            }
 
         })
 

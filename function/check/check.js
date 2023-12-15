@@ -38,7 +38,7 @@ class check {
             checkvalarr(arr, id)
                 .catch(() => {
                     consolelog("Errore nel controlare ownwer");
-                    reject(false);
+                    reject(-1);
                 })
                 .then(() => {
                     resolve(true);
@@ -50,6 +50,19 @@ class check {
         return new Promise(async (resolve) => {
             if (iduser == Client.guilds.cache.find(x => x.id == idguild).OwnerId) {
                 resolve(true);
+            }else{
+                resolve(false)
+            }
+
+        })
+
+    }
+    checkpermision(iduser, idguild, permision) {
+        return new Promise(async (resolve) => {
+            if ( Client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).permision.has(permision)) {
+                resolve(true);
+            }else{
+                resolve(false);
             }
 
         })
