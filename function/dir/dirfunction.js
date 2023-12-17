@@ -16,7 +16,9 @@ async function collectioncrete(mincollec, patch, folder, extensions) {
                     try {
                         let file = require(`./../../${patch}/${x}`);
                         if (file && file.name || file.data)
-                            mincollec.set(file.name, file);
+                            if (!mincollec.has(file.name)) {
+                                mincollec.set(file.name, file);
+                            }
 
                     } catch (error) {
                         consolelog("Errore nel caricamento del file :" + x);

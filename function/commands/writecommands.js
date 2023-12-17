@@ -6,6 +6,7 @@ class writecommand {
 
     commandguild(guild) {
         return new Promise((resolve, reject) => {
+            let ne = 0
             consolelog("Scrittura iniziata in " + guild.name);
             if (client.commands.size == 0) {
                 consolelog("Err: Non ci sono comandi da registrare");
@@ -19,12 +20,19 @@ class writecommand {
                             guild.commands.create(command.data)
                                 .catch(() => {
                                     consolelog("Errore: non ho potuto registrare il comando:" + command.name);
+
                                 });
                         } else {
-                            consolelog("Errore: non ho trovato la sezione data nel comando");
+                            consolelog("Errore: non ho trovato la sezione data nel comando :" + command.name);
+                            ne++;
                         }
-                        resolve1(0)
                     });
+
+                    if (ne != client.commands.size) {
+                        resolve1(0);
+                    } else {
+                        reject1(-1)
+                    }
 
                 } catch {
                     reject1(-1)
