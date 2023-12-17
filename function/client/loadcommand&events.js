@@ -42,7 +42,6 @@ class loadeventsandcommand {
     loadevents() {
         this.load("events", dirpatch.events)
             .then(() => {
-                consolelog(Array.from(client.events.entries()));
                 client.events.forEach(x => {
                     client.on(x.name, (...args) => {
                         x.execute(...args)
