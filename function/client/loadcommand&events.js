@@ -1,6 +1,6 @@
 const fs = require("fs")
 const { Collection } = require("discord.js");
-const dirpatch = require("./../../setting/patch.json");
+const dirpatch = require("./../../setting/settings.json");
 const { collectioncrete } = require("../dir/dirfunction");
 const { consolelog } = require("../log/consolelog");
 

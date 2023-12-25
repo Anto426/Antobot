@@ -1,5 +1,0 @@
-{
-    "commands": "./commands",
-    "events": "./events",
-    "database": "$/home/database"
-}

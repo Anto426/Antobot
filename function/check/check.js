@@ -1,5 +1,4 @@
 const { consolelog } = require("../log/consolelog")
-const dirpatch = require("./../../setting/patch.json");
 class check {
     constructor() { }
 
@@ -35,7 +34,7 @@ class check {
 
     chekowner(arr, id) {
         return new Promise(async (resolve, reject) => {
-            checkvalarr(arr, id)
+            this.checkvalarr(arr, id)
                 .catch(() => {
                     consolelog("Errore nel controlare ownwer");
                     reject(-1);
@@ -47,13 +46,13 @@ class check {
     }
 
     checksowner(iduser, idguild) {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
 
             try {
-                if (iduser == Client.guilds.cache.find(x => x.id == idguild).OwnerId) {
+                if (iduser == client.guilds.cache.find(x => x.id == idguild).OwnerId) {
                     resolve(true);
                 } else {
-                    resolve(false)
+                    reject(-1);
                 }
             } catch {
                 consolelog("Errore non ho potuto controllare sowner")
@@ -65,13 +64,13 @@ class check {
 
     }
     checkpermision(iduser, idguild, permision) {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
 
             try {
-                if (Client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).permisions.has(permision)) {
+                if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).permisions.has(permision)) {
                     resolve(true);
                 } else {
-                    resolve(false);
+                    reject(-1);
                 }
             } catch {
                 consolelog("Errore non ho potuto controllare i permessi")
@@ -84,14 +83,15 @@ class check {
     }
 
     checkposition(iduser, otheruserid, idguild) {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
             try {
-                if (Client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).roles.highest.position > Client.guilds.cache.find(x => x.id == otheruserid).members.cache.find(x => x.id == iduser).roles.highest.position) {
+                if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid) && !client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid).bot && client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).roles.highest.position > client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid).roles.highest.position) {
                     resolve(true);
                 } else {
-                    resolve(false);
+                    reject(-1);
                 }
-            } catch {
+            } catch (err) {
+                consolelog(err)
                 consolelog("Errore non ho potuto controllare la posizione")
                 reject(-1)
             }
@@ -103,10 +103,10 @@ class check {
 
 
     checkpchannel(idchannel, arr) {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 arr.forEach(element => {
-                    if (idchannel == dirpatch.database.guild.Allowchannels.find(x => x == element)) {
+                    if (idchannel == arr.find(x => x == element)) {
                         return resolve(true);
                     }
                 });

@@ -1,12 +1,11 @@
-const fs = require("fs")
 const { check } = require("../check/check")
 class securyty extends check {
 
     constructor() {
+        super()
         this.owner = false
         this.Sowner = false
         this.staff = false
-        this.higtofp = false
         this.position = false
         this.channel = false
     }
@@ -62,6 +61,35 @@ class securyty extends check {
             .catch(() => {
 
             })
+    }
+
+    allowcomand(OnlyOwner, chekposition, sizeofpermision, sizeofchannelallow) {
+        return new Promise(async (resolve, reject) => {
+
+            if (this.owner) {
+                return r
+            } else {
+                if (this.Sowner && !OnlyOwner) {
+                    return resolve(0)
+                } else {
+                    if (OnlyOwner) return reject(0)
+                    if ((sizeofpermision <= 0 ? false : true) == this.staff) {
+                        if (this.position == chekposition) {
+                            if ((sizeofchannelallow <= 0 ? false : true) == this.channel) {
+                                return resolve(1)
+                            } else {
+                                return reject(3)
+                            }
+                        } else {
+                            return reject(2)
+                        }
+                    } else {
+                        return reject(1)
+                    }
+                }
+            }
+        })
+
     }
 
 }

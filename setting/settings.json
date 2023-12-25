@@ -1,0 +1,20 @@
+{
+    "commands": "./commands",
+    "events": "./events",
+    "database": "/Database",
+    "configjson": {
+        "online": {
+            "url": "https://raw.githubusercontent.com/Anto426/Configsbot/main",
+            "name": [
+                "owner.json",
+                "game.json",
+                "guild.json",
+                "hollyday.json"
+            ]
+        },
+        "local": {
+            "embedconfig": "./setting/embed.json",
+            "emoji": "./setting/emoji.json"
+        }
+    }
+}

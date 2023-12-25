@@ -2,7 +2,7 @@ const { writecommand } = require("../commands/writecommands");
 const { Info } = require("../log/bootlog");
 const { consolelog } = require("../log/consolelog");
 const { time } = require("./../time/time")
-const { intitialclient } = require("./initclient");
+const { clientinit } = require("./initclient");
 const { loadeventsandcommand } = require("./loadcommand&events");
 require("dotenv").config()
 
@@ -27,7 +27,7 @@ function loging() {
 
 function boot() {
     new time('Europe/Rome').setTimezone()
-    intitialclient()
+    new clientinit().intitialclientbase()
         .then(() => {
             new loadeventsandcommand().loadall()
                 .then(() => {

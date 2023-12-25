@@ -3,7 +3,8 @@
 module.exports = {
     name: "ping",
     permisions: [],
-    allowedchannels:[],
+    allowedchannels: [],
+    OnlyOwner: false,
     position: false,
     test: false,
     data: {
@@ -11,6 +12,6 @@ module.exports = {
         description: "test latenza bot"
     },
     execute(interaction) {
-
+        interaction.reply("g")
     }
 }
