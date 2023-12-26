@@ -13,7 +13,7 @@ class Info {
         this.git_token = client.gitToken
         this.nguild = client.guilds.cache.size;
         this.ram = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} mb`;
-        this.link_invito = `https://discord.com/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=applications.commands%20bot`;
+        this.link_invito = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=applications.commands+bot`
 
 
     }

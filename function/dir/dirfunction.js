@@ -21,7 +21,8 @@ async function collectioncrete(mincollec, patch, folder, extensions) {
                             }
 
                     } catch (error) {
-                        consolelog("Errore nel caricamento del file :" + x);
+                        consolelog(error, "red")
+                        consolelog("Errore nel caricamento del file :" + x, "red");
                     }
                 } else {
                     collectioncrete(mincollec, patch, x, extensions)

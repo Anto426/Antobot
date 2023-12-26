@@ -1,5 +1,5 @@
 const { writecommand } = require("../commands/writecommands");
-const { hollyday } = require("../hollyday/hollyday");
+const { loadothermodules } = require("../loadothermodule/loadothermodule");
 const { Info } = require("../log/bootlog");
 const { consolelog } = require("../log/consolelog");
 const { time } = require("./../time/time")
@@ -12,19 +12,17 @@ function loging() {
         .then(() => {
             try {
                 new Info().log()
-                setTimeout(() => {
-                    new writecommand().commandallguild()
-                    const holl = new hollyday()
-                    holl.init().then(() => { holl.calculatenexthollyday() }).catch(() => { })
+                setTimeout(async() => {
+                    await new writecommand().commandallguild()
+                    new loadothermodules().load()
                 }, 400)
             } catch (err) {
                 console.log(err)
             }
         })
-        .catch((err) => {
-            console.log(err)
-            consolelog("Errore il Token non è valido il bot verrà killato")
-            process.exit(-1)
+        .catch(async() => {
+            await consolelog("Errore il Token non è valido il bot verrà killato", "red")
+            process.exit(-1);
         })
 }
 
@@ -41,9 +39,9 @@ function boot() {
                 })
 
         })
-        .catch((err) => {
+        .catch(async(err) => {
             console.log(err)
-            consolelog("Errore il client non è stato inizializato correttamete il bot verrà killato")
+            await consolelog("Errore il client non è stato inizializato correttamete il bot verrà killato", "red")
             process.exit(-1);
         })
 }

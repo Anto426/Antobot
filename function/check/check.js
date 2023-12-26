@@ -1,4 +1,5 @@
 const { consolelog } = require("../log/consolelog")
+const setting = require("./../../setting/settings.json")
 class check {
     constructor() { }
 
@@ -10,7 +11,7 @@ class check {
                         return resolve(true)
                 }
             } catch {
-                consolelog("Errore non ho potuto controllare nell 'array")
+                consolelog("Errore non ho potuto controllare nell 'array", "red")
                 reject(-1)
             }
 
@@ -26,7 +27,7 @@ class check {
                         resolve(true)
                 }
             } catch {
-                console.log("Errore non ho potuto controllare nell json")
+                console.log("Errore non ho potuto controllare nell json", "red")
                 reject(-1);
             }
         })
@@ -55,7 +56,7 @@ class check {
                     reject(-1);
                 }
             } catch {
-                consolelog("Errore non ho potuto controllare sowner")
+                consolelog("Errore non ho potuto controllare sowner", "red")
                 reject(-1)
             }
 
@@ -67,13 +68,17 @@ class check {
         return new Promise(async (resolve, reject) => {
 
             try {
-                if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).permisions.has(permision)) {
-                    resolve(true);
-                } else {
-                    reject(-1);
-                }
-            } catch {
-                consolelog("Errore non ho potuto controllare i permessi")
+                if (permision.length != 0)
+                    if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).permisions.has(permision)) {
+                        resolve(true);
+                    } else {
+                        reject(-1);
+                    }
+                else
+                    reject(-1)
+            } catch (err) {
+                console.log(err)
+                consolelog("Errore non ho potuto controllare i permessi", "red")
                 reject(-1)
             }
 
@@ -92,7 +97,7 @@ class check {
                 }
             } catch (err) {
                 consolelog(err)
-                consolelog("Errore non ho potuto controllare la posizione")
+                consolelog("Errore non ho potuto controllare la posizione", "red")
                 reject(-1)
             }
 
@@ -110,9 +115,9 @@ class check {
                         return resolve(true);
                     }
                 });
-                resolve(false)
+                reject(-1)
             } catch {
-                consolelog("Errore non ho potuto controllare il canale")
+                consolelog("Errore non ho potuto controllare il canale", "red")
                 reject(-1)
             }
 
@@ -120,6 +125,80 @@ class check {
 
     }
 
+    checkallowopenai() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (setting.var.opeanai.active)
+                    resolve(0)
+                else
+                    reject(-1)
+            } catch {
+                consolelog("Errore non ho potuto controllare la variabile", "red")
+                reject(-1)
+            }
+
+        })
+    }
+
+    checkallowdistube() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (setting.var.music)
+                    resolve(0)
+                else
+                    reject(-1)
+            } catch {
+                consolelog("Errore non ho potuto controllare la variabile", "red")
+                reject(-1)
+            }
+
+        })
+    }
+
+    checkallowhollyday() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (setting.var.hollyday)
+                    resolve(0)
+                else
+                    reject(-1)
+            } catch {
+                consolelog("Errore non ho potuto controllare la variabile", "red")
+                reject(-1)
+            }
+
+        })
+    }
+
+    checkallowstatus() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (setting.var.status)
+                    resolve(0)
+                else
+                    reject(-1)
+            } catch {
+                consolelog("Errore non ho potuto controllare la variabile", "red")
+                reject(-1)
+            }
+
+        })
+    }
+
+    checkallowcaptcha() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (setting.var.captcha)
+                    resolve(0)
+                else
+                    reject(-1)
+            } catch {
+                consolelog("Errore non ho potuto controllare la variabile", "red")
+                reject(-1)
+            }
+
+        })
+    }
 }
 
 

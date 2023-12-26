@@ -1,6 +1,6 @@
 const fs = require("fs")
 const { Collection } = require("discord.js");
-const dirpatch = require("./../../setting/settings.json");
+const setting = require("./../../setting/settings.json");
 const { collectioncrete } = require("../dir/dirfunction");
 const { consolelog } = require("../log/consolelog");
 
@@ -16,31 +16,40 @@ class loadeventsandcommand {
                 client[namecollect] = new Collection()
                 try {
                     let commandF = fs.readdirSync(dir)
-                    if (commandF.length != 0)
-                        resolve(await collectioncrete(client[namecollect], dir, commandF, "js"))
-                    else
+                    if (commandF.length != 0) {
+                        await collectioncrete(client[namecollect], dir, commandF, "js")
+                        if (client[namecollect].size == 0) {
+                            reject(-1)
+                        }
+                        else {
+                            resolve(0)
+                        }
+                    }
+                    else {
+                        consolelog("Non ci sono " + namecollect + "da caricare ", "red")
                         resolve(0)
+                    }
                 } catch (err) {
                     console.log(err)
-                    consolelog("Errore non ho trovato la cartella:" + dir)
+                    consolelog("Errore non ho trovato la cartella:" + dir, "red")
                     reject(-1)
                 }
 
 
-            } catch (err) { reject(err) }
+            } catch (err) { reject(-1) }
         })
     }
 
     loadcommand() {
 
-        this.load("commands", dirpatch.commands)
+        this.load("commands", setting.base.commands)
             .then(() => {
             })
-            .catch(() => { consolelog("Errore non ho caricato i camandi") })
+            .catch(() => { consolelog("Errore non ho caricato i camandi", "red") })
     }
 
     loadevents() {
-        this.load("events", dirpatch.events)
+        this.load("events", setting.base.events)
             .then(() => {
                 client.events.forEach(x => {
                     client.on(x.name, (...args) => {
@@ -50,7 +59,7 @@ class loadeventsandcommand {
             })
             .catch((err) => {
                 consolelog(err)
-                consolelog("Errore non ho caricato gli eventi")
+                consolelog("Errore non ho caricato gli eventi", "red")
                 client.events.delete();
             })
 

@@ -14,11 +14,11 @@ class json {
                 if (Array.isArray(jsonArray)) {
                     return resolve(jsonArray);
                 } else {
-                    consolelog('Il file JSON non contiene un array.');
+                    consolelog('Il file JSON non contiene un array.', "red");
                     reject(-1);
                 }
             } catch (error) {
-                consolelog('Errore durante la conversione del file JSON in un array');
+                consolelog('Errore durante la conversione del file JSON in un array', "red");
                 reject(-1);
             }
         })
@@ -37,7 +37,7 @@ class json {
                     resolve(response.data)
                 })
                 .catch((error) => {
-                    consolelog('Errore durante il download del file JSON: ' + error)
+                    consolelog('Errore durante il download del file JSON: ' + error, "red")
                     reject(-1)
                 });
 
@@ -53,10 +53,10 @@ class json {
             if (typeof jsonObject === 'object' && !Array.isArray(jsonObject)) {
                 return resolve(jsonArray);
             } else {
-                consolelog('Il file JSON non contiene un oggetto JavaScript.');
+                consolelog('Il file JSON non contiene un oggetto JavaScript.', "red");
             }
         } catch (error) {
-            consolelog('Errore durante la conversione del file JSON in un oggetto');
+            consolelog('Errore durante la conversione del file JSON in un oggetto', "red");
             reject(-1);
         }
     }

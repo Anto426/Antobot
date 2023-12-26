@@ -7,9 +7,9 @@ class writecommand {
     commandguild(guild) {
         return new Promise((resolve, reject) => {
             let ne = 0
-            consolelog("Scrittura iniziata in " + guild.name);
+            consolelog("Scrittura iniziata in " + guild.name, "yellow");
             if (client.commands.size == 0) {
-                consolelog("Err: Non ci sono comandi da registrare");
+                consolelog("Err: Non ci sono comandi da registrare", "red");
                 reject(-1);
             }
 
@@ -19,11 +19,11 @@ class writecommand {
                         if (command.data) {
                             guild.commands.create(command.data)
                                 .catch(() => {
-                                    consolelog("Errore: non ho potuto registrare il comando:" + command.name);
+                                    consolelog("Errore: non ho potuto registrare il comando:" + command.name, "red");
 
                                 });
                         } else {
-                            consolelog("Errore: non ho trovato la sezione data nel comando :" + command.name);
+                            consolelog("Errore: non ho trovato la sezione data nel comando :" + command.name, "red");
                             ne++;
                         }
                     });
@@ -41,13 +41,13 @@ class writecommand {
 
             })
                 .then(() => {
-                    consolelog("Scrittura dei comandi avvenuta corretamente in " + guild.name)
+                    consolelog("Scrittura dei comandi avvenuta corretamente in " + guild.name, "green")
                     resolve(0);
 
                 })
 
                 .catch(() => {
-                    consolelog("Err :Imposibile completare la scrittura dei comandi" + guild.name)
+                    consolelog("Err :Imposibile completare la scrittura dei comandi" + guild.name, "red")
                     reject(-1)
                 })
 

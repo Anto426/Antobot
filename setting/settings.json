@@ -1,15 +1,32 @@
 {
-    "commands": "./commands",
-    "events": "./events",
     "database": "/Database",
+    "base": {
+        "commands": "./base/commands",
+        "events": "./base/events"
+    },
+    "distube": {
+        "commands": "./distube/commands",
+        "events": "./distube/events"
+    },
+    "var": {
+        "status": true,
+        "captcha": false,
+        "hollyday": true,
+        "opeanai": {
+            "active": false,
+            "model": "gpt-turbo-3.5"
+        },
+        "music": false
+    },
     "configjson": {
         "online": {
             "url": "https://raw.githubusercontent.com/Anto426/Configsbot/main",
             "name": [
                 "owner.json",
                 "game.json",
-                "guild.json",
-                "hollyday.json"
+                "guildtest.json",
+                "hollyday.json",
+                "status.json"
             ]
         },
         "local": {

@@ -43,8 +43,8 @@ class securyty extends check {
             })
     }
 
-    checkpermision(iduser, idguild) {
-        super.checkpermision(iduser, idguild)
+    checkpermision(iduser, idguild, permision) {
+        super.checkpermision(iduser, idguild, permision)
             .then(() => {
                 this.staff = true;
             })
