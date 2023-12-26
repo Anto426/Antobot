@@ -20,3 +20,8 @@
 
 
 -Migliorata la sicurezza e ottimizzato il relativo modulo per una maggiore affidabilità.
+
+-Aggiunto supporto alle API di OpenAI per l'integrazione di funzionalità avanzate.
+
+
+-Implementato il supporto a Distube per una gestione ottimale della riproduzione audio.
