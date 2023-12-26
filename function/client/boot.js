@@ -1,4 +1,5 @@
 const { writecommand } = require("../commands/writecommands");
+const { hollyday } = require("../hollyday/hollyday");
 const { Info } = require("../log/bootlog");
 const { consolelog } = require("../log/consolelog");
 const { time } = require("./../time/time")
@@ -13,6 +14,8 @@ function loging() {
                 new Info().log()
                 setTimeout(() => {
                     new writecommand().commandallguild()
+                    const holl = new hollyday()
+                    holl.init().then(() => { holl.calculatenexthollyday() }).catch(() => { })
                 }, 400)
             } catch (err) {
                 console.log(err)
