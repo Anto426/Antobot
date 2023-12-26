@@ -1,9 +1,22 @@
-💻Changlog Anto's Bot v 6.1.0
-
--Aggiornato il metodo di avvio
-
--Aggiornato il modulo che si occupa di caricare i comandi e gli eventi
-
--Aggiornato il log inzile di Avvio con uno stile grafico più carino, ora e anche più dettagliato elencanto tutti i moduli e gli eventi caricati
+💻 Changelog per Anto's Bot v 6.1.0
 
 
+-Migliorato il metodo di avvio per ottimizzare le prestazioni.
+
+
+-Ottimizzato il modulo di caricamento dei comandi e degli eventi per una gestione più efficiente.
+
+
+-Rinnovato il log di avvio con uno stile grafico più accattivante e dettagliato, mostrando in modo completo tutti i moduli e gli    eventi caricati.
+
+
+-Aggiornati i log di sistema per una migliore tracciabilità e comprensione delle attività.
+
+
+-Aggiornato il modulo delle festività per una gestione più precisa degli eventi festivi.
+
+
+-Ottimizzato il modulo dello status per garantire una visualizzazione accurata dello stato del bot.
+
+
+-Migliorata la sicurezza e ottimizzato il relativo modulo per una maggiore affidabilità.
