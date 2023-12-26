@@ -66,7 +66,7 @@ class hollyday {
 
     async timer(channelcount) {
         const id = setInterval(() => {
-            updatechannel(channelcount, id)
+            this.updatechannel(channelcount, id)
         }, 5000 * 60)
 
 
