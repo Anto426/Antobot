@@ -1,5 +1,8 @@
 {
-    "database": "./Database",
+    "database": {
+        "root": "./Database",
+        "listoldmebers": "oldmember.json"
+    },
     "base": {
         "commands": "./base/commands",
         "events": "./base/events"

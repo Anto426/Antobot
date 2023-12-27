@@ -9,7 +9,7 @@ class writecommand {
             consolelog("Scrittura iniziata in " + guild.name, "yellow");
 
             if (client.basecommands.size === 0) {
-                console.log("Err: Non ci sono comandi da registrare", "red");
+                consolelog("Err: Non ci sono comandi da registrare", "red");
                 return reject(-1);
             }
 
@@ -20,7 +20,6 @@ class writecommand {
                 if (command.data) {
                     const commandPromise = guild.commands.create(command.data)
                         .catch((err) => {
-                            console.log(err)
                             consolelog("Errore: non ho potuto registrare il comando:" + command.name, "red");
                         });
                     promises.push(commandPromise);

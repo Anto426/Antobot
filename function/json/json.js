@@ -4,26 +4,7 @@ const axios = require("axios")
 class json {
     constructor() {
     }
-    getArrFromJson(dir) {
 
-        return new Promise((resolve, reject) => {
-            try {
-                const jsonData = fs.readFileSync(dir, 'utf8');
-                const jsonArray = JSON.parse(jsonData);
-
-                if (Array.isArray(jsonArray)) {
-                    return resolve(jsonArray);
-                } else {
-                    consolelog('Il file JSON non contiene un array.', "red");
-                    reject(-1);
-                }
-            } catch (error) {
-                consolelog('Errore durante la conversione del file JSON in un array', "red");
-                reject(-1);
-            }
-        })
-
-    }
 
     jsonddypendencebufferolyf(url, token) {
 
@@ -45,21 +26,36 @@ class json {
 
     }
 
-    getJsonToObject(dir) {
-        try {
-            const jsonData = fs.readFileSync(dir, 'utf8');
-            const jsonObject = JSON.parse(jsonData);
-
-            if (typeof jsonObject === 'object' && !Array.isArray(jsonObject)) {
-                return resolve(jsonArray);
-            } else {
-                consolelog('Il file JSON non contiene un oggetto JavaScript.', "red");
+    readJson(dir) {
+        return new Promise((resolve, reject) => {
+            try {
+                const jsonData = fs.readFileSync(dir, 'utf8');
+                const jsonObject = JSON.parse(jsonData);
+                resolve(jsonObject);
+            } catch (error) {
+                consolelog('Errore durante la lettura file JSON ', "red");
+                reject(error);
             }
-        } catch (error) {
-            consolelog('Errore durante la conversione del file JSON in un oggetto', "red");
-            reject(-1);
-        }
+        })
     }
+
+    createJSONFile(filePath, dataObject) {
+        return new Promise((resolve, reject) => {
+
+            const jsonData = JSON.stringify(dataObject, null, 2);
+
+            fs.writeFile(filePath, jsonData, 'utf8', (err) => {
+                if (err) {
+                    consolelog('Errore durante la scrittura del file', "red");
+                    reject(err);
+                    return;
+                }
+                resolve(0);
+            });
+        });
+    }
+
+
 }
 
 module.exports = {

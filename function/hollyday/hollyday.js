@@ -48,7 +48,7 @@ class hollyday {
         try {
             if (this.time.formatttimedayscale(this.time.getTimestampbyinput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.time.getCurrentTimestamp() > 0)) {
                 let time = `${this.time.formatttimedayscale(this.time.getTimestampbyinput(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.time.getCurrentTimestamp())}`
-                channelcount.setName(time.toString()).catch((err) => { console.log(err.toString()) }).catch(() => { consolelog("Non ho potuto aggiornare il conteggio della festa", "red") })
+                channelcount.setName(time.toString()).catch(() => { consolelog("Non ho potuto aggiornare il conteggio della festa", "red") })
             } else {
                 sendcongratulations(id)
             }
