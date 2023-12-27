@@ -1,5 +1,5 @@
 {
-    "database": "/Database",
+    "database": "./Database",
     "base": {
         "commands": "./base/commands",
         "events": "./base/events"
@@ -26,12 +26,10 @@
                 "game.json",
                 "guildtest.json",
                 "hollyday.json",
-                "status.json"
+                "status.json",
+                "embed.json",
+                "emoji.json"
             ]
-        },
-        "local": {
-            "embedconfig": "./setting/embed.json",
-            "emoji": "./setting/emoji.json"
         }
     }
 }

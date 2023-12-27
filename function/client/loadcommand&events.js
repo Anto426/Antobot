@@ -104,7 +104,7 @@ class loadeventsandcommand {
                 }).catch(() => { })
                 resolve(0)
             } catch {
-                reject(-1)
+                resolve(0)
             }
 
         })

@@ -11,16 +11,18 @@ function loging() {
     client.login(process.env.TOKEN)
         .then(() => {
             try {
-                new Info().log()
-                setTimeout(async() => {
-                    await new writecommand().commandallguild()
-                    new loadothermodules().load()
-                }, 400)
-            } catch (err) {
-                (err)
+                client.on('ready', async () => {
+                    new Info().log()
+                    await new writecommand().commandallguild().then(() => { 
+                        new loadothermodules().load()
+                    })
+
+                })
+            } catch {
+                consolelog("Errore il Token non è valido il bot verrà killato", "red")
             }
         })
-        .catch(async() => {
+        .catch(async () => {
             await consolelog("Errore il Token non è valido il bot verrà killato", "red")
             process.exit(-1);
         })
@@ -39,7 +41,7 @@ function boot() {
                 })
 
         })
-        .catch(async(err) => {
+        .catch(async (err) => {
             await consolelog("Errore il client non è stato inizializato correttamete il bot verrà killato", "red")
             process.exit(-1);
         })
