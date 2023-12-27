@@ -3,10 +3,13 @@ const { Collection } = require("discord.js");
 const setting = require("./../../setting/settings.json");
 const { collectioncrete } = require("../dir/dirfunction");
 const { consolelog } = require("../log/consolelog");
+const { check } = require("../check/check");
 
 
 class loadeventsandcommand {
-    constructor() { }
+    constructor() {
+        this.check = new check
+    }
 
     load(namecollect, dir) {
 
@@ -17,7 +20,7 @@ class loadeventsandcommand {
                 try {
                     let commandF = fs.readdirSync(dir)
                     if (commandF.length != 0) {
-                        await collectioncrete(client[namecollect], dir, commandF, "js")
+                        await collectioncrete(client[namecollect], dir, Array.isArray(commandF) ? commandF : [commandF], "js")
                         if (client[namecollect].size == 0) {
                             reject(-1)
                         }
@@ -26,11 +29,11 @@ class loadeventsandcommand {
                         }
                     }
                     else {
-                        consolelog("Non ci sono " + namecollect + "da caricare ", "red")
+                        consolelog("Non ci sono " + namecollect + " da caricare ", "red")
                         resolve(0)
                     }
                 } catch (err) {
-                    console.log(err)
+                    (err)
                     consolelog("Errore non ho trovato la cartella:" + dir, "red")
                     reject(-1)
                 }
@@ -42,17 +45,43 @@ class loadeventsandcommand {
 
     loadcommand() {
 
-        this.load("commands", setting.base.commands)
+        this.load("basecommands", setting.base.commands)
             .then(() => {
             })
             .catch(() => { consolelog("Errore non ho caricato i camandi", "red") })
     }
 
     loadevents() {
-        this.load("events", setting.base.events)
+        this.load("baseevents", setting.base.events)
             .then(() => {
-                client.events.forEach(x => {
-                    client.on(x.name, (...args) => {
+
+
+                client.baseevents.forEach(x => {
+                    client.on(x.typeEvent, (...args) => {
+                        x.execute(...args)
+                    });
+                });
+            })
+            .catch((err) => {
+                consolelog("Errore non ho caricato gli eventi", "red")
+                client.baseevents.delete();
+            })
+
+    }
+
+    loaddistubecommand() {
+
+        this.load("distubecommands", setting.distube.commands)
+            .then(() => {
+            })
+            .catch(() => { consolelog("Errore non ho caricato i camandi", "red") })
+    }
+
+    loaddistubeevents() {
+        this.load("distubeevents", setting.distube.events)
+            .then(() => {
+                client.distubeevents.forEach(x => {
+                    distube.on(x.typeEvent, (...args) => {
                         x.execute(...args)
                     });
                 });
@@ -60,16 +89,19 @@ class loadeventsandcommand {
             .catch((err) => {
                 consolelog(err)
                 consolelog("Errore non ho caricato gli eventi", "red")
-                client.events.delete();
+                client.baseevents.delete();
             })
 
     }
-
     loadall() {
         return new Promise(async (resolve, reject) => {
             try {
                 this.loadcommand()
                 this.loadevents()
+                this.check.checkallowdistube().then(() => {
+                    this.loaddistubecommand()
+                    this.loaddistubeevents()
+                }).catch(() => { })
                 resolve(0)
             } catch {
                 reject(-1)

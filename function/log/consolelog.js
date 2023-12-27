@@ -17,7 +17,7 @@ async function consolelog(message, color) {
     const separatorLength = messageColored.length + 6; 
     const separator = colorize("=".repeat(separatorLength), "white"); 
 
-    console.log(`${separator}\n=> ${messageColored}\n${separator}`);
+    console.log(`${separator}\n=> ${messageColored}`);
 }
 
 module.exports = {

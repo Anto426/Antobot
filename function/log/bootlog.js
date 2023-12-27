@@ -26,6 +26,10 @@ class Info {
                 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼',
                 'right': '║', 'right-mid': '╢', 'middle': '│'
             }
+
+
+            //General
+
             const GeneralTable = new Table({
                 head: [`${packageI.name.charAt(0).toUpperCase() + packageI.name.slice(1)} v `, packageI.version],
                 colWidths: [25, 117],
@@ -39,43 +43,6 @@ class Info {
 
             });
 
-
-            const EventsTable = new Table({
-                head: ["Event Load:" + [client.events.size]],
-                colWidths: [61],
-                style: {
-                    head: [client.events.size > 0 ? 'green' : 'red'],
-                    border: ['white'],
-                    compact: false
-                },
-                chars: settable,
-            });
-
-
-
-
-            const ComandsTable = new Table({
-                head: ["Comand Load:" + [client.commands.size]],
-                colWidths: [20, 40],
-                style: {
-                    head: [client.commands.size > 0 ? 'green' : 'red'],
-                    border: ['white'],
-                    compact: false
-                },
-                chars: settable
-            });
-
-            client.events.forEach(element => {
-                EventsTable.push(["Name:" + [element.name]])
-            });
-
-            client.commands.forEach(element => {
-                ComandsTable.push(["Name:" + element.name, "Description:" + element.data.description])
-            });
-
-
-
-
             for (let attributo of Object.getOwnPropertyNames(this)) {
                 if (this[attributo]) {
                     const value = this[attributo];
@@ -83,11 +50,83 @@ class Info {
                 }
             }
 
+            //Base
+            const BaseComandsTable = new Table({
+                head: ["Comand Load:" + [client.basecommands.size]],
+                colWidths: [20, 40],
+                style: {
+                    head: [client.basecommands.size > 0 ? 'green' : 'red'],
+                    border: ['white'],
+                    compact: false
+                },
+                chars: settable
+            });
+
+            const BaseEventsTable = new Table({
+                head: ["Event Load:" + [client.baseevents.size]],
+                colWidths: [20, 40],
+                style: {
+                    head: [client.baseevents.size > 0 ? 'green' : 'red'],
+                    border: ['white'],
+                    compact: false
+                },
+                chars: settable,
+            });
+
+            client.basecommands.forEach(element => {
+                BaseComandsTable.push(["Name:" + element.name, "Description:" + element.data.description])
+            });
+            client.baseevents.forEach(element => {
+                BaseEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent])
+            });
+
+
+            //Distube
+            const DistubeGeneralTable = new Table({
+                head: ["Comand Load:" + [client.distubecommands.size]],
+                colWidths: [20, 40],
+                style: {
+                    head: [client.distubecommands.size > 0 ? 'green' : 'red'],
+                    border: ['white'],
+                    compact: false
+                },
+                chars: settable
+            });
+
+            const DistubeEventsTable = new Table({
+                head: ["Event Load:" + [client.distubeevents.size]],
+                colWidths: [20, 40],
+                style: {
+                    head: [client.distubeevents.size > 0 ? 'green' : 'red'],
+                    border: ['white'],
+                    compact: false
+                },
+                chars: settable,
+            });
+
+
+            //push element 
+            client.distubecommands.forEach(element => {
+                DistubeGeneralTable.push(["Name:" + element.name, "Description:" + element.data.description])
+            });
+            client.distubeevents.forEach(element => {
+                DistubeEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent])
+            });
+
+            
+
+
             console.log(GeneralTable.toString())
 
-            console.log(ComandsTable.toString())
+            console.log("=".repeat(64));
+            console.log("Base:")
+            console.log(BaseComandsTable.toString())
+            console.log(BaseEventsTable.toString())
+            console.log("=".repeat(64));
+            console.log("Distube:")
+            console.log(DistubeGeneralTable.toString())
+            console.log(DistubeEventsTable.toString())
 
-            console.log(EventsTable.toString())
 
         } catch (err) { console.log(err) }
     }

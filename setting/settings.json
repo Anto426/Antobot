@@ -13,10 +13,10 @@
         "captcha": false,
         "hollyday": true,
         "opeanai": {
-            "active": false,
+            "active": true,
             "model": "gpt-turbo-3.5"
         },
-        "music": false
+        "music": true
     },
     "configjson": {
         "online": {

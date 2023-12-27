@@ -17,7 +17,7 @@ function loging() {
                     new loadothermodules().load()
                 }, 400)
             } catch (err) {
-                console.log(err)
+                (err)
             }
         })
         .catch(async() => {
@@ -28,7 +28,7 @@ function loging() {
 
 function boot() {
     new time('Europe/Rome').setTimezone()
-    new clientinit().intitialclientbase()
+    new clientinit().intitialallclientbysettings()
         .then(() => {
             new loadeventsandcommand().loadall()
                 .then(() => {
@@ -40,7 +40,6 @@ function boot() {
 
         })
         .catch(async(err) => {
-            console.log(err)
             await consolelog("Errore il client non è stato inizializato correttamete il bot verrà killato", "red")
             process.exit(-1);
         })

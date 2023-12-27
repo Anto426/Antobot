@@ -1,11 +1,16 @@
 const OpenAI = require('openai');
 const { Client, Partials } = require('discord.js');
-
+const { DisTube } = require("distube")
+const { SpotifyPlugin } = require("@distube/spotify")
+const { SoundCloudPlugin } = require("@distube/soundcloud")
+const { YtDlpPlugin } = require('@distube/yt-dlp');
+const { consolelog } = require('../log/consolelog');
+const { check } = require('../check/check');
 
 class clientinit {
 
     constructor() {
-
+        this.check = new check()
     }
 
     async intitialclientbase() {
@@ -24,11 +29,13 @@ class clientinit {
                 if (process.env.OPENAITOKEN)
                     client.openaitoken = process.env.OPENAITOKEN;
 
+                consolelog("Client di base inzializato con successo", "green");
+
                 resolve(0);
 
 
             } catch (err) {
-                console.log("Errore nel inizializare il client di base");
+                consolelog("Errore nel inizializare il client di base", "red");
                 reject(err);
             }
         })
@@ -43,11 +50,11 @@ class clientinit {
                 global.openai = new OpenAI({
                     apiKey: client.openaitoken
                 });
-
+                consolelog("Client di AI inzializato con successo", "green");
                 resolve(0)
 
             } catch (err) {
-                console.log("Errore nel inizializare il client di base");
+                consolelog("Errore nel inizializare il client di AI", "red");
                 reject(err);
             }
         })
@@ -55,16 +62,46 @@ class clientinit {
     }
 
 
-    async intitialclientai() {
+    async intitialclientmusic() {
         return new Promise(async (resolve, reject) => {
 
             try {
-                global.openai = new OpenAI({
-                    apiKey: client.openaitoken
-                });
+                global.distube = new DisTube(client, {
+                    leaveOnStop: true,
+                    emitNewSongOnly: true,
+                    emitAddSongWhenCreatingQueue: false,
+                    emitAddListWhenCreatingQueue: false,
+                    plugins: [
+                        new SpotifyPlugin({
+                            emitEventsAfterFetching: true
+                        }),
+                        new SoundCloudPlugin(),
+                        new YtDlpPlugin()
+                    ]
+                })
+                consolelog("Client di Distube inzializato con successo", "green");
                 resolve(0)
             } catch (err) {
-                console.log("Errore nel inizializare il client di base");
+                consolelog("Errore nel inizializare il client di Distube", "red");
+                reject(err);
+            }
+        })
+
+    }
+
+    async intitialallclientbysettings() {
+        return new Promise(async (resolve, reject) => {
+
+            try {
+                this.intitialclientbase().then(() => {
+                    this.check.checkallowdistube().then(async () => { await this.intitialclientmusic().catch(() => { }) }).catch(() => { })
+                    this.check.checkallowopenai().then(async () => { await this.intitialclientai().catch(() => { }) }).catch(() => { })
+                    resolve(0)
+                }).catch(() => {
+                    reject(-1);
+                })
+            } catch (err) {
+                consolelog("Errore nel inizializare il i client", "red");
                 reject(err);
             }
         })

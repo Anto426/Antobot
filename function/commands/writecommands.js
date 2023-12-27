@@ -8,14 +8,14 @@ class writecommand {
         return new Promise((resolve, reject) => {
             let ne = 0
             consolelog("Scrittura iniziata in " + guild.name, "yellow");
-            if (client.commands.size == 0) {
+            if (client.basecommands.size == 0) {
                 consolelog("Err: Non ci sono comandi da registrare", "red");
                 reject(-1);
             }
 
             new Promise((resolve1, reject1) => {
                 try {
-                    client.commands.forEach(command => {
+                    client.basecommands.forEach(command => {
                         if (command.data) {
                             guild.commands.create(command.data)
                                 .catch(() => {
@@ -28,7 +28,7 @@ class writecommand {
                         }
                     });
 
-                    if (ne != client.commands.size) {
+                    if (ne != client.basecommands.size) {
                         resolve1(0);
                     } else {
                         reject1(-1)

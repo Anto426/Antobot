@@ -27,7 +27,7 @@ class check {
                         resolve(true)
                 }
             } catch {
-                console.log("Errore non ho potuto controllare nell json", "red")
+                consolelog("Errore non ho potuto controllare nell json", "red")
                 reject(-1);
             }
         })
@@ -77,7 +77,7 @@ class check {
                 else
                     reject(-1)
             } catch (err) {
-                console.log(err)
+
                 consolelog("Errore non ho potuto controllare i permessi", "red")
                 reject(-1)
             }

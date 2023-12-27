@@ -3,13 +3,14 @@ const { consolelog } = require("../../../../function/log/consolelog");
 const { securyty } = require("../../../../function/security/security");
 const setting = require("../../../../setting/settings.json")
 module.exports = {
-    name: "interactionCreate",
+    name: "security",
+    typeEvent:"interactionCreate",
     async execute(interaction) {
         if (!interaction.isChatInputCommand()) return;
         let json = new Cjson();
         let security = new securyty()
 
-        const command = client.commands.get(interaction.commandName)
+        const command = client.basecommands.get(interaction.commandName)
         let jsonow = {}
 
         await json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[0], client.gitToken).then((jsonowner) => { jsonow = jsonowner }).catch(() => { })
