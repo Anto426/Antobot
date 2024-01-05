@@ -24,7 +24,7 @@ module.exports = {
                 command.execute(interaction)
             })
             .catch((err) => {
-                consolelog(err, "red");
+                
             })
 
         json = null;

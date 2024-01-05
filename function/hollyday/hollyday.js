@@ -79,7 +79,7 @@ class hollyday {
             const channelname = guild.channels.cache.find(x => x.id == this.guiljson["Anto's  Server"].channel.hollyday.name)
             this.calculatenexthollyday().then(() => {
                 if (!guild || !channelname || !channelcount || !this.nextHoliday) return
-                consolelog("Nuova festa trovata:" + this.nextHoliday.name + " in data:" + this.nextHoliday.date.day + 1 + "/" + this.nextHoliday.date.mouth + 1 + "/" + this.year)
+                consolelog("Nuova festa trovata:" + this.nextHoliday.name + " in data:" + this.nextHoliday.date.day + "/" + this.nextHoliday.date.mouth + 1 + "/" + this.year)
                 channelname.setName(this.nextHoliday.name).catch(() => { consolelog("Non ho potuto aggiornare il nome della festa", "red") })
                 this.updatechannel(channelcount, null)
                 this.timer(channelcount)
