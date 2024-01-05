@@ -1,34 +1,52 @@
+const { errembed } = require("../../../../embed/err/errembed");
 const { Cjson } = require("../../../../function/json/json");
 const { consolelog } = require("../../../../function/log/consolelog");
 const { securyty } = require("../../../../function/security/security");
+
 const setting = require("../../../../setting/settings.json")
 module.exports = {
     name: "security",
-    typeEvent:"interactionCreate",
+    typeEvent: "interactionCreate",
     async execute(interaction) {
+        let erremb = new errembed(interaction.guild, interaction.member)
+        erremb.init()
+        let embedf = [erremb.errNotPermission, erremb.errAreBot, erremb.errAreYou, erremb.errTohigtPermission]
         if (!interaction.isChatInputCommand()) return;
-        let json = new Cjson();
-        let security = new securyty()
-
         const command = client.basecommands.get(interaction.commandName)
+        let json = new Cjson();
+        let security = new securyty(interaction, command)
+
         let jsonow = {}
-
+        let jsonow0 = {}
+        let promises = []
         await json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[0], client.gitToken).then((jsonowner) => { jsonow = jsonowner }).catch(() => { })
-        security.chekowner(interaction.member.id, jsonow.owner)
-        security.checksowner(interaction.member.id, interaction.guild.id)
-        security.checkpermision(interaction, interaction.guild, command.permisions)
-        security.checkposition(interaction.member.id, interaction.options.getMember("user") ? interaction.options.getMember("user").id : null, interaction.guild.id)
-        security.checkpchannel(interaction.channel.id, command.allowedchannels)
-        security.allowcomand(command.OnlyOwner, command.position, command.permisions.length, command.allowedchannels.length)
-            .then(() => {
-                command.execute(interaction)
-            })
-            .catch((err) => {
-                
-            })
+        await json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], client.gitToken).then((jsonguild) => { jsonow0 = jsonguild }).catch(() => { })
 
-        json = null;
-        security = null
+        promises.push(security.chekowner(jsonow.owner))
+        promises.push(security.checkisyou())
+        promises.push(security.chekisbot())
+        promises.push(security.checksowner())
+        promises.push(security.checkpermision())
+        promises.push(security.checkposition())
+        promises.push(security.checkpchannel(jsonow0["Anto's  Server"].channel.allowchannel))
+
+
+        Promise.all(promises).then(() => {
+            security.allowcomand()
+                .then(() => {
+                    try {
+                        command.execute(interaction)
+                    } catch {
+                        interaction.reply({ embeds: [erremb.errGeneric()] })
+                        consolelog("Errore durante esecuzione del comando", "red")
+                    }
+                })
+                .catch((err) => {
+                    interaction.reply({ embeds: [embedf[err].call(erremb)] })
+                })
+        })
+
+
 
 
     }

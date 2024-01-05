@@ -1,99 +1,181 @@
+const { permisions } = require("../../base/commands/admin/testembed")
 const { check } = require("../check/check")
 class securyty extends check {
 
-    constructor() {
+    constructor(interaction, command) {
         super()
         this.owner = false
         this.Sowner = false
         this.staff = false
         this.position = false
         this.channel = false
+        this.isbot = false
+        this.isyou = false
+        this.command = command
+        this.interaction = interaction
     }
 
 
 
-    chekowner(arr, id) {
-        super.chekowner(arr, id)
-            .then(() => {
-                this.owner = true;
-            })
-            .catch(() => {
+    chekowner(arr) {
+        return new Promise((resolve) => {
+            super.chekowner(arr, this.interaction.member.id)
+                .then(() => {
+                    this.owner = true;
+                    resolve(0)
+                })
+                .catch(() => {
+                    resolve(0)
 
-            })
-
+                })
+        })
     }
 
-    checksowner(iduser, idguild) {
-        super.checksowner(iduser, idguild)
-            .then(() => {
-                this.owner = true;
-            })
-            .catch(() => {
 
-            })
+
+    checksowner() {
+
+        return new Promise((resolve) => {
+            super.checksowner(this.interaction.member.id, this.interaction.guild.id)
+                .then(() => {
+                    this.Sowner = true;
+                    resolve(0)
+                })
+                .catch(() => {
+                    resolve(0)
+                })
+        })
+
 
     }
-    checkpchannel(idchannel, arr) {
-        super.checkpchannel(idchannel, arr)
-            .then(() => {
-                this.channel = true;
-            })
-            .catch(() => {
+    checkpchannel(arr) {
 
-            })
-    }
-
-    checkpermision(iduser, idguild, permision) {
-        super.checkpermision(iduser, idguild, permision)
-            .then(() => {
-                this.staff = true;
-            })
-            .catch(() => {
-
-            })
-    }
-
-    checkposition(iduser, otheruserid, guildid) {
-        super.checkposition(iduser, otheruserid, guildid)
-            .then(() => {
-                this.position = true;
-            })
-            .catch(() => {
-
-            })
-    }
-
-    allowcomand(OnlyOwner, chekposition, sizeofpermision, sizeofchannelallow) {
-        return new Promise(async (resolve, reject) => {
-
-            if (this.owner) {
-                return r
-            } else {
-                if (this.Sowner && !OnlyOwner) {
-                    return resolve(0)
-                } else {
-                    if (OnlyOwner) return reject(0)
-                    if ((sizeofpermision <= 0 ? false : true) == this.staff) {
-                        if (this.position == chekposition) {
-                            if ((sizeofchannelallow <= 0 ? false : true) == this.channel) {
-                                return resolve(1)
-                            } else {
-                                return reject(3)
-                            }
-                        } else {
-                            return reject(2)
-                        }
-                    } else {
-                        return reject(1)
-                    }
+        return new Promise((resolve) => {
+            if (!this.owner || !this.Sowner)
+                if (this.command.allowedchannels)
+                    super.checkpchannel(this.interaction.channel.id, arr)
+                        .then(() => {
+                            this.channel = true;
+                            resolve(0)
+                        })
+                        .catch(() => {
+                            resolve(0)
+                        })
+                else {
+                    resolve(0)
+                    this.channel = true
                 }
-            }
         })
 
     }
 
-}
+    checkpermision() {
 
+        return new Promise((resolve) => {
+            if (!this.owner || !this.Sowner)
+                if (this.command.permisions.size > 0)
+                    super.checkpermision(this.interaction.member.id, this.interaction.guild.id, this.command.permision)
+                        .then(() => {
+                            this.staff = true;
+                            resolve(0)
+                        })
+                        .catch(() => {
+                            resolve(0)
+                        })
+                else {
+                    resolve(0)
+                    this.staff = true
+                }
+        })
+
+    }
+
+    checkposition() {
+
+        return new Promise((resolve) => {
+            if (this.command.position && interaction.options.getUser("user"))
+                super.checkposition(this.interaction.member.id, interaction.options.getUser("user").id, this.interaction.gild.id)
+                    .then(() => {
+                        resolve(0)
+                        this.position = true;
+                    })
+                    .catch(() => {
+                        resolve(0)
+                    })
+            else
+                resolve(0)
+        })
+
+    }
+
+    checkisyou() {
+
+        return new Promise((resolve) => {
+            if (this.command.position && interaction.options.getUser("user"))
+                super.checkisyou(this.interaction.member.id, interaction.options.getUser("user").id).then(() => {
+                    this.isyou = true
+                    resolve(0)
+                }).catch(() => {
+                    resolve(0)
+                })
+            else
+                resolve(0)
+        })
+
+    }
+
+    chekisbot() {
+
+        return new Promise((resolve) => {
+            if (this.interaction.options.getUser("user"))
+                super.chekisbot(this.interaction.member.id, this.interaction.guild.id).then(() => {
+                    this.isbot = true
+                    resolve(0)
+                }).catch(() => {
+                    resolve(0)
+                })
+            else
+                resolve(0)
+        })
+
+    }
+
+    allowcomand() {
+        return new Promise(async (resolve, reject) => {
+            if (this.owner)
+                resolve(0)
+            else {
+                if (this.command.OnlyOwner) reject(0)
+                if (this.permision) {
+                    if (this.isbot) {
+                        reject(1)
+                    }
+                    if (this.isyou) {
+                        reject(2)
+                    }
+                    if (this.owner) {
+                        resolve(0)
+                    } else {
+                        if (this.position) {
+                            if (this.channel) {
+                                resolve(0)
+                            } else {
+                                reject(0)
+                            }
+                        }
+                        else
+                            reject(3)
+                    }
+
+                }
+            }
+
+
+
+        })
+
+    }
+}
 module.exports = {
     securyty
 }

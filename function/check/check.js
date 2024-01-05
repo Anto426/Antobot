@@ -6,10 +6,11 @@ class check {
     checkvalarr(arr, value) {
         return new Promise((resolve, reject) => {
             try {
-                for (let i in arr) {
-                    if (i == value)
-                        return resolve(true)
-                }
+                arr.forEach(element => {
+                    if (element == value) {
+                        return resolve(true);
+                    }
+                });
             } catch {
                 consolelog("Errore non ho potuto controllare nell 'array", "red")
                 reject(-1)
@@ -24,7 +25,7 @@ class check {
             try {
                 for (let i in arr) {
                     if (arr[i] == value)
-                        resolve(true)
+                        resolve(0)
                 }
             } catch {
                 consolelog("Errore non ho potuto controllare nell json", "red")
@@ -37,12 +38,27 @@ class check {
         return new Promise(async (resolve, reject) => {
             this.checkvalarr(arr, id)
                 .catch(() => {
-                    consolelog("Errore nel controlare ownwer");
+                    consolelog("Errore nel controlare ownwer", "red");
                     reject(-1);
                 })
                 .then(() => {
-                    resolve(true);
+                    resolve(0);
                 })
+        })
+    }
+
+    chekisbot(iduser, idguild) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).bot) {
+                    resolve(0);
+                } else {
+                    reject(-1);
+                }
+            } catch {
+                consolelog("Errore non ho potuto controllare se è un bot", "red")
+                reject(-1)
+            }
         })
     }
 
@@ -50,8 +66,8 @@ class check {
         return new Promise(async (resolve, reject) => {
 
             try {
-                if (iduser == client.guilds.cache.find(x => x.id == idguild).OwnerId) {
-                    resolve(true);
+                if (iduser == client.guilds.cache.find(x => x.id == idguild).ownerId) {
+                    resolve(0);
                 } else {
                     reject(-1);
                 }
@@ -70,7 +86,7 @@ class check {
             try {
                 if (permision.length != 0)
                     if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).permisions.has(permision)) {
-                        resolve(true);
+                        resolve(0);
                     } else {
                         reject(-1);
                     }
@@ -87,11 +103,26 @@ class check {
 
     }
 
+    checkisyou(iduser, otheruserid) {
+
+        return new Promise(async (resolve, reject) => {
+            if (iduser, otheruserid)
+                if (iduser == otheruserid)
+                    reject(-1)
+                else
+                    resolve(0)
+
+            consolelog("Errore non ho potuto controllare la posizione", "red")
+            reject(-1)
+
+        })
+    }
+
     checkposition(iduser, otheruserid, idguild) {
         return new Promise(async (resolve, reject) => {
             try {
                 if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid) && !client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid).bot && client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).roles.highest.position > client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid).roles.highest.position) {
-                    resolve(true);
+                    resolve(0);
                 } else {
                     reject(-1);
                 }
@@ -108,18 +139,18 @@ class check {
 
 
     checkpchannel(idchannel, arr) {
+
         return new Promise(async (resolve, reject) => {
-            try {
-                arr.forEach(element => {
-                    if (idchannel == arr.find(x => x == element)) {
-                        return resolve(true);
-                    }
-                });
-                reject(-1)
-            } catch {
-                consolelog("Errore non ho potuto controllare il canale", "red")
-                reject(-1)
-            }
+
+            this.checkvalarr(arr, idchannel)
+                .catch(() => {
+                    consolelog("Errore non ho potuto controllare il canale", "red")
+                    reject(-1);
+                })
+                .then(() => {
+                    resolve(0);
+                })
+
 
         })
 

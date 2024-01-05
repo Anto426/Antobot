@@ -3,8 +3,8 @@ const { errembed } = require("../../../embed/err/errembed")
 module.exports = {
     name: "testembed",
     permisions: [],
-    allowedchannels: [],
-    OnlyOwner: false,
+    allowedchannels: true,
+    OnlyOwner: true,
     position: false,
     test: false,
     data: {
