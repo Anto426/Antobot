@@ -2,7 +2,6 @@ const { check } = require("../check/check");
 const { hollyday } = require("../hollyday/hollyday");
 const { consolelog } = require("../log/consolelog");
 const { status } = require("../status/status");
-
 class loadothermodules {
     constructor() {
         this.check = new check()
