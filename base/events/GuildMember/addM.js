@@ -1,8 +1,8 @@
 const { Cjson } = require("../../../function/json/json");
 const { consolelog } = require("../../../function/log/consolelog");
-const setting = require("./../../../setting/settings.json")
+const setting = require("../../../setting/settings.json")
 module.exports = {
-    name: "addM",
+    name: "AddM",
     typeEvent: "guildMemberAdd",
     async execute(member) {
         if (!member.bot) {
@@ -17,8 +17,6 @@ module.exports = {
                             }
 
                     });
-
-
 
                 } else {
 
