@@ -1,45 +1,15 @@
-const { EmbedBuilder } = require("discord.js");
+const { baseembed } = require("../baseembed");
 
-class errembed {
+class errembed extends baseembed {
     constructor(guild, member) {
-        this.guild = guild
-        this.member = member
-        this.owner = {}
-        this.Author = {}
-        this.embed = new EmbedBuilder()
+        super(guild, member)
     }
     init() {
-        return new Promise(async (resolve, reject) => {
-            try {
-                this.owner = await this.guild.fetchOwner()
-                this.embed
-                    .setTimestamp()
-                    .setAuthor({
-                        name: this.owner.user.username,
-                        iconURL: this.owner.user.displayAvatarURL({
-                            dynamic: true,
-                            format: "png",
-                            size: 512
-                        })
-
-                    })
-                    .setColor(embedconfig.color.red)
-                    .setFooter({
-                        text: "📢 Richiesta effetuata da " + this.member.user.username,
-                        iconURL: this.member.user.displayAvatarURL({
-                            dynamic: true,
-                            format: "png",
-                            size: 512
-                        })
-                    });
-
-                resolve(0)
-            } catch (err) {
-                console.log(err)
-                reject(-1)
-            }
+        return new Promise((resolve, reject) => {
+            super.init().then((embed) => { this.embed = embed; this.embed.setColor(embedconfig.color.red); resolve(0) }).catch(() => { reject(-1) })
         })
-    } 1
+    }
+
     errGeneric() {
         return this.embed
             .setTitle("🛠️ Ops! Qualcosa è andato storto... 🤖💥")
@@ -80,7 +50,7 @@ class errembed {
     errAreYou() {
         return this.embed
             .setTitle("⚠️  L'utente sei tu ⚠️")
-            .setDescription("🪃La persona a cui stati cercando di applicare la seguente azione sei tu quaindi non posso farlo.")
+            .setDescription("🪃La persona a cui stati cercando di applicare la seguente azione sei tu quindi non posso fare nulla.")
             .setThumbnail(embedconfig.image.notpermission)
     }
 }

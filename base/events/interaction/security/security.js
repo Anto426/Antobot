@@ -36,8 +36,9 @@ module.exports = {
                 .then(() => {
                     try {
                         command.execute(interaction)
-                    } catch {
+                    } catch (err) {
                         interaction.reply({ embeds: [erremb.errGeneric()] })
+                        consolelog(err)
                         consolelog("Errore durante esecuzione del comando", "red")
                     }
                 })

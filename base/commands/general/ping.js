@@ -1,3 +1,5 @@
+const { comandbembed } = require("../../../embed/base/command")
+const { time } = require("../../../function/time/time")
 
 
 module.exports = {
@@ -12,6 +14,12 @@ module.exports = {
         description: "test latenza bot"
     },
     execute(interaction) {
-        interaction.reply(g)
+        let embed = new comandbembed(interaction.guild, interaction.member)
+        let timea = new time().formatttimedayscale(new Date().getTime() - timeon)
+        let latenza = `${client.ws.ping}ms`
+        let ram =  `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} mb`;
+        embed.init().then(() => {
+            interaction.reply({ embeds: [embed.ping(latenza, ram, timea)] })
+        }).catch(() => { });
     }
 }

@@ -153,7 +153,7 @@ class securyty extends check {
                     if (this.isyou) {
                         reject(2)
                     }
-                    if (this.owner) {
+                    if (this.Sowner) {
                         resolve(0)
                     } else {
                         if (this.position) {
@@ -167,6 +167,8 @@ class securyty extends check {
                             reject(3)
                     }
 
+                } else {
+                    reject(0)
                 }
             }
 
