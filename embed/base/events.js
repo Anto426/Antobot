@@ -24,7 +24,7 @@ class eventbembed extends baseembed {
 
                 let canvas = await createCanvas(1700, 600)
                 let ctx = await canvas.getContext("2d")
-                let img = await loadImage(process.env.dirbot +  setting.canavas.font.dir + "/" + setting.canavas.image.name[0])
+                let img = await loadImage(process.env.dirbot +  setting.canavas.image.dir + "/" + setting.canavas.image.name[0])
                 ctx.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.height / 2)
                 ctx.fillStyle = "rgba(0,0,0,0.30)"
                 ctx.fillRect(70, 70, canvas.width - 70 - 70, canvas.height - 70 - 70)
