@@ -1,6 +1,7 @@
 const { eventbembed } = require("../../../embed/base/events")
 const { errembed } = require("../../../embed/err/errembed");
 const { Cjson } = require("../../../function/json/json");
+const setting = require("../../../setting/settings.json")
 
 module.exports = {
     name: "testembed",
