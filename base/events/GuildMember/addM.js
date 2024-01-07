@@ -29,7 +29,7 @@ module.exports = {
                         let embedmsg = new eventbembed(member.guild)
                         embedmsg.init().then(async () => {
                             let send = await embedmsg.welcome(member, humans.size).catch(() => { })
-                            member.guild.channels.cache.find(x => x.id == jsonf0["Anto's  Server"].channel.info.welcome).send({ embeds: [send], files: [send[1]] })
+                            member.guild.channels.cache.find(x => x.id == jsonf0["Anto's  Server"].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] })
 
                         }).catch((err) => { })
                         try {

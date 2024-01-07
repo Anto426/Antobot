@@ -23,12 +23,12 @@ module.exports = {
                 let embedmsg = new eventbembed(interaction.guild)
                 embedmsg.init().then(async () => {
                     let send = await embedmsg.welcome(interaction.member, humans.size).catch(() => { })
-                    interaction.guild.channels.cache.find(x => x.id == jsonf0["Anto's  Server"].channel.info.welcome).send({ embeds: [send], files: [send[1]] })
+                    interaction.guild.channels.cache.find(x => x.id == jsonf0["Anto's  Server"].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] })
 
                 }).catch((err) => { })
 
             })
-
+            
 
         } catch (err) {
             console.log(err)
