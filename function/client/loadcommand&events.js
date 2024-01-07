@@ -87,7 +87,7 @@ class loadeventsandcommand {
                 });
             })
             .catch((err) => {
-                consolelog(err)
+                 
                 consolelog("Errore non ho caricato gli eventi", "red")
                 client.baseevents.delete();
             })

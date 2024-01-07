@@ -130,7 +130,7 @@ class check {
                     reject(-1);
                 }
             } catch (err) {
-                consolelog(err)
+                 
                 consolelog("Errore non ho potuto controllare la posizione", "red")
                 reject(-1)
             }

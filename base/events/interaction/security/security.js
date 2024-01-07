@@ -38,7 +38,7 @@ module.exports = {
                         command.execute(interaction)
                     } catch (err) {
                         interaction.reply({ embeds: [erremb.errGeneric()], ephemeral: true })
-                        consolelog(err)
+                         
                         consolelog("Errore durante esecuzione del comando", "red")
                     }
                 })
