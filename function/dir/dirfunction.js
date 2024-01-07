@@ -17,7 +17,7 @@ async function collectioncrete(mincollec, patch, folders, extensions) {
                 for (let x of contf) {
                     if (x.endsWith(extensions)) {
                         try {
-                            let file = require(`./../../${patch1}/${x}`);
+                            let file = require(`${patch1}/${x}`);
                             if (file && file.name || file.data)
                                 mincollec.set(file.name, file);
 
