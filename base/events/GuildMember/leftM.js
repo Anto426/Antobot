@@ -8,18 +8,28 @@ module.exports = {
 
         let json = new Cjson();
         await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then((jsonf) => {
-            jsonf[member.guild.id][member.id].roles = Array.from(member.roles.cache).map(role => role[1].id);
-            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsonf).catch((err) => {   })
 
-        }).catch(() => {
+            if (!jsonf[member.guild.id]) {
+                jsonf[member.guild.id] = {};
+            }
+
+            if (!jsonf[member.guild.id][member.id]) {
+                jsonf[member.guild.id][member.id] = {};
+            }
+
+            jsonf[member.guild.id][member.id].roles = Array.from(member.roles.cache).map(role => role[1].id);
+            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsonf).catch(() => { })
+
+        }).catch((err) => {
+            consolelog(err)
             const jsons = {
                 [member.guild.id]: {
                     [member.id]: {
-                        roles: Array.from(member.roles.cache)[0]
+                        roles: Array.from(member.roles.cache).map(role => role[1].id)
                     }
                 }
             }
-            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch((err) => {   })
+            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch((err) => { })
         })
 
 
