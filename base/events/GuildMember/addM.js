@@ -11,7 +11,7 @@ module.exports = {
     typeEvent: "guildMemberAdd",
     async execute(member) {
 
-        async function welcomemessage() {
+        async function welcomemessage(json) {
             let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
             json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
                 let embedmsg = new eventbembed(member.guild)
@@ -47,11 +47,11 @@ module.exports = {
 
                 } else {
 
-                    welcomemessage()
+                    welcomemessage(json)
 
                 }
             }).catch(async (err) => {
-                welcomemessage()
+                welcomemessage(json)
             })
         } else {
 
