@@ -8,7 +8,7 @@ class botton {
 
     checkisyourbotton(interaction) {
         return new Promise((resolve, reject) => {
-            this.check.checkisyou(interaction.customId.toString()[2], interaction.member.id).then(() => {
+            this.check.checkisyou(interaction.customId.toString().split("-")[1], interaction.member.id).then(() => {
                 resolve(0)
             }).catch(() => {
                 let embed = new errembed(interaction.guild, interaction.member)

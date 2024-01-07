@@ -42,7 +42,7 @@ function boot() {
                 })
 
         })
-        .catch(async (err) => {
+        .catch(async () => {
             await consolelog("Errore il client non è stato inizializato correttamete il bot verrà killato", "red")
             process.exit(-1);
         })

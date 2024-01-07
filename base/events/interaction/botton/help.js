@@ -18,7 +18,7 @@ module.exports = {
             Cbotton.checkisyourbotton(interaction)
                 .then(() => {
                     let json = new Cjson()
-                    json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[6], client.gitToken).then((jsonf) => {
+                    json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
                         new baseembed(interaction.guild, interaction.member).init().then((embedbase) => {
                             const command = client.basecommands.get(interaction.values[0])
 

@@ -26,16 +26,9 @@ class clientinit {
                     partials: [Partials.User, Partials.Reaction, Partials.Message, Partials.Channel]
                 })
 
-                if (process.env.GITTOKEN)
-                    client.gitToken = process.env.GITTOKEN;
-
-                if (process.env.OPENAITOKEN)
-                    client.openaitoken = process.env.OPENAITOKEN;
-
-
                 global.embedconfig = {}
 
-                await this.json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[5], client.gitToken).then((jsonf) => { embedconfig = jsonf }).catch(() => { consolelog("Errore variabile json non caricata", "red") });
+                await this.json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[5], process.env.GITTOKEN).then((jsonf) => { embedconfig = jsonf }).catch(() => { consolelog("Errore variabile json non caricata", "red") });
                 
 
                 consolelog("Client di base inzializato con successo", "green");
@@ -57,7 +50,7 @@ class clientinit {
             try {
 
                 global.openai = new OpenAI({
-                    apiKey: client.openaitoken
+                    apiKey: process.env.OPENAITOKEN
                 });
                 consolelog("Client di AI inzializato con successo", "green");
                 resolve(0)

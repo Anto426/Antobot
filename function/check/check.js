@@ -8,9 +8,10 @@ class check {
             try {
                 arr.forEach(element => {
                     if (element == value) {
-                        return resolve(true);
+                        return resolve(0);
                     }
                 });
+                return reject(-1)
             } catch {
                 consolelog("Errore non ho potuto controllare nell 'array", "red")
                 reject(-1)
@@ -38,7 +39,6 @@ class check {
         return new Promise(async (resolve, reject) => {
             this.checkvalarr(arr, id)
                 .catch(() => {
-                    consolelog("Errore nel controlare ownwer", "red");
                     reject(-1);
                 })
                 .then(() => {
@@ -108,9 +108,10 @@ class check {
         return new Promise(async (resolve, reject) => {
             if (iduser, otheruserid)
                 if (iduser == otheruserid)
-                    reject(-1)
-                else
                     resolve(0)
+                else
+                    reject(-1)
+
             else {
                 consolelog("Errore non ho potuto controllare se utente ha lo stesso id", "red")
                 reject(-1)
@@ -146,7 +147,6 @@ class check {
 
             this.checkvalarr(arr, idchannel)
                 .catch(() => {
-                    consolelog("Errore non ho potuto controllare il canale", "red")
                     reject(-1);
                 })
                 .then(() => {

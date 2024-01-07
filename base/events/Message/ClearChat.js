@@ -8,7 +8,7 @@ module.exports = {
 
         let json = new Cjson()
 
-        json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], client.gitToken).then((jsonf) => {
+        json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf) => {
             jsonf['Anto\'s  Server'].channel.allowchannel.forEach(x => {
                 try {
                     if (message.channel.id == x && !message.author.bot) {

@@ -51,7 +51,7 @@ class securyty extends check {
     checkpchannel(arr) {
 
         return new Promise((resolve) => {
-            if (!this.owner || !this.Sowner)
+            if (!this.owner || !this.Sowner) {
                 if (this.command.allowedchannels)
                     super.checkpchannel(this.interaction.channel.id, arr)
                         .then(() => {
@@ -65,6 +65,12 @@ class securyty extends check {
                     resolve(0)
                     this.channel = true
                 }
+            } else {
+                resolve(0)
+                this.channel = true
+            }
+
+
         })
 
     }
@@ -72,7 +78,7 @@ class securyty extends check {
     checkpermision() {
 
         return new Promise((resolve) => {
-            if (!this.owner || !this.Sowner)
+            if (!this.owner || !this.Sowner) {
                 if (this.command.permisions.size > 0)
                     super.checkpermision(this.interaction.member.id, this.interaction.guild.id, this.command.permision)
                         .then(() => {
@@ -86,6 +92,11 @@ class securyty extends check {
                     resolve(0)
                     this.staff = true
                 }
+            }
+            else {
+                this.staff = true
+                resolve(0)
+            }
         })
 
     }
@@ -97,13 +108,15 @@ class securyty extends check {
                 super.checkposition(this.interaction.member.id, interaction.options.getUser("user").id, this.interaction.gild.id)
                     .then(() => {
                         resolve(0)
-                        this.position = true;
+
                     })
                     .catch(() => {
                         resolve(0)
                     })
-            else
+            else {
+                this.position = true;
                 resolve(0)
+            }
         })
 
     }
@@ -141,34 +154,25 @@ class securyty extends check {
     }
 
     allowcomand() {
+        console.log(this.owner, this.Sowner, this.staff, this.isbot, this.isyou, this.position, this.channel)
         return new Promise(async (resolve, reject) => {
             if (this.owner)
                 resolve(0)
             else {
                 if (this.command.OnlyOwner) reject(0)
-                if (this.permision) {
-                    if (this.isbot) {
-                        reject(1)
-                    }
-                    if (this.isyou) {
-                        reject(2)
-                    }
-                    if (this.Sowner) {
-                        resolve(0)
-                    } else {
+                if (this.Sowner) resolve(0)
+                else {
+                    if (this.staff) {
                         if (this.position) {
-                            if (this.channel) {
-                                resolve(0)
-                            } else {
-                                reject(0)
-                            }
-                        }
-                        else
-                            reject(3)
-                    }
-
-                } else {
-                    reject(0)
+                            if (!this.isbot) {
+                                if (!this.isyou) {
+                                    if (this.channel) {
+                                        resolve(0)
+                                    } else reject(0)
+                                } else reject(2)
+                            } else reject(1)
+                        } else reject(3)
+                    } else reject(0)
                 }
             }
 

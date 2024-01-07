@@ -19,8 +19,8 @@ module.exports = {
         let jsonow = {}
         let jsonow0 = {}
         let promises = []
-        await json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[0], client.gitToken).then((jsonowner) => { jsonow = jsonowner }).catch(() => { })
-        await json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], client.gitToken).then((jsonguild) => { jsonow0 = jsonguild }).catch(() => { })
+        await json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[0], process.env.GITTOKEN).then((jsonowner) => { jsonow = jsonowner }).catch(() => { })
+        await json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonguild) => { jsonow0 = jsonguild }).catch(() => { })
 
         promises.push(security.chekowner(jsonow.owner))
         promises.push(security.checkisyou())
@@ -37,13 +37,13 @@ module.exports = {
                     try {
                         command.execute(interaction)
                     } catch (err) {
-                        interaction.reply({ embeds: [erremb.errGeneric()] })
+                        interaction.reply({ embeds: [erremb.errGeneric()], ephemeral: true })
                         consolelog(err)
                         consolelog("Errore durante esecuzione del comando", "red")
                     }
                 })
                 .catch((err) => {
-                    interaction.reply({ embeds: [embedf[err].call(erremb)] })
+                    interaction.reply({ embeds: [embedf[err].call(erremb)], ephemeral: true })
                 })
         })
 
