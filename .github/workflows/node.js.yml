@@ -1,0 +1,39 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "host" ]
+
+
+jobs:
+  build:
+    runs-on: self-hosted
+    env:
+      TOKEN: ${{ vars.TOKEN }}
+      GITTOKEN: ${{ vars.GITTOKEN }}
+      OPENAITOKEN: ${{ vars.OPENAITOKEN }}
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - name: Stop Systemctl module "Antobot"
+      run: sudo systemctl stop antobot
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Start Systemctl module "Antobot"
+      run: sudo systemctl start antobot
+
+    - name: Complete task
+      run: echo "Task completed successfully."
