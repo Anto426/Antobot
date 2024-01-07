@@ -1,15 +1,15 @@
 {
     "database": {
-        "root": "./Database",
+        "root": "${process.env.dirdatabase}/Database",
         "listoldmebers": "oldmember.json"
     },
     "base": {
-        "commands": "./base/commands",
-        "events": "./base/events"
+        "commands": "${process.env.dirbot}/base/commands",
+        "events": "${process.env.dirbot}/base/events"
     },
     "distube": {
-        "commands": "./distube/commands",
-        "events": "./distube/events"
+        "commands": "${process.env.dirbot}/distube/commands",
+        "events": "${process.env.dirbot}/distube/events"
     },
     "var": {
         "status": true,
