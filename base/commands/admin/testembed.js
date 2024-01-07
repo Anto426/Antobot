@@ -1,5 +1,6 @@
 const { eventbembed } = require("../../../embed/base/events")
-const { errembed } = require("../../../embed/err/errembed")
+const { errembed } = require("../../../embed/err/errembed");
+const { Cjson } = require("../../../function/json/json");
 
 module.exports = {
     name: "testembed",
@@ -15,7 +16,7 @@ module.exports = {
     },
     async execute(interaction) {
         try {
-
+            let json = new Cjson();
             let [bots, humans] = (await interaction.guild.members.fetch()).partition(member => member.user.bot);
             json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
                 let embedmsg = new eventbembed(interaction.guild)
