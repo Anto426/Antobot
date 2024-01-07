@@ -8,7 +8,7 @@ module.exports = {
     async execute(member) {
         if (!member.bot) {
             let json = new Cjson();
-            await json.readJson(setting.database.root + "/" + setting.database.listoldmebers).then(async (jsonf) => {
+            await json.readJson(process.env.dirdatabase + process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then(async (jsonf) => {
                 if (jsonf[member.guild.id][member.id]) {
                     jsonf[member.guild.id][member.id].roles.forEach(element => {
                         let role = member.guild.roles.cache.find(x => x.id === element);

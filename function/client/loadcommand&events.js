@@ -45,14 +45,14 @@ class loadeventsandcommand {
 
     loadcommand() {
 
-        this.load("basecommands", setting.base.commands)
+        this.load("basecommands", process.env.dirbot+ setting.base.commands)
             .then(() => {
             })
             .catch(() => { consolelog("Errore non ho caricato i camandi", "red") })
     }
 
     loadevents() {
-        this.load("baseevents", setting.base.events)
+        this.load("baseevents", process.env.dirbot+ setting.base.events)
             .then(() => {
 
 
@@ -71,14 +71,14 @@ class loadeventsandcommand {
 
     loaddistubecommand() {
 
-        this.load("distubecommands", setting.distube.commands)
+        this.load("distubecommands", process.env.dirbot+ setting.distube.commands)
             .then(() => {
             })
             .catch(() => { consolelog("Errore non ho caricato i camandi", "red") })
     }
 
     loaddistubeevents() {
-        this.load("distubeevents", setting.distube.events)
+        this.load("distubeevents", process.env.dirbot+ setting.distube.events)
             .then(() => {
                 client.distubeevents.forEach(x => {
                     distube.on(x.typeEvent, (...args) => {
