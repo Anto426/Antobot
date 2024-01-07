@@ -1,4 +1,3 @@
-const { permisions } = require("../../base/commands/admin/testembed")
 const { check } = require("../check/check")
 class securyty extends check {
 
@@ -19,6 +18,7 @@ class securyty extends check {
 
     chekowner(arr) {
         return new Promise((resolve) => {
+            console.log(arr)
             super.chekowner(arr, this.interaction.member.id)
                 .then(() => {
                     this.owner = true;

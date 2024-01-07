@@ -18,17 +18,17 @@ class comandbembed extends baseembed {
             .addFields(
                 {
                     name: "📶 Latenza",
-                    value: Latenza,
+                    value: Latenza ? Latenza : "Sconosciuta",
                     inline: true
                 },
                 {
                     name: "💻 Ram",
-                    value: ram,
+                    value: ram ? ram : "Sconosciuta",
                     inline: true
                 },
                 {
                     name: "⏲️ Tempo di accensione",
-                    value: time,
+                    value: time ? time : "Sconosciuto",
                     inline: false
                 },
             )
@@ -45,6 +45,8 @@ class comandbembed extends baseembed {
             .setDescription("🌟 Benvenuto nel comando 'help'! Hai bisogno di informazioni su un particolare comando? Clicca su quello di cui hai bisogno e io ti aiuterò! 🚀")
             .setThumbnail(embedconfig.image.help)
     }
+
+    
 
 }
 

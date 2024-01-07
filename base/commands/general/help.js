@@ -21,35 +21,27 @@ module.exports = {
         let Cmenu = new menu()
         let list = []
 
-        if (client.basecommands.size != 0) {
+        let comandlist = new StringSelectMenuBuilder()
+            .setCustomId(`help-${interaction.member.id}`)
+            .setPlaceholder('Scegli un comando')
 
-            let comandlist = new StringSelectMenuBuilder()
-                .setCustomId(`help-${interaction.member.id}`)
-                .setPlaceholder('Scegli un comando')
+        client.basecommands.forEach(command => {
+            if (command.see) {
+                list.push(new StringSelectMenuOptionBuilder()
+                    .setLabel(`⚙️ ${command.data.name}`)
+                    .setDescription(`${command.data.description}`)
+                    .setValue(`${command.data.name}`))
+            }
 
-            client.basecommands.forEach(command => {
-                if (command.see) {
-                    list.push(new StringSelectMenuOptionBuilder()
-                        .setLabel(`⚙️ ${command.data.name}`)
-                        .setDescription(`${command.data.description}`)
-                        .setValue(`${command.data.name}`))
-                }
+        });
 
+        embed.init().then(() => {
+            interaction.reply({
+                embeds: [embed.help()],
+                components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, 0),
             });
+        })
 
 
-
-
-            embed.init().then(() => {
-                interaction.reply({
-                    embeds: [embed.help()],
-                    components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, 0),
-                });
-            })
-        }
-        else
-            embederr.init().then(() => {
-                interaction.reply({ embeds: [embederr.errGeneric().setDescription("⚠️ Non ho trovato comandi da mostrarti")], ephemeral: true })
-            })
     }
 }

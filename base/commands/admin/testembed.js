@@ -1,3 +1,4 @@
+const { eventbembed } = require("../../../embed/base/events")
 const { errembed } = require("../../../embed/err/errembed")
 
 module.exports = {
@@ -14,10 +15,10 @@ module.exports = {
     },
     execute(interaction) {
         try {
-            let embed = new errembed(interaction.guild, interaction.member)
-            embed.init().then(() => {
-                interaction.reply({ embeds: [embed.errAreYou()] })
-            }).catch((err) => { console.log(err) })
+
+
+
+
         } catch (err) {
             console.log(err)
         }
