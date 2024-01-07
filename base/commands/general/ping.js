@@ -9,15 +9,16 @@ module.exports = {
     OnlyOwner: false,
     position: false,
     test: false,
+    see: true,
     data: {
         name: "ping",
-        description: "test latenza bot"
+        description: "Test latenza"
     },
     execute(interaction) {
         let embed = new comandbembed(interaction.guild, interaction.member)
         let timea = new time().formatttimedayscale(new Date().getTime() - timeon)
         let latenza = `${client.ws.ping}ms`
-        let ram =  `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} mb`;
+        let ram = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} mb`;
         embed.init().then(() => {
             interaction.reply({ embeds: [embed.ping(latenza, ram, timea)] })
         }).catch(() => { });

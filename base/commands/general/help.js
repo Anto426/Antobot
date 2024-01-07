@@ -1,0 +1,55 @@
+const { comandbembed } = require("../../../embed/base/command");
+const { errembed } = require("../../../embed/err/errembed");
+const { menu } = require("../../../function/row/menu");
+const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js")
+module.exports = {
+    name: "help",
+    permisions: [],
+    allowedchannels: true,
+    OnlyOwner: false,
+    position: false,
+    test: false,
+    see: false,
+    data: {
+        name: "help",
+        description: "/help"
+    },
+    execute(interaction) {
+
+        let embederr = new errembed(interaction.guild, interaction.member)
+        let embed = new comandbembed(interaction.guild, interaction.member)
+        let Cmenu = new menu()
+        let list = []
+
+        if (client.basecommands.size != 0) {
+
+            let comandlist = new StringSelectMenuBuilder()
+                .setCustomId(`help-${interaction.member.id}`)
+                .setPlaceholder('Scegli un comando')
+
+            client.basecommands.forEach(command => {
+                if (command.see) {
+                    list.push(new StringSelectMenuOptionBuilder()
+                        .setLabel(`⚙️ ${command.data.name}`)
+                        .setDescription(`${command.data.description}`)
+                        .setValue(`${command.data.name}`))
+                }
+
+            });
+
+
+
+
+            embed.init().then(() => {
+                interaction.reply({
+                    embeds: [embed.help()],
+                    components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, 0),
+                });
+            })
+        }
+        else
+            embederr.init().then(() => {
+                interaction.reply({ embeds: [embederr.errGeneric().setDescription("⚠️ Non ho trovato comandi da mostrarti")], ephemeral: true })
+            })
+    }
+}

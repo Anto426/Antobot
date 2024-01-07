@@ -111,9 +111,11 @@ class check {
                     reject(-1)
                 else
                     resolve(0)
+            else {
+                consolelog("Errore non ho potuto controllare se utente ha lo stesso id", "red")
+                reject(-1)
+            }
 
-            consolelog("Errore non ho potuto controllare la posizione", "red")
-            reject(-1)
 
         })
     }

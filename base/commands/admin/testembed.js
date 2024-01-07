@@ -7,6 +7,7 @@ module.exports = {
     OnlyOwner: true,
     position: false,
     test: false,
+    see: false,
     data: {
         name: "testembed",
         description: "Testa gli embed"

@@ -19,12 +19,12 @@ class comandbembed extends baseembed {
                 {
                     name: "📶 Latenza",
                     value: Latenza,
-                    inline: false
+                    inline: true
                 },
                 {
                     name: "💻 Ram",
                     value: ram,
-                    inline: false
+                    inline: true
                 },
                 {
                     name: "⏲️ Tempo di accensione",
@@ -37,6 +37,13 @@ class comandbembed extends baseembed {
                 format: "png",
                 size: 512
             }));
+    }
+
+    help() {
+        return this.embed
+            .setTitle("🆘 Help")
+            .setDescription("🌟 Benvenuto nel comando 'help'! Hai bisogno di informazioni su un particolare comando? Clicca su quello di cui hai bisogno e io ti aiuterò! 🚀")
+            .setThumbnail(embedconfig.image.help)
     }
 
 }
