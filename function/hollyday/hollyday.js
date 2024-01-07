@@ -16,7 +16,7 @@ class hollyday {
 
     async init() {
         return new Promise(async (resolve, reject) => {
-            await this.Cjson.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guiljson = json }).catch((err) => { consolelog("Errore nel inizializare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
+            await this.Cjson.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guiljson = json }).catch((err) => { consolelog("Errore nel inizializare il json " + setting.configjson.online.name[2] + " TOKEN" + process.env.GITTOKEN, "red"); return reject(-1) })
             await this.Cjson.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN).then((json) => { this.hollydayjson = json }).catch((err) => { consolelog("Errore nel inizializare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
             resolve(0);
         })
@@ -60,7 +60,7 @@ class hollyday {
     async sendcongratulations(id) {
         if (this.time.formatttimedayscale(this.time.getTimestampbyinput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.time.getCurrentTimestamp()) <= 0) {
             clearInterval(id)
-            this.main() 
+            this.main()
         }
     }
 
