@@ -58,7 +58,7 @@ class eventbembed extends baseembed {
                     .setDescription(`${member} benvenuto su  ${member.guild.name} spero che ti possa trovare bene sei il nostro ${count} membro `)
                     .setImage('attachment://welcomecanavas.png')
 
-                let send = [embed, attachment]
+                let send = [this.embed, attachment]
 
                 resolve(send)
 
