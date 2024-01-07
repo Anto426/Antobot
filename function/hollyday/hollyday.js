@@ -60,7 +60,7 @@ class hollyday {
     async sendcongratulations(id) {
         if (this.time.formatttimedayscale(this.time.getTimestampbyinput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.time.getCurrentTimestamp()) <= 0) {
             clearInterval(id)
-            this.main()
+            this.main() 
         }
     }
 
