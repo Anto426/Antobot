@@ -23,6 +23,7 @@ async function collectioncrete(mincollec, patch, folders, extensions) {
 
 
                         } catch (error) {
+                            consolelog(error)
                             consolelog("Errore nel caricamento del file :" + x, "red");
                         }
                     } else {
