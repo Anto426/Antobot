@@ -13,10 +13,19 @@ module.exports = {
         name: "testembed",
         description: "Testa gli embed"
     },
-    execute(interaction) {
+    async execute(interaction) {
         try {
 
+            let [bots, humans] = (await interaction.guild.members.fetch()).partition(member => member.user.bot);
+            json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
+                let embedmsg = new eventbembed(interaction.guild)
+                embedmsg.init().then(async () => {
+                    let send = await embedmsg.welcome(interaction.member, humans.size).catch(() => { })
+                    interaction.guild.channels.cache.find(x => x.id == jsonf0["Anto's  Server"].channel.info.welcome).send({ embeds: [send], files: [send[1]] })
 
+                }).catch((err) => { })
+
+            })
 
 
         } catch (err) {
