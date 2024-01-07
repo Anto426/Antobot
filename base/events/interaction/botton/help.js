@@ -13,6 +13,7 @@ module.exports = {
     typeEvent: "interactionCreate",
     async execute(interaction) {
         if (interaction.isChatInputCommand()) return;
+
         if (interaction.customId.split("-").includes("help")) {
             let Cbotton = new botton()
             Cbotton.checkisyourbotton(interaction)
@@ -57,32 +58,37 @@ module.exports = {
         }
 
         if (interaction.customId.split("-").includes("helpm")) {
+            let Cbotton = new botton()
+            Cbotton.checkisyourbotton(interaction).then(() => {
 
-            let embed = new comandbembed(interaction.guild, interaction.member)
-            let Cmenu = new menu()
-            let list = []
+                let embed = new comandbembed(interaction.guild, interaction.member)
+                let Cmenu = new menu()
+                let list = []
 
 
-            let comandlist = new StringSelectMenuBuilder()
-                .setCustomId(`help-${interaction.member.id}`)
-                .setPlaceholder('Scegli un comando')
+                let comandlist = new StringSelectMenuBuilder()
+                    .setCustomId(`help-${interaction.member.id}`)
+                    .setPlaceholder('Scegli un comando')
 
-            client.basecommands.forEach(command => {
-                if (command.see) {
-                    list.push(new StringSelectMenuOptionBuilder()
-                        .setLabel(`⚙️ ${command.data.name}`)
-                        .setDescription(`${command.data.description}`)
-                        .setValue(`${command.data.name}`))
-                }
+                client.basecommands.forEach(command => {
+                    if (command.see) {
+                        list.push(new StringSelectMenuOptionBuilder()
+                            .setLabel(`⚙️ ${command.data.name}`)
+                            .setDescription(`${command.data.description}`)
+                            .setValue(`${command.data.name}`))
+                    }
 
-            });
-
-            embed.init().then(() => {
-                interaction.update({
-                    embeds: [embed.help()],
-                    components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, interaction.customId.split("-")[3]),
                 });
-            })
+
+                embed.init().then(() => {
+                    interaction.update({
+                        embeds: [embed.help()],
+                        components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, interaction.customId.split("-")[3]),
+                    });
+                })
+
+            }).catch(() => { })
+
 
 
         }

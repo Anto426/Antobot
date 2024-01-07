@@ -11,6 +11,22 @@
         "commands": "/distube/commands",
         "events": "/distube/events"
     },
+    "canavas": {
+        "font": {
+            "dir": "/canavas/font",
+            "name": [
+                "asapCondensed.ttf",
+                "NotoSansJP-Bold.ttf"
+            ]
+        },
+        "image": {
+            
+            "dir": "/canavas/image",
+            "name": [
+                "background.jpg"
+            ]
+        }
+    },
     "var": {
         "status": true,
         "captcha": false,

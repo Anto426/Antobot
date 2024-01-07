@@ -1,6 +1,7 @@
 const { AttachmentBuilder } = require("discord.js");
 const { baseembed } = require("../baseembed");
 const { createCanvas, loadImage, registerFont } = require("canvas")
+const setting = require("./../../setting/settings.json")
 class eventbembed extends baseembed {
     constructor(guild, member) {
         super(guild, member)
@@ -17,13 +18,13 @@ class eventbembed extends baseembed {
         return new Promise(async (resolve, reject) => {
             try {
 
-                registerFont("./canavas/font/asapCondensed.ttf", { family: "asapCondensed" });
-                registerFont("./canavas/font/NotoSansJP-Bold.ttf", { family: "NotoSansJP-Bold" });
+                registerFont(process.env.dirbot +  setting.canavas.font.dir + "/" + setting.canavas.font.name[0], { family: setting.canavas.font.name[0].split(".")[0] });
+                registerFont(process.env.dirbot +  setting.canavas.font.dir + "/" + setting.canavas.font.name[1], { family: setting.canavas.font.name[1].split(".")[0] });
 
 
                 let canvas = await createCanvas(1700, 600)
                 let ctx = await canvas.getContext("2d")
-                let img = await loadImage("./canavas/image/background.jpg")
+                let img = await loadImage(process.env.dirbot +  setting.canavas.font.dir + "/" + setting.canavas.image.name[0])
                 ctx.drawImage(img, canvas.width / 2 - img.width / 2, canvas.height / 2 - img.height / 2)
                 ctx.fillStyle = "rgba(0,0,0,0.30)"
                 ctx.fillRect(70, 70, canvas.width - 70 - 70, canvas.height - 70 - 70)
