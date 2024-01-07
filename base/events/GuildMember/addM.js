@@ -41,7 +41,7 @@ module.exports = {
 
                 }
             }).catch((err) => {
-                 
+                consolelog(err)
             })
         } else {
 
