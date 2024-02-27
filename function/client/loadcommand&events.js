@@ -1,10 +1,9 @@
-const fs = require("fs")
+ const fs = require("fs")
 const { Collection } = require("discord.js");
 const setting = require("./../../setting/settings.json");
 const { collectioncrete } = require("../dir/dirfunction");
 const { consolelog } = require("../log/consolelog");
 const { check } = require("../check/check");
-
 
 class loadeventsandcommand {
     constructor() {
