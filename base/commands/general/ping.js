@@ -1,7 +1,6 @@
 const { comandbembed } = require("../../../embed/base/command")
 const { time } = require("../../../function/time/time")
 
-
 module.exports = {
     name: "ping",
     permisions: [],
