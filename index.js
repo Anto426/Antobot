@@ -1,3 +1,3 @@
 const { boot } = require("./function/client/boot");
 
-boot()
+new boot().on();
