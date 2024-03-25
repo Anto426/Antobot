@@ -39,7 +39,7 @@ class menu {
         }
 
         list.forEach(element => {
-            menu.addOptions(element)
+            fild.addOptions(element)
         });
 
         row.addComponents(fild)
