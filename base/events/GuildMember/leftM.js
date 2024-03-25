@@ -1,4 +1,4 @@
-const { Cjson } = require("../../../function/json/json");
+const { Cjson } = require("../../../function/file/json");
 const { consolelog } = require("../../../function/log/consolelog");
 const setting = require("../../../setting/settings.json")
 module.exports = {

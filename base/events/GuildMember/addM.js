@@ -1,5 +1,5 @@
 const { eventbembed } = require("../../../embed/base/events");
-const { Cjson } = require("../../../function/json/json");
+const { Cjson } = require("../../../function/file/json");
 const { consolelog } = require("../../../function/log/consolelog");
 const setting = require("../../../setting/settings.json")
 
@@ -19,13 +19,16 @@ module.exports = {
                     let send = await embedmsg.welcome(member, humans.size).catch(() => { })
                     member.guild.channels.cache.find(x => x.id == jsonf0["Anto's  Server"].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] })
 
-                }).catch((err) => { })
+                }).catch(() => { })
                 try {
                     member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0["Anto's  Server"].role.user))
                 } catch { }
 
             })
         }
+
+
+
 
 
         if (!member.bot) {

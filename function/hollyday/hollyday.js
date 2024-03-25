@@ -1,5 +1,5 @@
 
-const { Cjson } = require("../json/json");
+const { Cjson } = require("../file/json");
 const { time } = require("../time/time");
 const setting = require("../../setting/settings.json");
 const { consolelog } = require("../log/consolelog");

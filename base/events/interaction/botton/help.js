@@ -1,7 +1,7 @@
 const { baseembed } = require("../../../../embed/baseembed");
 const { errembed } = require("../../../../embed/err/errembed");
 const { botton } = require("../../../../function/interaction/botton");
-const { Cjson } = require("../../../../function/json/json");
+const { Cjson } = require("../../../../function/file/json");
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 
 

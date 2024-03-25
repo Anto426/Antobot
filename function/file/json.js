@@ -44,14 +44,32 @@ class json {
 
             const jsonData = JSON.stringify(dataObject, null, 2);
 
-            fs.writeFile(filePath, jsonData, 'utf8', (err) => {
+            let dirpatch = filePath.substring(0, filePath.lastIndexOf('/'));
+
+            if (!fs.existsSync(dirpatch)) {
+                fs.mkdirSync(dirpatch)
+            }
+
+            fs.writeFile(`${filePath}.json`, jsonData, 'utf8', (err) => {
                 if (err) {
-                    consolelog('Errore durante la scrittura del file', "red");
+                    consolelog('Errore durante la scrittura del file JSON', "red");
                     reject(err);
                     return;
                 }
                 resolve(0);
             });
+        });
+    }
+
+    jsonexist(json) {
+        return new Promise((resolve, reject) => {
+            if (fs.existsSync(json))
+                resolve(0)
+            else {
+                reject(-1)
+                consolelog("Errore: json non esiste", "red")
+            }
+
         });
     }
 

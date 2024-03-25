@@ -1,5 +1,5 @@
 const { ActivityType } = require("discord.js")
-const { Cjson } = require("../json/json")
+const { Cjson } = require("../file/json")
 const { consolelog } = require("../log/consolelog")
 const { Cmath } = require("../math/math")
 const setting = require("./../../setting/settings.json")

@@ -6,7 +6,7 @@ const { SoundCloudPlugin } = require("@distube/soundcloud")
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const { consolelog } = require('../log/consolelog');
 const { check } = require('../check/check');
-const { Cjson } = require('../json/json');
+const { Cjson } = require('../file/json');
 const setting = require("./../../setting/settings.json")
 
 class clientinit {
@@ -31,13 +31,13 @@ class clientinit {
                 await this.json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[5], process.env.GITTOKEN).then((jsonf) => { embedconfig = jsonf }).catch(() => { consolelog("Errore variabile json non caricata", "red") });
                 
 
-                consolelog("Client di base inzializato con successo", "green");
+                consolelog("Client di base inzializzato con successo", "green");
 
                 resolve(0);
 
 
             } catch (err) {
-                consolelog("Errore nel inizializare il client di base", "red");
+                consolelog("Errore nell' inizializzare il client di base", "red");
                 reject(err);
             }
         })
