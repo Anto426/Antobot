@@ -1,5 +1,4 @@
 const { comandbembed } = require("../../../embed/base/command");
-const { errembed } = require("../../../embed/err/errembed");
 const { menu } = require("../../../function/row/menu");
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js")
 module.exports = {
@@ -16,7 +15,6 @@ module.exports = {
     },
     execute(interaction) {
 
-        let embederr = new errembed(interaction.guild, interaction.member)
         let embed = new comandbembed(interaction.guild, interaction.member)
         let Cmenu = new menu()
         let list = []

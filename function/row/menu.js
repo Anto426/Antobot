@@ -1,10 +1,10 @@
-const { ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 class menu {
     constructor() {
 
     }
 
-    createmenu(list, id, menu, iduser, npage) {
+    createmenu(list, id, fild, iduser, npage) {
 
         let row = new ActionRowBuilder()
         let row0 = new ActionRowBuilder()
@@ -42,7 +42,7 @@ class menu {
             menu.addOptions(element)
         });
 
-        row.addComponents(menu)
+        row.addComponents(fild)
         row0.addComponents(bup, bdown)
 
         components.push(row, row0)

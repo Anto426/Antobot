@@ -40,7 +40,7 @@ class boot {
             .then(() => {
                 new loadeventsandcommand().loadall()
                     .then(() => {
-                        loging()
+                        this.loging()
                     })
                     .catch(() => {
                         this.loging()
