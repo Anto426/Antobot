@@ -18,4 +18,4 @@ Status:
 🟨: Non Completo
 
   
-(P.S. Alcuni comandi vecchi verranno ripristinati nel corso del tempo.)
+***(P.S. Alcuni comandi vecchi verranno ripristinati nel corso del tempo 🟥.)***
