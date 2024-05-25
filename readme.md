@@ -1,4 +1,4 @@
-# 💻 Changelog per Anto's Bot v 6.1.0
+# 💻 Changelog per Anto's Bot v 6.1.0 (Beta 1)
 
 - ⚙️ Migliorato il metodo di avvio per ottimizzare le prestazioni.
 - 🛠️ Ottimizzato il modulo di caricamento dei comandi e degli eventi per una gestione più efficiente.
@@ -7,8 +7,8 @@
 - 🎉 Aggiornato il modulo delle festività per una gestione più precisa degli eventi festivi.
 - 🛡️ Ottimizzato il modulo dello status per garantire una visualizzazione accurata dello stato del bot.
 - 🔒 Migliorata la sicurezza e ottimizzato il relativo modulo per una maggiore affidabilità.
-- 🤖 Aggiunto supporto alle API di OpenAI per l'integrazione di funzionalità avanzate.
-- 🎵 Implementato il supporto a Distube per una gestione ottimale della riproduzione audio.
+- 🤖 Aggiunto supporto alle API di OpenAI per l'integrazione di funzionalità avanzate. (Ancora da terminare)
+- 🎵 Implementato il supporto a Distube per una gestione ottimale della riproduzione audio.  (Ancora da terminare)
 - 👋 Aggiornati gli eventi welcome e left, ora conservano i vecchi ruoli degli utenti.
 - 🔄 Aggiornati tutti i comandi e gli eventi.(ancora non pronto)
 - 🖼️ Riscritti tutti gli embed. (ancora non pronto)
