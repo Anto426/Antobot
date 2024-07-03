@@ -41,7 +41,7 @@ class json {
 
     createJSONFile(filePath, dataObject) {
         return new Promise((resolve, reject) => {
-
+            filePath = filePath.filter(".json", "");
             const jsonData = JSON.stringify(dataObject, null, 2);
 
             let dirpatch = filePath.substring(0, filePath.lastIndexOf('/'));

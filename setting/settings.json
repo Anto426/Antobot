@@ -1,7 +1,7 @@
 {
     "database": {
         "root": "/Database",
-        "listoldmebers": "oldmember"
+        "listoldmebers": "oldmember.json"
     },
     "base": {
         "commands": "/base/commands",
