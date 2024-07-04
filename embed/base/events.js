@@ -77,9 +77,12 @@ class eventbembed extends baseembed {
                 this.embed
                     .setTitle(`╚»★Bentornato su ${member.guild.name}★«╝`)
                     .setDescription(`${member} Bentornato su  ${member.guild.name} `)
-                    .setImage('attachment://welcomecanavas.png')
-
-                console.log(list)
+                    .addFields({
+                        name: "Ruoli ricevuti",
+                        value: list.split("\n").toString(),
+                    })
+                    .setThumbnail(member.guild.guild.iconURL())
+                resolve(this.embed)
 
             } catch (err) {
                 console.log(err)

@@ -23,7 +23,7 @@ module.exports = {
                         if (role)
                             if (!member.roles.cache.has(role.id)) {
                                 try {
-                                    listrole.push(role);
+                                    listrole.push(role.name);
                                     member.roles.add(role);
                                 } catch { }
                             }
