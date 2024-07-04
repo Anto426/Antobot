@@ -7,7 +7,7 @@ module.exports = {
     async execute(member) {
 
         let json = new Cjson();
-        await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then((jsonf) => {
+        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then((jsonf) => {
 
             if (!jsonf[member.guild.id]) {
                 jsonf[member.guild.id] = {};
@@ -29,8 +29,8 @@ module.exports = {
                     }
                 }
             }
-            
-            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch((err) => { })
+
+            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch((err) => { consolelog(err, "red") })
         })
 
 

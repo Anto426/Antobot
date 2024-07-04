@@ -11,8 +11,14 @@ module.exports = {
     typeEvent: "guildMemberAdd",
     async execute(member) {
 
+
+
         if (!member.bot) {
             let embedmsg = new eventbembed(member.guild)
+
+
+
+
             embedmsg.init().then(async () => {
 
                 let json = new Cjson();
@@ -31,14 +37,21 @@ module.exports = {
 
                         });
 
-                        let send = await embedmsg.welcomeback(member, listrole)
-                        member.send({ embeds: [send] }).catch(() => { consolelog("Non sono riuscito ad inviare il messaggio", "red") })
+                        try {
+                            consolelog(listrole)
+                            let send = embedmsg.welcomeback(member, listrole)
+                            member.send({ embeds: [send] }).catch(() => { consolelog("Non sono riuscito ad inviare il messaggio", "red") })
+                        } catch (error) {
+                            console.log(error)
+                        }
+
 
 
                     } else {
 
                         let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
                         json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
+                            let embedmsg = new eventbembed(member.guild)
                             embedmsg.init().then(async () => {
                                 let send = await embedmsg.welcome(member, humans.size).catch(() => { })
                                 member.guild.channels.cache.find(x => x.id == jsonf0["Anto's  Server"].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] })
@@ -52,7 +65,6 @@ module.exports = {
 
                     }
                 }).catch(async (err) => {
-
                 })
             }).catch(() => { consolelog("Non sono riuscito a iniziallizzare embed di base", "red") })
 

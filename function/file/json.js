@@ -41,7 +41,7 @@ class json {
 
     createJSONFile(filePath, dataObject) {
         return new Promise((resolve, reject) => {
-            filePath = filePath.filter(".json", "");
+            filePath = filePath.toString().replace(".json", "");
             const jsonData = JSON.stringify(dataObject, null, 2);
 
             let dirpatch = filePath.substring(0, filePath.lastIndexOf('/'));
@@ -56,6 +56,7 @@ class json {
                     reject(err);
                     return;
                 }
+                consolelog(`${filePath}.json creato con successo`, "green")
                 resolve(0);
             });
         });
