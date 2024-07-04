@@ -31,8 +31,8 @@ module.exports = {
 
                         });
 
-                        let send = await embedmsg.welcomeback(member, listrole).catch(() => { consolelog("Non sono riuscito ad inviare il messaggio", "red") })
-                        member.send({ embeds: [send] })
+                        let send = await embedmsg.welcomeback(member, listrole)
+                        member.send({ embeds: [send] }).catch(() => { consolelog("Non sono riuscito ad inviare il messaggio", "red") })
 
 
                     } else {
