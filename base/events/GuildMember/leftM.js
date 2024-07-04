@@ -29,6 +29,7 @@ module.exports = {
                     }
                 }
             }
+            
             json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch((err) => { })
         })
 
