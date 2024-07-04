@@ -31,12 +31,12 @@ module.exports = {
                                 .addFields(
                                     {
                                         name: "Permessi",
-                                        value: command.permisions.size != 0 ? "🔓Libero" : "🔐Bloccato",
+                                        value: command.permisions.size != 0 && !comandbembed.OnlyOwner && !comandbembed.OnlyOwner ? "🔓Libero" : "🔐Bloccato",
                                         inline: true
                                     },
                                     {
                                         name: "Libero su tutti i canali",
-                                        value: command.allowedchannels ? "⚔️No" : "🏇Si",
+                                        value: command.allowedchannels  ? "⚔️No" : "🏇Si",
                                         inline: true
                                     },
                                 )
