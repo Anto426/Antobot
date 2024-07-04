@@ -72,7 +72,8 @@ class eventbembed extends baseembed {
     }
 
     welcomeback(member, list) {
-        let string = list.join('\n').toString()
+        let serverIcon = member.guild.iconURL();
+        let string = list.reverse().join('\n').toString()
         return this.embed
             .setTitle(`╚»★Bentornato su ${member.guild.name}★«╝`)
             .setDescription(`${member} Bentornato su  ${member.guild.name} `)
@@ -80,6 +81,7 @@ class eventbembed extends baseembed {
                 name: "Ruoli ricevuti",
                 value: string,
             })
+            .setThumbnail(serverIcon)
 
 
     }
