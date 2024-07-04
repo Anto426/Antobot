@@ -74,12 +74,13 @@ class eventbembed extends baseembed {
     welcomeback(member, list) {
         return new Promise(async (resolve, reject) => {
             try {
+
                 this.embed
                     .setTitle(`╚»★Bentornato su ${member.guild.name}★«╝`)
                     .setDescription(`${member} Bentornato su  ${member.guild.name} `)
                     .addFields({
                         name: "Ruoli ricevuti",
-                        value: list.split("\n").toString(),
+                        value: [list.split("\n").toString()],
                     })
                     .setThumbnail(member.guild.guild.iconURL())
                 resolve(this.embed)
