@@ -22,7 +22,8 @@ module.exports = {
                     json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
                         new baseembed(interaction.guild, interaction.member).init().then((embedbase) => {
                             const command = client.basecommands.get(interaction.values[0])
-
+                            let permisions =  (command.permisions.size != 0 && !comandbembed.OnlyOwner && !comandbembed.OnlyOwner) ? "🔓Libero" : "🔐Bloccato"
+                            let free =  command.allowedchannels  ? "⚔️No" : "🏇Si"
                             embedbase
                                 .setTitle("⚙️ " + command.name)
                                 .setColor(embedconfig.color.green)
@@ -31,12 +32,12 @@ module.exports = {
                                 .addFields(
                                     {
                                         name: "Permessi",
-                                        value: (command.permisions.size != 0 && !comandbembed.OnlyOwner && !comandbembed.OnlyOwner) ? "🔓Libero" : "🔐Bloccato",
+                                        value:permisions,
                                         inline: true
                                     },
                                     {
                                         name: "Libero su tutti i canali",
-                                        value: command.allowedchannels  ? "⚔️No" : "🏇Si",
+                                        value: free,
                                         inline: true
                                     },
                                 )
