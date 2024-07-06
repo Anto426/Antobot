@@ -19,7 +19,6 @@ module.exports = {
             let Cbotton = new botton()
             Cbotton.checkisyourbotton(interaction)
                 .then(() => {
-                    consolelog(client.comamndg.size)
                     let json = new Cjson()
                     json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
                         new baseembed(interaction.guild, interaction.member).init().then((embedbase) => {
@@ -38,6 +37,11 @@ module.exports = {
                                     {
                                         name: "Libero su tutti i canali",
                                         value: command.allowedchannels ? "⚔️No" : "🏇Si",
+                                        inline: true
+                                    },
+                                    {
+                                        name: "Appartenente al client",
+                                        value: `🤖${command.type}`,
                                         inline: true
                                     },
                                 )

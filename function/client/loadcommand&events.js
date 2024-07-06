@@ -49,6 +49,9 @@ class loadeventsandcommand {
 
         this.load("basecommands", process.env.dirbot + setting.base.commands)
             .then(() => {
+                client.basecommands.forEach(x => {
+                    x.type = "Base"
+                });
             })
             .catch(() => { consolelog("Errore non ho caricato i camandi:", "red") })
     }
@@ -74,6 +77,9 @@ class loadeventsandcommand {
 
         this.load("distubecommands", process.env.dirbot + setting.distube.commands)
             .then(() => {
+                client.distubecommands.forEach(x => {
+                    x.type = "Distube"
+                });
             })
             .catch(() => { consolelog("Errore non ho caricato i camandi", "red") })
     }

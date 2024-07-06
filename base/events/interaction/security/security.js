@@ -12,7 +12,7 @@ module.exports = {
         erremb.init()
         let embedf = [erremb.errNotPermission, erremb.errAreBot, erremb.errAreYou, erremb.errTohigtPermission]
         if (!interaction.isChatInputCommand()) return;
-        const command = client.basecommands.get(interaction.commandName)
+        const command = client.comamndg.get(interaction.commandName)
         let json = new Cjson();
         let security = new securyty(interaction, command)
 
@@ -38,7 +38,6 @@ module.exports = {
                         command.execute(interaction)
                     } catch (err) {
                         interaction.reply({ embeds: [erremb.errGeneric()], ephemeral: true })
-                         
                         consolelog("Errore durante esecuzione del comando", "red")
                     }
                 })
