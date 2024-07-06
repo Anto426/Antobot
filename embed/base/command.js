@@ -46,7 +46,12 @@ class comandbembed extends baseembed {
             .setThumbnail(embedconfig.image.help)
     }
 
-    
+    eval() {
+        return this.embed
+        .setTitle("🤖 Eval")
+    }
+
+
 
 }
 
