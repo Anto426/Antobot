@@ -27,18 +27,17 @@ module.exports = {
             let embedmsg = embed.eval();
             let command = interaction.options.getString('comand');
             try {
-                let on = eval(command).toString()
-                consolelog(on)
+                let on = eval(command).toString();
+                console.log(on);
                 embedmsg
                     .setDescription("Comando eseguito con successo")
-                    .addFields
-                    (
+                    .addFields(
                         {
                             name: "Output",
-                            value: on,
-                            inline: true
+                            value: `\`\`\`${on}\`\`\``,
+                            inline: false
                         }
-                    )
+                    );
 
             } catch (error) {
                 embedmsg
