@@ -8,6 +8,7 @@ const { ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, S
 const setting = require("../../../../setting/settings.json");
 const { menu } = require("../../../../function/row/menu");
 const { comandbembed } = require("../../../../embed/base/command");
+const { consolelog } = require("../../../../function/log/consolelog");
 module.exports = {
     name: "help",
     typeEvent: "interactionCreate",
@@ -18,10 +19,11 @@ module.exports = {
             let Cbotton = new botton()
             Cbotton.checkisyourbotton(interaction)
                 .then(() => {
+                    consolelog(client.comamndg.size)
                     let json = new Cjson()
                     json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
                         new baseembed(interaction.guild, interaction.member).init().then((embedbase) => {
-                            const command = client.basecommands.get(interaction.values[0])
+                            const command = client.comamndg.get(interaction.values[0])
                             embedbase
                                 .setTitle("⚙️ " + command.name)
                                 .setColor(embedconfig.color.green)
@@ -69,7 +71,7 @@ module.exports = {
                     .setCustomId(`help-${interaction.member.id}`)
                     .setPlaceholder('Scegli un comando')
 
-                client.basecommands.forEach(command => {
+                client.comamndg.forEach(command => {
                     if (command.see) {
                         list.push(new StringSelectMenuOptionBuilder()
                             .setLabel(`⚙️ ${command.data.name}`)

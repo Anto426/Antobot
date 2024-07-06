@@ -1,3 +1,4 @@
+const { Collection } = require("discord.js");
 const { consolelog } = require("../log/consolelog")
 
 class writecommand {
@@ -11,7 +12,12 @@ class writecommand {
 
                 consolelog("Scrittura iniziata in " + guild.name, "yellow");
 
-                if (client.basecommands.size === 0) {
+                client.comamndg = new Collection([
+                    ...client.basecommands,
+                    ...client.distubecommands,
+                ])
+
+                if (client.comamndg.size === 0) {
                     consolelog("Err: Non ci sono comandi da registrare", "red");
                     return reject(-1);
                 }
@@ -19,7 +25,10 @@ class writecommand {
                 let ne = 0;
                 const promises = [];
 
-                client.basecommands.forEach(command => {
+
+
+
+                client.comamndg.forEach(command => {
                     if (command.data) {
                         const commandPromise = guild.commands.create(command.data)
                             .catch((err) => {
@@ -34,7 +43,7 @@ class writecommand {
 
                 Promise.all(promises)
                     .then(() => {
-                        if (ne === client.basecommands.size) {
+                        if (ne === client.comamndg.size) {
                             consolelog("Nessun comando registrato correttamente in " + guild.name, "red");
                             return reject(-1);
                         }

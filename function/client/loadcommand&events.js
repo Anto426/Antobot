@@ -1,4 +1,4 @@
- const fs = require("fs")
+const fs = require("fs")
 const { Collection } = require("discord.js");
 const setting = require("./../../setting/settings.json");
 const { collectioncrete } = require("../dir/dirfunction");
@@ -20,19 +20,22 @@ class loadeventsandcommand {
                     let commandF = fs.readdirSync(dir)
                     if (commandF.length != 0) {
                         await collectioncrete(client[namecollect], dir, Array.isArray(commandF) ? commandF : [commandF], "js")
-                        if (client[namecollect].size == 0) {
-                            reject(-1)
-                        }
-                        else {
-                            resolve(0)
-                        }
+                        setTimeout(() => {
+                            if (client[namecollect].size == 0) {
+                                reject(-1)
+                            }
+                            else {
+                                resolve(0)
+                            }
+                        }, 3000)
+
+
                     }
                     else {
                         consolelog("Non ci sono " + namecollect + " da caricare ", "red")
                         resolve(0)
                     }
                 } catch (err) {
-                    (err)
                     consolelog("Errore non ho trovato la cartella:" + dir, "red")
                     reject(-1)
                 }
@@ -44,16 +47,15 @@ class loadeventsandcommand {
 
     loadcommand() {
 
-        this.load("basecommands", process.env.dirbot+ setting.base.commands)
+        this.load("basecommands", process.env.dirbot + setting.base.commands)
             .then(() => {
             })
-            .catch(() => { consolelog("Errore non ho caricato i camandi", "red") })
+            .catch(() => { consolelog("Errore non ho caricato i camandi:", "red") })
     }
 
     loadevents() {
-        this.load("baseevents", process.env.dirbot+ setting.base.events)
+        this.load("baseevents", process.env.dirbot + setting.base.events)
             .then(() => {
-
 
                 client.baseevents.forEach(x => {
                     client.on(x.typeEvent, (...args) => {
@@ -61,7 +63,7 @@ class loadeventsandcommand {
                     });
                 });
             })
-            .catch((err) => {
+            .catch(() => {
                 consolelog("Errore non ho caricato gli eventi", "red")
                 client.baseevents.delete();
             })
@@ -70,14 +72,14 @@ class loadeventsandcommand {
 
     loaddistubecommand() {
 
-        this.load("distubecommands", process.env.dirbot+ setting.distube.commands)
+        this.load("distubecommands", process.env.dirbot + setting.distube.commands)
             .then(() => {
             })
             .catch(() => { consolelog("Errore non ho caricato i camandi", "red") })
     }
 
     loaddistubeevents() {
-        this.load("distubeevents", process.env.dirbot+ setting.distube.events)
+        this.load("distubeevents", process.env.dirbot + setting.distube.events)
             .then(() => {
                 client.distubeevents.forEach(x => {
                     distube.on(x.typeEvent, (...args) => {
@@ -86,7 +88,7 @@ class loadeventsandcommand {
                 });
             })
             .catch((err) => {
-                 
+
                 consolelog("Errore non ho caricato gli eventi", "red")
                 client.baseevents.delete();
             })
@@ -95,14 +97,16 @@ class loadeventsandcommand {
     loadall() {
         return new Promise(async (resolve, reject) => {
             try {
-                this.loadcommand()
                 this.loadevents()
+                this.loadcommand()
                 this.check.checkallowdistube().then(() => {
                     this.loaddistubecommand()
                     this.loaddistubeevents()
                 }).catch(() => { })
+
                 resolve(0)
-            } catch {
+            } catch (err) {
+                consolelog(err)
                 resolve(0)
             }
 
