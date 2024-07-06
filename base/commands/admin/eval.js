@@ -23,11 +23,11 @@ module.exports = {
 
     async execute(interaction) {
         let embed = new comandbembed(interaction.guild, interaction.member)
-        embed.init().then(() => {
+        embed.init().then(async () => {
             let embedmsg = embed.eval();
             let command = interaction.options.getString('comand');
             try {
-                let on = eval(command).toString();
+                let on = await eval(command);
                 console.log(on);
                 embedmsg
                     .setDescription("Comando eseguito con successo")
