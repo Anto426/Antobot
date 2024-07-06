@@ -1,10 +1,11 @@
 const { comandbembed } = require("../../../embed/base/command")
+const { consolelog } = require("../../../function/log/consolelog")
 const setting = require("../../../setting/settings.json")
 
 module.exports = {
     name: "eval",
     permisions: [],
-    allowedchannels: false,
+    allowedchannels: true,
     OnlyOwner: true,
     position: false,
     test: true,
@@ -21,17 +22,30 @@ module.exports = {
     },
 
     async execute(interaction) {
-        try {
+        let embed = new comandbembed(interaction.guild, interaction.member)
+        embed.init().then(() => {
+            let embedmsg = embed.eval();
+            let command = interaction.options.getString('comand');
+            try {
+                let on = eval(command).toString()
+                consolelog(on)
+                embedmsg
+                    .setDescription("Comando eseguito con successo")
+                    .addFields
+                    (
+                        {
+                            name: "Output",
+                            value: on,
+                            inline: true
+                        }
+                    )
 
-            let embedmsg = new comandbembed()
-            embedmsg.init().then().catch(() => {
-
-            })
-
-
-        } catch (err) {
-            console.log(err)
-        }
+            } catch (error) {
+                embedmsg
+                    .setDescription("Comando non eseguito")
+            }
+            interaction.reply({ embeds: [embedmsg] })
+        })
 
     }
 }
