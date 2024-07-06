@@ -40,6 +40,7 @@ module.exports = {
                     );
 
             } catch (error) {
+                consolelog(error)
                 embedmsg
                     .setDescription("Comando non eseguito")
             }
