@@ -160,10 +160,26 @@ class securyty extends check {
         console.log(this.owner, this.Sowner, this.staff, this.isbot, this.isyou, this.position, this.channel)
         return new Promise(async (resolve, reject) => {
             if (this.owner)
-                resolve(0)
+                if (this.command.type == "Distube") {
+                    if (!this.voiceChannel) {
+                        reject(4)
+                    }
+                    if (this.voiceChannelBot && this.voiceChannel.id != this.voiceChannelBot.id) {
+                        reject(5)
+                    }
+                    resolve([this.voiceChannel, this.voiceChannelBot ? this.voiceChannelBot : "undefined"])
+                } else resolve(0)
             else {
                 if (this.command.OnlyOwner) reject(0)
-                if (this.Sowner) resolve(0)
+                if (this.Sowner) if (this.command.type == "Distube") {
+                    if (!this.voiceChannel) {
+                        reject(4)
+                    }
+                    if (this.voiceChannelBot && this.voiceChannel.id != this.voiceChannelBot.id) {
+                        reject(5)
+                    }
+                    resolve([this.voiceChannel, this.voiceChannelBot ? this.voiceChannelBot : "undefined"])
+                } else resolve(0)
                 else {
                     if (this.staff) {
                         if (this.position) {
@@ -173,11 +189,11 @@ class securyty extends check {
                                         if (this.command.type == "Distube") {
                                             if (!this.voiceChannel) {
                                                 reject(4)
-                                            } else {
-                                                if (this.voiceChannelBot && voiceChannel.id != voiceChannelBot.id) {
-                                                    reject(5)
-                                                } else resolve(0)
                                             }
+                                            if (this.voiceChannelBot && this.voiceChannel.id != this.voiceChannelBot.id) {
+                                                reject(5)
+                                            }
+                                            resolve([this.voiceChannel, this.voiceChannelBot ? this.voiceChannelBot : "undefined"])
                                         } else resolve(0)
                                     } else reject(0)
                                 } else reject(2)
