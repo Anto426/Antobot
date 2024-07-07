@@ -7,7 +7,7 @@ const { check } = require("../check/check");
 
 class loadeventsandcommand {
     constructor() {
-        this.check = new check
+        this.check = new check()
     }
 
     load(namecollect, dir) {
@@ -93,10 +93,10 @@ class loadeventsandcommand {
                     });
                 });
             })
-            .catch((err) => {
-
-                consolelog("Errore non ho caricato gli eventi", "red")
-                client.baseevents.delete();
+            .catch(() => {
+            
+                consolelog("Errore non ho caricato gli eventi di distube", "red")
+                client.distubeevents.delete();
             })
 
     }
