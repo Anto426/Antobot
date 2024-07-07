@@ -1,14 +1,10 @@
 const { baseembed } = require("../../../../embed/baseembed");
-const { errembed } = require("../../../../embed/err/errembed");
 const { botton } = require("../../../../function/interaction/botton");
 const { Cjson } = require("../../../../function/file/json");
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
-
-
 const setting = require("../../../../setting/settings.json");
 const { menu } = require("../../../../function/row/menu");
 const { comandbembed } = require("../../../../embed/base/command");
-const { consolelog } = require("../../../../function/log/consolelog");
 module.exports = {
     name: "help",
     typeEvent: "interactionCreate",
@@ -24,9 +20,9 @@ module.exports = {
                         new baseembed(interaction.guild, interaction.member).init().then((embedbase) => {
                             const command = client.comamndg.get(interaction.values[0])
                             embedbase
-                                .setTitle("⚙️ " + command.name)
+                                .setTitle(`${jsonf.command[command.name].emoji}  ${command.name}`)
                                 .setColor(embedconfig.color.green)
-                                .setDescription(jsonf.command[command.name])
+                                .setDescription(jsonf.command[command.name].description)
                                 .setThumbnail(embedconfig.image.help)
                                 .addFields(
                                     {
@@ -65,36 +61,38 @@ module.exports = {
         if (interaction.customId.split("-").includes("helpm")) {
             let Cbotton = new botton()
             Cbotton.checkisyourbotton(interaction).then(() => {
+                let json = new Cjson()
+                json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
 
-                let embed = new comandbembed(interaction.guild, interaction.member)
-                let Cmenu = new menu()
-                let list = []
+                    let embed = new comandbembed(interaction.guild, interaction.member)
+                    let Cmenu = new menu()
+                    let list = []
 
 
-                let comandlist = new StringSelectMenuBuilder()
-                    .setCustomId(`help-${interaction.member.id}`)
-                    .setPlaceholder('Scegli un comando')
+                    let comandlist = new StringSelectMenuBuilder()
+                        .setCustomId(`help-${interaction.member.id}`)
+                        .setPlaceholder('Scegli un comando')
 
-                client.comamndg.forEach(command => {
-                    if (command.see) {
-                        list.push(new StringSelectMenuOptionBuilder()
-                            .setLabel(`⚙️ ${command.data.name}`)
-                            .setDescription(`${command.data.description}`)
-                            .setValue(`${command.data.name}`))
-                    }
+                    client.comamndg.forEach(command => {
+                        if (command.see) {
+                            list.push(new StringSelectMenuOptionBuilder()
+                                .setLabel(`${jsonf.command[command.name].emoji} ${command.data.name}`)
+                                .setDescription(`${command.data.description}`)
+                                .setValue(`${command.data.name}`))
+                        }
 
-                });
-
-                embed.init().then(() => {
-                    interaction.update({
-                        embeds: [embed.help()],
-                        components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, interaction.customId.split("-")[3]),
                     });
-                })
+
+                    embed.init().then(() => {
+                        interaction.update({
+                            embeds: [embed.help()],
+                            components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, interaction.customId.split("-")[3]),
+                        });
+                    })
+
+                }).catch(() => { })
 
             }).catch(() => { })
-
-
 
         }
     }
