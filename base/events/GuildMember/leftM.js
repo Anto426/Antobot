@@ -6,6 +6,7 @@ module.exports = {
     typeEvent: "guildMemberRemove",
     async execute(member) {
 
+        if (member.user.bot) return
         let json = new Cjson();
         json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then((jsonf) => {
 
