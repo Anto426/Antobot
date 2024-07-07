@@ -21,6 +21,8 @@
     "discord.js": "^14.14.1",
     "distube": "^4.1.1",
     "dotenv": "^16.4.5",
-    "openai": "^4.29.2"
+    "libsodium-wrappers": "^0.7.13",
+    "openai": "^4.29.2",
+    "opusscript": "^0.0.8"
   }
 }
