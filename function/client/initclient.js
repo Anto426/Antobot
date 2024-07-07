@@ -29,7 +29,7 @@ class clientinit {
                 global.embedconfig = {}
 
                 await this.json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[5], process.env.GITTOKEN).then((jsonf) => { embedconfig = jsonf }).catch(() => { consolelog("Errore variabile json non caricata", "red") });
-                
+
 
                 consolelog("Client di base inzializzato con successo", "green");
 
@@ -79,7 +79,32 @@ class clientinit {
                         }),
                         new SoundCloudPlugin(),
                         new YtDlpPlugin()
-                    ]
+                    ],
+                    customFilters: {
+                        'bassboost': 'bass=g=10',
+                        '8D': 'apulsator=hz=0.08',
+                        'vaporwave': 'aresample=48000,asetrate=48000*0.8',
+                        'nightcore': 'aresample=48000,asetrate=48000*1.25',
+                        'phaser': 'aphaser=in_gain=0.4',
+                        'tremolo': 'tremolo',
+                        'vibrato': 'vibrato=f=6.5',
+                        'reverse': 'areverse',
+                        'treble': 'treble=g=5',
+                        'normalizer': 'dynaudnorm=g=101',
+                        'surrounding': 'surround',
+                        'pulsator': 'apulsator=hz=1',
+                        'subboost': 'asubboost',
+                        'karaoke': 'stereotools=mlev=0.03',
+                        'flanger': 'flanger',
+                        'gate': 'agate',
+                        'haas': 'haas',
+                        'mcompand': 'mcompand',
+                        'earwax': 'earwax',
+                    },
+                    ytdlOptions: {
+                        quality: 'highestaudio',
+                        highWaterMark: 1 << 25,
+                    },
                 })
                 consolelog("Client di Distube inzializato con successo", "green");
                 resolve(0)
