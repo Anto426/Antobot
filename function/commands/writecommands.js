@@ -115,11 +115,11 @@ class writecommand {
             let countguild = 0;
             let counterr = 0;
             let ncommand = client.comamndg.size;
-            client.guilds.cache.forEach(async (guild) => {
+            client.guilds.cache.forEach(async(guild) => {
                 let count = 0;
                 let commands = await guild.commands.fetch();
                 for (let i = 0; i < ncommand; i++) {
-                    if (commands.find(x => x.name === client.comamndg.at(i).name)) {
+                    if (commands.find(x => x.name === client.comamndg.at(i).name)){
                         count++;
                     } else break;
                 }
