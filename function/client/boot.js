@@ -19,7 +19,7 @@ class boot {
                     client.on('ready', async () => {
                         global.timeon = new Date().getTime()
                         new Info().log()
-                        await new writecommand().commandallguild().then(() => {
+                        await new writecommand().commandallguildonstartup().then(() => {
                             new loadothermodules().load()
                         })
 

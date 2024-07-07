@@ -12,10 +12,7 @@ class writecommand {
 
                 consolelog("Scrittura iniziata in " + guild.name, "yellow");
 
-                client.comamndg = new Collection([
-                    ...client.basecommands,
-                    ...client.distubecommands,
-                ])
+
 
                 if (client.comamndg.size === 0) {
                     consolelog("Err: Non ci sono comandi da registrare", "red");
@@ -105,6 +102,46 @@ class writecommand {
         })
 
 
+    }
+
+
+    commandallguildonstartup() {
+        return new Promise((resolve, reject) => {
+            client.comamndg = new Collection([
+                ...client.basecommands,
+                ...client.distubecommands,
+            ])
+            let countguild = 0;
+            let ncommand = client.comamndg.size;
+            client.guilds.cache.forEach(async (guild) => {
+                let count = 0;
+                let commands = await guild.commands.fetch();
+                for (let i = 0; i < ncommand; i++) {
+                    if (commands[i] == client.comamndg[i]) {
+                        count++;
+                    } else break;
+                }
+
+                if (count != ncommand) {
+                    this.comanddeleteguild(guild).then(() => {
+                        this.commandoneguild(guild).then(() => { countguild++ }).catch(() => { })
+                    }).catch(() => { })
+                }
+            })
+
+            consolelog(countguild)
+            if (countguild === client.guilds.cache.size) {
+                consolelog("Comandi inizializzati correttamente in tutti i server", "green")
+                resolve(0)
+            } if (countguild > 0) {
+                consolelog("Comandi inizializzati correttamente in " + countguild + " server", "green")
+                resolve(0)
+            } else {
+                consolelog("Non devo inizializzare nessun comando", "yellow");
+                resolve(0)
+            }
+
+        })
     }
 
     async commandoneguild(guild) {
