@@ -104,6 +104,7 @@ class clientinit {
                     ytdlOptions: {
                         quality: 'highestaudio',
                         highWaterMark: 1 << 25,
+                        filter: 'audioonly',
                     },
                 })
                 consolelog("Client di Distube inzializato con successo", "green");
