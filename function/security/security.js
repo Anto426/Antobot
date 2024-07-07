@@ -1,3 +1,4 @@
+const { ChannelType } = require("discord.js")
 const { check } = require("../check/check")
 class securyty extends check {
 
@@ -12,6 +13,8 @@ class securyty extends check {
         this.isyou = false
         this.command = command
         this.interaction = interaction
+        this.voiceChannel = interaction.member.voice.channel
+        this.voiceChannelBot = interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(client.user.id))
     }
 
 
@@ -167,7 +170,15 @@ class securyty extends check {
                             if (!this.isbot) {
                                 if (!this.isyou) {
                                     if (this.channel) {
-                                        resolve(0)
+                                        if (this.command.type == "Distube") {
+                                            if (!this.voiceChannel) {
+                                                reject(4)
+                                            } else {
+                                                if (this.voiceChannelBot && voiceChannel.id != voiceChannelBot.id) {
+                                                    reject(5)
+                                                } else resolve(0)
+                                            }
+                                        } else resolve(0)
                                     } else reject(0)
                                 } else reject(2)
                             } else reject(1)

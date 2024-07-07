@@ -10,7 +10,7 @@ module.exports = {
     async execute(interaction) {
         let erremb = new errembed(interaction.guild, interaction.member)
         erremb.init()
-        let embedf = [erremb.errNotPermission, erremb.errAreBot, erremb.errAreYou, erremb.errTohigtPermission]
+        let embedf = [erremb.errNotPermission, erremb.errAreBot, erremb.errAreYou, erremb.errTohigtPermission, erremb.erryoustayinavoclal, erremb.errjustplaymusic]
         if (!interaction.isChatInputCommand()) return;
         const command = client.comamndg.get(interaction.commandName)
         let json = new Cjson();
