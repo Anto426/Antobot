@@ -106,34 +106,36 @@ class writecommand {
 
 
     commandallguildonstartup() {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             client.comamndg = new Collection([
                 ...client.basecommands,
                 ...client.distubecommands,
             ])
+
             let countguild = 0;
+            let counterr = 0;
             let ncommand = client.comamndg.size;
             client.guilds.cache.forEach(async (guild) => {
                 let count = 0;
                 let commands = await guild.commands.fetch();
                 for (let i = 0; i < ncommand; i++) {
-                    if (commands[i] == client.comamndg[i]) {
+                    if (commands.find(x => x.name === client.comamndg.at(i).name)) {
                         count++;
                     } else break;
                 }
 
                 if (count != ncommand) {
                     this.comanddeleteguild(guild).then(() => {
-                        this.commandoneguild(guild).then(() => { countguild++ }).catch(() => { })
+                        this.commandoneguild(guild).then(() => { countguild++ }).catch(() => { counterr++ })
                     }).catch(() => { })
                 }
             })
 
-            consolelog(countguild)
+            consolelog("count g :" + countguild)
             if (countguild === client.guilds.cache.size) {
                 consolelog("Comandi inizializzati correttamente in tutti i server", "green")
                 resolve(0)
-            } if (countguild > 0) {
+            } if (countguild >= 0) {
                 consolelog("Comandi inizializzati correttamente in " + countguild + " server", "green")
                 resolve(0)
             } else {
