@@ -156,29 +156,36 @@ class securyty extends check {
     checkdistube() {
         return new Promise((resolve, reject) => {
 
+            try {
 
-            if (this.command.distube) {
 
-                let result = [interaction.member.voice.channel, interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(interaction.user.id))]
+                let result = [this.interaction.member.voice.channel, this.interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(this.interaction.user.id))]
 
-                if (this.command.distube.checkchannel) {
-                    if (!result[0]) {
-                        result = 4
+
+                if (this.command.distube) {
+
+                    if (this.command.distube.checkchannel) {
+                        if (!result[0]) {
+                            result = 4
+                        }
+                        if (result[1] && result[0].id != result[1].id) {
+                            result = 5
+                        }
                     }
-                    if (result[1] && result[0].id != result[1].id) {
-                        result = 5
-                    }
+                    if (this.command.distube.checklisttrack)
+                        if (!this.interaction.options.getString("song")) {
+                            result = 6
+                        }
                 }
-                if (this.command.distube.checklisttrack)
-                    if (!this.interaction.options.getString("song")) {
-                        result = 6
-                    }
-            }
-            else
-                if (Array.isArray(result))
-                    resolve(result)
                 else
-                    reject(result)
+                    if (Array.isArray(result))
+                        resolve(result)
+                    else
+                        reject(result)
+
+            } catch {
+                reject(0)
+            }
         })
     }
 
@@ -187,10 +194,10 @@ class securyty extends check {
         return new Promise(async (resolve, reject) => {
             if (this.owner)
                 if (this.command.type == "Distube")
-                    this.checkdistube().then(() => {
+                    this.checkdistube().then((result) => {
                         resolve(result)
                     }).catch((err) => {
-                        resolve(err)
+                        reject(err)
                     })
                 else resolve(0)
             else {
@@ -200,7 +207,7 @@ class securyty extends check {
                         this.checkdistube().then((result) => {
                             resolve(result)
                         }).catch((err) => {
-                            resolve(err)
+                            reject(err)
                         })
                     else resolve(0)
                 else {
@@ -210,10 +217,10 @@ class securyty extends check {
                                 if (!this.isyou) {
                                     if (this.channel) {
                                         if (this.command.type == "Distube")
-                                            this.checkdistube().then(() => {
+                                            this.checkdistube().then((result) => {
                                                 resolve(result)
                                             }).catch((err) => {
-                                                resolve(err)
+                                                reject(err)
                                             })
                                         else resolve(0)
                                     } else reject(0)
