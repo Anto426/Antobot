@@ -13,8 +13,6 @@ class securyty extends check {
         this.isyou = false
         this.command = command
         this.interaction = interaction
-        this.voiceChannel = interaction.member.voice.channel
-        this.voiceChannelBot = interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(client.user.id))
     }
 
 
@@ -111,7 +109,6 @@ class securyty extends check {
                 super.checkposition(this.interaction.member.id, interaction.options.getUser("user").id, this.interaction.gild.id)
                     .then(() => {
                         resolve(0)
-
                     })
                     .catch(() => {
                         resolve(0)
@@ -156,45 +153,69 @@ class securyty extends check {
 
     }
 
+    checkdistube() {
+        return new Promise((resolve, reject) => {
+
+
+            if (this.command.distube) {
+
+                let result = [interaction.member.voice.channel, interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(interaction.user.id))]
+
+                if (this.command.distube.checkchannel) {
+                    if (!result[0]) {
+                        result = 4
+                    }
+                    if (result[1] && result[0].id != result[1].id) {
+                        result = 5
+                    }
+                }
+                if (this.command.distube.checklisttrack)
+                    if (!this.interaction.options.getString("song")) {
+                        result = 6
+                    }
+            }
+            else
+                if (Array.isArray(result))
+                    resolve(result)
+                else
+                    reject(result)
+        })
+    }
+
     allowcomand() {
         console.log(this.owner, this.Sowner, this.staff, this.isbot, this.isyou, this.position, this.channel)
         return new Promise(async (resolve, reject) => {
             if (this.owner)
-                if (this.command.type == "Distube") {
-                    if (!this.voiceChannel) {
-                        reject(4)
-                    }
-                    if (this.voiceChannelBot && this.voiceChannel.id != this.voiceChannelBot.id) {
-                        reject(5)
-                    }
-                    resolve([this.voiceChannel, this.voiceChannelBot ? this.voiceChannelBot : "undefined"])
-                } else resolve(0)
+                if (this.command.type == "Distube")
+                    this.checkdistube().then(() => {
+                        resolve(result)
+                    }).catch((err) => {
+                        resolve(err)
+                    })
+                else resolve(0)
             else {
                 if (this.command.OnlyOwner) reject(0)
-                if (this.Sowner) if (this.command.type == "Distube") {
-                    if (!this.voiceChannel) {
-                        reject(4)
-                    }
-                    if (this.voiceChannelBot && this.voiceChannel.id != this.voiceChannelBot.id) {
-                        reject(5)
-                    }
-                    resolve([this.voiceChannel, this.voiceChannelBot ? this.voiceChannelBot : "undefined"])
-                } else resolve(0)
+                if (this.Sowner)
+                    if (this.command.type == "Distube")
+                        this.checkdistube().then((result) => {
+                            resolve(result)
+                        }).catch((err) => {
+                            resolve(err)
+                        })
+                    else resolve(0)
                 else {
                     if (this.staff) {
                         if (this.position) {
                             if (!this.isbot) {
                                 if (!this.isyou) {
                                     if (this.channel) {
-                                        if (this.command.type == "Distube") {
-                                            if (!this.voiceChannel) {
-                                                reject(4)
-                                            }
-                                            if (this.voiceChannelBot && this.voiceChannel.id != this.voiceChannelBot.id) {
-                                                reject(5)
-                                            }
-                                            resolve([this.voiceChannel, this.voiceChannelBot ? this.voiceChannelBot : "undefined"])
-                                        } else resolve(0)
+                                        if (this.command.type == "Distube")
+                                            this.checkdistube().then(() => {
+                                                resolve(result)
+                                            }).catch((err) => {
+                                                resolve(err)
+                                            })
+                                        else resolve(0)
                                     } else reject(0)
                                 } else reject(2)
                             } else reject(1)
