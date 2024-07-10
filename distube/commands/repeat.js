@@ -1,5 +1,4 @@
 const { comanddembed } = require("../../embed/distube/command")
-const { errembed } = require("../../embed/err/errembed")
 module.exports = {
     name: "repeat",
     permisions: [],
@@ -7,6 +6,10 @@ module.exports = {
     position: false,
     test: true,
     see: true,
+    disTube: {
+        checkchannel: true,
+        checklisttrack: true
+    },
     data: {
         name: "repeat",
         description: "ripeti la canzone",
@@ -17,23 +20,19 @@ module.exports = {
             required: true,
             choices: [{
                 name: "off",
-                value: 1
+                value: "1"
             }, {
                 name: "Song",
-                value: 2
+                value: "2"
             }, {
                 name: "Queue",
-                value: 3
+                value: "3"
             },]
         }]
     },
     async execute(interaction, channels) {
 
         try {
-            let embedmsg = new comanddembed(interaction.guild, interaction.member)
-            let errembed = embederr()
-            let mode = interaction.options.getString("mode")
-            let queue = distube.getQueue(interaction)
 
 
         } catch (error) {
