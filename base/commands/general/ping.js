@@ -20,6 +20,6 @@ module.exports = {
         let ram = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} mb`;
         embed.init().then(() => {
             interaction.reply({ embeds: [embed.ping(latenza, ram, timea)] })
-        }).catch(() => { });
+        })
     }
 }

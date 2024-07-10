@@ -53,6 +53,19 @@ class errembed extends baseembed {
             .setDescription("🪃La persona a cui stati cercando di applicare la seguente azione sei tu quindi non posso fare nulla.")
             .setThumbnail(embedconfig.image.notpermission)
     }
+    erryoustayinavoclal() {
+        return this.embed
+            .setTitle("🎵 Non ti trovi in una chat vocale 🎵")
+            .setDescription("Non sei in una chat vocale")
+            .setThumbnail(embedconfig.image.notpermission)
+    }
+
+    errjustplaymusic() {
+        return this.embed
+            .setTitle("🎵 Musica gia in riproduzione🎵")
+            .setDescription("Sto gia riproducendo un brano per qualc'altro")
+            .setThumbnail(embedconfig.image.notpermission)
+    }
 }
 
 

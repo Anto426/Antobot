@@ -33,9 +33,14 @@ module.exports = {
 
         Promise.all(promises).then(() => {
             security.allowcomand()
-                .then(() => {
+                .then((result) => {
                     try {
-                        command.execute(interaction)
+                        if (Array.isArray(result)) {
+                            command.execute(interaction, result)
+                        } else {
+                            command.execute(interaction)
+                        }
+
                     } catch (err) {
                         interaction.reply({ embeds: [erremb.errGeneric()], ephemeral: true })
                         consolelog("Errore durante esecuzione del comando", "red")
