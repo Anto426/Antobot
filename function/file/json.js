@@ -2,8 +2,7 @@ const fs = require("fs");
 const { consolelog } = require("../log/consolelog");
 const axios = require("axios")
 class json {
-    constructor() {
-    }
+    constructor() { }
 
 
     jsonddypendencebufferolyf(url, token) {
