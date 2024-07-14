@@ -1,14 +1,17 @@
 const { Cjson } = require("../../../function/file/json");
-const { consolelog } = require("../../../function/log/consolelog");
+const { BotConsole } = require("../../../function/log/botConsole");
 const setting = require("../../../setting/settings.json")
+
+
+
 module.exports = {
     name: "LeftM",
     typeEvent: "guildMemberRemove",
     async execute(member) {
 
-        if (member.user.bot) return
+        if (member.user.bot) return;
         let json = new Cjson();
-        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then((jsonf) => {
+        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmembers).then((jsonf) => {
 
             if (!jsonf[member.guild.id]) {
                 jsonf[member.guild.id] = {};
@@ -19,23 +22,20 @@ module.exports = {
             }
 
             jsonf[member.guild.id][member.id].roles = Array.from(member.roles.cache).map(role => role[1].id);
-            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsonf).catch(() => { })
+            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmembers, jsonf).catch(() => { });
 
         }).catch((err) => {
-            consolelog(err)
+            new BotConsole().log(err);
             const jsons = {
                 [member.guild.id]: {
                     [member.id]: {
                         roles: Array.from(member.roles.cache).map(role => role[1].id)
                     }
                 }
-            }
+            };
 
-            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch((err) => { consolelog(err, "red") })
-        })
-
-
+            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmembers, jsons).catch((err) => { new BotConsole().log(err, "red"); });
+        });
 
     }
-
 }

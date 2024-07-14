@@ -1,3 +1,3 @@
-const { boot } = require("./function/client/boot");
+const { Boot  } = require("./function/client/boot");
 
-new boot().on();
+new Boot().on();

@@ -1,9 +1,11 @@
-const { consolelog } = require("../log/consolelog")
-const setting = require("./../../setting/settings.json")
-class check {
+
+const { BotConsole } = require("../log/botConsole");
+const setting = require("./../../setting/settings.json");
+
+class Check {
     constructor() { }
 
-    checkvalarr(arr, value) {
+    checkValArr(arr, value) {
         return new Promise((resolve, reject) => {
             try {
                 arr.forEach(element => {
@@ -11,232 +13,208 @@ class check {
                         return resolve(0);
                     }
                 });
-                return reject(-1)
+                return reject(-1);
             } catch {
-                consolelog("Errore non ho potuto controllare nell 'array", "red")
-                reject(-1)
-            }
-
-        })
-    }
-
-    checkvaljson(arr, value) {
-        return new Promise(async (resolve, reject) => {
-
-            try {
-                for (let i in arr) {
-                    if (arr[i] == value)
-                        resolve(0)
-                }
-            } catch {
-                consolelog("Errore non ho potuto controllare nell json", "red")
+                new BotConsole().log("Errore, non ho potuto controllare nell'array", "red");
                 reject(-1);
             }
-        })
+        });
     }
 
-    chekowner(arr, id) {
+    checkValJson(arr, value) {
         return new Promise(async (resolve, reject) => {
-            this.checkvalarr(arr, id)
+            try {
+                for (let i in arr) {
+                    if (arr[i] == value) {
+                        resolve(0);
+                    }
+                }
+            } catch {
+                new BotConsole().log("Errore, non ho potuto controllare nel JSON", "red");
+                reject(-1);
+            }
+        });
+    }
+
+    checkOwner(arr, id) {
+        return new Promise(async (resolve, reject) => {
+            this.checkValArr(arr, id)
                 .catch(() => {
                     reject(-1);
                 })
                 .then(() => {
                     resolve(0);
-                })
-        })
+                });
+        });
     }
 
-    chekisbot(iduser, idguild) {
+    checkIsBot(idUser, idGuild) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).bot) {
+                if (client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == idUser).bot) {
                     resolve(0);
                 } else {
                     reject(-1);
                 }
             } catch {
-                consolelog("Errore non ho potuto controllare se è un bot", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare se è un bot", "red");
+                reject(-1);
             }
-        })
+        });
     }
 
-    checksowner(iduser, idguild) {
+    checkSOwner(idUser, idGuild) {
         return new Promise(async (resolve, reject) => {
-
             try {
-                if (iduser == client.guilds.cache.find(x => x.id == idguild).ownerId) {
+                if (idUser == client.guilds.cache.find(x => x.id == idGuild).ownerId) {
                     resolve(0);
                 } else {
                     reject(-1);
                 }
             } catch {
-                consolelog("Errore non ho potuto controllare sowner", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare l'owner", "red");
+                reject(-1);
             }
-
-
-        })
-
+        });
     }
-    checkpermision(iduser, idguild, permision) {
-        return new Promise(async (resolve, reject) => {
 
+    checkPermission(idUser, idGuild, permission) {
+        return new Promise(async (resolve, reject) => {
             try {
-                if (permision.length != 0)
-                    if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).permisions.has(permision)) {
+                if (permission.length != 0) {
+                    if (client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == idUser).permissions.has(permission)) {
                         resolve(0);
                     } else {
                         reject(-1);
                     }
-                else
-                    reject(-1)
+                } else {
+                    reject(-1);
+                }
             } catch (err) {
-
-                consolelog("Errore non ho potuto controllare i permessi", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare i permessi", "red");
+                reject(-1);
             }
-
-
-        })
-
+        });
     }
 
-    checkisyou(iduser, otheruserid) {
-
+    checkIsYou(idUser, otherUserId) {
         return new Promise(async (resolve, reject) => {
-            if (iduser, otheruserid)
-                if (iduser == otheruserid)
-                    resolve(0)
-                else
-                    reject(-1)
-
-            else {
-                consolelog("Errore non ho potuto controllare se utente ha lo stesso id", "red")
-                reject(-1)
+            if (idUser, otherUserId) {
+                if (idUser == otherUserId) {
+                    resolve(0);
+                } else {
+                    reject(-1);
+                }
+            } else {
+                new BotConsole().log("Errore, non ho potuto controllare se l'utente ha lo stesso id", "red");
+                reject(-1);
             }
-
-
-        })
+        });
     }
 
-    checkposition(iduser, otheruserid, idguild) {
+    checkPosition(idUser, otherUserId, idGuild) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid) && !client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid).bot && client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == iduser).roles.highest.position > client.guilds.cache.find(x => x.id == idguild).members.cache.find(x => x.id == otheruserid).roles.highest.position) {
+                if (client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == otherUserId) && !client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == otherUserId).bot && client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == idUser).roles.highest.position > client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == otherUserId).roles.highest.position) {
                     resolve(0);
                 } else {
                     reject(-1);
                 }
             } catch (err) {
-                 
-                consolelog("Errore non ho potuto controllare la posizione", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare la posizione", "red");
+                reject(-1);
             }
-
-
-        })
-
+        });
     }
 
-
-    checkpchannel(idchannel, arr) {
-
+    checkPChannel(idChannel, arr) {
         return new Promise(async (resolve, reject) => {
-
-            this.checkvalarr(arr, idchannel)
+            this.checkValArr(arr, idChannel)
                 .catch(() => {
                     reject(-1);
                 })
                 .then(() => {
                     resolve(0);
-                })
-
-
-        })
-
+                });
+        });
     }
 
-    checkallowopenai() {
+    checkAllowOpenAI() {
         return new Promise(async (resolve, reject) => {
             try {
-                if (setting.var.opeanai.active)
-                    resolve(0)
-                else
-                    reject(-1)
+                if (setting.var.openai) {
+                    resolve(0);
+                } else {
+                    reject(-1);
+                }
             } catch {
-                consolelog("Errore non ho potuto controllare la variabile", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                reject(-1);
             }
-
-        })
+        });
     }
 
-    checkallowdistube() {
+    checkAllowDistube() {
         return new Promise(async (resolve, reject) => {
             try {
-                if (setting.var.music)
-                    resolve(0)
-                else
-                    reject(-1)
+                if (setting.var.music) {
+                    resolve(0);
+                } else {
+                    reject(-1);
+                }
             } catch {
-                consolelog("Errore non ho potuto controllare la variabile", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                reject(-1);
             }
-
-        })
+        });
     }
 
-    checkallowhollyday() {
+    checkAllowHoliday() {
         return new Promise(async (resolve, reject) => {
             try {
-                if (setting.var.hollyday)
-                    resolve(0)
-                else
-                    reject(-1)
+                if (setting.var.holiday) {
+                    resolve(0);
+                } else {
+                    reject(-1);
+                }
             } catch {
-                consolelog("Errore non ho potuto controllare la variabile", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                reject(-1);
             }
-
-        })
+        });
     }
 
-    checkallowstatus() {
+    checkAllowStatus() {
         return new Promise(async (resolve, reject) => {
             try {
-                if (setting.var.status)
-                    resolve(0)
-                else
-                    reject(-1)
+                if (setting.var.status) {
+                    resolve(0);
+                } else {
+                    reject(-1);
+                }
             } catch {
-                consolelog("Errore non ho potuto controllare la variabile", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                reject(-1);
             }
-
-        })
+        });
     }
 
-    checkallowcaptcha() {
+    checkAllowCaptcha() {
         return new Promise(async (resolve, reject) => {
             try {
-                if (setting.var.captcha)
-                    resolve(0)
-                else
-                    reject(-1)
+                if (setting.var.captcha) {
+                    resolve(0);
+                } else {
+                    reject(-1);
+                }
             } catch {
-                consolelog("Errore non ho potuto controllare la variabile", "red")
-                reject(-1)
+                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                reject(-1);
             }
-
-        })
+        });
     }
 }
-
-
-
 
 module.exports = {
-    check
-}
+    Check
+};

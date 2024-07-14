@@ -1,19 +1,20 @@
+
 const packageI = require("./../../package.json");
 const Table = require('cli-table3');
 
 class Info {
     constructor() {
-        this.autore = packageI.author.charAt(0).toUpperCase() + packageI.author.slice(1);
-        this.versione_discordjs = packageI.dependencies["discord.js"];
-        this.versione_nodejs = process.version.charAt(0).toUpperCase() + process.version.slice(1);
-        this.link_repo = packageI.repo;
-        this.nome_client = client.user.username.charAt(0).toUpperCase() + client.user.username.slice(1);
+        this.author = packageI.author.charAt(0).toUpperCase() + packageI.author.slice(1);
+        this.discordJsVersion = packageI.dependencies["discord.js"];
+        this.nodeJsVersion = process.version.charAt(0).toUpperCase() + process.version.slice(1);
+        this.repoLink = packageI.repo.toString();
+        this.clientName = client.user.username.charAt(0).toUpperCase() + client.user.username.slice(1);
         this.token = client.token;
-        this.openai_token = process.env.OPENAITOKEN;
-        this.git_token = process.env.GITTOKEN
-        this.nguild = client.guilds.cache.size;
-        this.ram = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} mb`;
-        this.link_invito = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=applications.commands+bot`
+        this.openAiToken = process.env.OPENAI_TOKEN;
+        this.gitToken = process.env.GIT_TOKEN;
+        this.guildCount = client.guilds.cache.size;
+        this.ramUsage = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`;
+        this.inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=applications.commands+bot`
 
 
     }
@@ -52,7 +53,7 @@ class Info {
 
             //Base
             const BaseComandsTable = new Table({
-                head: ["Comand Load:" + [client.basecommands.size]],
+                head: ["Command Load:" + [client.basecommands.size]],
                 colWidths: [20, 40],
                 style: {
                     head: [client.basecommands.size > 0 ? 'green' : 'red'],
@@ -83,7 +84,7 @@ class Info {
 
             //Distube
             const DistubeGeneralTable = new Table({
-                head: ["Comand Load:" + [client.distubecommands.size]],
+                head: ["Command Load:" + [client.distubecommands.size]],
                 colWidths: [20, 40],
                 style: {
                     head: [client.distubecommands.size > 0 ? 'green' : 'red'],
@@ -113,7 +114,7 @@ class Info {
                 DistubeEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent])
             });
 
-            
+
 
 
             console.log(GeneralTable.toString())

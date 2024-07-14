@@ -1,8 +1,8 @@
 const { AttachmentBuilder } = require("discord.js");
-const { baseembed } = require("../baseembed");
+const { BaseEmbed } = require("../baseembed");
 const { createCanvas, loadImage, registerFont } = require("canvas")
 const setting = require("./../../setting/settings.json")
-class eventbembed extends baseembed {
+class EventEmbed extends BaseEmbed {
     constructor(guild, member) {
         super(guild, member)
     }
@@ -90,4 +90,4 @@ class eventbembed extends baseembed {
 
 }
 
-module.exports = { eventbembed }
+module.exports = { EventEmbed }

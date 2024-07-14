@@ -1,53 +1,54 @@
+
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
-class menu {
+class Menu {
     constructor() {
 
     }
 
-    createmenu(list, id, fild, iduser, npage) {
+    createMenu(list, id, field, idUser, npage) {
 
-        let row = new ActionRowBuilder()
-        let row0 = new ActionRowBuilder()
+        let row = new ActionRowBuilder();
+        let row0 = new ActionRowBuilder();
 
-        let incremento = 25 * npage
-        let components = []
+        let incremento = 25 * npage;
+        let components = [];
 
 
         let bup = new ButtonBuilder()
-            .setCustomId(`${id}-${iduser}-up-0`)
+            .setCustomId(`${id}-${idUser}-up-0`)
             .setLabel('Avanti')
             .setStyle(ButtonStyle.Success)
-            .setDisabled(true)
+            .setDisabled(true);
 
         let bdown = new ButtonBuilder()
-            .setCustomId(`${id}-${iduser}-down-0`)
+            .setCustomId(`${id}-${idUser}-down-0`)
             .setLabel('Indietro')
             .setStyle(ButtonStyle.Success)
-            .setDisabled(true)
+            .setDisabled(true);
 
 
 
-        if (list.size >= 25) {
+        if (list.length >= 25) {
 
             list = list.slice(0 + incremento, 25 + incremento);
-            if ((list.size / 25) < npage) {
-                bup.setDisabled(false)
+            if ((list.length / 25) < npage) {
+                bup.setDisabled(false);
             }
             if (npage != 0) {
-                bdown.setDisabled(false)
+                bdown.setDisabled(false);
             }
         }
 
         list.forEach(element => {
-            fild.addOptions(element)
+            field.addOptions(element);
         });
 
-        row.addComponents(fild)
-        row0.addComponents(bup, bdown)
+        row.addComponents(field);
+        row0.addComponents(bup, bdown);
 
-        components.push(row, row0)
+        components.push(row, row0);
 
-        return components
+        return components;
     }
 
 
@@ -55,4 +56,4 @@ class menu {
 }
 
 
-module.exports = { menu }
+module.exports = { Menu };

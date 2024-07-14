@@ -1,25 +1,27 @@
-const { Cjson } = require("../../../function/file/json")
-const { consolelog } = require("../../../function/log/consolelog")
-const setting = require("../../../setting/settings.json")
+const { CJson } = require("../../../function/file/json");
+const { BotConsole } = require("../../../function/log/botConsole");
+const setting = require("../../../setting/settings.json");
+
+
 module.exports = {
     name: "ClearChat",
     typeEvent: "messageCreate",
     async execute(message) {
 
-        let json = new Cjson()
+        let json = new CJson();
 
-        json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf) => {
-            jsonf['Anto\'s  Server'].channel.allowchannel.forEach(x => {
+        json.jsonDependencyBufferOnly(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf) => {
+            jsonf['Anto\'s Server'].channel.allowchannel.forEach(x => {
                 try {
                     if (message.channel.id == x && !message.author.bot) {
-                        message.delete().catch(() => { })
-                        return
+                        message.delete().catch(() => { });
+                        return;
                     }
-                } catch (err) { consolelog("Errore non sono risucito a cancellare il messagio", "red") }
+                } catch (err) { new BotConsole().log("Errore non sono riuscito a cancellare il messaggio", "red"); }
 
-            })
-        }).catch((err) => { })
+            });
+        }).catch((err) => { });
 
 
     }
-}
+};

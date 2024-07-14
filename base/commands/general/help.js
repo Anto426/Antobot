@@ -1,5 +1,5 @@
 const { comandbembed } = require("../../../embed/base/command");
-const { menu } = require("../../../function/row/menu");
+const { Menu } = require("../../../function/row/Menu");
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js")
 module.exports = {
     name: "help",
@@ -16,7 +16,7 @@ module.exports = {
     execute(interaction) {
 
         let embed = new comandbembed(interaction.guild, interaction.member)
-        let Cmenu = new menu()
+        let CMenu = new Menu()
         let list = []
 
         let comandlist = new StringSelectMenuBuilder()
@@ -36,7 +36,7 @@ module.exports = {
         embed.init().then(() => {
             interaction.reply({
                 embeds: [embed.help()],
-                components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, 0),
+                components: CMenu.createMenu(list, "helpm", comandlist, interaction.member.id, 0),
             });
         })
 

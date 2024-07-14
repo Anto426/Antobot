@@ -1,5 +1,4 @@
-const { EmbedBuilder } = require("discord.js");
-class baseembed {
+class BaseEmbed {
     constructor(guild, member) {
         this.guild = guild
         this.member = member
@@ -40,4 +39,4 @@ class baseembed {
     }
 }
 
-module.exports = { baseembed }
+module.exports = { BaseEmbed }

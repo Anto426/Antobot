@@ -1,4 +1,3 @@
-const { comanddembed } = require("../../embed/distube/command")
 module.exports = {
     name: "repeat",
     permisions: [],

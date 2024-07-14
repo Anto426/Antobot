@@ -1,11 +1,12 @@
+
 const fs = require("fs");
-const { consolelog } = require("../log/consolelog");
+const { BotConsole } = require("../log/botConsole");;
 const axios = require("axios")
 class json {
     constructor() { }
 
 
-    jsonddypendencebufferolyf(url, token) {
+    jsonDependencyBuffer(url, token) {
 
         return new Promise((resolve, reject) => {
             axios.get(url, {
@@ -17,7 +18,7 @@ class json {
                     resolve(response.data)
                 })
                 .catch((error) => {
-                    consolelog('Errore durante il download del file JSON: ' + error, "red")
+                    new BotConsole().log('Errore durante il download del file JSON: ' + error, "red");
                     reject(-1)
                 });
 
@@ -32,7 +33,7 @@ class json {
                 const jsonObject = JSON.parse(jsonData);
                 resolve(jsonObject);
             } catch (error) {
-                consolelog('Errore durante la lettura file JSON ', "red");
+                new BotConsole().log('Errore durante la lettura del file JSON', "red");
                 reject(error);
             }
         })
@@ -43,19 +44,19 @@ class json {
             filePath = filePath.toString().replace(".json", "");
             const jsonData = JSON.stringify(dataObject, null, 2);
 
-            let dirpatch = filePath.substring(0, filePath.lastIndexOf('/'));
+            let dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
 
-            if (!fs.existsSync(dirpatch)) {
-                fs.mkdirSync(dirpatch)
+            if (!fs.existsSync(dirPath)) {
+                fs.mkdirSync(dirPath)
             }
 
             fs.writeFile(`${filePath}.json`, jsonData, 'utf8', (err) => {
                 if (err) {
-                    consolelog('Errore durante la scrittura del file JSON', "red");
+                    new BotConsole().log('Errore durante la scrittura del file JSON', "red");
                     reject(err);
                     return;
                 }
-                consolelog(`${filePath}.json creato con successo`, "green")
+                new BotConsole().log(`${filePath}.json creato con successo`, "green")
                 resolve(0);
             });
         });
@@ -67,7 +68,7 @@ class json {
                 resolve(0)
             else {
                 reject(-1)
-                consolelog("Errore: json non esiste", "red")
+                new BotConsole().log("Errore: il file JSON non esiste", "red");
             }
 
         });

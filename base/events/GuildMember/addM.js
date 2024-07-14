@@ -1,8 +1,7 @@
-const { eventbembed } = require("../../../embed/base/events");
+const { EventEmbed } = require("../../../embed/base/events");
 const { Cjson } = require("../../../function/file/json");
-const { consolelog } = require("../../../function/log/consolelog");
-const setting = require("../../../setting/settings.json")
-
+const { BotConsole } = require("../../../function/log/botConsole");
+const setting = require("../../../setting/settings.json");
 
 
 
@@ -10,14 +9,11 @@ module.exports = {
     name: "AddM",
     typeEvent: "guildMemberAdd",
     async execute(member) {
-
-
-
-        let embedmsg = new eventbembed(member.guild)
-        embedmsg.init().then(async () => {
+        let embedMsg = new EventEmbed(member.guild);
+        embedMsg.init().then(async () => {
             let json = new Cjson();
             if (!member.user.bot) {
-                await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then(async (jsonf) => {
+                await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmembers).then(async (jsonf) => {
                     if (jsonf[member.guild.id][member.id]) {
                         let listrole = [];
                         jsonf[member.guild.id][member.id].roles.forEach(element => {
@@ -33,47 +29,46 @@ module.exports = {
                         });
 
                         try {
-                            consolelog(listrole)
-                            let send = embedmsg.welcomeback(member, listrole)
-                            member.send({ embeds: [send] }).catch(() => { consolelog("Non sono riuscito ad inviare il messaggio", "red") })
-                        } catch (error) {
-                            console.log(error)
-                        }
+                            let send = embedMsg.welcomeBack(member, listrole);
+                            member.send({ embeds: [send] }).catch(() => { new BotConsole().log("Non sono riuscito ad inviare il messaggio", "red") })
+                        } catch { }
 
 
 
                     } else {
 
                         let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
-                        json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
+                        json.jsonDependencyBufferOnly(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
                             let embedmsg = new eventbembed(member.guild)
                             embedmsg.init().then(async () => {
                                 let send = await embedmsg.welcome(member, humans.size).catch(() => { })
-                                member.guild.channels.cache.find(x => x.id == jsonf0["Anto's  Server"].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] })
+                                member.guild.channels.cache.find(x => x.id === jsonf0["Anto's Server"].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] });
 
                             }).catch(() => { })
                             try {
-                                member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0["Anto's  Server"].role.user))
+                                member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0["Anto's Server"].role.user));
                             } catch { }
 
                         })
 
                     }
                 }).catch(async (err) => {
-                    consolelog(err)
+                    new BotConsole().log(err, "red");
                 })
 
 
             } else {
 
                 try {
-                    json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
-                        member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0["Anto's  Server"].role.bot))
+                    json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
+                        member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0["Anto's Server"].role.bot));
                     })
-                } catch (err) { consolelog(err) }
+                } catch (err) {
+                    new BotConsole().log(err, "red");
+                }
             }
 
-        }).catch(() => { consolelog("Non sono riuscito a iniziallizzare embed di base", "red") })
+        }).catch(() => { new BotConsole().log("Non sono riuscito a iniziallizzare embed di base", "red") })
 
 
 

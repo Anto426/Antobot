@@ -1,4 +1,5 @@
-const { comanddembed } = require("../../embed/distube/command")
+const { CommandEmbed } = require("../../embed/distube/command")
+
 module.exports = {
     name: "play",
     permisions: [],
@@ -23,20 +24,19 @@ module.exports = {
     async execute(interaction, channels) {
 
         try {
-            let embedmsg = new comanddembed(interaction.guild, interaction.member)
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
             let song = interaction.options.getString("song")
             embedmsg.init()
-            .then(async () => {
-                await distube.play(channels[0] || channels[1], song, {
-                    member: interaction.member,
-                    textChannel: interaction.channel,
-                    message: song.name
-                })
-                interaction.reply({ embeds: [embedmsg.play()] })
-            }).catch((error) => { console.log(error) })
+                .then(async () => {
+                    await distube.play(channels[0] || channels[1], song, {
+                        member: interaction.member,
+                        textChannel: interaction.channel,
+                        message: song.name
+                    })
+                    interaction.reply({ embeds: [embedmsg.play()] })
+                }).catch((error) => { console.log(error) })
 
-        } catch (error) {
-            console.error(error);
+        } catch {
         }
 
 

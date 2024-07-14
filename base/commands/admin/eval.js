@@ -1,5 +1,5 @@
 const { comandbembed } = require("../../../embed/base/command")
-const { consolelog } = require("../../../function/log/consolelog")
+const { BotConsole } = require("../../../function/log/botConsole")
 const setting = require("../../../setting/settings.json")
 
 module.exports = {
@@ -28,7 +28,6 @@ module.exports = {
             let command = interaction.options.getString('comand');
             try {
                 let on = await eval(command);
-                console.log(on);
                 embedmsg
                     .setDescription("Comando eseguito con successo")
                     .addFields(
@@ -40,7 +39,7 @@ module.exports = {
                     );
 
             } catch (error) {
-                consolelog(error)
+                new BotConsole().log(error)
                 embedmsg
                     .setDescription("Comando non eseguito")
             }

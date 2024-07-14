@@ -1,73 +1,68 @@
-class time {
+class Time {
 
     constructor() {
-        this.timezone
+        this.Timezone = null;
     }
 
-    setTimezone(timezone) {
-        this.timezone = timezone
+    setTimezone(Timezone) {
+        this.Timezone = Timezone;
     }
 
     getCurrentTime() {
-        return `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}`;
+        const date = new Date();
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+        return `${hours}:${minutes}:${seconds}`;
     }
 
     getCurrentTimestamp() {
-
-        return new Date().getTime()
+        return new Date().getTime();
     }
 
-    getcorrentYear() {
-        return new Date().getFullYear()
+    getCurrentYear() {
+        return new Date().getFullYear();
     }
 
-    getTimestampbyinput(year, mouth, day) {
-        return new Date(year, mouth, day).getTime()
+    getTimestampByInput(year, month, day) {
+        return new Date(year, month, day).getTime();
     }
 
-    setTimezone() {
-        process.env.TZ = this.timezone;
+    setLocalTimezone() {
+        process.env.TZ = this.Timezone;
     }
 
-
-    formatttimedayscale(millis) {
-        var minutes = Math.floor(millis / 60000).toFixed(0);
-        var hour = 0
-        var day = 0
+    formatTimeDayscale(millis) {
+        let minutes = Math.floor(millis / 60000).toFixed(0);
+        let hours = 0;
+        let days = 0;
         while (minutes >= 60) {
-            hour += 1
-            minutes -= 60
+            hours += 1;
+            minutes -= 60;
         }
-        while (hour >= 24) {
-            day += 1
-            hour -= 24
+        while (hours >= 24) {
+            days += 1;
+            hours -= 24;
         }
 
-        return day + "d :" + hour + " h:" + minutes + " m"
+        return `${days}d : ${hours}h : ${minutes}m`;
     }
 
-
-    formatttimehoursscale(millis) {
-        let m = 0,
-            h = 0
+    formatTimeHoursscale(millis) {
+        let minutes = 0;
+        let hours = 0;
         while (millis >= 60) {
-
-            m += 1
-            millis -= 60
-
+            minutes += 1;
+            millis -= 60;
         }
-        while (m >= 60) {
-
-            h += 1
-            m -= 60
-
+        while (minutes >= 60) {
+            hours += 1;
+            minutes -= 60;
         }
-        return "h:" + h + " m:" + m + "s:" + s
+        return `h:${hours} m:${minutes} s:${millis}`;
     }
 }
 
-
-
 module.exports = {
-    time
+    Time
 }

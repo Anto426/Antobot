@@ -1,42 +1,43 @@
 
 const { Cjson } = require("../file/json");
-const { time } = require("../time/time");
+const { Time } = require("../Time/Time");
+const { BotConsole } = require("../log/botConsole");
+
 const setting = require("../../setting/settings.json");
-const { consolelog } = require("../log/consolelog");
-class hollyday {
+class Holiday {
 
     constructor() {
-        this.time = new time()
+        this.Time = new Time()
         this.Cjson = new Cjson()
         this.hollydayjson = {}
         this.guiljson = {}
         this.nextHoliday = {}
-        this.year = parseInt(this.time.getcorrentYear())
+        this.year = parseInt(this.Time.getCurrentYear())
     }
 
     async init() {
         return new Promise(async (resolve, reject) => {
-            await this.Cjson.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guiljson = json }).catch((err) => { consolelog("Errore nel inizializare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
-            await this.Cjson.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN).then((json) => { this.hollydayjson = json }).catch((err) => { consolelog("Errore nel inizializare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
+            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guildJson = json }).catch((err) => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
+            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN).then((json) => { this.holidayJson = json }).catch((err) => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
             resolve(0);
         })
 
     }
 
 
-    calculatenexthollyday() {
+    calculateNextHoliday() {
 
         return new Promise(async (resolve, reject) => {
             try {
                 this.nextHoliday = this.hollydayjson.holidays.find(holy => {
-                    return this.time.getTimestampbyinput(this.year, holy.date.mouth, holy.date.day) > this.time.getCurrentTimestamp();
+                    return this.Time.getTimestampByInput(this.year, holy.date.mouth, holy.date.day) > this.Time.getCurrentTimestamp();
                 });
 
                 if (this.nextHoliday) {
                     resolve(0)
                 } else {
                     this.year += 1;
-                    resolve(await this.calculatenexthollyday())
+                    resolve(await this.calculateNextHoliday())
                 }
             } catch { reject(-1) }
 
@@ -44,29 +45,29 @@ class hollyday {
 
     }
 
-    async updatechannel(channelcount, id) {
+    async updateChannel(channelCount, id) {
         try {
-            if (this.time.formatttimedayscale(this.time.getTimestampbyinput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.time.getCurrentTimestamp() > 0)) {
-                let time = `${this.time.formatttimedayscale(this.time.getTimestampbyinput(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.time.getCurrentTimestamp())}`
-                channelcount.setName(time.toString()).catch(() => { consolelog("Non ho potuto aggiornare il conteggio della festa", "red") })
+            if (this.Time.formatTimeDayscale(this.Time.getTimestampByInput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp() > 0)) {
+                let Time = `${this.Time.formatTimeDayscale(this.Time.getCurrentTimestamp(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp())}`
+                channelCount.setName(Time.toString()).catch(() => { new BotConsole().log("Non ho potuto aggiornare il conteggio della festa", "red") })
             } else {
-                sendcongratulations(id)
+                this.sendCongratulations(id)
             }
 
-        } catch { consolelog("Non ho potuto aggiornare il conteggio della festa", "red") }
+        } catch { new BotConsole().log("Non ho potuto aggiornare il conteggio della festa", "red") }
 
     }
 
-    async sendcongratulations(id) {
-        if (this.time.formatttimedayscale(this.time.getTimestampbyinput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.time.getCurrentTimestamp()) <= 0) {
+    async sendCongratulations(id) {
+        if (this.Time.formatTimeDayscale(this.Time.getTimestampByInput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp()) <= 0) {
             clearInterval(id)
             this.main()
         }
     }
 
-    async timer(channelcount) {
+    async Timer(channelcount) {
         const id = setInterval(() => {
-            this.updatechannel(channelcount, id)
+            this.updateChannel(channelcount, id)
         }, 5000 * 60)
 
 
@@ -77,17 +78,17 @@ class hollyday {
             const guild = client.guilds.cache.find(x => x.id == this.guiljson["Anto's  Server"].id)
             const channelcount = guild.channels.cache.find(x => x.id == this.guiljson["Anto's  Server"].channel.hollyday.count)
             const channelname = guild.channels.cache.find(x => x.id == this.guiljson["Anto's  Server"].channel.hollyday.name)
-            this.calculatenexthollyday().then(() => {
+            this.calculateNextHoliday().then(() => {
                 if (!guild || !channelname || !channelcount || !this.nextHoliday) return
-                consolelog("Nuova festa trovata:" + this.nextHoliday.name + " in data:" + this.nextHoliday.date.day + "/" + (this.nextHoliday.date.mouth + 1) + "/" + this.year)
-                channelname.setName(this.nextHoliday.name).catch(() => { consolelog("Non ho potuto aggiornare il nome della festa", "red") })
-                this.updatechannel(channelcount, null)
-                this.timer(channelcount)
+                new BotConsole().log("Nuova festa trovata:" + this.nextHoliday.name + " in data:" + this.nextHoliday.date.day + "/" + (this.nextHoliday.date.mouth + 1) + "/" + this.year)
+                channelname.setName(this.nextHoliday.name).catch(() => { new BotConsole().log("Non ho potuto aggiornare il nome della festa", "red") })
+                this.updateChannel(channelcount, null)
+                this.Timer(channelcount)
             }).catch(() => { })
 
-        } catch (err) { consolelog(err, "red") }
+        } catch (err) { new BotConsole().log(err, "red") }
     }
 }
 
 
-module.exports = { hollyday }
+module.exports = { Holiday }

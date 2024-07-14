@@ -1,47 +1,51 @@
-const { ActivityType } = require("discord.js")
-const { Cjson } = require("../file/json")
-const { consolelog } = require("../log/consolelog")
-const { Cmath } = require("../math/math")
-const setting = require("./../../setting/settings.json")
-class status {
+
+const { ActivityType } = require("discord.js");
+const { Cjson } = require("../file/json");
+const { MathClass } = require("../math/MathClass");
+const setting = require("./../../setting/settings.json");
+const { BotConsole } = require("../log/botConsole");
+
+class Status {
     constructor() {
-        this.stausjson = {}
-        this.json = new Cjson
-        this.math = new Cmath
+        this.statusJson = {};
+        this.json = new Cjson();
+        this.math = new MathClass();
     }
-    init() {
+
+    async init() {
         return new Promise(async (resolve, reject) => {
-
-            await this.json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[4], process.env.GITTOKEN).then((json) => { this.stausjson = json; resolve(0) }).catch(() => { consolelog("Errore nel inizializare " + setting.configjson.online.name[4], "red"); reject(-1) })
-
-        })
-
+            try {
+                const json = await this.json.jsonDependencyBufferOnlyf(setting.configjson.online.url + "/" + setting.configjson.online.name[4], process.env.GITTOKEN);
+                this.statusJson = json;
+                resolve(0);
+            } catch (error) {
+                new BotConsole().log("Errore nell'inizializzare " + setting.configjson.online.name[4], "red");
+                reject(-1);
+            }
+        });
     }
 
-    updatestatus() {
-
+    updateStatus() {
         try {
             client.user.setPresence({
                 activities: [{
-                    name: this.stausjson.status[this.math.getRandomNumber(0, this.stausjson.status.length - 1)],
+                    name: this.statusJson.status[this.math.getRandomNumber(0, this.statusJson.status.length - 1)],
                     type: ActivityType.Playing,
                 }],
                 status: 'online'
             });
-        } catch (err) {
-            consolelog("Errore nel aggiornare lo status :" + err, "red")
+        } catch (error) {
+            new BotConsole().log("Errore nell'aggiornare lo status: " + error, "red");
         }
     }
 
-    updatestatuseveryfiveminutes() {
+    updateStatusEveryFiveMinutes() {
         setInterval(() => {
-            this.updatestatus()
-        }, 5000 * 60)
-
+            this.updateStatus();
+        }, 5000 * 60);
     }
-
-
 }
+
 module.exports = {
-    status
-}
+    Status
+};

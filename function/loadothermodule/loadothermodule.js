@@ -1,22 +1,21 @@
-const { check } = require("../check/check");
-const { hollyday } = require("../hollyday/hollyday");
-const { consolelog } = require("../log/consolelog");
-const { status } = require("../status/status");
+const { Check } = require("../check/check");
+const { Holiday } = require("../hollyday/hollyday");
+const { Status } = require("../status/status");
 
-class loadothermodules {
+class Loadothermodules {
     constructor() {
-        this.check = new check()
-        this.status = new status()
-        this.hollyday = new hollyday()
+        this.check = new Check()
+        this.status = new Status()
+        this.holiday = new Holiday()
     }
 
     load() {
-        this.check.checkallowstatus().then(() => { consolelog("Modulo status caricato", "green"); this.status.init().then(() => { this.status.updatestatus(); this.status.updatestatuseveryfiveminutes(); }).catch(() => { }) }).catch(() => { })
-        this.check.checkallowhollyday().then(() => { consolelog("Modulo hollyday caricato", "green"); this.hollyday.init().then(() => { this.hollyday.main() }).catch(() => { }); }).catch(() => { })
+        this.check.checkAllowStatus().then(() => { new BotConsole().log("Modulo status caricato", "green"); this.status.init().then(() => { this.status.updateStatus(); this.status.updateStatusEveryFiveMinutes(); }).catch(() => { }) }).catch(() => { })
+        this.check.checkAllowHoliday().then(() => { new BotConsole().log("Modulo hollyday caricato", "green"); this.holiday.init().then(() => { this.holiday.main() }).catch(() => { }); }).catch(() => { })
     }
 
 }
 
 module.exports = {
-    loadothermodules
+    Loadothermodules
 }

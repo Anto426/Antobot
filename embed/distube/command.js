@@ -1,24 +1,21 @@
-const { baseembed } = require("../baseembed");
+const { BaseEmbed } = require("../baseembed");
 
-class comanddembed extends baseembed {
+class CommandEmbed extends BaseEmbed {
     constructor(guild, member) {
-        super(guild, member)
+        super(guild, member);
     }
 
-    init() {
+    initialize() {
         return new Promise((resolve, reject) => {
-            super.init().then((embed) => { this.embed = embed; this.embed.setColor(embedconfig.color.purple); resolve(0) }).catch(() => { reject(-1) })
-        })
+            super.initialize().then((embed) => { this.embed = embed; this.embed.setColor(embedconfig.color.purple); resolve(0); }).catch(() => { reject(-1); });
+        });
     }
-
 
     play() {
         return this.embed
             .setDescription("PROVA")
-            .setTitle("PROVA")
+            .setTitle("PROVA");
     }
-
-
 }
 
-module.exports = { comanddembed }
+module.exports = { CommandEmbed };

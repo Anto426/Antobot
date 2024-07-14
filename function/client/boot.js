@@ -1,14 +1,15 @@
-const { writecommand } = require("../commands/writecommands");
-const { loadothermodules } = require("../loadothermodule/loadothermodule");
+
+const { WriteCommand } = require("../commands/WriteCommand");
+const { Loadothermodules } = require("../loadothermodule/loadothermodule");
 const { Info } = require("../log/bootlog");
-const { consolelog } = require("../log/consolelog");
-const { time } = require("./../time/time")
-const { clientinit } = require("./initclient");
-const { loadeventsandcommand } = require("./loadcommand&events");
+const { BotConsole } = require("../log/botConsole");
+const { Time } = require("./../Time/Time")
+const { ClientInit } = require("./initclient");
+const { LoadEventsAndCommand } = require("./loadEventsAndCommand");
 require("dotenv").config()
 
 
-class boot {
+class Boot {
     constructor() {
     }
 
@@ -17,28 +18,28 @@ class boot {
             .then(() => {
                 try {
                     client.on('ready', async () => {
-                        global.timeon = new Date().getTime()
+                        global.Timeon = new Date().getTime()
                         new Info().log()
-                        await new writecommand().commandallguildonstartup().then(() => {
-                            new loadothermodules().load()
+                        await new WriteCommand().commandAllguildonstartup().then(() => {
+                            new Loadothermodules().load()
                         })
 
                     })
                 } catch {
-                    consolelog("Errore il Token non è valido il bot verrà killato", "red")
+                    new BotConsole().log("Errore il Token non è valido il bot verrà killato", "red")
                 }
             })
             .catch(async () => {
-                await consolelog("Errore il Token non è valido il bot verrà killato", "red")
+                await new BotConsole().log("Errore il Token non è valido il bot verrà killato", "red")
                 process.exit(-1);
             })
     }
 
     on() {
-        new time('Europe/Rome').setTimezone()
-        new clientinit().intitialallclientbysettings()
+        new Time('Europe/Rome').setTimezone()
+        new ClientInit().intitialallclientbysettings()
             .then(() => {
-                new loadeventsandcommand().loadall()
+                new LoadEventsAndCommand().loadall()
                     .then(() => {
                         this.loging()
                     })
@@ -48,11 +49,11 @@ class boot {
 
             })
             .catch(async () => {
-                await consolelog("Errore il client non è stato inizializato correttamete il bot verrà killato", "red")
+                await new BotConsole().log("Errore il client non è stato inizializato correttamete il bot verrà killato", "red")
                 process.exit(-1);
             })
     }
 }
 
 
-module.exports = { boot }
+module.exports = { Boot }

@@ -1,22 +1,24 @@
+
+
 const OpenAI = require('openai');
 const { Client, Partials } = require('discord.js');
 const { DisTube } = require("distube")
 const { SpotifyPlugin } = require("@distube/spotify")
 const { SoundCloudPlugin } = require("@distube/soundcloud")
 const { YtDlpPlugin } = require('@distube/yt-dlp');
-const { consolelog } = require('../log/consolelog');
-const { check } = require('../check/check');
+const { Check } = require('../check/check');
 const { Cjson } = require('../file/json');
-const setting = require("./../../setting/settings.json")
+const setting = require("./../../setting/settings.json");
+const { BotConsole } = require('../log/botConsole');
 
-class clientinit {
+class ClientInit {
 
     constructor() {
-        this.check = new check()
+        this.check = new Check()
         this.json = new Cjson()
     }
 
-    async intitialclientbase() {
+    async initializeClientBase() {
 
         return new Promise(async (resolve, reject) => {
 
@@ -28,23 +30,23 @@ class clientinit {
 
                 global.embedconfig = {}
 
-                await this.json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[5], process.env.GITTOKEN).then((jsonf) => { embedconfig = jsonf }).catch(() => { consolelog("Errore variabile json non caricata", "red") });
+                await this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[5], process.env.GITTOKEN).then((jsonf) => { embedconfig = jsonf }).catch(() => { new BotConsole().log("Errore variabile json non caricata", "red") });
 
 
-                consolelog("Client di base inzializzato con successo", "green");
+                new BotConsole().log("Client di base inizializzato con successo", "green");
 
                 resolve(0);
 
 
             } catch (err) {
-                consolelog("Errore nell' inizializzare il client di base", "red");
+                new BotConsole().log("Errore nell'inizializzare il client di base", "red");
                 reject(err);
             }
         })
     }
 
 
-    async intitialclientai() {
+    async initializeClientAI() {
         return new Promise(async (resolve, reject) => {
 
             try {
@@ -52,11 +54,11 @@ class clientinit {
                 global.openai = new OpenAI({
                     apiKey: process.env.OPENAITOKEN
                 });
-                consolelog("Client di AI inzializato con successo", "green");
+                new BotConsole().log("Client di AI inizializzato con successo", "green");
                 resolve(0)
 
             } catch (err) {
-                consolelog("Errore nel inizializare il client di AI", "red");
+                new BotConsole().log("Errore nell'inizializzare il client di AI", "red");
                 reject(err);
             }
         })
@@ -64,7 +66,7 @@ class clientinit {
     }
 
 
-    async intitialclientmusic() {
+    async initializeClientMusic() {
         return new Promise(async (resolve, reject) => {
 
             try {
@@ -107,10 +109,10 @@ class clientinit {
                         filter: 'audioonly',
                     },
                 })
-                consolelog("Client di Distube inzializato con successo", "green");
+                new BotConsole().log("Client di Distube inzializato con successo", "green");
                 resolve(0)
             } catch (err) {
-                consolelog("Errore nel inizializare il client di Distube", "red");
+                new BotConsole().log("Errore nel inizializare il client di Distube", "red");
                 reject(err);
             }
         })
@@ -121,15 +123,15 @@ class clientinit {
         return new Promise(async (resolve, reject) => {
 
             try {
-                this.intitialclientbase().then(() => {
-                    this.check.checkallowdistube().then(async () => { await this.intitialclientmusic().catch(() => { }) }).catch(() => { })
-                    this.check.checkallowopenai().then(async () => { await this.intitialclientai().catch(() => { }) }).catch(() => { })
+                this.initializeClientBase().then(() => {
+                    this.check.checkAllowDistube().then(async () => { await this.initializeClientMusic().catch(() => { }) }).catch(() => { })
+                    this.check.checkAllowOpenAI().then(async () => { await this.initializeClientAI().catch(() => { }) }).catch(() => { })
                     resolve(0)
                 }).catch(() => {
                     reject(-1);
                 })
             } catch (err) {
-                consolelog("Errore nel inizializare il i client", "red");
+                new BotConsole().log("Errore nel inizializare il i client", "red");
                 reject(err);
             }
         })
@@ -143,4 +145,4 @@ class clientinit {
 
 
 
-module.exports = { clientinit }
+module.exports = { ClientInit }

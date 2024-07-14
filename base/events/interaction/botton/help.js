@@ -1,10 +1,10 @@
-const { baseembed } = require("../../../../embed/baseembed");
 const { botton } = require("../../../../function/interaction/botton");
 const { Cjson } = require("../../../../function/file/json");
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const setting = require("../../../../setting/settings.json");
-const { menu } = require("../../../../function/row/menu");
+const { Menu } = require("../../../../function/row/Menu");
 const { comandbembed } = require("../../../../embed/base/command");
+const { BaseEmbed } = require("../../../../embed/baseembed");
 module.exports = {
     name: "help",
     typeEvent: "interactionCreate",
@@ -13,11 +13,11 @@ module.exports = {
 
         if (interaction.customId.split("-").includes("help")) {
             let Cbotton = new botton()
-            Cbotton.checkisyourbotton(interaction)
+            Cbotton.checkIsYourButton(interaction)
                 .then(() => {
                     let json = new Cjson()
-                    json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
-                        new baseembed(interaction.guild, interaction.member).init().then((embedbase) => {
+                    json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
+                        new BaseEmbed(interaction.guild, interaction.member).init().then((embedbase) => {
                             const command = client.comamndg.get(interaction.values[0])
                             embedbase
                                 .setTitle(`${jsonf.command[command.name].emoji}  ${command.name}`)
@@ -60,12 +60,12 @@ module.exports = {
 
         if (interaction.customId.split("-").includes("helpm")) {
             let Cbotton = new botton()
-            Cbotton.checkisyourbotton(interaction).then(() => {
+            Cbotton.checkIsYourButton(interaction).then(() => {
                 let json = new Cjson()
-                json.jsonddypendencebufferolyf(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
+                json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
 
                     let embed = new comandbembed(interaction.guild, interaction.member)
-                    let Cmenu = new menu()
+                    let CMenu = new Menu()
                     let list = []
 
 
@@ -86,7 +86,7 @@ module.exports = {
                     embed.init().then(() => {
                         interaction.update({
                             embeds: [embed.help()],
-                            components: Cmenu.createmenu(list, "helpm", comandlist, interaction.member.id, interaction.customId.split("-")[3]),
+                            components: CMenu.createMenu(list, "helpm", comandlist, interaction.member.id, interaction.customId.split("-")[3]),
                         });
                     })
 

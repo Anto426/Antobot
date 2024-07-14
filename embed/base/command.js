@@ -1,6 +1,6 @@
-const { baseembed } = require("../baseembed");
+const { BaseEmbed } = require("../baseembed");
 
-class comandbembed extends baseembed {
+class comandbembed extends BaseEmbed {
     constructor(guild, member) {
         super(guild, member)
     }
@@ -11,14 +11,14 @@ class comandbembed extends baseembed {
         })
     }
 
-    ping(Latenza, ram, time) {
+    ping(latency, ram, Time) {
         return this.embed
             .setTitle("Pong 🏓")
             .setDescription("Questo comando restituisce le statistiche del bot")
             .addFields(
                 {
                     name: "📶 Latenza",
-                    value: Latenza ? Latenza : "Sconosciuta",
+                    value: latency ? latency : "Sconosciuta",
                     inline: true
                 },
                 {
@@ -28,7 +28,7 @@ class comandbembed extends baseembed {
                 },
                 {
                     name: "⏲️ Tempo di accensione",
-                    value: time ? time : "Sconosciuto",
+                    value: Time ? Time : "Sconosciuto",
                     inline: false
                 },
             )
@@ -48,7 +48,7 @@ class comandbembed extends baseembed {
 
     eval() {
         return this.embed
-        .setTitle("🤖 Eval")
+            .setTitle("🤖 Eval")
     }
 
 

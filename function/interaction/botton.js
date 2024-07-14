@@ -1,17 +1,17 @@
-const { errembed } = require("../../embed/err/errembed");
-const { check } = require("../check/check");
+const { ErrEmbed } = require("../../embed/err/errEmbed");
+const { Check } = require("../check/check");
 
 class botton {
     constructor() {
-        this.check = new check()
+        this.check = new Check()
     }
 
-    checkisyourbotton(interaction) {
+    checkIsYourButton(interaction) {
         return new Promise((resolve, reject) => {
-            this.check.checkisyou(interaction.customId.toString().split("-")[1], interaction.member.id).then(() => {
+            this.check.checkIsYou(interaction.customId.toString().split("-")[1], interaction.member.id).then(() => {
                 resolve(0)
             }).catch(() => {
-                let embed = new errembed(interaction.guild, interaction.member)
+                let embed = new ErrEmbed(interaction.guild, interaction.member)
                 embed.init().then(() => {
                     interaction.reply({ embeds: [embed.errYourBotton()], ephemeral: true })
                 })
