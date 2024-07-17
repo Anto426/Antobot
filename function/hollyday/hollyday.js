@@ -1,6 +1,6 @@
 
 const { Cjson } = require("../file/json");
-const { Time } = require("../Time/Time");
+const { Time } = require("../time/time");
 const { BotConsole } = require("../log/botConsole");
 
 const setting = require("../../setting/settings.json");
