@@ -3,7 +3,7 @@ const { WriteCommand } = require("../commands/WriteCommand");
 const { Loadothermodules } = require("../loadothermodule/loadothermodule");
 const { Info } = require("../log/bootlog");
 const { BotConsole } = require("../log/botConsole");
-const { Time } = require("./../Time/Time")
+const { Time } = require("./../time/time")
 const { ClientInit } = require("./initclient");
 const { LoadEventsAndCommand } = require("./loadEventsAndCommand");
 require("dotenv").config()
