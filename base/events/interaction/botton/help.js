@@ -2,9 +2,9 @@ const { botton } = require("../../../../function/interaction/botton");
 const { Cjson } = require("../../../../function/file/json");
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const setting = require("../../../../setting/settings.json");
-const { Menu } = require("../../../function/row/menu");
 const { comandbembed } = require("../../../../embed/base/command");
 const { BaseEmbed } = require("../../../../embed/baseembed");
+const { Menu } = require("../../../../function/row/menu");
 module.exports = {
     name: "help",
     typeEvent: "interactionCreate",
