@@ -1,5 +1,5 @@
 const { comandbembed } = require("../../../embed/base/command");
-const { Menu } = require("../../../function/row/Menu");
+const { Menu } = require("../../../function/row/menu");
 const { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require("discord.js")
 module.exports = {
     name: "help",
