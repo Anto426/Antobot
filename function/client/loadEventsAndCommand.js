@@ -61,9 +61,8 @@ class LoadEventsAndCommand {
     loadevents() {
         this.load("baseevents", process.env.dirbot + setting.base.events)
             .then(() => {
-
                 client.baseevents.forEach(x => {
-                    client.on(x.eventType, (...args) => {
+                    client.on(x.typeEvent, (...args) => {
                         x.execute(...args)
                     });
                 });

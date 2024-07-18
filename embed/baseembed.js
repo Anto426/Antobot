@@ -1,3 +1,5 @@
+const { EmbedBuilder } = require("discord.js")
+
 class BaseEmbed {
     constructor(guild, member) {
         this.guild = guild

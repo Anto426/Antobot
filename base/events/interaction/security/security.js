@@ -2,7 +2,7 @@
 const { ErrEmbed } = require("../../../../embed/err/errEmbed");
 const { Cjson } = require("../../../../function/file/json");
 const { BotConsole } = require("../../../../function/log/botConsole");
-const { securyty } = require("../../../../function/security/security");
+const { Security } = require("../../../../function/security/security");
 
 const setting = require("../../../../setting/settings.json")
 
@@ -15,9 +15,9 @@ module.exports = {
         erremb.init()
         let embedf = [erremb.notPermissionError, erremb.botUserError, erremb.selfUserError, erremb.highPermissionError, erremb.notInVoiceChannelError, erremb.musicAlreadyPlayingError]
         if (!interaction.isChatInputCommand()) return;
-        const command = client.comamndg.get(interaction.commandName)
+        const command = client.commandg.get(interaction.commandName)
         let json = new Cjson();
-        let security = new securyty(interaction, command)
+        let security = new Security(interaction, command)
 
         let jsonow = {}
         let jsonow0 = {}
@@ -25,17 +25,17 @@ module.exports = {
         await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[0], process.env.GITTOKEN).then((jsonowner) => { jsonow = jsonowner }).catch(() => { })
         await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonguild) => { jsonow0 = jsonguild }).catch(() => { })
 
-        promises.push(security.chekowner(jsonow.owner))
-        promises.push(security.checkisyou())
-        promises.push(security.chekisbot())
-        promises.push(security.checksowner())
-        promises.push(security.checkpermision())
-        promises.push(security.checkposition())
-        promises.push(security.checkpchannel(jsonow0["Anto's  Server"].channel.allowchannel))
+        promises.push(security.checkOwner(jsonow.owner))
+        promises.push(security.checkIsYou())
+        promises.push(security.checkIsBot())
+        promises.push(security.checkServerOwner())
+        promises.push(security.checkPermission())
+        promises.push(security.checkPosition())
+        promises.push(security.checkChannel(jsonow0["Anto's  Server"].channel.allowchannel))
 
 
         Promise.all(promises).then(() => {
-            security.allowcomand()
+            security.allowCommand()
                 .then((result) => {
                     try {
                         if (Array.isArray(result)) {

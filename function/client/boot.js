@@ -1,11 +1,11 @@
 
 const { WriteCommand } = require("../commands/WriteCommand");
 const { Loadothermodules } = require("../loadothermodule/loadothermodule");
-const { Info } = require("../log/bootlog");
+const { LogStartup } = require("../log/bootlog");
 const { BotConsole } = require("../log/botConsole");
 const { Time } = require("./../time/time")
 const { ClientInit } = require("./initclient");
-const { LoadEventsAndCommand } = require("./loadEventsAndCommand");
+const { LoadEventsAndCommand } = require("./LoadEventsAndCommand");
 require("dotenv").config()
 
 
@@ -19,7 +19,7 @@ class Boot {
                 try {
                     client.on('ready', async () => {
                         global.Timeon = new Date().getTime()
-                        new Info().log()
+                        new LogStartup().log()
                         await new WriteCommand().commandAllguildonstartup().then(() => {
                             new Loadothermodules().load()
                         })

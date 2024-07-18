@@ -3,7 +3,9 @@ const { BotConsole } = require("../log/botConsole");
 const setting = require("./../../setting/settings.json");
 
 class Check {
-    constructor() { }
+    constructor() {
+        this.BotConsole = new BotConsole();
+    }
 
     checkValArr(arr, value) {
         return new Promise((resolve, reject) => {
@@ -15,7 +17,7 @@ class Check {
                 });
                 return reject(-1);
             } catch {
-                new BotConsole().log("Errore, non ho potuto controllare nell'array", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare nell'array", "red");
                 reject(-1);
             }
         });
@@ -30,7 +32,7 @@ class Check {
                     }
                 }
             } catch {
-                new BotConsole().log("Errore, non ho potuto controllare nel JSON", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare nel JSON", "red");
                 reject(-1);
             }
         });
@@ -57,7 +59,7 @@ class Check {
                     reject(-1);
                 }
             } catch {
-                new BotConsole().log("Errore, non ho potuto controllare se è un bot", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare se è un bot", "red");
                 reject(-1);
             }
         });
@@ -71,8 +73,8 @@ class Check {
                 } else {
                     reject(-1);
                 }
-            } catch {
-                new BotConsole().log("Errore, non ho potuto controllare l'owner", "red");
+            } catch (err) {
+                this.BotConsole.log("Errore, non ho potuto controllare Server owner", "red");
                 reject(-1);
             }
         });
@@ -82,7 +84,7 @@ class Check {
         return new Promise(async (resolve, reject) => {
             try {
                 if (permission.length != 0) {
-                    if (client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == idUser).permissions.has(permission)) {
+                    if (client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == idUser).permisions.has(permission)) {
                         resolve(0);
                     } else {
                         reject(-1);
@@ -91,7 +93,7 @@ class Check {
                     reject(-1);
                 }
             } catch (err) {
-                new BotConsole().log("Errore, non ho potuto controllare i permessi", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare i permessi", "red");
                 reject(-1);
             }
         });
@@ -106,7 +108,7 @@ class Check {
                     reject(-1);
                 }
             } else {
-                new BotConsole().log("Errore, non ho potuto controllare se l'utente ha lo stesso id", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare se l'utente ha lo stesso id", "red");
                 reject(-1);
             }
         });
@@ -121,7 +123,7 @@ class Check {
                     reject(-1);
                 }
             } catch (err) {
-                new BotConsole().log("Errore, non ho potuto controllare la posizione", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare la posizione", "red");
                 reject(-1);
             }
         });
@@ -148,7 +150,7 @@ class Check {
                     reject(-1);
                 }
             } catch {
-                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare la variabile", "red");
                 reject(-1);
             }
         });
@@ -163,7 +165,7 @@ class Check {
                     reject(-1);
                 }
             } catch {
-                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare la variabile", "red");
                 reject(-1);
             }
         });
@@ -178,7 +180,7 @@ class Check {
                     reject(-1);
                 }
             } catch {
-                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare la variabile", "red");
                 reject(-1);
             }
         });
@@ -193,7 +195,7 @@ class Check {
                     reject(-1);
                 }
             } catch {
-                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare la variabile", "red");
                 reject(-1);
             }
         });
@@ -208,7 +210,7 @@ class Check {
                     reject(-1);
                 }
             } catch {
-                new BotConsole().log("Errore, non ho potuto controllare la variabile", "red");
+                this.BotConsole.log("Errore, non ho potuto controllare la variabile", "red");
                 reject(-1);
             }
         });

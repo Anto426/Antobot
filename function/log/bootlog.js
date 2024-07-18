@@ -2,7 +2,7 @@
 const packageI = require("./../../package.json");
 const Table = require('cli-table3');
 
-class Info {
+class LogStartup {
     constructor() {
         this.author = packageI.author.charAt(0).toUpperCase() + packageI.author.slice(1);
         this.discordJsVersion = packageI.dependencies["discord.js"];
@@ -14,7 +14,7 @@ class Info {
         this.gitToken = process.env.GIT_TOKEN;
         this.guildCount = client.guilds.cache.size;
         this.ramUsage = `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`;
-        this.inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=applications.commands+bot`
+        this.inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permisions=8&scope=applications.commands+bot`
 
 
     }
@@ -133,4 +133,4 @@ class Info {
     }
 
 }
-module.exports = { Info }
+module.exports = { LogStartup }

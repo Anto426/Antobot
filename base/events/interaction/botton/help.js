@@ -18,7 +18,7 @@ module.exports = {
                     let json = new Cjson()
                     json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
                         new BaseEmbed(interaction.guild, interaction.member).init().then((embedbase) => {
-                            const command = client.comamndg.get(interaction.values[0])
+                            const command = client.commandg.get(interaction.values[0])
                             embedbase
                                 .setTitle(`${jsonf.command[command.name].emoji}  ${command.name}`)
                                 .setColor(embedconfig.color.green)
@@ -73,7 +73,7 @@ module.exports = {
                         .setCustomId(`help-${interaction.member.id}`)
                         .setPlaceholder('Scegli un comando')
 
-                    client.comamndg.forEach(command => {
+                    client.commandg.forEach(command => {
                         if (command.see) {
                             list.push(new StringSelectMenuOptionBuilder()
                                 .setLabel(`${jsonf.command[command.name].emoji} ${command.data.name}`)

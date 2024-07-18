@@ -23,7 +23,7 @@ module.exports = {
             .setCustomId(`help-${interaction.member.id}`)
             .setPlaceholder('Scegli un comando')
 
-        client.comamndg.forEach(command => {
+        client.commandg.forEach(command => {
             if (command.see) {
                 list.push(new StringSelectMenuOptionBuilder()
                     .setLabel(`⚙️ ${command.data.name}`)

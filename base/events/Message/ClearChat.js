@@ -1,4 +1,4 @@
-const { CJson } = require("../../../function/file/json");
+const { Cjson } = require("../../../function/file/json");
 const { BotConsole } = require("../../../function/log/botConsole");
 const setting = require("../../../setting/settings.json");
 
@@ -8,9 +8,9 @@ module.exports = {
     typeEvent: "messageCreate",
     async execute(message) {
 
-        let json = new CJson();
+        let json = new Cjson();
 
-        json.jsonDependencyBufferOnly(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf) => {
+        json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf) => {
             jsonf['Anto\'s Server'].channel.allowchannel.forEach(x => {
                 try {
                     if (message.channel.id == x && !message.author.bot) {
@@ -20,7 +20,7 @@ module.exports = {
                 } catch (err) { new BotConsole().log("Errore non sono riuscito a cancellare il messaggio", "red"); }
 
             });
-        }).catch((err) => { });
+        }).catch(() => { });
 
 
     }

@@ -19,7 +19,13 @@ class BotConsole {
         } else if (Array.isArray(data)) {
             message = JSON.stringify(data);
         } else if (typeof data === 'object') {
-            message = JSON.stringify(data);
+            if (data instanceof Promise) {
+                message = await data;
+            } else {
+                message = JSON.stringify(data);
+            }
+        } else {
+            message = String(data);
         }
 
         return `${selectedColor}${message}${this.colors.reset}`;

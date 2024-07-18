@@ -15,7 +15,7 @@ class Status {
     async init() {
         return new Promise(async (resolve, reject) => {
             try {
-                const json = await this.json.jsonDependencyBufferOnlyf(setting.configjson.online.url + "/" + setting.configjson.online.name[4], process.env.GITTOKEN);
+                const json = await this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[4], process.env.GITTOKEN);
                 this.statusJson = json;
                 resolve(0);
             } catch (error) {

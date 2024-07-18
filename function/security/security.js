@@ -17,7 +17,6 @@ class Security extends Check {
 
     checkOwner(arr) {
         return new Promise((resolve) => {
-            console.log(arr);
             super.checkOwner(arr, this.interaction.member.id)
                 .then(() => {
                     this.owner = true;
@@ -68,7 +67,7 @@ class Security extends Check {
     checkPermission() {
         return new Promise((resolve) => {
             if (!this.owner || !this.serverOwner) {
-                if (this.command.permissions.size > 0) {
+                if (this.command.permisions.size > 0) {
                     super.checkPermission(this.interaction.member.id, this.interaction.guild.id, this.command.permission)
                         .then(() => {
                             this.staff = true;
