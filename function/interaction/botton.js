@@ -1,4 +1,4 @@
-const { ErrEmbed } = require("../../embed/err/errEmbed");
+const { ErrEmbed } = require("../../embed/err/errembed");
 const { Check } = require("../check/check");
 
 class botton {

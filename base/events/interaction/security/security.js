@@ -1,5 +1,5 @@
 
-const { ErrEmbed } = require("../../../../embed/err/errEmbed");
+const { ErrEmbed } = require("../../../../embed/err/errembed");
 const { Cjson } = require("../../../../function/file/json");
 const { BotConsole } = require("../../../../function/log/botConsole");
 const { Security } = require("../../../../function/security/security");
