@@ -5,7 +5,7 @@ const { LogStartup } = require("../log/bootlog");
 const { BotConsole } = require("../log/botConsole");
 const { Time } = require("./../time/time")
 const { ClientInit } = require("./initclient");
-const { LoadEventsAndCommand } = require("./LoadEventsAndCommand");
+const { LoadEventsAndCommand } = require("./loadmodule");
 require("dotenv").config()
 
 
