@@ -39,15 +39,17 @@ class Holiday {
                 }
 
             } catch { 
-                reject(-1) }
+                reject(-1) 
+            }
         })
 
     }
 
     async updateChannel(channelCount, id) {
         try {
-            if (this.Time.formatTimeDayscale(this.Time.getTimestampByInput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp() > 0)) {
+            if ((this.Time.formatTimeDayscale(this.Time.getTimestampByInput(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp()) > 0)) {
                 let Time = `${this.Time.formatTimeDayscale(this.Time.getCurrentTimestamp(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp())}`
+                
                 channelCount.setName(Time.toString()).catch(() => { new BotConsole().log("Non ho potuto aggiornare il conteggio della festa", "red") })
             } else {
                 this.sendCongratulations(id)
@@ -58,7 +60,7 @@ class Holiday {
     }
 
     async sendCongratulations(id) {
-        if (this.Time.formatTimeDayscale(this.Time.getTimestampByInput(this.nextHoliday.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp()) <= 0) {
+        if (this.Time.formatTimeDayscale(this.Time.getTimestampByInput(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp()) <= 0) {
             clearInterval(id)
             this.main()
         }
@@ -74,7 +76,6 @@ class Holiday {
 
     main() {
         try {
-            console.log(this.guildJson["Anto's  Server"].id)
             const guild = client.guilds.cache.find(x => x.id == this.guildJson["Anto's  Server"].id)
             const channelcount = guild.channels.cache.find(x => x.id == this.guildJson["Anto's  Server"].channel.hollyday.count)
             const channelname = guild.channels.cache.find(x => x.id == this.guildJson["Anto's  Server"].channel.hollyday.name)
