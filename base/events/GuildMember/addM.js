@@ -13,7 +13,7 @@ module.exports = {
         embedMsg.init().then(async () => {
             let json = new Cjson();
             if (!member.user.bot) {
-                await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmembers).then(async (jsonf) => {
+                await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then(async (jsonf) => {
                     if (jsonf[member.guild.id][member.id]) {
                         let listrole = [];
                         jsonf[member.guild.id][member.id].roles.forEach(element => {
@@ -38,8 +38,8 @@ module.exports = {
                     } else {
 
                         let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
-                        json.jsonDependencyBufferOnly(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
-                            let embedmsg = new eventbembed(member.guild)
+                        json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
+                            let embedmsg = new EventEmbed(member.guild)
                             embedmsg.init().then(async () => {
                                 let send = await embedmsg.welcome(member, humans.size).catch(() => { })
                                 member.guild.channels.cache.find(x => x.id === jsonf0[member.guild.name].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] });
