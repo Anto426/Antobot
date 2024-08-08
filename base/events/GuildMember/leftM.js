@@ -11,7 +11,7 @@ module.exports = {
 
         if (member.user.bot) return;
         let json = new Cjson();
-        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmembers).then((jsonf) => {
+        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then((jsonf) => {
 
             if (!jsonf[member.guild.id]) {
                 jsonf[member.guild.id] = {};

@@ -30,7 +30,7 @@
     "var": {
         "status": true,
         "captcha": false,
-        "hollyday": true,
+        "holiday": true,
         "opeanai": {
             "active": true,
             "model": "gpt-turbo-3.5"

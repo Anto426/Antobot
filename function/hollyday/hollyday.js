@@ -1,9 +1,7 @@
-
-const { Cjson } = require("../file/json");
 const { Time } = require("../time/time");
 const { BotConsole } = require("../log/botConsole");
-
 const setting = require("../../setting/settings.json");
+const { Cjson } = require("../file/json");
 class Holiday {
 
     constructor() {
@@ -17,8 +15,8 @@ class Holiday {
 
     async init() {
         return new Promise(async (resolve, reject) => {
-            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guildJson = json }).catch((err) => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
-            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN).then((json) => { this.holidayJson = json }).catch((err) => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
+            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guildJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
+            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN).then((json) => { this.holidayJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
             resolve(0);
         })
 
@@ -39,7 +37,9 @@ class Holiday {
                     this.year += 1;
                     resolve(await this.calculateNextHoliday())
                 }
-            } catch { reject(-1) }
+
+            } catch(err) { 
+                reject(-1) }
 
         })
 
@@ -86,7 +86,7 @@ class Holiday {
                 this.Timer(channelcount)
             }).catch(() => { })
 
-        } catch (err) { new BotConsole().log(err, "red") }
+        } catch  {  }
     }
 }
 
