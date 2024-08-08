@@ -47,9 +47,9 @@ class Holiday {
 
     async updateChannel(channelCount, id) {
         try {
-            if ((this.Time.formatTimeDayscale(this.Time.getTimestampByInput(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp()) > 0)) {
-                let Time = `${this.Time.formatTimeDayscale(this.Time.getCurrentTimestamp(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp())}`
-                
+            let timereamining = this.Time.getTimestampByInput(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp()
+            if (timereamining > 0) {
+                let Time = `${this.Time.formatTimeDayscale(timereamining)}`
                 channelCount.setName(Time.toString()).catch(() => { new BotConsole().log("Non ho potuto aggiornare il conteggio della festa", "red") })
             } else {
                 this.sendCongratulations(id)
@@ -70,8 +70,6 @@ class Holiday {
         const id = setInterval(() => {
             this.updateChannel(channelcount, id)
         }, 5000 * 60)
-
-
     }
 
     main() {
