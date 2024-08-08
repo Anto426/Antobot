@@ -15,7 +15,7 @@ class Holiday {
 
     async init() {
         return new Promise(async (resolve, reject) => {
-            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guildJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
+            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guildJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return  reject(-1) })
             await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN).then((json) => { this.holidayJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
             resolve(0);
         })
@@ -27,7 +27,7 @@ class Holiday {
 
         return new Promise(async (resolve, reject) => {
             try {
-                this.nextHoliday = this.hollydayjson.holidays.find(holy => {
+                this.nextHoliday = this.holidayJson.holidays.find(holy => {
                     return this.Time.getTimestampByInput(this.year, holy.date.mouth, holy.date.day) > this.Time.getCurrentTimestamp();
                 });
 
@@ -38,9 +38,8 @@ class Holiday {
                     resolve(await this.calculateNextHoliday())
                 }
 
-            } catch(err) { 
+            } catch { 
                 reject(-1) }
-
         })
 
     }
@@ -75,9 +74,10 @@ class Holiday {
 
     main() {
         try {
-            const guild = client.guilds.cache.find(x => x.id == this.guiljson["Anto's  Server"].id)
-            const channelcount = guild.channels.cache.find(x => x.id == this.guiljson["Anto's  Server"].channel.hollyday.count)
-            const channelname = guild.channels.cache.find(x => x.id == this.guiljson["Anto's  Server"].channel.hollyday.name)
+            console.log(this.guildJson["Anto's  Server"].id)
+            const guild = client.guilds.cache.find(x => x.id == this.guildJson["Anto's  Server"].id)
+            const channelcount = guild.channels.cache.find(x => x.id == this.guildJson["Anto's  Server"].channel.hollyday.count)
+            const channelname = guild.channels.cache.find(x => x.id == this.guildJson["Anto's  Server"].channel.hollyday.name)
             this.calculateNextHoliday().then(() => {
                 if (!guild || !channelname || !channelcount || !this.nextHoliday) return
                 new BotConsole().log("Nuova festa trovata:" + this.nextHoliday.name + " in data:" + this.nextHoliday.date.day + "/" + (this.nextHoliday.date.mouth + 1) + "/" + this.year)
@@ -86,7 +86,7 @@ class Holiday {
                 this.Timer(channelcount)
             }).catch(() => { })
 
-        } catch  {  }
+        } catch(err) {  }
     }
 }
 
