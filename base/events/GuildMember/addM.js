@@ -42,11 +42,11 @@ module.exports = {
                             let embedmsg = new eventbembed(member.guild)
                             embedmsg.init().then(async () => {
                                 let send = await embedmsg.welcome(member, humans.size).catch(() => { })
-                                member.guild.channels.cache.find(x => x.id === jsonf0[mamber.guild.name].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] });
+                                member.guild.channels.cache.find(x => x.id === jsonf0[member.guild.name].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] });
 
                             }).catch(() => { })
                             try {
-                                member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[mamber.guild.name].role.user));
+                                member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[member.guild.name].role.user));
                             } catch { }
 
                         })
@@ -61,7 +61,7 @@ module.exports = {
 
                 try {
                     json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
-                        member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[mamber.guild.name].role.bot));
+                        member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[member.guild.name].role.bot));
                     })
                 } catch (err) {
                     new BotConsole().log(err, "red");
