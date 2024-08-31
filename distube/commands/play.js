@@ -39,7 +39,9 @@ module.exports = {
                         let currentTrack = queue.songs[queue.songs.length - 1];
                         interaction.reply({
                             embeds: [embedmsg.play(currentTrack)]
-                        });
+                        }).catch((err) => {
+                            console.error(err);
+                        })
                     }).catch((err) => {
                         console.error(err);
                     })
