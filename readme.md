@@ -1,4 +1,4 @@
-# 💻 Changelog per Anto's Bot v 6.1.0 (Beta 1) 
+# 💻 Changelog per Anto's Bot v 6.1.0 (Beta 2) 
 
 - ⚙️ Migliorato il metodo di avvio per ottimizzare le prestazioni.🟩
 - 🛠️ Ottimizzato il modulo di caricamento dei comandi e degli eventi per una gestione più efficiente.🟩
