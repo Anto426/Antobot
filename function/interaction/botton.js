@@ -13,7 +13,7 @@ class botton {
             }).catch(() => {
                 let embed = new ErrEmbed(interaction.guild, interaction.member)
                 embed.init().then(() => {
-                    interaction.reply({ embeds: [embed.errYourBotton()], ephemeral: true })
+                    interaction.reply({ embeds: [embed.wrongButtonError()], ephemeral: true })
                 })
                 reject(-1)
             })
