@@ -36,7 +36,7 @@ module.exports = {
                         message: songQuery.name
                     }).then(() => {
                         let queue = distube.getQueue(interaction.guildId);
-                        let currentTrack = queue.songs[0];
+                        let currentTrack = queue.songs[queue.songs.length - 1];
                         interaction.reply({
                             embeds: [embedmsg.play(currentTrack)]
                         });
