@@ -2,8 +2,6 @@ const { Cjson } = require("../../../function/file/json");
 const { BotConsole } = require("../../../function/log/botConsole");
 const setting = require("../../../setting/settings.json")
 
-
-
 module.exports = {
     name: "LeftM",
     typeEvent: "guildMemberRemove",
@@ -22,7 +20,7 @@ module.exports = {
             }
 
             jsonf[member.guild.id][member.id].roles = Array.from(member.roles.cache).map(role => role[1].id);
-            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmembers, jsonf).catch(() => { });
+            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsonf).catch(() => { });
 
         }).catch((err) => {
             new BotConsole().log(err);
@@ -34,7 +32,7 @@ module.exports = {
                 }
             };
 
-            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmembers, jsons).catch((err) => { new BotConsole().log(err, "red"); });
+            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch((err) => { new BotConsole().log(err, "red"); });
         });
 
     }
