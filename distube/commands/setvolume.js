@@ -26,16 +26,14 @@ module.exports = {
 
 
         let queue = distube.getQueue(interaction)
-        let volume = interaction.options.getInteger("volume")
-
+        let temp = interaction.options.getInteger("volume")
+        let volume = (temp < 100 ? (temp ? temp : 0) : 100)
 
         try {
 
             if (queue) {
                 let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    volume = min(100, volume)
-                    volume = max(0, volume)
                     queue.setVolume(volume);
                     interaction.reply({ embeds: [embedmsg.volume(volume)] })
                 }).catch((err) => { console.log(err); })
