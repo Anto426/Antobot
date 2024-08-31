@@ -47,6 +47,13 @@ class CommandEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.stop)
     }
 
+    volume(volume) {
+        return this.embed
+            .setTitle("🔊 Volume")
+            .setDescription(`Il volume è stato impostato a ${volume}`)
+            .setThumbnail(embedconfig.image.volume)
+    }
+
 
 }
 
