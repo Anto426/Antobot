@@ -28,20 +28,18 @@ module.exports = {
             const embedmsg = new CommandEmbed(interaction.guild, interaction.member);
             let songQuery = interaction.options.getString("song");
 
+
             embedmsg.init()
                 .then(async () => {
+
                     distube.play(channels[0] || channels[1], songQuery, {
                         member: interaction.member,
                         textChannel: interaction.channel,
                         message: songQuery.name
-                    }).then(() => {
-                        let queue = distube.getQueue(interaction.guildId);
-                        let currentTrack = queue.songs[queue.songs.length - 1];
-                        interaction.reply({
-                            embeds: [embedmsg.play(currentTrack)]
-                        }).catch((err) => {
-                            console.error(err);
-                        })
+                    })
+                    
+                    interaction.reply({
+                        embeds: [embedmsg.play()]
                     }).catch((err) => {
                         console.error(err);
                     })

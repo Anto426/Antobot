@@ -73,24 +73,19 @@ class ClientInit {
                 this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[7], process.env.GITTOKEN)
                     .then((cookies) => {
                         global.distube = new DisTube(client, {
-                            leaveOnStop: true,
-                            emitNewSongOnly: true,
-                            emitAddSongWhenCreatingQueue: false,
-                            emitAddListWhenCreatingQueue: false,
+                            emitNewSongOnly: true, // Emissione solo della nuova canzone
+                            emitAddSongWhenCreatingQueue: false, // Non emettere l'aggiunta di una canzone quando si crea una coda
+                            emitAddListWhenCreatingQueue: false, // Non emettere l'aggiunta di una lista quando si crea una coda
                             plugins: [
-                                new SpotifyPlugin({
-                                    emitEventsAfterFetching: true
+                                new SoundCloudPlugin(), // Plugin di SoundCloud
+                                new YtDlpPlugin({
+                                    cookies: [
+                                        {
+                                            cookies: cookies.youtube, 
+                                        }
+                                    ]
                                 }),
-                                new SoundCloudPlugin(),
-                                new YtDlpPlugin(
-                                    {
-                                        cookies: [
-                                            {
-                                                cookies: cookies.youtube,
-                                            }
-                                        ]
-                                    }
-                                )
+                                new SpotifyPlugin() 
                             ],
                             customFilters: {
                                 'bassboost': 'bass=g=10',
@@ -112,17 +107,12 @@ class ClientInit {
                                 'haas': 'haas',
                                 'mcompand': 'mcompand',
                                 'earwax': 'earwax',
-                            },
-                            ytdlOptions: {
-                                quality: 'highestaudio',
-                                highWaterMark: 1 << 25,
-                                filter: 'audioonly',
-                            },
-                        })
+                            }
+                        });
                         new BotConsole().log("Client di Distube inzializato con successo", "green");
                         resolve(0)
 
-                    }).catch(() => { new BotConsole().log("Errore variabile json non caricata", "red") });
+                    }).catch((err) => { console.log(err); new BotConsole().log("Errore variabile json non caricata", "red") });
             } catch (err) {
                 new BotConsole().log("Errore nel inizializare il client di Distube", "red");
                 reject(err);

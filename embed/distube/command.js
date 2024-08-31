@@ -11,18 +11,11 @@ class CommandEmbed extends BaseEmbed {
         });
     }
 
-    play(song) {
+    play() {
         return this.embed
             .setTitle("🎵 Tracia Aggiunta alla coda")
-            .addFields(
-                { name: '🎶 Name', value: song.name.toString(), inline: true },
-                { name: '🔗 URL Song', value: `[Clicca qui](${song.url.toString()})`, inline: true },
-                { name: '⌚ Duration', value: song.formattedDuration.toString(), inline: true },
-                { name: '👁️ Views', value: song.views.toString(), inline: true },
-                { name: '🧑‍🎨 Artist', value: song.uploader.name.toString(), inline: true },
-                { name: '🔗 URL Artist', value: `[Clicca qui](${song.uploader.url.toString()})`, inline: true }
-            )
-            .setThumbnail(song.thumbnail)
+            .setDescription("La canzone è stata aggiunta alla coda con successo!")
+            .setThumbnail(embedconfig.image.songadd)
     }
 
     repeat(mode) {
