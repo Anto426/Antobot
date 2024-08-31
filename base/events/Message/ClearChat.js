@@ -11,7 +11,7 @@ module.exports = {
         let json = new Cjson();
 
         json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf) => {
-            jsonf['Anto\'s Server'].channel.allowchannel.forEach(x => {
+            jsonf[message.guild].channel.allowchannel.forEach(x => {
                 try {
                     if (message.channel.id == x && !message.author.bot) {
                         message.delete().catch(() => { });
