@@ -47,7 +47,8 @@
                 "hollyday.json",
                 "status.json",
                 "embed.json",
-                "description.json"
+                "description.json",
+                "cookies.json"
             ]
         }
     }
