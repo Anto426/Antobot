@@ -1,5 +1,4 @@
 const { Cjson } = require("../../../function/file/json");
-const { BotConsole } = require("../../../function/log/botConsole");
 
 const setting = require("../../../setting/settings.json")
 module.exports = {
@@ -7,7 +6,6 @@ module.exports = {
     typeEvent: "voiceStateUpdate",
     async execute(oldMember, newMember) {
         if (!newMember.member.user.bot) {
-            let botConsole = new BotConsole();
             let json = new Cjson;
             await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then(async (jsonGuild) => {
 
