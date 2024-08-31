@@ -87,6 +87,13 @@ class ErrEmbed extends BaseEmbed {
             .setDescription("Non posso saltare questa traccia")
             .setThumbnail(embedconfig.image.genericerr)
     }
+
+    playlistError() {
+        return this.embed
+            .setTitle("🎶 Playlist non supportata")
+            .setDescription("Non posso riprodurre playlist")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
 }
 
 

@@ -26,14 +26,64 @@ module.exports = {
 
         try {
             const embedmsg = new CommandEmbed(interaction.guild, interaction.member);
-            let song = interaction.options.getString("song")
-            const results = await distube.search(song, { limit: 5 })
+            let songQuery = interaction.options.getString("song")
+            let searchQuery = songQuery;
+            let results = undefined;
+
+
+            if (songQuery.includes('youtube.com') || songQuery.includes('youtu.be')) {
+                if (songQuery.includes('list=')) {
+                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
+                    embedmsg.init().then(() => {
+                        console.log('Ignoring YouTube playlist link');
+                        interaction.reply({ embeds: [embedmsg.playlistError()], ephemeral: true });
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                    return;
+                }
+
+                const urlPattern = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+                const match = songQuery.match(urlPattern);
+                if (match) {
+                    searchQuery = match[1];
+                }
+
+            } else if (songQuery.includes('spotify.com')) {
+                const trackRegex = /(?:https?:\/\/)?(?:www\.)?open\.spotify\.com\/track\/([a-zA-Z0-9]{22})/;
+
+
+                let match = songQuery.match(trackRegex);
+
+                if (match) {
+                    results = spotifyApi.getTrack(match[1]);
+                } else {
+                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
+                    embedmsg.init().then(() => {
+                        console.log('Ignoring spotify playlist link');
+                        interaction.reply({ embeds: [embedmsg.playlistError()], ephemeral: true });
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                    return;
+                }
+
+
+
+            }
+
+
+
+            //TODO: Add more checks for other platforms
+
+
+
             embedmsg.init()
                 .then(async () => {
-                    distube.play(channels[0] || channels[1], song, {
+                    distube.play(channels[0] || channels[1], songQuery, {
                         member: interaction.member,
                         textChannel: interaction.channel,
-                        message: song.name
+                        message: songQuery.name
                     })
 
                     interaction.reply({
