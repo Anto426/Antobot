@@ -1,9 +1,12 @@
+const { CommandEmbed } = require("../../embed/distube/command")
+const { ErrEmbed } = require("../../embed/err/errembed")
+
 module.exports = {
     name: "repeat",
     permisions: [],
     allowedchannels: true,
     position: false,
-    test: true,
+    test: false,
     see: true,
     disTube: {
         checkchannel: true,
@@ -29,10 +32,26 @@ module.exports = {
             },]
         }]
     },
-    async execute(interaction, channels) {
+    async execute(interaction) {
+
+
+        let queue = distube.getQueue(interaction)
+        let mode = interaction.options.getString("mode")
 
         try {
 
+            if (queue) {
+                let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    queue.setRepeatMode(parseInt(mode))
+                    interaction.reply({ embeds: [embedmsg.repeat(mode)] })
+                }).catch((err) => { console.log(err); })
+            } else {
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.listtrackError()], ephemeral: true })
+                }).catch(() => { })
+            }
 
         } catch (error) {
             console.error(error);

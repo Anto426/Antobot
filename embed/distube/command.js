@@ -5,17 +5,49 @@ class CommandEmbed extends BaseEmbed {
         super(guild, member);
     }
 
-    initialize() {
+    init() {
         return new Promise((resolve, reject) => {
-            super.initialize().then((embed) => { this.embed = embed; this.embed.setColor(embedconfig.color.purple); resolve(0); }).catch(() => { reject(-1); });
+            super.init().then((embed) => { this.embed = embed; this.embed.setColor(embedconfig.color.purple); resolve(0); }).catch(() => { reject(-1); });
         });
     }
 
-    play() {
+    play(song) {
         return this.embed
-            .setDescription("PROVA")
-            .setTitle("PROVA");
+            .setTitle("🎵 Tracia Aggiunta alla coda")
+            .addFields(
+                { name: '🎶 Name', value: song.name.toString(), inline: true },
+                { name: '🔗 URL Song', value: `[Clicca qui](${song.url.toString()})`, inline: true },
+                { name: '⌚ Duration', value: song.formattedDuration.toString(), inline: true },
+                { name: '👁️ Views', value: song.views.toString(), inline: true },
+                { name: '🧑‍🎨 Artist', value: song.uploader.name.toString(), inline: true },
+                { name: '🔗 URL Artist', value: `[Clicca qui](${song.uploader.url.toString()})`, inline: true }
+            )
+            .setThumbnail(song.thumbnail)
     }
+
+    repeat(mode) {
+        return this.embed
+            .setTitle("🔁 Ripetizione")
+            .setDescription("Il modo di ripetizione è stato cambiato con successo!")
+            .addFields([{ name: "Stato", value: (mode ? (mode === 2 ? 'Repeat queue' : 'Repeat song') : "off"), inline: true }])
+            .setThumbnail(embedconfig.image.repeat)
+    }
+
+    skip() {
+        return this.embed
+            .setTitle("⏭️ Skip")
+            .setDescription("La canzone è stata saltata con successo!")
+            .setThumbnail(embedconfig.image.skip)
+    }
+
+    stop() {
+        return this.embed
+            .setTitle("⏹️ Stop")
+            .setDescription("La coda e stata pulita con successo!")
+            .setThumbnail(embedconfig.image.stop)
+    }
+
+
 }
 
 module.exports = { CommandEmbed };

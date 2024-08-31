@@ -66,6 +66,27 @@ class ErrEmbed extends BaseEmbed {
             .setDescription("Sto gia riproducendo un brano per qualc'altro")
             .setThumbnail(embedconfig.image.notpermission)
     }
+
+    nottrackfoundError() {
+        return this.embed
+            .setTitle("🎵 Traccia non trovata🎵")
+            .setDescription("Non ho trovato nessuna traccia con quel nome")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    listtrackError() {
+        return this.embed
+            .setTitle("🎵 Lista vuota🎵")
+            .setDescription("La lista è vuota")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    notrakskipableError() {
+        return this.embed
+            .setTitle("🎶 Non sono presenti ulteriori tracce")
+            .setDescription("Non posso saltare questa traccia")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
 }
 
 

@@ -89,7 +89,7 @@ class LoadEventsAndCommand {
         this.load("distubeevents", process.env.dirbot + setting.distube.events)
             .then(() => {
                 client.distubeevents.forEach(x => {
-                    distube.on(x.eventType, (...args) => {
+                    distube.on(x.typeEvent, (...args) => {
                         x.execute(...args)
                     });
                 });

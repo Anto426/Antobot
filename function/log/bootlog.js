@@ -106,7 +106,6 @@ class LogStartup {
             });
 
 
-            //push element 
             client.distubecommands.forEach(element => {
                 DistubeGeneralTable.push(["Name:" + element.name, "Description:" + element.data.description])
             });

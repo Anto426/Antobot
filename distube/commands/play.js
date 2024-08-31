@@ -1,11 +1,12 @@
-const { CommandEmbed } = require("../../embed/distube/command")
+const { CommandEmbed } = require("../../embed/distube/command");
+const { ErrEmbed } = require("../../embed/err/errembed");
 
 module.exports = {
     name: "play",
     permisions: [],
     allowedchannels: true,
     position: false,
-    test: true,
+    test: false,
     see: true,
     disTube: {
         checkchannel: true,
@@ -24,22 +25,33 @@ module.exports = {
     async execute(interaction, channels) {
 
         try {
-            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+            const embedmsg = new CommandEmbed(interaction.guild, interaction.member);
             let song = interaction.options.getString("song")
+            const results = await distube.search(song, { limit: 5 })
             embedmsg.init()
                 .then(async () => {
-                    await distube.play(channels[0] || channels[1], song, {
+                    distube.play(channels[0] || channels[1], song, {
                         member: interaction.member,
                         textChannel: interaction.channel,
                         message: song.name
                     })
-                    interaction.reply({ embeds: [embedmsg.play()] })
-                }).catch((error) => { console.log(error) })
 
-        } catch {
+                    interaction.reply({
+                        embeds: [embedmsg.play(results[0])]
+                    });
+                })
+
+        } catch (error) {
+            const embedmsg = new ErrEmbed(interaction.guild, interaction.member);
+            console.error('Error playing the song:', error);
+            embedmsg.init()
+                .then(() => {
+                    interaction.reply({ embeds: [embedmsg.nottrackfoundError()], ephemeral: true })
+                }
+                ).catch((err) => {
+                    console.log(err);
+                })
         }
-
-
-
     }
+
 }
