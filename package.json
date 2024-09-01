@@ -12,6 +12,7 @@
   "dependencies": {
     "@discordjs/voice": "^0.17.0",
     "@distube/deezer": "^2.0.1",
+    "@distube/direct-link": "^1.0.1",
     "@distube/soundcloud": "^2.0.3",
     "@distube/spotify": "^2.0.2",
     "@distube/yt-dlp": "^2.0.1",
@@ -25,6 +26,7 @@
     "dotenv": "^16.4.5",
     "libsodium-wrappers": "^0.7.15",
     "openai": "^4.57.0",
-    "opusscript": "^0.1.1"
+    "opusscript": "^0.1.1",
+    "sodium-native": "^4.1.1"
   }
 }

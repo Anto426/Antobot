@@ -5,11 +5,13 @@ const { Client, Partials } = require('discord.js');
 const { DisTube } = require("distube")
 const { SpotifyPlugin } = require("@distube/spotify")
 const { SoundCloudPlugin } = require("@distube/soundcloud")
-const { YtDlpPlugin } = require('@distube/yt-dlp');
+const { YtDlpPlugin } = require("@distube/yt-dlp");
 const { Check } = require('../check/check');
 const { Cjson } = require('../file/json');
 const setting = require("./../../setting/settings.json");
 const { BotConsole } = require('../log/botConsole');
+const { default: DeezerPlugin } = require('@distube/deezer');
+const { DirectLinkPlugin } = require('@distube/direct-link');
 
 class ClientInit {
 
@@ -72,20 +74,20 @@ class ClientInit {
             try {
                 this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[7], process.env.GITTOKEN)
                     .then((cookies) => {
+                        
                         global.distube = new DisTube(client, {
                             emitNewSongOnly: true,
-                            emitAddSongWhenCreatingQueue: true,
-                            emitAddListWhenCreatingQueue: true,
+                            emitAddSongWhenCreatingQueue: false,
+                            emitAddListWhenCreatingQueue: false,
                             plugins: [
-                                new SoundCloudPlugin(),
                                 new YtDlpPlugin({
-                                    cookies: [
-                                        {
-                                            cookies: cookies.youtube,
-                                        }
-                                    ]
+                                    updateYouTubeDL: true,
+                                    cookies: cookies.youtube
                                 }),
-                                new SpotifyPlugin()
+                                new SoundCloudPlugin(),
+                                new SpotifyPlugin(),
+                                new DeezerPlugin(),
+                                new DirectLinkPlugin()
                             ],
                             customFilters: {
                                 'bassboost': 'bass=g=10',
