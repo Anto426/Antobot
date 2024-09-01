@@ -41,22 +41,13 @@ module.exports = {
 
         let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
         embedmsg.init().then(() => {
-            queue.setRepeatMode(parseInt(mode)).then(() => {
-                interaction.reply({ embeds: [embedmsg.repeat(mode)] })
-            }).catch((err) => {
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notrepeatError()], ephemeral: true })
-                }).catch((err) => {
-                    console.error(err);
-                })
-
-            })
+            queue.setRepeatMode(parseInt(mode))
+            interaction.reply({ embeds: [embedmsg.repeat(mode)] })
         }).catch((err) => {
             console.error(err);
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.notrepeatError()], ephemeral: true })
             }).catch((err) => {
                 console.error(err);
             })
