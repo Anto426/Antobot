@@ -160,6 +160,45 @@ class comandbembed extends BaseEmbed {
     }
 
 
+    userinfo(user) {
+        return this.embed
+            .setTitle("👤 User Info")
+            .setDescription(`Ecco le informazioni di ${user.username}`)
+            .addFields(
+                {
+                    name: "📛 Tag",
+                    value: user.tag,
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: user.id,
+                    inline: true
+                },
+                {
+                    name: "📅 Creazione",
+                    value: user.createdAt.toDateString(),
+                    inline: true
+                },
+                {
+                    name: "🤖 Bot",
+                    value: user.bot,
+                    inline: true
+                },
+                {
+                    name: "📅 Entrato",
+                    value: user.joinedAt.toDateString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+    }
+
+
 
 
 
