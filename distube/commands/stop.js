@@ -31,7 +31,15 @@ module.exports = {
                     console.error(err);
                 })
             })
-        }).catch((err) => { console.log(err); })
+        }).catch((err) => {
+            console.error(err);
+            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+            embedmsg.init().then(() => {
+                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+            }).catch((err) => {
+                console.error(err);
+            })
+        })
 
     }
 }

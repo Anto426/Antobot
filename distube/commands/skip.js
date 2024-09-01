@@ -33,7 +33,7 @@ module.exports = {
                 distube.skip(interaction)
                 interaction.reply({ embeds: [embedmsg.skip()] })
             }).catch((err) => { console.log(err); })
-
+            
         }
 
     }
