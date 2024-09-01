@@ -138,17 +138,15 @@ class Security extends Check {
         return new Promise((resolve, reject) => {
             try {
 
-                let result = [this.interaction.member.voice.channel, this.interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(this.interaction.user.id))];
-
+                let result = [this.interaction.member.voice.channel, this.interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(client.user.id))];
+                
                 if (this.command.disTube.checkchannel) {
                     if (!result[0]) {
-
                         result = 4;
-                    }
-
-                    if (result[1] && result[0].id != result[1].id) {
-
-                        result = 5;
+                    } else {
+                        if (result[1] && result[0].id != result[1].id) {
+                            result = 5;
+                        }
                     }
                 }
                 if (this.command.disTube.checklisttrack) {
