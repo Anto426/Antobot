@@ -167,12 +167,12 @@ class comandbembed extends BaseEmbed {
             .addFields(
                 {
                     name: "📛 Tag",
-                    value: user.tag,
+                    value: user.tag.toString(),
                     inline: true
                 },
                 {
                     name: "🆔 ID",
-                    value: user.id,
+                    value: user.id.toString(),
                     inline: true
                 },
                 {
@@ -182,7 +182,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "🤖 Bot",
-                    value: user.bot,
+                    value: user.bot ? "Si" : "No",
                     inline: true
                 },
                 {
@@ -206,12 +206,12 @@ class comandbembed extends BaseEmbed {
             .addFields(
                 {
                     name: "📛 Tag",
-                    value: client.user.tag,
+                    value: client.user.tag.toString(),
                     inline: true
                 },
                 {
                     name: "🆔 ID",
-                    value: client.user.id,
+                    value: client.user.id.toString(),
                     inline: true
                 },
                 {
@@ -221,12 +221,12 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "🤖 Bot",
-                    value: client.user.bot,
+                    value: client.user.bot ? "Si" : "No",
                     inline: true
                 },
                 {
                     name: "Repo Github",
-                    value: `[Clicca qui](${packagejson.repository.url})`,
+                    value: `[Clicca qui](${packagejson.repository.url.toString()})`,
                     inline: true
                 },
             )
