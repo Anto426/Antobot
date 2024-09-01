@@ -78,10 +78,8 @@ class ClientInit {
                         global.distube = new DisTube(client, {
                             emitNewSongOnly: false,
                             emitAddSongWhenCreatingQueue: false,
-                            emitAddListWhenCreatingQueue: false,
-                            leaveOnEmpty: true,
-                            leaveOnFinish: false,
-                            
+
+
                             plugins: [
                                 new YtDlpPlugin({
                                     update: true,
