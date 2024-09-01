@@ -76,9 +76,12 @@ class ClientInit {
                     .then((cookies) => {
 
                         global.distube = new DisTube(client, {
-                            emitNewSongOnly: true,
+                            emitNewSongOnly: false,
                             emitAddSongWhenCreatingQueue: false,
                             emitAddListWhenCreatingQueue: false,
+                            leaveOnEmpty: true,
+                            leaveOnFinish: false,
+                            
                             plugins: [
                                 new YtDlpPlugin({
                                     update: true,
