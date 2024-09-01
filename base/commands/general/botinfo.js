@@ -7,7 +7,7 @@ module.exports = {
     OnlyOwner: false,
     position: false,
     test: false,
-    see: false,
+    see: true,
     data: {
         name: "botinfo",
         description: "ritorna le informazioni del bot"
