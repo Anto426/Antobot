@@ -160,8 +160,6 @@ class comandbembed extends BaseEmbed {
 
 
     userinfo(member) {
-
-
         return this.embed
             .setTitle("👤 User Info")
             .setDescription(`Ecco le informazioni di ${(member.user.globalName ? member.user.globalName : member.user.tag)}`)
@@ -189,11 +187,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🤖 Bot",
                     value: member.user.bot ? "Si" : "No",
-                    inline: true
-                },
-                {
-                    name: "🏆 Nitro",
-                    value: member.premiumSince ? "Si" : "No",
                     inline: true
                 },
                 {
