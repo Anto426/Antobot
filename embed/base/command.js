@@ -238,6 +238,21 @@ class comandbembed extends BaseEmbed {
     }
 
 
+    userbanner(user) {
+        return this.embed
+            .setTitle("🖼️ Banner")
+            .setDescription(`Ecco il banner di ${user.username}`)
+            .setImage(user.bannerURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+            .setThumbnail(user.guild.iconURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+    }
 
 
 
