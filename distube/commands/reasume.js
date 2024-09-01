@@ -19,7 +19,7 @@ module.exports = {
     async execute(interaction) {
 
 
-        let queue = interaction.client.distube.getQueue(interaction.guildId)
+        let queue = distube.getQueue(interaction.guildId)
         let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
 
         embedmsg.init()
