@@ -137,29 +137,33 @@ class Security extends Check {
     checkDistube() {
         return new Promise((resolve, reject) => {
             try {
+
                 let result = [this.interaction.member.voice.channel, this.interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(this.interaction.user.id))];
-                if (this.command.distube) {
-                    if (this.command.distube.checkChannel) {
-                        if (!result[0]) {
-                            result = 4;
-                        }
-                        if (result[1] && result[0].id != result[1].id) {
-                            result = 5;
-                        }
+
+                if (this.command.disTube.checkchannel) {
+                    if (!result[0]) {
+
+                        result = 4;
                     }
-                    if (this.command.distube.checkListTrack) {
-                        if (!this.interaction.options.getString("song")) {
-                            result = 6;
-                        }
-                    }
-                } else {
-                    if (Array.isArray(result)) {
-                        resolve(result);
-                    } else {
-                        reject(result);
+
+                    if (result[1] && result[0].id != result[1].id) {
+
+                        result = 5;
                     }
                 }
-            } catch {
+                if (this.command.disTube.checklisttrack) {
+                    if (!this.interaction.options.getString("song")) {
+                        result = 6;
+                    }
+                }
+                if (Array.isArray(result)) {
+                    resolve(result);
+                } else {
+                    reject(result);
+                }
+
+            } catch (err) {
+                console.log(err);
                 reject(0);
             }
         });

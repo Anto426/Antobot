@@ -13,7 +13,7 @@ module.exports = {
     async execute(interaction) {
         let erremb = new ErrEmbed(interaction.guild, interaction.member)
         erremb.init()
-        let embedf = [erremb.notPermissionError, erremb.botUserError, erremb.selfUserError, erremb.highPermissionError, erremb.notInVoiceChannelError, erremb.musicAlreadyPlayingError]
+        let embedf = [erremb.notPermissionError, erremb.botUserError, erremb.selfUserError, erremb.highPermissionError, erremb.notInVoiceChannelError, erremb.musicAlreadyPlayingError,erremb.listtrackError]
         if (!interaction.isChatInputCommand()) return;
         const command = client.commandg.get(interaction.commandName)
         let json = new Cjson();
@@ -31,8 +31,7 @@ module.exports = {
         promises.push(security.checkServerOwner())
         promises.push(security.checkPermission())
         promises.push(security.checkPosition())
-        promises.push(security.checkChannel(jsonow0["Anto's  Server"].channel.allowchannel))
-
+        promises.push(security.checkChannel(jsonow0[interaction.guild].channel.allowchannel))
 
         Promise.all(promises).then(() => {
             security.allowCommand()
@@ -50,6 +49,7 @@ module.exports = {
                     }
                 })
                 .catch((err) => {
+                    console.log(err)
                     interaction.reply({ embeds: [embedf[err].call(erremb)], ephemeral: true })
                 })
         })
