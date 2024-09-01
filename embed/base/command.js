@@ -51,6 +51,33 @@ class comandbembed extends BaseEmbed {
             .setTitle("🤖 Eval")
     }
 
+    registerCommand(status) {
+
+        if (status == 0) {
+            this.embed
+                .setTitle("Cancellazione Comandi in corso")
+                .setDescription("La cancellazione dei comandi è in corso")
+                .setThumbnail(embedconfig.image.load)
+                .setColor(embedconfig.color.yellow)
+
+        } else if (status == 1) {
+            this.embed
+                .setTitle("Riscrittura Comandi completata")
+                .setDescription("Riscrittura dei comandi completata con successo")
+                .setThumbnail(embedconfig.image.success)
+                .setColor(embedconfig.color.green)
+        } else if (status == -1) {
+            this.embed
+                .setTitle("Riscrittura Comandi fallita")
+                .setDescription("Riscrittura dei comandi fallita")
+                .setThumbnail(embedconfig.image.genericerror)
+                .setColor(embedconfig.color.red)
+        }
+
+        return this.embed
+
+    }
+
 
 
 }
