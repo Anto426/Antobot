@@ -74,14 +74,14 @@ class ClientInit {
             try {
                 this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[7], process.env.GITTOKEN)
                     .then((cookies) => {
-                        
+
                         global.distube = new DisTube(client, {
                             emitNewSongOnly: true,
                             emitAddSongWhenCreatingQueue: false,
                             emitAddListWhenCreatingQueue: false,
                             plugins: [
                                 new YtDlpPlugin({
-                                    updateYouTubeDL: true,
+                                    update: true,
                                     cookies: cookies.youtube
                                 }),
                                 new SoundCloudPlugin(),

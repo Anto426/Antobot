@@ -152,7 +152,7 @@ class Security extends Check {
                     }
                 }
                 if (this.command.disTube.checklisttrack) {
-                    if (!this.interaction.options.getString("song")) {
+                    if (!distube.getQueue(this.interaction)) {
                         result = 6;
                     }
                 }

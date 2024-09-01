@@ -36,6 +36,8 @@ module.exports = {
                         member: interaction.member,
                         textChannel: interaction.channel,
                         message: songQuery.name
+                    }).catch((err) => {
+                        console.error(err);
                     })
                     
                     interaction.reply({
