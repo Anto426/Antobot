@@ -193,7 +193,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "🏆 Nitro",
-                    value: member.user.discriminator ? "Si" : "No",
+                    value: member.premiumSince ? "Si" : "No",
                     inline: true
                 },
                 {
