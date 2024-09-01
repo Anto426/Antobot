@@ -82,7 +82,7 @@ class comandbembed extends BaseEmbed {
     avatar(member) {
         return this.embed
             .setTitle("🖼️ Avatar")
-            .setDescription(`Ecco l'avatar di ${member.user.globalName}`)
+            .setDescription(`Ecco l'avatar di ${(member.user.globalName ? member.user.globalName : member.user.tag)}`)
             .setImage(member.displayAvatarURL({
                 dynamic: true,
                 format: "png",
@@ -168,7 +168,7 @@ class comandbembed extends BaseEmbed {
             .addFields(
                 {
                     name: "📛 Username",
-                    value: member.user.globalName.toString(),
+                    value: (member.user.globalName ? member.user.globalName : member.user.tag).toString(),
                     inline: true
                 },
                 {
