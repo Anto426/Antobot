@@ -1,7 +1,7 @@
 const { comandbembed } = require("../../../embed/base/command");
 const { ErrEmbed } = require("../../../embed/err/errembed");
 module.exports = {
-    name: "avatar",
+    name: "serverinfo",
     permisions: [],
     allowedchannels: true,
     OnlyOwner: false,
@@ -9,7 +9,7 @@ module.exports = {
     test: false,
     see: true,
     data: {
-        name: "userinfo",
+        name: "serverinfo",
         description: "ritorna le informazioni del server"
     },
     execute(interaction) {
