@@ -18,7 +18,7 @@ module.exports = {
 
         embed.init().then(() => {
             interaction.reply({
-                embeds: [embed.botinfo(interaction.user)],
+                embeds: [embed.botinfo(client.user)],
             });
         }).catch((err) => {
             console.log(err)
