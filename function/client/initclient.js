@@ -73,19 +73,19 @@ class ClientInit {
                 this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[7], process.env.GITTOKEN)
                     .then((cookies) => {
                         global.distube = new DisTube(client, {
-                            emitNewSongOnly: true, // Emissione solo della nuova canzone
-                            emitAddSongWhenCreatingQueue: false, // Non emettere l'aggiunta di una canzone quando si crea una coda
-                            emitAddListWhenCreatingQueue: false, // Non emettere l'aggiunta di una lista quando si crea una coda
+                            emitNewSongOnly: true,
+                            emitAddSongWhenCreatingQueue: true,
+                            emitAddListWhenCreatingQueue: true,
                             plugins: [
-                                new SoundCloudPlugin(), // Plugin di SoundCloud
+                                new SoundCloudPlugin(),
                                 new YtDlpPlugin({
                                     cookies: [
                                         {
-                                            cookies: cookies.youtube, 
+                                            cookies: cookies.youtube,
                                         }
                                     ]
                                 }),
-                                new SpotifyPlugin() 
+                                new SpotifyPlugin()
                             ],
                             customFilters: {
                                 'bassboost': 'bass=g=10',
