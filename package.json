@@ -10,6 +10,7 @@
   "repo": "https://github.com/Anto426/Antobot",
   "license": "ISC",
   "dependencies": {
+    "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.17.0",
     "@distube/deezer": "^2.0.1",
     "@distube/direct-link": "^1.0.1",
@@ -26,7 +27,6 @@
     "dotenv": "^16.4.5",
     "libsodium-wrappers": "^0.7.15",
     "openai": "^4.57.0",
-    "opusscript": "^0.1.1",
     "sodium-native": "^4.1.1"
   }
 }
