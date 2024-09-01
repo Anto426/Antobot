@@ -5,6 +5,7 @@ const setting = require("../../../../setting/settings.json");
 const { comandbembed } = require("../../../../embed/base/command");
 const { BaseEmbed } = require("../../../../embed/baseembed");
 const { Menu } = require("../../../../function/row/menu");
+const { ErrEmbed } = require("../../../../embed/err/errembed");
 module.exports = {
     name: "help",
     typeEvent: "interactionCreate",
@@ -52,7 +53,15 @@ module.exports = {
                             interaction.update({ embeds: [embedbase], components: [row] })
 
 
-                        }).catch(() => { })
+                        }).catch(() => {
+                            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                            embedmsg.init().then(() => {
+                                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                            }
+                            ).catch((err) => {
+                                console.error(err);
+                            })
+                        })
                     })
 
                 }).catch(() => { })
@@ -75,8 +84,9 @@ module.exports = {
 
                     client.commandg.forEach(command => {
                         if (command.see) {
+
                             list.push(new StringSelectMenuOptionBuilder()
-                                .setLabel(`${jsonf.command[command.name].emoji} ${command.data.name}`)
+                                .setLabel(`${jsonf.command[command.name] ? jsonf.command[command.name].emoji : "⚙️"} ${command.data.name}`)
                                 .setDescription(`${command.data.description}`)
                                 .setValue(`${command.data.name}`))
                         }
@@ -90,7 +100,15 @@ module.exports = {
                         });
                     })
 
-                }).catch(() => { })
+                }).catch(() => {
+                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                    embedmsg.init().then(() => {
+                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                    }
+                    ).catch((err) => {
+                        console.error(err);
+                    })
+                })
 
             }).catch(() => { })
 
