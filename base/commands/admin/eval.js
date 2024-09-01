@@ -8,7 +8,7 @@ module.exports = {
     allowedchannels: true,
     OnlyOwner: true,
     position: false,
-    test: true,
+    test: false,
     see: true,
     data: {
         name: "eval",
