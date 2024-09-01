@@ -71,7 +71,7 @@ class comandbembed extends BaseEmbed {
             this.embed
                 .setTitle("Riscrittura Comandi fallita")
                 .setDescription("Riscrittura dei comandi fallita")
-                .setThumbnail(embedconfig.image.genericerror)
+                .setThumbnail(embedconfig.image.genericerr)
                 .setColor(embedconfig.color.red)
         }
 
