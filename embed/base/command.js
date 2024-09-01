@@ -164,7 +164,7 @@ class comandbembed extends BaseEmbed {
 
         return this.embed
             .setTitle("👤 User Info")
-            .setDescription(`Ecco le informazioni di ${member.user.globalName}`)
+            .setDescription(`Ecco le informazioni di ${(member.user.globalName ? member.user.globalName : member.user.tag)}`)
             .addFields(
                 {
                     name: "📛 Username",
