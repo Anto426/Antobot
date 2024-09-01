@@ -1,3 +1,4 @@
+const { ChannelType } = require("discord.js");
 const { comandbembed } = require("../../../embed/base/command");
 const { ErrEmbed } = require("../../../embed/err/errembed");
 module.exports = {
@@ -18,13 +19,16 @@ module.exports = {
         let embed = new comandbembed(interaction.guild, interaction.member)
 
         embed.init().then(() => {
-            interaction.reply({
-                embeds: [embed.serverinfo(interaction.guild)],
-            });
+            interaction.guild.invites.create(interaction.guild.channels.cache.filter(channel => channel.type === ChannelType.GuildText).first().id, { maxAge: 18000, maxUses: 0 }).then((invites) => {
+                interaction.reply({
+                    embeds: [embed.serverinfo(interaction.guild, invites)],
+                });
+            })
         }).catch((err) => {
             console.log(err)
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
+
                 interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
             }
             ).catch((err) => {

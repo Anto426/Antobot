@@ -10,15 +10,23 @@ module.exports = {
     see: true,
     data: {
         name: "useravatar",
-        description: "ritorna l'avatar dell'utente"
+        description: "ritorna l'avatar dell'utente",
+        options: [{
+            name: "utente",
+            description: "l'utente di cui vuoi l'avatar",
+            type: 6,
+            required: false
+        }]
     },
     execute(interaction) {
 
         let embed = new comandbembed(interaction.guild, interaction.member)
+        let member = interaction.options.getMember('utente') || interaction.member;
+
 
         embed.init().then(() => {
             interaction.reply({
-                embeds: [embed.avatar(interaction.user)],
+                embeds: [embed.avatar(member)],
             });
         }).catch((err) => {
             console.log(err)

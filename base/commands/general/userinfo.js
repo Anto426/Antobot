@@ -10,16 +10,24 @@ module.exports = {
     see: true,
     data: {
         name: "userinfo",
-        description: "ritorna le informazioni del server"
+        description: "ritorna le informazioni del server",
+        options: [{
+            name: "utente",
+            description: "l'utente di cui vuoi le informazioni",
+            type: 6,
+            required: false
+        }]
     },
     execute(interaction) {
 
 
         let embed = new comandbembed(interaction.guild, interaction.member)
+        let member = interaction.options.getMember('utente') || interaction.member;
+
 
         embed.init().then(() => {
             interaction.reply({
-                embeds: [embed.userinfo(interaction.guild)],
+                embeds: [embed.userinfo(member)],
             });
         }).catch((err) => {
             console.log(err)

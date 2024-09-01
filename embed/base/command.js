@@ -1,5 +1,6 @@
 const { BaseEmbed } = require("../baseembed");
 const packagejson = require("../../package.json");
+const { ChannelType } = require("discord.js");
 class comandbembed extends BaseEmbed {
     constructor(guild, member) {
         super(guild, member)
@@ -78,16 +79,16 @@ class comandbembed extends BaseEmbed {
 
     }
 
-    avatar(user) {
+    avatar(member) {
         return this.embed
             .setTitle("🖼️ Avatar")
-            .setDescription(`Ecco l'avatar di ${user.username}`)
-            .setImage(user.displayAvatarURL({
+            .setDescription(`Ecco l'avatar di ${member.user.globalName}`)
+            .setImage(member.displayAvatarURL({
                 dynamic: true,
                 format: "png",
                 size: 512
             }))
-            .setThumbnail(user.guild.iconURL({
+            .setThumbnail(member.guild.iconURL({
                 dynamic: true,
                 format: "png",
                 size: 512
@@ -96,14 +97,15 @@ class comandbembed extends BaseEmbed {
 
 
 
-    serverinfo(guild) {
+    serverinfo(guild, invites) {
+
         return this.embed
             .setTitle("ℹ️ Server Info")
             .setDescription(`Ecco le informazioni di ${guild.name}`)
             .addFields(
                 {
                     name: "👑 Proprietario",
-                    value: guild.owner.user.tag,
+                    value: guild.members.cache.find(x => x.id == guild.ownerId).user.globalName.toString(),
                     inline: true
                 },
                 {
@@ -112,43 +114,38 @@ class comandbembed extends BaseEmbed {
                     inline: true
                 },
                 {
-                    name: "🌍 Regione",
-                    value: guild.region,
-                    inline: true
-                },
-                {
                     name: "🔊 Canali Vocali",
-                    value: guild.channels.cache.filter(channel => channel.type === 'GUILD_VOICE').size,
+                    value: guild.channels.cache.filter(channel => channel.type === ChannelType.GuildVoice).size.toString(),
                     inline: true
                 },
                 {
                     name: "📝 Canali Testuali",
-                    value: guild.channels.cache.filter(channel => channel.type === 'GUILD_TEXT').size,
+                    value: guild.channels.cache.filter(channel => channel.type === ChannelType.GuildText).size.toString(),
                     inline: true
                 },
                 {
                     name: "👥 Membri",
-                    value: guild.memberCount,
+                    value: guild.memberCount.toString(),
                     inline: true
                 },
                 {
                     name: "🤖 Bot",
-                    value: guild.members.cache.filter(member => member.user.bot).size,
+                    value: guild.members.cache.filter(member => member.user.bot).size.toString(),
                     inline: true
                 },
                 {
                     name: "🔒 Ruoli",
-                    value: guild.roles.cache.size,
+                    value: guild.roles.cache.size.toString(),
                     inline: true
                 },
                 {
                     name: "📜 Emotes",
-                    value: guild.emojis.cache.size,
+                    value: guild.emojis.cache.size.toString(),
                     inline: true
                 },
                 {
                     name: "🔗 Invito",
-                    value: `[Clicca qui](${guild.vanityURLCode})`,
+                    value: `[Clicca qui](${invites.toString()})`,
                     inline: true
                 },
             )
@@ -157,41 +154,59 @@ class comandbembed extends BaseEmbed {
                 format: "png",
                 size: 512
             }))
+
+
     }
 
 
-    userinfo(user) {
+    userinfo(member) {
+
+
         return this.embed
             .setTitle("👤 User Info")
-            .setDescription(`Ecco le informazioni di ${user.username}`)
+            .setDescription(`Ecco le informazioni di ${member.user.globalName}`)
             .addFields(
                 {
-                    name: "📛 Tag",
-                    value: user.tag.toString(),
+                    name: "📛 Username",
+                    value: member.user.globalName.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tag",
+                    value: member.user.tag.toString(),
                     inline: true
                 },
                 {
                     name: "🆔 ID",
-                    value: user.id.toString(),
+                    value: member.user.id.toString(),
                     inline: true
                 },
                 {
                     name: "📅 Creazione",
-                    value: user.createdAt.toDateString(),
+                    value: member.user.createdAt.toDateString(),
                     inline: true
                 },
                 {
                     name: "🤖 Bot",
-                    value: user.bot ? "Si" : "No",
+                    value: member.user.bot ? "Si" : "No",
                     inline: true
                 },
                 {
-                    name: "📅 Entrato",
-                    value: user.joinedAt.toDateString(),
+                    name: "🏆 Nitro",
+                    value: member.user.discriminator ? "Si" : "No",
                     inline: true
+                },
+                {
+                    name: "🔒 Ruoli",
+                    value: member.roles.cache.size.toString(),
+
+                },
+                {
+                    name: "📅 Entrato",
+                    value: member.joinedAt.toDateString(),
                 }
             )
-            .setThumbnail(user.displayAvatarURL({
+            .setThumbnail(member.user.displayAvatarURL({
                 dynamic: true,
                 format: "png",
                 size: 512
@@ -212,21 +227,21 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: client.user.id.toString(),
-                    inline: true
+                    inline: false
                 },
                 {
                     name: "📅 Creazione",
-                    value: client.user.createdAt.toDateString(),
+                    value: " 1, giugno 2022",
                     inline: true
                 },
                 {
-                    name: "🤖 Bot",
+                    name: "🤖 Bot ",
                     value: client.user.bot ? "Si" : "No",
                     inline: true
                 },
                 {
-                    name: "Repo Github",
-                    value: `[Clicca qui](${packagejson.repository.url.toString()})`,
+                    name: "🪙 Repo Github",
+                    value: `[Clicca qui](${packagejson.repo.toString()})`,
                     inline: true
                 },
             )
@@ -236,26 +251,6 @@ class comandbembed extends BaseEmbed {
                 size: 512
             }))
     }
-
-
-    userbanner(user) {
-        return this.embed
-            .setTitle("🖼️ Banner")
-            .setDescription(`Ecco il banner di ${user.username}`)
-            .setImage(user.bannerURL({
-                dynamic: true,
-                format: "png",
-                size: 512
-            }))
-            .setThumbnail(user.guild.iconURL({
-                dynamic: true,
-                format: "png",
-                size: 512
-            }))
-    }
-
-
-
 
 
 }
