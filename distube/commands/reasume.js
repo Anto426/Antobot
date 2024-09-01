@@ -19,12 +19,11 @@ module.exports = {
     async execute(interaction) {
 
 
-        let queue = distube.getQueue(interaction.guildId)
         let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
 
         embedmsg.init()
             .then(async () => {
-                queue.pause().then(() => {
+                distube.resume().then(() => {
                     interaction.reply({ embeds: [embedmsg.repeat(mode)] })
                 }).catch(() => {
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
