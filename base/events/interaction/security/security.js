@@ -44,8 +44,9 @@ module.exports = {
                         }
 
                     } catch (err) {
-                        interaction.reply({ embeds: [erremb.errGeneric()], ephemeral: true })
+                        interaction.reply({ embeds: [erremb.genericError()], ephemeral: true })
                         new BotConsole().log("Errore durante esecuzione del comando", "red")
+                        console.log(err)
                     }
                 })
                 .catch((err) => {
