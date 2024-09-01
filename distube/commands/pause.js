@@ -24,22 +24,14 @@ module.exports = {
 
         embedmsg.init()
             .then(async () => {
-                distube.pause(interaction.guild).then(() => {
-                    interaction.reply({ embeds: [embedmsg.pause()] })
-                }).catch((err) => {
-                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                    embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.notpauseError()], ephemeral: true })
-                    }).catch((err) => {
-                        console.error(err);
-                    })
+                distube.pause(interaction.guild)
+                interaction.reply({ embeds: [embedmsg.pause()] })
 
-                })
             }).catch((err) => {
                 console.error(err);
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true });
+                    interaction.reply({ embeds: [embedmsg.notpauseError()], ephemeral: true });
                 }).catch((err) => {
                     console.error(err);
                 });
