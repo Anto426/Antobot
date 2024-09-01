@@ -29,7 +29,7 @@ module.exports = {
                         });
 
                         try {
-                            let send = embedMsg.welcomeBack(member, listrole);
+                            let send = embedMsg.welcomeback(member, listrole);
                             member.send({ embeds: [send] }).catch(() => { new BotConsole().log("Non sono riuscito ad inviare il messaggio", "red") })
                         } catch { }
 
