@@ -10,7 +10,7 @@ module.exports = {
     see: true,
     disTube: {
         checkchannel: true,
-        checklisttrack: true
+        checklisttrack: false
     },
     data: {
         name: "play",

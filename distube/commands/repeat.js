@@ -40,18 +40,12 @@ module.exports = {
 
         try {
 
-            if (queue) {
-                let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-                embedmsg.init().then(() => {
-                    queue.setRepeatMode(parseInt(mode))
-                    interaction.reply({ embeds: [embedmsg.repeat(mode)] })
-                }).catch((err) => { console.log(err); })
-            } else {
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.listtrackError()], ephemeral: true })
-                }).catch(() => { })
-            }
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+            embedmsg.init().then(() => {
+                queue.setRepeatMode(parseInt(mode))
+                interaction.reply({ embeds: [embedmsg.repeat(mode)] })
+            }).catch((err) => { console.log(err); })
+
 
         } catch (error) {
             console.error(error);

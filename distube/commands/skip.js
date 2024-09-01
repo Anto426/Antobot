@@ -22,28 +22,22 @@ module.exports = {
         let queue = distube.getQueue(interaction)
 
         try {
-            if (queue) {
-                if (queue.songs.length == 1) {
+            if (queue.songs.length == 1) {
 
-                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                    embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.notrakskipableError()], ephemeral: true })
-                    }).catch(() => { })
-
-                } else {
-                    let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-                    embedmsg.init().then(() => {
-                        distube.skip(interaction)
-                        interaction.reply({ embeds: [embedmsg.skip()] })
-                    }).catch((err) => { console.log(err); })
-
-                }
-            } else {
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.listtrackError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.notrakskipableError()], ephemeral: true })
                 }).catch(() => { })
+
+            } else {
+                let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    distube.skip(interaction)
+                    interaction.reply({ embeds: [embedmsg.skip()] })
+                }).catch((err) => { console.log(err); })
+
             }
+
 
         } catch (error) {
             console.error(error);
