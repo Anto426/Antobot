@@ -199,6 +199,46 @@ class comandbembed extends BaseEmbed {
     }
 
 
+    botinfo() {
+        return this.embed
+            .setTitle("🤖 Bot Info")
+            .setDescription(`Ecco le informazioni di ${client.user.username}`)
+            .addFields(
+                {
+                    name: "📛 Tag",
+                    value: client.user.tag,
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: client.user.id,
+                    inline: true
+                },
+                {
+                    name: "📅 Creazione",
+                    value: client.user.createdAt.toDateString(),
+                    inline: true
+                },
+                {
+                    name: "🤖 Bot",
+                    value: client.user.bot,
+                    inline: true
+                },
+                {
+                    name: "Repo Github",
+                    value: `[Clicca qui](${packagejson.repository.url})`,
+                    inline: true
+                },
+            )
+            .setThumbnail(client.user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+    }
+
+
+
 
 
 
