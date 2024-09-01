@@ -54,6 +54,20 @@ class CommandEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.volume)
     }
 
+    pause() {
+        return this.embed
+            .setTitle("⏸️ Pausa")
+            .setDescription("La canzone è stata messa in pausa con successo!")
+            .setThumbnail(embedconfig.image.pause)
+    }
+
+    resume() {
+        return this.embed
+            .setTitle("▶️ Riprendi")
+            .setDescription("La canzone è stata ripresa con successo!")
+            .setThumbnail(embedconfig.image.resume)
+    }
+
 
 }
 

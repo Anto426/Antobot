@@ -24,7 +24,7 @@ module.exports = {
         embedmsg.init()
             .then(async () => {
                 distube.resume(interaction.guild).then(() => {
-                    interaction.reply({ embeds: [embedmsg.repeat(mode)] })
+                    interaction.reply({ embeds: [embedmsg.resume()] })
                 }).catch(() => {
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
