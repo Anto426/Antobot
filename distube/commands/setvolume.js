@@ -29,27 +29,23 @@ module.exports = {
         let temp = interaction.options.getInteger("volume")
         let volume = (temp < 100 ? (temp ? temp : 0) : 100)
 
-        try {
-
-            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
-                queue.setVolume(volume).then(() => {
-                    interaction.reply({ embeds: [embedmsg.volume(volume)] })
-                }).catch(() => {
-                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                    embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
-                    }).catch((err) => {
-                        console.error(err);
-                    })
-
+        let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+        embedmsg.init().then(() => {
+            queue.setVolume(volume).then(() => {
+                interaction.reply({ embeds: [embedmsg.volume(volume)] })
+            }).catch(() => {
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                }).catch((err) => {
+                    console.error(err);
                 })
-            }).catch((err) => { console.log(err); })
+
+            })
+        }).catch((err) => { console.log(err); })
 
 
-        } catch (error) {
-            console.error(error);
-        }
+
 
 
 

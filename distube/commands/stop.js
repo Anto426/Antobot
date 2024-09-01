@@ -18,20 +18,20 @@ module.exports = {
     },
     async execute(interaction) {
 
-        try {
 
-            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
-                distube.stop(interaction).then(() => {
-                    interaction.reply({ embeds: [embedmsg.stop()] })
-                }).catch((err) => { console.log(err); })
-            }).catch((err) => { console.log(err); })
-
-        } catch (error) {
-            console.error(error);
-        }
-
-
+        let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+        embedmsg.init().then(() => {
+            distube.stop(interaction).then(() => {
+                interaction.reply({ embeds: [embedmsg.stop()] })
+            }).catch(() => {
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                }).catch((err) => {
+                    console.error(err);
+                })
+            })
+        }).catch((err) => { console.log(err); })
 
     }
 }

@@ -38,27 +38,24 @@ module.exports = {
         let queue = distube.getQueue(interaction)
         let mode = interaction.options.getString("mode")
 
-        try {
 
-            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
-                queue.setRepeatMode(parseInt(mode)).then(() => {
-                    interaction.reply({ embeds: [embedmsg.repeat(mode)] })
+        let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+        embedmsg.init().then(() => {
+            queue.setRepeatMode(parseInt(mode)).then(() => {
+                interaction.reply({ embeds: [embedmsg.repeat(mode)] })
+            }).catch((err) => {
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
                 }).catch((err) => {
-                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                    embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
-                    }).catch((err) => {
-                        console.error(err);
-                    })
-                
-                 })
-            }).catch((err) => { console.log(err); })
+                    console.error(err);
+                })
+
+            })
+        }).catch((err) => { console.log(err); })
 
 
-        } catch (error) {
-            console.error(error);
-        }
+
 
 
 
