@@ -11,7 +11,7 @@ module.exports = {
     OnlyOwner: false,
     position: false,
     test: false,
-    see: true,
+    see: false,
     data: {
         name: "help",
         description: "/help"
