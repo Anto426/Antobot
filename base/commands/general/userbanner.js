@@ -1,7 +1,7 @@
 const { comandbembed } = require("../../../embed/base/command");
 const { ErrEmbed } = require("../../../embed/err/errembed");
 module.exports = {
-    name: "banner",
+    name: "userbanner",
     permisions: [],
     allowedchannels: true,
     OnlyOwner: false,
@@ -9,7 +9,7 @@ module.exports = {
     test: false,
     see: true,
     data: {
-        name: "banner",
+        name: "userbanner",
         description: "ritorna il banner dell'utente"
     },
     execute(interaction) {
