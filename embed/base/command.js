@@ -1,5 +1,5 @@
 const { BaseEmbed } = require("../baseembed");
-
+const packagejson = require("../../package.json");
 class comandbembed extends BaseEmbed {
     constructor(guild, member) {
         super(guild, member)
@@ -77,6 +77,28 @@ class comandbembed extends BaseEmbed {
         return this.embed
 
     }
+
+    avatar(user) {
+        return this.embed
+            .setTitle("🖼️ Avatar")
+            .setDescription(`Ecco l'avatar di ${user.username}`)
+            .setImage(user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+            .setThumbnail(user.guild.iconURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+    }
+
+
+
+
+
+
 
 
 
