@@ -1,7 +1,7 @@
 const { comandbembed } = require("../../../embed/base/command");
 const { ErrEmbed } = require("../../../embed/err/errembed");
 module.exports = {
-    name: "avatar",
+    name: "useravatar",
     permisions: [],
     allowedchannels: true,
     OnlyOwner: false,
@@ -9,7 +9,7 @@ module.exports = {
     test: false,
     see: true,
     data: {
-        name: "avatar",
+        name: "useravatar",
         description: "ritorna l'avatar dell'utente"
     },
     execute(interaction) {
