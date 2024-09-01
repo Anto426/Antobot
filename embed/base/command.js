@@ -96,6 +96,68 @@ class comandbembed extends BaseEmbed {
 
 
 
+    serverinfo(guild) {
+        return this.embed
+            .setTitle("ℹ️ Server Info")
+            .setDescription(`Ecco le informazioni di ${guild.name}`)
+            .addFields(
+                {
+                    name: "👑 Proprietario",
+                    value: guild.owner.user.tag,
+                    inline: true
+                },
+                {
+                    name: "📅 Creazione",
+                    value: guild.createdAt.toDateString(),
+                    inline: true
+                },
+                {
+                    name: "🌍 Regione",
+                    value: guild.region,
+                    inline: true
+                },
+                {
+                    name: "🔊 Canali Vocali",
+                    value: guild.channels.cache.filter(channel => channel.type === 'GUILD_VOICE').size,
+                    inline: true
+                },
+                {
+                    name: "📝 Canali Testuali",
+                    value: guild.channels.cache.filter(channel => channel.type === 'GUILD_TEXT').size,
+                    inline: true
+                },
+                {
+                    name: "👥 Membri",
+                    value: guild.memberCount,
+                    inline: true
+                },
+                {
+                    name: "🤖 Bot",
+                    value: guild.members.cache.filter(member => member.user.bot).size,
+                    inline: true
+                },
+                {
+                    name: "🔒 Ruoli",
+                    value: guild.roles.cache.size,
+                    inline: true
+                },
+                {
+                    name: "📜 Emotes",
+                    value: guild.emojis.cache.size,
+                    inline: true
+                },
+                {
+                    name: "🔗 Invito",
+                    value: `[Clicca qui](${guild.vanityURLCode})`,
+                    inline: true
+                },
+            )
+            .setThumbnail(guild.iconURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+    }
 
 
 
