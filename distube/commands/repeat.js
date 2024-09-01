@@ -1,3 +1,4 @@
+const { RepeatMode } = require("distube")
 const { CommandEmbed } = require("../../embed/distube/command")
 const { ErrEmbed } = require("../../embed/err/errembed")
 
@@ -21,18 +22,19 @@ module.exports = {
             type: 3,
             required: true,
             choices: [{
-                name: "off",
+                name: "🔴Off",
+                value: "0"
+            }, {
+                name: "🎶 Song",
                 value: "1"
             }, {
-                name: "Song",
+                name: "🔁 Queue",
                 value: "2"
-            }, {
-                name: "Queue",
-                value: "3"
             },]
         }]
     },
     async execute(interaction) {
+
 
 
         let queue = distube.getQueue(interaction)
