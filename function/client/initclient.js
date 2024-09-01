@@ -5,13 +5,13 @@ const { Client, Partials } = require('discord.js');
 const { DisTube } = require("distube")
 const { SpotifyPlugin } = require("@distube/spotify")
 const { SoundCloudPlugin } = require("@distube/soundcloud")
-const { YtDlpPlugin } = require("@distube/yt-dlp");
 const { Check } = require('../check/check');
 const { Cjson } = require('../file/json');
 const setting = require("./../../setting/settings.json");
 const { BotConsole } = require('../log/botConsole');
 const { default: DeezerPlugin } = require('@distube/deezer');
 const { DirectLinkPlugin } = require('@distube/direct-link');
+const { YouTubePlugin } = require('@distube/youtube');
 
 class ClientInit {
 
@@ -81,14 +81,35 @@ class ClientInit {
 
 
                             plugins: [
-                                new YtDlpPlugin({
-                                    update: true,
+                                new YouTubePlugin({
                                     cookies: cookies.youtube
                                 }),
                                 new SoundCloudPlugin(),
                                 new SpotifyPlugin(),
                                 new DeezerPlugin(),
                             ],
+                            customFilters: {
+                                'bassboost': 'bass=g=10',
+                                '8D': 'apulsator=hz=0.08',
+                                'vaporwave': 'aresample=48000,asetrate=48000*0.8',
+                                'nightcore': 'aresample=48000,asetrate=48000*1.25',
+                                'phaser': 'aphaser=in_gain=0.4',
+                                'tremolo': 'tremolo',
+                                'vibrato': 'vibrato=f=6.5',
+                                'reverse': 'areverse',
+                                'treble': 'treble=g=5',
+                                'normalizer': 'dynaudnorm=g=101',
+                                'surrounding': 'surround',
+                                'pulsator': 'apulsator=hz=1',
+                                'subboost': 'asubboost',
+                                'karaoke': 'stereotools=mlev=0.03',
+                                'flanger': 'flanger',
+                                'gate': 'agate',
+                                'haas': 'haas',
+                                'mcompand': 'mcompand',
+                                'earwax': 'earwax',
+                            }
+
                         });
                         new BotConsole().log("Client di Distube inzializato con successo", "green");
                         resolve(0)

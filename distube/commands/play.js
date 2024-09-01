@@ -36,17 +36,24 @@ module.exports = {
                         member: interaction.member,
                         textChannel: interaction.channel,
                         message: songQuery.name
-                    }).catch((err) => {
+                    }).then(() => {
+                        let queue = distube.getQueue(interaction);
+                        let song = distube.getQueue(interaction).songs[queue.songs.length - 1];
+                        interaction.reply({
+                            embeds: [embedmsg.play(song)]
+                        }).catch((err) => {
+                            let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
+                            embedmsg.init().then(() => {
+                                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                            }).catch((err) => {
+                                console.error(err);
+                            })
+                            console.error(err);
+                        })
+                    }
+                    ).catch((err) => {
                         console.error(err);
                     })
-                    
-                    interaction.reply({
-                        embeds: [embedmsg.play()]
-                    }).catch((err) => {
-                        console.error(err);
-                    })
-
-
                 })
 
         } catch (error) {

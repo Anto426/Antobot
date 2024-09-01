@@ -22,8 +22,9 @@ module.exports = {
 
             let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                distube.stop(interaction)
-                interaction.reply({ embeds: [embedmsg.stop()] })
+                distube.stop(interaction).then(() => {
+                    interaction.reply({ embeds: [embedmsg.stop()] })
+                }).catch((err) => { console.log(err); })
             }).catch((err) => { console.log(err); })
 
         } catch (error) {
