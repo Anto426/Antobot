@@ -25,7 +25,14 @@ module.exports = {
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
                 interaction.reply({ embeds: [embedmsg.notrakskipableError()], ephemeral: true })
-            }).catch(() => { })
+            }).catch(() => { 
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.notskipError()], ephemeral: true })
+                }).catch((err) => {
+                    console.error(err);
+                })
+            })
 
         } else {
             let embedmsg = new CommandEmbed(interaction.guild, interaction.member)

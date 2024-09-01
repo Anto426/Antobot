@@ -94,6 +94,56 @@ class ErrEmbed extends BaseEmbed {
             .setDescription("Non posso riprodurre playlist")
             .setThumbnail(embedconfig.image.genericerr)
     }
+
+    notpauseError() {
+        return this.embed
+            .setTitle("🎶 Non è stato possibile mettere in pausa")
+            .setDescription("non posso mettere in pausa la riproduzione")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    playError() {
+        return this.embed
+            .setTitle("🎶 Non è stato possibile riprodurre")
+            .setDescription("non posso riprodurre la traccia")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    notvolumeError() {
+        return this.embed
+            .setTitle("🔊 Non è stato possibile impostare il volume")
+            .setDescription("non posso impostare il volume")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    notrepeatError() {
+        return this.embed
+            .setTitle("🔁 Non è stato possibile impostare la ripetizione")
+            .setDescription("non posso impostare la ripetizione")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    notstopError() {
+        return this.embed
+            .setTitle("⏹️ Non è stato possibile fermare la riproduzione")
+            .setDescription("non posso fermare la riproduzione")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    notskipError() {
+        return this.embed
+            .setTitle("⏭️ Non è stato possibile saltare la traccia")
+            .setDescription("non posso saltare la traccia")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    notresumeError() {
+        return this.embed
+            .setTitle("▶️ Non è stato possibile riprendere la riproduzione")
+            .setDescription("non posso riprendere la riproduzione")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+    
 }
 
 

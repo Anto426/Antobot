@@ -36,7 +36,7 @@ module.exports = {
             }).catch(() => {
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.notvolumeError()], ephemeral: true })
                 }).catch((err) => {
                     console.error(err);
                 })
