@@ -172,24 +172,7 @@ class Security extends Check {
         console.log("owner", this.owner, "serverOwner", this.serverOwner, "staff", this.staff, "isBot", this.isBot, "isYou", this.isYou, "position", this.position, "channel", this.channel);
         return new Promise(async (resolve, reject) => {
             if (this.owner) {
-                if (!this.isBot) {
-                    if (this.command.type == "Distube") {
-                        this.checkDistube().then((result) => {
-                            resolve(result);
-                        }).catch((err) => {
-                            reject(err);
-                        });
-                    } else {
-                        resolve(0);
-                    }
-                } else {
-                    reject(1);
-                }
-            } else {
-                if (this.command.onlyOwner) {
-                    reject(0);
-                }
-                if (this.serverOwner) {
+                if (!this.isYou) {
                     if (!this.isBot) {
                         if (this.command.type == "Distube") {
                             this.checkDistube().then((result) => {
@@ -202,6 +185,32 @@ class Security extends Check {
                         }
                     } else {
                         reject(1);
+                    }
+                } else {
+                    reject(2);
+                }
+            } else {
+                if (this.command.onlyOwner) {
+                    reject(0);
+                }
+                if (this.serverOwner) {
+                    if (!this.isYou) {
+                        if (!this.isBot) {
+                            if (this.command.type == "Distube") {
+                                this.checkDistube().then((result) => {
+                                    resolve(result);
+                                }).catch((err) => {
+                                    reject(err);
+                                });
+                            } else {
+                                resolve(0);
+                            }
+                        } else {
+                            reject(1);
+                        }
+                    }
+                    else {
+                        reject(2);
                     }
                 } else {
                     if (this.staff) {
