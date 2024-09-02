@@ -453,6 +453,19 @@ class comandbembed extends BaseEmbed {
             }))
     }
 
+    eval(result) {
+        return this.embed
+            .setTitle("🤖 Eval")
+            .setDescription("Ecco il risultato del comando")
+            .addFields(
+                {
+                    name: "📜 Output",
+                    value: `\`\`\`${result}\`\`\``,
+                    inline: false
+                }
+            )
+    }
+
 
 
 

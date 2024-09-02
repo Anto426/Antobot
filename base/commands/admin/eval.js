@@ -1,5 +1,5 @@
-const { comandbembed } = require("../../../embed/base/command")
-const { BotConsole } = require("../../../function/log/botConsole")
+const { comandbembed } = require("../../../embed/base/command");
+const { ErrEmbed } = require("../../../embed/err/errembed");
 
 module.exports = {
     name: "eval",
@@ -23,28 +23,24 @@ module.exports = {
 
     async execute(interaction) {
         let embed = new comandbembed(interaction.guild, interaction.member)
+        let command = interaction.options.getString('comand');
         embed.init().then(async () => {
-            let embedmsg = embed.eval();
-            let command = interaction.options.getString('comand');
-            try {
-                let on = await eval(command);
-                embedmsg
-                    .setDescription("Comando eseguito con successo")
-                    .addFields(
-                        {
-                            name: "Output",
-                            value: `\`\`\`${on}\`\`\``,
-                            inline: false
-                        }
-                    );
 
-            } catch (error) {
-                new BotConsole().log(error)
-                embedmsg
-                    .setDescription("Comando non eseguito")
-            }
-            interaction.reply({ embeds: [embedmsg] })
+            let result = await eval(command);
+            interaction.reply({ embeds: [embed.eval(result)] });
+
+        }).catch((err) => {
+            console.log(err)
+            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+            embedmsg.init().then(() => {
+                interaction.reply({ embeds: [embedmsg.evaleError()], ephemeral: true })
+            }).catch((err) => {
+                console.error(err);
+            })
         })
 
+
     }
+
+
 }
