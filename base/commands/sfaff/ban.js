@@ -2,7 +2,7 @@ const { PermissionsBitField } = require("discord.js");
 const { comandbembed } = require("../../../embed/base/command");
 const { ErrEmbed } = require("../../../embed/err/errembed");
 module.exports = {
-    name: "useravatar",
+    name: "ban",
     permisions: [PermissionsBitField.Flags.BanMembers],
     allowedchannels: true,
     OnlyOwner: false,
