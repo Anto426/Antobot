@@ -1,6 +1,6 @@
 const { PermissionsBitField } = require("discord.js");
-const { comandbembed } = require("../../../../embed/base/command");
-const { ErrEmbed } = require("../../../../embed/err/errembed");
+const { ErrEmbed } = require("../../../embed/err/errembed");
+const { comandbembed } = require("../../../embed/base/command");
 module.exports = {
     name: "ban",
     permisions: [PermissionsBitField.Flags.BanMembers],
