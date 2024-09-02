@@ -200,6 +200,20 @@ class ErrEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.genericerr)
     }
 
+    evaleError() {
+        return this.embed
+            .setTitle("🚫 Non è stato possibile eseguire il comando")
+            .setDescription("non posso eseguire il comando")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    ownerError() {
+        return this.embed
+            .setTitle("🚫 Errore")
+            .setDescription("🚫 Questo comando può essere eseguito solo dall'owner ")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
 }
 
 

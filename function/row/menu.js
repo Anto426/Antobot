@@ -13,6 +13,7 @@ class Menu {
         let incremento = 25 * npage;
         let components = [];
 
+        let tlist = list;
 
         let bup = new ButtonBuilder()
             .setCustomId(`${id}-${idUser}-up-0`)
@@ -27,10 +28,9 @@ class Menu {
             .setDisabled(true);
 
 
-
         if (list.length >= 25) {
 
-            list = list.slice(0 + incremento, 25 + incremento);
+            tlist = list.slice(0 + incremento, 25 + incremento);
             if ((list.length / 25) < npage) {
                 bup.setDisabled(false);
             }
@@ -39,7 +39,7 @@ class Menu {
             }
         }
 
-        list.forEach(element => {
+        tlist.forEach(element => {
             field.addOptions(element);
         });
 

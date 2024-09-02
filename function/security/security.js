@@ -13,6 +13,16 @@ class Security extends Check {
         this.isYou = false;
         this.command = command;
         this.interaction = interaction;
+        this.codeErr = {
+            ownerError: 0,
+            notPermissionError: 1,
+            botUserError: 2,
+            selfUserError: 3,
+            highPermissionError: 4,
+            notInVoiceChannelError: 5,
+            musicAlreadyPlayingError: 6,
+            listtrackError: 7
+        }
     }
 
     checkOwner(arr) {
@@ -43,20 +53,15 @@ class Security extends Check {
 
     checkChannel(arr) {
         return new Promise((resolve) => {
-            if (!this.owner || !this.serverOwner) {
-                if (this.command.allowedChannels) {
-                    super.checkPChannel(this.interaction.channel.id, arr)
-                        .then(() => {
-                            this.channel = true;
-                            resolve(0);
-                        })
-                        .catch(() => {
-                            resolve(0);
-                        });
-                } else {
-                    resolve(0);
-                    this.channel = true;
-                }
+            if (this.command.allowedChannels) {
+                super.checkPChannel(this.interaction.channel.id, arr)
+                    .then(() => {
+                        this.channel = true;
+                        resolve(0);
+                    })
+                    .catch(() => {
+                        resolve(0);
+                    });
             } else {
                 resolve(0);
                 this.channel = true;
@@ -79,9 +84,7 @@ class Security extends Check {
 
     checkPosition() {
         return new Promise((resolve) => {
-
             let otherUser = this.interaction.options.getMember("user")
-
             if (this.command.position && otherUser) {
                 super.checkPosition(this.interaction.member, otherUser)
                     .then(() => {
@@ -100,8 +103,9 @@ class Security extends Check {
 
     checkIsYou() {
         return new Promise((resolve) => {
-            if (this.command.position && this.interaction.options.getUser("user")) {
-                super.checkIsYou(this.interaction.member.id, this.interaction.options.getUser("user").id).then(() => {
+            let otherUser = this.interaction.options.getMember("user")
+            if (this.command.position && otherUser) {
+                super.checkIsYou(this.interaction.member.id, otherUser.id).then(() => {
                     this.isYou = true;
                     resolve(0);
                 }).catch(() => {
@@ -115,7 +119,8 @@ class Security extends Check {
 
     checkIsBot() {
         return new Promise((resolve) => {
-            if (this.interaction.options.getUser("user") && !this.command.allowebot) {
+            let otherUser = this.interaction.options.getMember("user")
+            if (otherUser && !this.command.allowebot) {
                 super.checkIsBot(this.interaction.options.getUser("user")).then(() => {
                     this.isBot = true;
                     resolve(0);
@@ -136,16 +141,16 @@ class Security extends Check {
 
                 if (this.command.disTube.checkchannel) {
                     if (!result[0]) {
-                        result = 4;
+                        result = error.notInVoiceChannelError;
                     } else {
                         if (result[1] && result[0].id != result[1].id) {
-                            result = 5;
+                            result = error.musicAlreadyPlayingError;
                         }
                     }
                 }
                 if (this.command.disTube.checklisttrack) {
                     if (!distube.getQueue(this.interaction)) {
-                        result = 6;
+                        result = error.listtrackError;
                     }
                 }
                 if (Array.isArray(result)) {
@@ -164,46 +169,49 @@ class Security extends Check {
     allowCommand() {
         console.log("owner", this.owner, "serverOwner", this.serverOwner, "staff", this.staff, "isBot", this.isBot, "isYou", this.isYou, "position", this.position, "channel", this.channel);
         return new Promise(async (resolve, reject) => {
-            if (this.owner) {
-                if (!this.isYou) {
-                    if (!this.isBot) {
-                        if (this.command.type == "Distube") {
-                            this.checkDistube().then((result) => {
-                                resolve(result);
-                            }).catch((err) => {
-                                reject(err);
-                            });
-                        } else {
-                            resolve(0);
-                        }
-                    } else {
-                        reject(1);
-                    }
-                } else {
-                    reject(2);
-                }
-            } else {
-                if (this.command.onlyOwner) {
-                    reject(0);
-                }
-                if (this.serverOwner) {
+
+            if (this.command.OnlyOwner) {
+                if (this.owner) {
                     if (!this.isYou) {
                         if (!this.isBot) {
                             if (this.command.type == "Distube") {
-                                this.checkDistube().then((result) => {
-                                    resolve(result);
-                                }).catch((err) => {
-                                    reject(err);
-                                });
+                                this.checkDistube()
+                                    .then((result) => {
+                                        resolve(result);
+                                    }).catch((err) => {
+                                        reject(err);
+                                    });
                             } else {
                                 resolve(0);
                             }
                         } else {
-                            reject(1);
+                            reject(this.codeErr.botUserError);
                         }
+                    } else {
+                        reject(this.codeErr.selfUserError);
                     }
-                    else {
-                        reject(2);
+                } else {
+                    reject(this.codeErr.ownerError);
+                }
+            } else {
+                if (this.serverOwner && this.owner) {
+                    if (!this.isYou) {
+                        if (!this.isBot) {
+                            if (this.command.type == "Distube") {
+                                this.checkDistube()
+                                    .then((result) => {
+                                        resolve(result);
+                                    }).catch((err) => {
+                                        reject(err);
+                                    });
+                            } else {
+                                resolve(0);
+                            }
+                        } else {
+                            reject(this.codeErr.botUserError);
+                        }
+                    } else {
+                        reject(this.codeErr.selfUserError);
                     }
                 } else {
                     if (this.staff) {
@@ -212,31 +220,32 @@ class Security extends Check {
                                 if (!this.isYou) {
                                     if (this.channel) {
                                         if (this.command.type == "Distube") {
-                                            this.checkDistube().then((result) => {
-                                                resolve(result);
-                                            }).catch((err) => {
-                                                reject(err);
-                                            });
+                                            this.checkDistube()
+                                                .then((result) => {
+                                                    resolve(result);
+                                                }).catch((err) => {
+                                                    reject(err);
+                                                });
                                         } else {
                                             resolve(0);
                                         }
                                     } else {
-                                        reject(0);
+                                        reject(this.codeErr.notPermissionError);
                                     }
                                 } else {
-                                    reject(2);
+                                    reject(this.codeErr.selfUserError);
                                 }
                             } else {
-                                reject(1);
+                                reject(this.codeErr.botUserError);
                             }
                         } else {
-                            reject(3);
+                            reject(this.codeErr.highPermissionError);
                         }
-                    } else {
-                        reject(0);
                     }
+
                 }
             }
+
         });
     }
 }

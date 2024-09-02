@@ -153,13 +153,18 @@ class Check {
 
     checkPChannel(idChannel, arr) {
         return new Promise(async (resolve, reject) => {
-            this.checkValArr(arr, idChannel)
-                .catch(() => {
-                    reject(-1);
-                })
-                .then(() => {
-                    resolve(0);
-                });
+            if (arr.length != 0) {
+                this.checkValArr(arr, idChannel)
+                    .then(() => {
+                        resolve(0);
+                    })
+                    .catch(() => {
+                        reject(-1);
+                    });
+            } else {
+                resolve(0);
+            }
+
         });
     }
 

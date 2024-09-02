@@ -13,7 +13,16 @@ module.exports = {
     async execute(interaction) {
         let erremb = new ErrEmbed(interaction.guild, interaction.member)
         erremb.init()
-        let embedf = [erremb.notPermissionError, erremb.botUserError, erremb.selfUserError, erremb.highPermissionError, erremb.notInVoiceChannelError, erremb.musicAlreadyPlayingError,erremb.listtrackError]
+        let embedf = [
+            erremb.ownerError,
+            erremb.notPermissionError,
+            erremb.botUserError,
+            erremb.selfUserError,
+            erremb.highPermissionError,
+            erremb.notInVoiceChannelError,
+            erremb.musicAlreadyPlayingError,
+            erremb.listtrackError
+        ]
         if (!interaction.isChatInputCommand()) return;
         const command = client.commandg.get(interaction.commandName)
         let json = new Cjson();
