@@ -1,6 +1,7 @@
 const { BaseEmbed } = require("../baseembed");
 const packagejson = require("../../package.json");
 const { ChannelType } = require("discord.js");
+const { Time } = require("../../function/time/time");
 class comandbembed extends BaseEmbed {
     constructor(guild, member) {
         super(guild, member)
@@ -348,7 +349,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "⏲️ Durata",
-                    value: time.toString(),
+                    value: new Time().formatTimeDayscale(time),
                     inline: true
                 },
                 {
@@ -390,7 +391,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "⏲️ Timeout annulato",
-                    value: member.communicationDisabledUntilTimestamp.toString(),
+                    value: new Time().formatTimeDayscale(member.communicationDisabledUntilTimestamp),
                     inline: true
                 }
             )
