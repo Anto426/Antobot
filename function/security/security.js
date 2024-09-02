@@ -66,24 +66,14 @@ class Security extends Check {
 
     checkPermission() {
         return new Promise((resolve) => {
-            if (!this.owner || !this.serverOwner) {
-                if (this.command.permisions.size > 0) {
-                    super.checkPermission(this.interaction.member.id, this.interaction.guild.id, this.command.permission)
-                        .then(() => {
-                            this.staff = true;
-                            resolve(0);
-                        })
-                        .catch(() => {
-                            resolve(0);
-                        });
-                } else {
-                    resolve(0);
+            super.checkPermission(this.interaction.member, this.command.permisions)
+                .then(() => {
                     this.staff = true;
-                }
-            } else {
-                this.staff = true;
-                resolve(0);
-            }
+                    resolve(0);
+                })
+                .catch(() => {
+                    resolve(0);
+                });
         });
     }
 
@@ -91,7 +81,7 @@ class Security extends Check {
         return new Promise((resolve) => {
 
             let otherUser = this.interaction.options.getMember("user")
-            
+
             if (this.command.position && otherUser) {
                 super.checkPosition(this.interaction.member, otherUser)
                     .then(() => {

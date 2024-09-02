@@ -80,19 +80,27 @@ class Check {
         });
     }
 
-    checkPermission(idUser, idGuild, permission) {
+    checkPermission(User, permission) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (permission.length != 0) {
-                    if (client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == idUser).permisions.has(permission)) {
+                console.log(permission);
+                if (permission.size != 0) {
+                    let permcount = 0;
+                    permission.forEach(element => {
+                        if (User.permissions.has(element)) {
+                            permcount++;
+                        }
+                    });
+                    if (permcount == permission.length) {
                         resolve(0);
                     } else {
                         reject(-1);
                     }
                 } else {
-                    reject(-1);
+                    resolve(0);
                 }
             } catch (err) {
+                console.log(err);
                 this.BotConsole.log("Errore, non ho potuto controllare i permessi", "red");
                 reject(-1);
             }
