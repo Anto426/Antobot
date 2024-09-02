@@ -29,10 +29,10 @@ module.exports = {
 
         let embed = new comandbembed(interaction.guild, interaction.member)
         let member = interaction.options.getMember('utente');
-        let motivo = interaction.options.getString('motivo') || "nessun motivo specificato";
+        let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
 
         embed.init().then(() => {
-            member.ban({ reason: motivo }).then(() => {
+            member.ban({ reason: reason }).then(() => {
                 interaction.reply({
                     embeds: [embed.ban(member, motivo)],
                 });
