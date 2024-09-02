@@ -10,7 +10,6 @@ const { Cjson } = require('../file/json');
 const setting = require("./../../setting/settings.json");
 const { BotConsole } = require('../log/botConsole');
 const { default: DeezerPlugin } = require('@distube/deezer');
-const { DirectLinkPlugin } = require('@distube/direct-link');
 const { YouTubePlugin } = require('@distube/youtube');
 
 class ClientInit {
