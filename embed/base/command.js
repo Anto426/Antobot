@@ -275,7 +275,11 @@ class comandbembed extends BaseEmbed {
                     value: reason.toString(),
                 }
             )
-            .setThumbnail(embedconfig.image.ban)
+            .setThumbnail(member.user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
     }
 
 
@@ -309,7 +313,11 @@ class comandbembed extends BaseEmbed {
                     value: reason.toString(),
                 }
             )
-            .setThumbnail(embedconfig.image.kick)
+            .setThumbnail(member.user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
     }
 
 
@@ -348,7 +356,11 @@ class comandbembed extends BaseEmbed {
                     value: reason.toString(),
                 }
             )
-            .setThumbnail(embedconfig.image.timeout)
+            .setThumbnail(member.user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
     }
 
     untimeout(member) {
@@ -382,7 +394,11 @@ class comandbembed extends BaseEmbed {
                     inline: true
                 }
             )
-            .setThumbnail(embedconfig.image.untimeout)
+            .setThumbnail(member.user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
     }
 
 
