@@ -122,8 +122,8 @@ class Security extends Check {
 
     checkIsBot() {
         return new Promise((resolve) => {
-            if (this.interaction.options.getUser("user")) {
-                super.checkIsBot(this.interaction.member.id, this.interaction.guild.id).then(() => {
+            if (this.interaction.options.getUser("user") && !this.command.allowebot) {
+                super.checkIsBot(this.interaction.options.getUser("user")).then(() => {
                     this.isBot = true;
                     resolve(0);
                 }).catch(() => {
@@ -140,7 +140,7 @@ class Security extends Check {
             try {
 
                 let result = [this.interaction.member.voice.channel, this.interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(client.user.id))];
-                
+
                 if (this.command.disTube.checkchannel) {
                     if (!result[0]) {
                         result = 4;
@@ -169,23 +169,10 @@ class Security extends Check {
     }
 
     allowCommand() {
-        console.log(this.owner, this.serverOwner, this.staff, this.isBot, this.isYou, this.position, this.channel);
+        console.log("owner", this.owner, "serverOwner", this.serverOwner, "staff", this.staff, "isBot", this.isBot, "isYou", this.isYou, "position", this.position, "channel", this.channel);
         return new Promise(async (resolve, reject) => {
             if (this.owner) {
-                if (this.command.type == "Distube") {
-                    this.checkDistube().then((result) => {
-                        resolve(result);
-                    }).catch((err) => {
-                        reject(err);
-                    });
-                } else {
-                    resolve(0);
-                }
-            } else {
-                if (this.command.onlyOwner) {
-                    reject(0);
-                }
-                if (this.serverOwner) {
+                if (!this.isBot) {
                     if (this.command.type == "Distube") {
                         this.checkDistube().then((result) => {
                             resolve(result);
@@ -194,6 +181,27 @@ class Security extends Check {
                         });
                     } else {
                         resolve(0);
+                    }
+                } else {
+                    reject(1);
+                }
+            } else {
+                if (this.command.onlyOwner) {
+                    reject(0);
+                }
+                if (this.serverOwner) {
+                    if (!this.isBot) {
+                        if (this.command.type == "Distube") {
+                            this.checkDistube().then((result) => {
+                                resolve(result);
+                            }).catch((err) => {
+                                reject(err);
+                            });
+                        } else {
+                            resolve(0);
+                        }
+                    } else {
+                        reject(1);
                     }
                 } else {
                     if (this.staff) {

@@ -6,6 +6,7 @@ module.exports = {
     name: "repeat",
     permisions: [],
     allowedchannels: true,
+    allowebot: true,
     position: false,
     test: false,
     see: true,

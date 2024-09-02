@@ -1,10 +1,11 @@
 const { PermissionsBitField } = require("discord.js");
-const { comandbembed } = require("../../../embed/base/command");
-const { ErrEmbed } = require("../../../embed/err/errembed");
+const { comandbembed } = require("../../../../embed/base/command");
+const { ErrEmbed } = require("../../../../embed/err/errembed");
 module.exports = {
     name: "ban",
     permisions: [PermissionsBitField.Flags.BanMembers],
     allowedchannels: true,
+    allowebot: true,
     OnlyOwner: false,
     position: true,
     test: false,
@@ -40,7 +41,11 @@ module.exports = {
                 console.log(err)
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notbanError()], ephemeral: true })
+                    if (err.code == 50013) {
+                        interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true })
+                    } else {
+                        interaction.reply({ embeds: [embedmsg.notbanError()], ephemeral: true })
+                    }
                 }
                 ).catch((err) => {
                     console.error(err);

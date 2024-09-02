@@ -5,6 +5,7 @@ module.exports = {
     name: "resume",
     permisions: [],
     allowedchannels: true,
+    allowebot: true,
     position: false,
     test: false,
     see: true,

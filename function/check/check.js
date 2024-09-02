@@ -50,10 +50,10 @@ class Check {
         });
     }
 
-    checkIsBot(idUser, idGuild) {
+    checkIsBot(user) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == idUser).bot) {
+                if (user.bot) {
                     resolve(0);
                 } else {
                     reject(-1);

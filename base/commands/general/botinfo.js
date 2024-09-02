@@ -4,6 +4,7 @@ module.exports = {
     name: "botinfo",
     permisions: [],
     allowedchannels: true,
+    allowebot: true,
     OnlyOwner: false,
     position: false,
     test: false,

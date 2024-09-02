@@ -5,6 +5,7 @@ module.exports = {
     name: "untimeout",
     permisions: [PermissionsBitField.Flags.ModerateMembers],
     allowedchannels: true,
+    allowebot: false,
     OnlyOwner: false,
     position: true,
     test: false,
@@ -36,7 +37,11 @@ module.exports = {
                     console.log(err)
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.notuntimeoutError()], ephemeral: true })
+                        if (err.code == 50013) {
+                            interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true })
+                        } else {
+                            interaction.reply({ embeds: [embedmsg.notuntimeoutError()], ephemeral: true })
+                        }
                     }
                     ).catch((err) => {
                         console.error(err);
@@ -58,11 +63,7 @@ module.exports = {
             console.log("utente già timeoutato")
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                if (member.bot) {
-                    interaction.reply({ embeds: [embedmsg.botUserError()], ephemeral: true })
-                } else {
-                    interaction.reply({ embeds: [embedmsg.nothavetimeoutError()], ephemeral: true })
-                }
+                interaction.reply({ embeds: [embedmsg.nothavetimeoutError()], ephemeral: true })
             }
             ).catch((err) => {
                 console.error(err);

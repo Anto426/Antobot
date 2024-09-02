@@ -5,6 +5,7 @@ module.exports = {
     name: "pause",
     permisions: [],
     allowedchannels: true,
+    allowebot: true,
     position: false,
     test: false,
     see: true,

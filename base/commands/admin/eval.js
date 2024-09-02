@@ -1,11 +1,11 @@
 const { comandbembed } = require("../../../embed/base/command")
 const { BotConsole } = require("../../../function/log/botConsole")
-const setting = require("../../../setting/settings.json")
 
 module.exports = {
     name: "eval",
     permisions: [],
     allowedchannels: true,
+    allowebot: true,
     OnlyOwner: true,
     position: false,
     test: false,

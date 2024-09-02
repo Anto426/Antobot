@@ -1,10 +1,11 @@
 const { PermissionsBitField } = require("discord.js");
-const { comandbembed } = require("../../../embed/base/command");
-const { ErrEmbed } = require("../../../embed/err/errembed");
+const { comandbembed } = require("../../../../embed/base/command");
+const { ErrEmbed } = require("../../../../embed/err/errembed");
 module.exports = {
     name: "timeout",
     permisions: [PermissionsBitField.Flags.ModerateMembers],
     allowedchannels: true,
+    allowebot: false,
     OnlyOwner: false,
     position: true,
     test: false,
@@ -69,11 +70,12 @@ module.exports = {
         let time = interaction.options.getInteger('durata');
 
 
-        if (member.communicationDisabledUntilTimestamp == null || member.communicationDisabledUntilTimestamp < Date.now() && !member.bot) {
+
+        if (member.communicationDisabledUntilTimestamp == null || member.communicationDisabledUntilTimestamp < Date.now()) {
 
             let embed = new comandbembed(interaction.guild, interaction.member)
             embed.init().then(() => {
-                member.timeout().then(() => {
+                member.timeout(time, reason).then(() => {
                     interaction.reply({
                         embeds: [embed.timeout(member, time, reason)],
                     });
@@ -81,7 +83,11 @@ module.exports = {
                     console.log(err)
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.notkickError()], ephemeral: true })
+                        if (err.code == 50013) {
+                            interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true })
+                        } else {
+                            interaction.reply({ embeds: [embedmsg.nottimeoutError()], ephemeral: true })
+                        }
                     }
                     ).catch((err) => {
                         console.error(err);
@@ -103,11 +109,7 @@ module.exports = {
             console.log("utente già timeoutato")
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                if (member.bot) {
-                    interaction.reply({ embeds: [embedmsg.botUserError()], ephemeral: true })
-                } else {
-                    interaction.reply({ embeds: [embedmsg.isjusttimeoutError()], ephemeral: true })
-                }
+                interaction.reply({ embeds: [embedmsg.isjusttimeoutError()], ephemeral: true })
             }
             ).catch((err) => {
                 console.error(err);

@@ -8,6 +8,7 @@ module.exports = {
     name: "help",
     permisions: [],
     allowedchannels: true,
+    allowebot: true,
     OnlyOwner: false,
     position: false,
     test: false,

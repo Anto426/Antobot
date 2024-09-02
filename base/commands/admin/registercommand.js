@@ -8,6 +8,7 @@ module.exports = {
     name: "registercommand",
     permisions: [],
     allowedchannels: true,
+    allowebot: true,
     OnlyOwner: true,
     position: false,
     test: true,

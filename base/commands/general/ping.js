@@ -5,6 +5,7 @@ module.exports = {
     name: "ping",
     permisions: [],
     allowedchannels: true,
+    allowebot: true,
     OnlyOwner: false,
     position: false,
     test: false,
