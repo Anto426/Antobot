@@ -3,7 +3,7 @@ const { comandbembed } = require("../../../embed/base/command");
 const { ErrEmbed } = require("../../../embed/err/errembed");
 module.exports = {
     name: "timeout",
-    permisions: [PermissionsBitField.Flags.KickMembers],
+    permisions: [PermissionsBitField.Flags.ModerateMembers],
     allowedchannels: true,
     OnlyOwner: false,
     position: false,
@@ -113,12 +113,6 @@ module.exports = {
                 console.error(err);
             })
         }
-
-
-
-
-
-
 
 
     }
