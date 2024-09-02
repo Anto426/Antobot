@@ -351,6 +351,40 @@ class comandbembed extends BaseEmbed {
             .setThumbnail(embedconfig.image.timeout)
     }
 
+    untimeout(member) {
+        return this.embed
+            .setTitle("🔓 Untimeout")
+            .setDescription(`L'utente ${member.user.globalName} è stato untimeoutato`)
+            .addFields(
+                {
+                    name: "📛 Username",
+                    value: member.user.globalName.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tag",
+                    value: member.user.tag.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔒 Ruoli",
+                    value: member.roles.cache.size.toString(),
+
+                },
+                {
+                    name: "⏲️ Timeout annulato",
+                    value: member.communicationDisabledUntilTimestamp.toString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(embedconfig.image.untimeout)
+    }
+
 
 
 

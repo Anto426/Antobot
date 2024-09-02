@@ -171,7 +171,21 @@ class ErrEmbed extends BaseEmbed {
             .setDescription("l'utente è già in timeout")
             .setThumbnail(embedconfig.image.genericerr)
     }
-    
+
+    notuntimeoutError() {
+        return this.embed
+            .setTitle("🚫 Non è stato possibile rimuovere il timeout")
+            .setDescription("non posso rimuovere il timeout")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    nothavetimeoutError() {
+        return this.embed
+            .setTitle("🚫 L'utente non è in timeout")
+            .setDescription("l'utente non è in timeout")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
 }
 
 
