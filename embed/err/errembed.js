@@ -186,6 +186,20 @@ class ErrEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.genericerr)
     }
 
+    notlistbanerror() {
+        return this.embed
+            .setTitle("🚫 Non è stato possibile ottenere la lista dei ban")
+            .setDescription("non posso ottenere la lista dei ban")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    notunbannedError() {
+        return this.embed
+            .setTitle("🚫 Non è stato possibile sbannare l'utente")
+            .setDescription("non posso sbannare l'utente")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
 }
 
 

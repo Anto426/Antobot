@@ -403,6 +403,60 @@ class comandbembed extends BaseEmbed {
     }
 
 
+    notbanlist() {
+        return this.embed
+            .setTitle("🚫 Banlist vuota")
+            .setDescription("La banlist è vuota")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+
+    unbanlist(size) {
+        return this.embed
+            .setTitle("Lista Utenti Bannati")
+            .setDescription(`Ecco la lista degli utenti bannati Seleziona l'utente da sbannare:`)
+            .addFields(
+                {
+                    name: "🔗 N Utenti Bannati",
+                    value: size.toString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(embedconfig.image.load)
+    }
+
+    unban(member) {
+        return this.embed
+            .setTitle("🔓 Unban")
+            .setDescription(`L'utente ${member.user.globalName} è stato sbannato`)
+            .addFields(
+                {
+                    name: "📛 Username",
+                    value: member.user.globalName.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tag",
+                    value: member.user.tag.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id.toString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(member.user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+    }
+
+
+
+
+
 
 
 }
