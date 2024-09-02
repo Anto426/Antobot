@@ -283,7 +283,42 @@ class comandbembed extends BaseEmbed {
     }
 
 
+    kick(member, reason) {
+        return this.embed
+            .setTitle("👢 Kick")
+            .setDescription(`L'utente ${member.user.globalName} è stato kikkato`)
+            .addFields(
+                {
+                    name: "📛 Username",
+                    value: member.user.globalName.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tag",
+                    value: member.user.tag.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔒 Ruoli",
+                    value: member.roles.cache.size.toString(),
 
+                },
+                {
+                    name: "📅 Entrato",
+                    value: member.joinedAt.toDateString(),
+                },
+                {
+                    name: "👢 Motivo",
+                    value: reason.toString(),
+                }
+            )
+            .setThumbnail(embedconfig.image.kick)
+    }
 
 
 }

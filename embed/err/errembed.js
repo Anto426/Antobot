@@ -150,6 +150,13 @@ class ErrEmbed extends BaseEmbed {
             .setDescription("non posso bannare l'utente")
             .setThumbnail(embedconfig.image.genericerr)
     }
+
+    notkickError() {
+        return this.embed
+            .setTitle("🚫 Non è stato possibile kikkare l'utente")
+            .setDescription("non posso kikkare l'utente")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
     
 }
 
