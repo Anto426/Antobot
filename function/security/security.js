@@ -45,7 +45,7 @@ class Security extends Check {
         return new Promise((resolve) => {
             if (!this.owner || !this.serverOwner) {
                 if (this.command.allowedChannels) {
-                    super.checkChannel(this.interaction.channel.id, arr)
+                    super.checkPChannel(this.interaction.channel.id, arr)
                         .then(() => {
                             this.channel = true;
                             resolve(0);
@@ -90,9 +90,10 @@ class Security extends Check {
     checkPosition() {
         return new Promise((resolve) => {
 
-            if (this.command.position && this.interaction.options.getUser("user")) {
-                super.checkPosition(this.interaction.member.id, this.interaction.options.getUser("user").id, this.interaction.guild.id)
+            if (this.command.position && this.interaction.options.getMember("user")) {
+                super.checkPosition(this.interaction.member, this.interaction.options.getUser("user"))
                     .then(() => {
+                        this.position = true;
                         resolve(0);
                     })
                     .catch(() => {

@@ -114,10 +114,10 @@ class Check {
         });
     }
 
-    checkPosition(idUser, otherUserId, idGuild) {
+    checkPosition(User, otherUser) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == otherUserId) && !client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == otherUserId).bot && client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == idUser).roles.highest.position > client.guilds.cache.find(x => x.id == idGuild).members.cache.find(x => x.id == otherUserId).roles.highest.position) {
+                if (otherUser.roles.highest.position > User.roles.highest.position) {
                     resolve(0);
                 } else {
                     reject(-1);
