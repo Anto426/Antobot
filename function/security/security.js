@@ -90,8 +90,10 @@ class Security extends Check {
     checkPosition() {
         return new Promise((resolve) => {
 
-            if (this.command.position && this.interaction.options.getMember("user")) {
-                super.checkPosition(this.interaction.member, this.interaction.options.getUser("user"))
+            let otherUser = this.interaction.options.getMember("user")
+            
+            if (this.command.position && otherUser) {
+                super.checkPosition(this.interaction.member, otherUser)
                     .then(() => {
                         this.position = true;
                         resolve(0);

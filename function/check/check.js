@@ -117,12 +117,26 @@ class Check {
     checkPosition(User, otherUser) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (otherUser.roles.highest.position > User.roles.highest.position) {
+
+
+
+
+                const UserhighestRole = User.roles.cache.reduce((prevRole, currRole) => {
+                    return (prevRole.rawPosition > currRole.rawPosition) ? prevRole : currRole;
+                });
+
+                const otherUserhighestRole = otherUser.roles.cache.reduce((prevRole, currRole) => {
+                    return (prevRole.rawPosition > currRole.rawPosition) ? prevRole : currRole;
+                });
+
+
+                if (UserhighestRole.rawPosition > otherUserhighestRole.rawPosition) {
                     resolve(0);
                 } else {
                     reject(-1);
                 }
             } catch (err) {
+                console.log(err);
                 this.BotConsole.log("Errore, non ho potuto controllare la posizione", "red");
                 reject(-1);
             }
