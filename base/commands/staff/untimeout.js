@@ -26,7 +26,7 @@ module.exports = {
         let member = interaction.options.getMember('user');
 
 
-        if (member.communicationDisabledUntilTimestamp != null || member.communicationDisabledUntilTimestamp > Date.now() && !member.bot) {
+        if (member.communicationDisabledUntilTimestamp != null || member.communicationDisabledUntilTimestamp > Date.now()) {
 
             let embed = new comandbembed(interaction.guild, interaction.member)
             embed.init().then(() => {
@@ -61,7 +61,7 @@ module.exports = {
 
 
         } else {
-            console.log("utente già timeoutato")
+            console.log("utente già untimeoutato")
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
                 interaction.reply({ embeds: [embedmsg.nothavetimeoutError()], ephemeral: true })
