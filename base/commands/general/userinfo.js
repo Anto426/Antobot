@@ -12,7 +12,7 @@ module.exports = {
         name: "userinfo",
         description: "ritorna le informazioni del server",
         options: [{
-            name: "utente",
+            name: "user",
             description: "l'utente di cui vuoi le informazioni",
             type: 6,
             required: false
@@ -22,7 +22,7 @@ module.exports = {
 
 
         let embed = new comandbembed(interaction.guild, interaction.member)
-        let member = interaction.options.getMember('utente') || interaction.member;
+        let member = interaction.options.getMember('user') || interaction.member;
 
 
         embed.init().then(() => {

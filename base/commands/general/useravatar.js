@@ -12,7 +12,7 @@ module.exports = {
         name: "useravatar",
         description: "ritorna l'avatar dell'utente",
         options: [{
-            name: "utente",
+            name: "user",
             description: "l'utente di cui vuoi l'avatar",
             type: 6,
             required: false
@@ -21,7 +21,7 @@ module.exports = {
     execute(interaction) {
 
         let embed = new comandbembed(interaction.guild, interaction.member)
-        let member = interaction.options.getMember('utente') || interaction.member;
+        let member = interaction.options.getMember('user') || interaction.member;
 
 
         embed.init().then(() => {

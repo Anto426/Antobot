@@ -13,7 +13,7 @@ module.exports = {
         name: "untimeout",
         description: "untimeout un utente",
         options: [{
-            name: "utente",
+            name: "user",
             description: "l'utente il quale vuoi untimeoutare",
             type: 6,
             required: true
@@ -21,7 +21,7 @@ module.exports = {
     },
     execute(interaction) {
 
-        let member = interaction.options.getMember('utente');
+        let member = interaction.options.getMember('user');
 
 
         if (member.communicationDisabledUntilTimestamp != null || member.communicationDisabledUntilTimestamp > Date.now() && !member.bot) {

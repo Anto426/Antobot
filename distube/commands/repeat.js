@@ -19,17 +19,17 @@ module.exports = {
         options: [{
             name: "mode",
             description: "mode",
-            type: 3,
+            type: 4,
             required: true,
             choices: [{
                 name: "🔴Off",
-                value: "0"
+                value: 0
             }, {
                 name: "🎶 Song",
-                value: "1"
+                value: 1
             }, {
                 name: "🔁 Queue",
-                value: "2"
+                value: 2
             },]
         }]
     },
@@ -38,12 +38,12 @@ module.exports = {
 
 
         let queue = distube.getQueue(interaction)
-        let mode = interaction.options.getString("mode")
+        let mode = interaction.options.getInteger("mode")
 
 
         let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
         embedmsg.init().then(() => {
-            queue.setRepeatMode(parseInt(mode))
+            queue.setRepeatMode(mode)
             interaction.reply({ embeds: [embedmsg.repeat(mode)] })
         }).catch((err) => {
             console.error(err);

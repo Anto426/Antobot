@@ -13,7 +13,7 @@ module.exports = {
         name: "timeout",
         description: "timeout un utente",
         options: [{
-            name: "utente",
+            name: "user",
             description: "l'utente il quale vuoi timeoutare",
             type: 6,
             required: true
@@ -64,7 +64,7 @@ module.exports = {
     },
     execute(interaction) {
 
-        let member = interaction.options.getMember('utente');
+        let member = interaction.options.getMember('user');
         let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
         let time = interaction.options.getInteger('durata');
 

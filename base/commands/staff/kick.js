@@ -13,7 +13,7 @@ module.exports = {
         name: "kick",
         description: "kikka un utente",
         options: [{
-            name: "utente",
+            name: "user",
             description: "l'utente il quale vuoi kikkare",
             type: 6,
             required: true
@@ -28,7 +28,7 @@ module.exports = {
     execute(interaction) {
 
         let embed = new comandbembed(interaction.guild, interaction.member)
-        let member = interaction.options.getMember('utente');
+        let member = interaction.options.getMember('user');
         let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
 
         embed.init().then(() => {
