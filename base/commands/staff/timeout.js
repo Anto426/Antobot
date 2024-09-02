@@ -21,7 +21,7 @@ module.exports = {
         {
             "name": "durata",
             "description": "la durata del timeout",
-            "type": 3,
+            "type": 4,
             choices: [{
                 name: "⏱️ 1 min",
                 value: 1
