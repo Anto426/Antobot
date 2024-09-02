@@ -89,8 +89,9 @@ class Security extends Check {
 
     checkPosition() {
         return new Promise((resolve) => {
+
             if (this.command.position && this.interaction.options.getUser("user")) {
-                super.checkPosition(this.interaction.member.id, interaction.options.getUser("user").id, this.interaction.guild.id)
+                super.checkPosition(this.interaction.member.id, this.interaction.options.getUser("user").id, this.interaction.guild.id)
                     .then(() => {
                         resolve(0);
                     })
@@ -106,8 +107,8 @@ class Security extends Check {
 
     checkIsYou() {
         return new Promise((resolve) => {
-            if (this.command.position && interaction.options.getUser("user")) {
-                super.checkIsYou(this.interaction.member.id, interaction.options.getUser("user").id).then(() => {
+            if (this.command.position && this.interaction.options.getUser("user")) {
+                super.checkIsYou(this.interaction.member.id, this.interaction.options.getUser("user").id).then(() => {
                     this.isYou = true;
                     resolve(0);
                 }).catch(() => {
