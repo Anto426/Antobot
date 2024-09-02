@@ -68,7 +68,7 @@ module.exports = {
 
         let member = interaction.options.getMember('user');
         let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
-        let time = interaction.options.getInteger('durata');
+        let time = interaction.options.getInteger('durata') * 1000 * 60;
 
 
 
