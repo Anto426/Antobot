@@ -157,6 +157,20 @@ class ErrEmbed extends BaseEmbed {
             .setDescription("non posso kikkare l'utente")
             .setThumbnail(embedconfig.image.genericerr)
     }
+
+    nottimeoutError() {
+        return this.embed
+            .setTitle("🚫 Non è stato possibile timeoutare l'utente")
+            .setDescription("non posso timeoutare l'utente")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    isjusttimeoutError() {
+        return this.embed
+            .setTitle("🚫 L'utente è già in timeout")
+            .setDescription("l'utente è già in timeout")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
     
 }
 

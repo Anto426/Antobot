@@ -271,10 +271,6 @@ class comandbembed extends BaseEmbed {
 
                 },
                 {
-                    name: "📅 Entrato",
-                    value: member.joinedAt.toDateString(),
-                },
-                {
                     name: "🔨 Motivo",
                     value: reason.toString(),
                 }
@@ -309,16 +305,53 @@ class comandbembed extends BaseEmbed {
 
                 },
                 {
-                    name: "📅 Entrato",
-                    value: member.joinedAt.toDateString(),
-                },
-                {
                     name: "👢 Motivo",
                     value: reason.toString(),
                 }
             )
             .setThumbnail(embedconfig.image.kick)
     }
+
+
+    timeout(member, time, reason) {
+        return this.embed
+            .setTitle("⏲️ Timeout")
+            .setDescription(`L'utente ${member.user.globalName} è stato timeoutato`)
+            .addFields(
+                {
+                    name: "📛 Username",
+                    value: member.user.globalName.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tag",
+                    value: member.user.tag.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔒 Ruoli",
+                    value: member.roles.cache.size.toString(),
+
+                },
+                {
+                    name: "⏲️ Durata",
+                    value: time.toString(),
+                    inline: true
+                },
+                {
+                    name: "👢 Motivo",
+                    value: reason.toString(),
+                }
+            )
+            .setThumbnail(embedconfig.image.timeout)
+    }
+
+
 
 
 }
