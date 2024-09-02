@@ -428,11 +428,11 @@ class comandbembed extends BaseEmbed {
     unban(member) {
         return this.embed
             .setTitle("🔓 Unban")
-            .setDescription(`L'utente ${member.user.globalName} è stato sbannato`)
+            .setDescription(`L'utente ${member.user.globalName ? member.user.globalName : member.user.tag} è stato sbannato`)
             .addFields(
                 {
                     name: "📛 Username",
-                    value: member.user.globalName.toString(),
+                    value: (member.user.globalName ? member.user.globalName : member.user.tag).toString(),
                     inline: true
                 },
                 {
