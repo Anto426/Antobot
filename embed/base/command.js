@@ -253,7 +253,7 @@ class comandbembed extends BaseEmbed {
             .addFields(
                 {
                     name: "📛 Username",
-                    value: member.user.globalName.toString(),
+                    value: member.user.globalName ? member.user.globalName.toString() : member.user.tag.toString(),
                     inline: true
                 },
                 {
@@ -291,7 +291,7 @@ class comandbembed extends BaseEmbed {
             .addFields(
                 {
                     name: "📛 Username",
-                    value: member.user.globalName.toString(),
+                    value: member.user.globalName ? member.user.globalName.toString() : member.user.tag.toString(),
                     inline: true
                 },
                 {

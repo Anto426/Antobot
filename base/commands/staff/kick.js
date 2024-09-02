@@ -32,6 +32,7 @@ module.exports = {
         let member = interaction.options.getMember('user');
         let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
 
+
         embed.init().then(() => {
             member.kick(reason).then(() => {
                 interaction.reply({

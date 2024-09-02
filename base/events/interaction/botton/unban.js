@@ -92,15 +92,13 @@ module.exports = {
                             console.error(err);
                         })
                     })
-                })
-
+                }).catch(() => { })
 
         }
 
         if (interaction.customId.split("-").includes("unbanhub")) {
             let Cbotton = new botton()
             Cbotton.checkIsYourButton(interaction).then(() => {
-
                 let embed = new comandbembed(interaction.guild, interaction.member)
 
                 interaction.guild.bans.fetch().then((bans) => {
@@ -191,7 +189,6 @@ module.exports = {
                     })
                     let embed = new comandbembed(interaction.guild, interaction.member)
                     embed.init().then(() => {
-                        console.log(member)
                         interaction.guild.members.unban(member.user, "Unbanned").then(() => {
                             let row = new ActionRowBuilder().addComponents(
                                 new ButtonBuilder()
