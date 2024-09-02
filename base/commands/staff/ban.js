@@ -34,7 +34,7 @@ module.exports = {
         embed.init().then(() => {
             member.ban({ reason: reason }).then(() => {
                 interaction.reply({
-                    embeds: [embed.ban(member, motivo)],
+                    embeds: [embed.ban(member, reason)],
                 });
             }).catch((err) => {
                 console.log(err)
