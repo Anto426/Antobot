@@ -28,7 +28,7 @@ module.exports = {
                                 .addFields(
                                     {
                                         name: "Permessi",
-                                        value: (command.permisions.size != 0 && !command.OnlyOwner && !command.OnlyOwner) ? "🔓Libero" : "🔐Bloccato",
+                                        value: (command.permisions.size != 0 && !command.OnlyOwner) ? "🔓Libero" : "🔐Bloccato",
                                         inline: true
                                     },
                                     {
