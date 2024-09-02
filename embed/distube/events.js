@@ -38,7 +38,6 @@ class EventEmbed extends BaseEmbed {
                 { name: '🔗 URL Song', value: `[Clicca qui](${song.url.toString()})`, inline: true },
                 { name: '⌚ Duration', value: song.formattedDuration.toString(), inline: true },
                 { name: '👁️ Views', value: song.views.toString(), inline: true },
-                { name: "🔊 Volume", value: queen.volume.toString(), inline: true },
                 { name: '🧑‍🎨 Artist', value: song.uploader.name.toString(), inline: true },
                 { name: '🔗 URL Artist', value: `[Clicca qui](${song.uploader.url})`, inline: true }
             )
