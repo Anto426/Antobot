@@ -143,6 +143,13 @@ class ErrEmbed extends BaseEmbed {
             .setDescription("non posso riprendere la riproduzione")
             .setThumbnail(embedconfig.image.genericerr)
     }
+
+    notbanError() {
+        return this.embed
+            .setTitle("🚫 Non è stato possibile bannare l'utente")
+            .setDescription("non posso bannare l'utente")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
     
 }
 

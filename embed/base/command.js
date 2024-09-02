@@ -245,6 +245,46 @@ class comandbembed extends BaseEmbed {
             }))
     }
 
+    ban(member, reason) {
+        return this.embed
+            .setTitle("🔨 Ban")
+            .setDescription(`L'utente ${member.user.globalName} è stato bannato`)
+            .addFields(
+                {
+                    name: "📛 Username",
+                    value: member.user.globalName.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tag",
+                    value: member.user.tag.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔒 Ruoli",
+                    value: member.roles.cache.size.toString(),
+
+                },
+                {
+                    name: "📅 Entrato",
+                    value: member.joinedAt.toDateString(),
+                },
+                {
+                    name: "🔨 Motivo",
+                    value: reason.toString(),
+                }
+            )
+            .setThumbnail(embedconfig.image.ban)
+    }
+
+
+
+
 
 }
 
