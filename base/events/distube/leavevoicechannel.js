@@ -1,5 +1,5 @@
 const { ChannelType } = require("discord.js");
-const { isVoiceChannelEmpty, RepeatMode } = require("distube");
+const { isVoiceChannelEmpty } = require("distube");
 
 module.exports = {
     name: "voiceStateUpdate",
