@@ -5,8 +5,9 @@ module.exports = {
     async execute(oldMember, newMember) {
         let logmodule = new log();
         let console = new BotConsole();
+        const tag = true;
+        
         logmodule.init().then(() => {
-            const tag = true;
             let changedprop = [];
             for (let key in oldMember) {
                 if (oldMember[key] !== newMember[key]) {

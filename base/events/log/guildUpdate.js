@@ -3,9 +3,9 @@ module.exports = {
     name: "Log guildUpdate",
     typeEvent: "guildUpdate",
     async execute(newGuild, oldGuild) {
+        const tag = true;
         let logmodule = new log();
         logmodule.init().then(() => {
-            const tag = true;
             let changedprop = [];
             for (let key in oldGuild) {
                 if (oldGuild[key] !== newGuild[key]) {
