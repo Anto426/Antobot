@@ -112,6 +112,13 @@ class log {
     }
 
 
+    guildUpdate(newGuild, oldGuild, tag) {
+        let embedmsg = new logembed(channel.guild, channel);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.guildUpdate(newGuild, oldGuild), channel.guild, tag).catch(() => { });
+        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
 
 
 
