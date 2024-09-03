@@ -39,6 +39,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.green)
     }
 
     deletechannel(channel) {
@@ -63,6 +65,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.red)
     }
 
     updatechannel(newChannel, changedprop) {
@@ -79,6 +83,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            
     }
 
 
@@ -92,6 +97,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.green)
     }
 
 
@@ -105,6 +112,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.red)
     }
 
 
@@ -138,6 +147,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.red)
     }
 
     guildBanRemove(user) {
@@ -150,6 +161,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.green)
     }
 
 
@@ -214,6 +227,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.green)
     }
 
 
@@ -239,6 +254,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.red)
     }
 
     ready() {
@@ -289,6 +306,8 @@ class logembed extends BaseEmbed {
                 size: 512
             }))
 
+            .setColor(embedconfig.color.green)
+
     }
 
     roleCreate(role) {
@@ -318,6 +337,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.green)
     }
 
 
@@ -348,6 +369,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
+            .setColor(embedconfig.color.red)
     }
 
 
@@ -365,6 +388,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+
     }
 
 
@@ -390,6 +414,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.green)
     }
 
     guildMemberAddReturn(member, rolenamelist) {
@@ -418,6 +443,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.green)
     }
 
 
@@ -448,6 +474,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.red)
     }
 
     voiceEnter(user, channel) {
@@ -477,6 +504,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.green)
     }
 
     voiceExit(user, channel) {
@@ -506,6 +534,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.red)
     }
 
 

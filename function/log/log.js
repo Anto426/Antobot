@@ -217,14 +217,6 @@ class log {
 
     }
 
-
-
-
-
-
-
-
-
 }
 
 module.exports = { log }
