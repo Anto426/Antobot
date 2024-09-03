@@ -81,6 +81,14 @@ class log {
     }
 
 
+    emojiUpdate(oldEmoji, newEmoji, tag) {
+        let embedmsg = new logembed(channel.guild, channel);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.emojiUpdate(oldEmoji, newEmoji), channel.guild, tag).catch(() => { });
+        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
+
 
 
 

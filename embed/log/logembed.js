@@ -52,6 +52,17 @@ class logembed extends BaseEmbed {
 
 
 
+    emojiUpdate(oldEmoji, newEmoji) {
+        return this.embed
+            .setTitle("✏️ Emoji modificata")
+            .setDescription(`L'emoji ${oldEmoji} è stata modificata in ${newEmoji}`)
+            .setFooter(`Emoji modificata il ${this.Time.getTime()}`)
+    }
+
+
+    
+
+
 
 
 
