@@ -78,7 +78,7 @@ class LogStartup {
                 BaseComandsTable.push(["Name:" + element.name, "Description:" + element.data.description])
             });
             client.baseevents.forEach(element => {
-                BaseEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent])
+                BaseEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent, "Allow:" + element.allowevents])
             });
 
 
@@ -110,7 +110,7 @@ class LogStartup {
                 DistubeGeneralTable.push(["Name:" + element.name, "Description:" + element.data.description])
             });
             client.distubeevents.forEach(element => {
-                DistubeEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent])
+                DistubeEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent, "Allow:" + element.allowevents])
             });
 
 
