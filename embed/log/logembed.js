@@ -161,7 +161,7 @@ class logembed extends BaseEmbed {
                 name: "🔧 Proprietà modificate",
                 value: changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n")
             })
-            .setThumbnail(member.avatarURL(
+            .setThumbnail(member.user.avatarURL(
                 {
                     dynamic: true,
                     size: 256
@@ -442,7 +442,7 @@ class logembed extends BaseEmbed {
                     inline: true
                 }
             )
-            .setThumbnail(member.avatarURL(
+            .setThumbnail(member.user.avatarURL(
                 {
                     dynamic: true,
                     size: 256

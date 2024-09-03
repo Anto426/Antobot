@@ -1,18 +1,40 @@
 const { log } = require("../../../function/log/log");
+
 module.exports = {
     name: "Log guildUpdate",
     typeEvent: "guildUpdate",
-    async execute(newGuild, oldGuild) {
+    async execute(oldGuild, newGuild) {
         const tag = true;
         let logmodule = new log();
-        logmodule.init().then(() => {
+
+        try {
+            await logmodule.init();
+
             let changedprop = [];
-            for (let key in oldGuild) {
+            const keys = [
+                { key: "name", label: "📛 Name" },
+                { key: "region", label: "🌍 Region" },
+                { key: "verificationLevel", label: "✅ Verification Level" },
+                { key: "afkChannelID", label: "💤 AFK Channel" },
+                { key: "afkTimeout", label: "⏲️ AFK Timeout" },
+                { key: "icon", label: "🖼️ Icon" },
+                { key: "splash", label: "🌊 Splash" },
+                { key: "banner", label: "🎨 Banner" },
+                { key: "systemChannelID", label: "📢 System Channel" },
+                { key: "preferredLocale", label: "🌐 Preferred Locale" }
+            ];
+
+            keys.forEach(({ key, label }) => {
                 if (oldGuild[key] !== newGuild[key]) {
-                    changedprop.push({ key: key, old: oldMember[key], new: newMember[key] });
+                    changedprop.push({ key: label, old: oldGuild[key], new: newGuild[key] });
                 }
-            }
-            logmodule.guildUpdate(newGuild, changedprop, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+            });
+
+            if (changedprop.length > 0)
+                logmodule.guildUpdate(newGuild, changedprop, tag);
+
+        } catch (error) {
+            console.log("Errore nell'inizializzare il modulo log:", error);
+        }
     }
 }

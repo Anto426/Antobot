@@ -1,21 +1,58 @@
-const { BotConsole } = require("../../../function/log/botConsole");
 const { log } = require("../../../function/log/log");
+
 module.exports = {
     name: "Log guildMemberUpdate",
     typeEvent: "guildMemberUpdate",
     async execute(oldMember, newMember) {
         let logmodule = new log();
-        let console = new BotConsole();
         const tag = true;
-        
-        logmodule.init().then(() => {
+
+        try {
+            await logmodule.init();
             let changedprop = [];
-            for (let key in oldMember) {
+
+            const memberKeys = [
+                { key: "nickname", label: "👤 Nickname" },
+            ];
+
+            memberKeys.forEach(({ key, label }) => {
                 if (oldMember[key] !== newMember[key]) {
-                    changedprop.push({ key: key, old: oldMember[key], new: newMember[key] });
+                    changedprop.push({ key: label, old: oldMember[key], new: newMember[key] });
                 }
-            }
-            logmodule.guildMemberUpdate(oldMember, changedprop, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+            });
+
+            const userKeys = [
+                { key: "username", label: "👤 Username" },
+                { key: "discriminator", label: "🔢 Discriminator" },
+                { key: "avatar", label: "🖼️ Avatar" }
+            ];
+
+            userKeys.forEach(({ key, label }) => {
+                if (oldMember.user[key] !== newMember.user[key]) {
+                    changedprop.push({ key: label, old: oldMember.user[key], new: newMember.user[key] });
+                }
+            });
+
+            let oldRoles = oldMember.roles.cache.map(role => role.name);
+            let newRoles = newMember.roles.cache.map(role => role.name);
+
+            oldRoles.forEach((role) => {
+                if (!newRoles.includes(role)) {
+                    changedprop.push({ key: "🏤 Ruolo rimosso", old: role, new: null });
+                }
+            });
+
+            newRoles.forEach((role) => {
+                if (!oldRoles.includes(role)) {
+                    changedprop.push({ key: "🏤 Ruolo aggiunto", old: null, new: role });
+                }
+            });
+
+            if (changedprop.length > 0)
+                logmodule.guildMemberUpdate(newMember, changedprop, tag);
+
+        } catch (error) {
+            console.log("Errore nell'inizializzare il modulo log:", error);
+        }
     }
 }

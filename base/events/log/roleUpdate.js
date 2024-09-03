@@ -1,18 +1,35 @@
 const { log } = require("../../../function/log/log");
+
 module.exports = {
     name: "Log roleUpdate",
     typeEvent: "roleUpdate",
     async execute(oldRole, newRole) {
         const tag = true;
         let logmodule = new log();
-        logmodule.init().then(() => {
+
+        try {
+            await logmodule.init();
+
             let changedprop = [];
-            for (let key in oldRole) {
+            const keys = [
+                { key: "name", label: "📛 Name" },
+                { key: "color", label: "🎨 Color" },
+                { key: "hoist", label: "📌 Hoisted" },
+                { key: "position", label: "📍 Position" },
+                { key: "mentionable", label: "📣 Mentionable" }
+            ];
+
+            keys.forEach(({ key, label }) => {
                 if (oldRole[key] !== newRole[key]) {
-                    changedprop.push({ key: key, old: oldRole[key], new: newRole[key] });
+                    changedprop.push({ key: label, old: oldRole[key], new: newRole[key] });
                 }
-            }
-            logmodule.roleUpdate(newChannel, changedprop, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+            });
+
+            if (changedprop.length > 0)
+                logmodule.roleUpdate(newRole, changedprop, tag);
+
+        } catch (error) {
+            console.log("Errore nell'inizializzare il modulo log:", error);
+        }
     }
 }
