@@ -17,7 +17,7 @@ module.exports = {
                 logmodule.voiceEnter(user, newChannel, tag);
             } else if (oldChannel && !newChannel) {
                 logmodule.voiceExit(user, oldChannel, tag);
-            } else if (oldChannel && newChannel && oldChannel !== newChannel.id) {
+            } else if (oldChannel && newChannel && oldChannel.id !== newChannel.id) {
                 logmodule.voiceChange(user, newChannel, tag);
             }
         }).catch((err) => { console.log(err); console.log("Errore nell'inizializzare il modulo log") });
