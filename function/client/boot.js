@@ -3,6 +3,7 @@ const { WriteCommand } = require("../commands/WriteCommand");
 const { Loadothermodules } = require("../loadothermodule/loadothermodule");
 const { LogStartup } = require("../log/bootlog");
 const { BotConsole } = require("../log/botConsole");
+const { log } = require("../log/log");
 const { Time } = require("./../time/time")
 const { ClientInit } = require("./initclient");
 const { LoadEventsAndCommand } = require("./loadmodule");
@@ -17,6 +18,7 @@ class Boot {
         this.WriteCommand = new WriteCommand()
         this.time = new Time('Europe/Rome')
         this.ClientInit = new ClientInit()
+        this.log = new log()
 
     }
 
@@ -27,6 +29,12 @@ class Boot {
                     client.on('ready', async () => {
                         global.Timeon = this.time.getCurrentTimestamp()
                         new LogStartup().log()
+                        this.log.init().then(() => {
+                            this.log.ready(true)
+                        }).catch((err) => {
+                            console.log(err)
+                            this.BotConsole.log("Errore nell'inizializzare il modulo log", "red")
+                        })
                         await this.WriteCommand.commandAllguildonstartup().then(() => {
                             this.loadothermodules.load()
                         })

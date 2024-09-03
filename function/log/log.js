@@ -137,9 +137,9 @@ class log {
 
 
     ready(tag) {
-        let embedmsg = new logembed(Client.guilds.cache.get(this.guildJson["Anto's  Server"].id));
+        let embedmsg = new logembed(client.guilds.cache.get(this.guildJson["Anto's  Server"].id));
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.ready(), channel.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.ready(), client.guilds.cache.get(this.guildJson["Anto's  Server"].id), tag).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
