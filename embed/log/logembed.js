@@ -1,4 +1,5 @@
 const { BaseEmbed } = require("../baseembed");
+const package = require("../../package.json");
 
 class logembed extends BaseEmbed {
     constructor(guild, member) {
@@ -129,6 +130,30 @@ class logembed extends BaseEmbed {
             .setTitle("🔗 Invito eliminato")
             .setDescription(`L'invito ${invite} è stato eliminato`)
             .setFooter(`Invito eliminato il ${this.Time.getTime()}`)
+    }
+
+    ready() {
+        return this.embed
+            .setTitle("🟢 Bot pronto")
+            .setDescription(`il bot si è avviato correttamente`)
+            .addFields(
+                {
+                    name: "🔧 Versione",
+                    value: `${package.version}`,
+                    inline: true
+                },
+                {
+                    name: "🔧 Repo",
+                    value: ` [clicca qui](${package.repo})`,
+                    inline: true
+                },
+                {
+                    name: "🔧 Sviluppatore",
+                    value: `${package.author}`,
+                    inline: true
+                }
+            )
+            .setFooter(`Bot pronto il ${this.Time.getTime()}`)
     }
 
 
