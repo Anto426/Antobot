@@ -21,11 +21,23 @@ class log {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
             embedmsg.addchannel(channel);
-            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot.private-log).send({ embeds: [embedmsg.addchannel(channel)] });
+            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embedmsg.addchannel(channel)] });
+        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
+    deltechannel(channel) {
+        let embedmsg = new logembed(channel.guild, channel);
+        embedmsg.init().then(() => {
+            embedmsg.deletechannel(channel);
+            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embedmsg.deletechannel(channel)] });
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
     
+
+
+
+
 }
 
 module.exports = { log }

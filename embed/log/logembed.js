@@ -19,6 +19,13 @@ class logembed extends BaseEmbed {
         return this.embed;
     }
 
+    deletechannel(channel) {
+        this.embed.setTitle("Canale eliminato");
+        this.embed.setDescription(`Il canale ${channel} è stato eliminato`);
+        this.embed.setFooter(`Canale eliminato il ${this.Time.getTime()}`);
+        return this.embed;
+    }
+
 
 
 
