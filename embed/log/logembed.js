@@ -13,17 +13,25 @@ class logembed extends BaseEmbed {
 
 
     addchannel(channel) {
-        this.embed.setTitle("Nuovo canale creato");
-        this.embed.setDescription(`Il canale ${channel} è stato creato`);
-        this.embed.setFooter(`Canale creato il ${this.Time.getTime()}`);
-        return this.embed;
+        return this.embed
+            .setTitle("Nuovo canale creato")
+            .setDescription(`Il canale ${channel} è stato creato`)
+            .setFooter(`Canale creato il ${this.Time.getTime()}`)
     }
 
     deletechannel(channel) {
-        this.embed.setTitle("Canale eliminato");
-        this.embed.setDescription(`Il canale ${channel} è stato eliminato`);
-        this.embed.setFooter(`Canale eliminato il ${this.Time.getTime()}`);
-        return this.embed;
+        return this.embed
+            .setTitle("Canale eliminato")
+            .setDescription(`Il canale ${channel} è stato eliminato`)
+            .setFooter(`Canale eliminato il ${this.Time.getTime()}`)
+    }
+
+    updatechannel(oldChannel, changedprop) {
+        return this.embed
+            .setTitle("Canale modificato")
+            .setDescription(`Il canale ${oldChannel.name} è stato modificato in ${newChannel.name}`)
+            .addField("Proprietà modificate", changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n"))
+            .setFooter(`Canale modificato il ${this.Time.getTime()}`);
     }
 
 

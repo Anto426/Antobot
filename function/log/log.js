@@ -33,7 +33,21 @@ class log {
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
-    
+
+    updatechannel(newChannel, changedprop) {
+        let embedmsg = new logembed(channel.guild, channel);
+        embedmsg.init().then(() => {
+            embedmsg.updatechannel(channel);
+            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embedmsg.updatechannel(oldChannel, changedprop)] });
+        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
+
+
+
+
+
+
 
 
 
