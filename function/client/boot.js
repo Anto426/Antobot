@@ -11,12 +11,12 @@ require("dotenv").config()
 
 class Boot {
     constructor() {
-        this.LogStartup = new LogStartup()
         this.BotConsole = new BotConsole()
         this.loadothermodules = new Loadothermodules()
         this.loadEventsAndCommand = new LoadEventsAndCommand()
         this.WriteCommand = new WriteCommand()
-        this.Time = new Time('Europe/Rome')
+        this.time = new Time('Europe/Rome')
+        this.ClientInit = new ClientInit()
 
     }
 
@@ -25,8 +25,8 @@ class Boot {
             .then(() => {
                 try {
                     client.on('ready', async () => {
-                        global.Timeon = this.Time.getTime()
-                        this.LogStartup.log()
+                        global.Timeon = this.time.getCurrentTimestamp()
+                        new LogStartup().log()
                         await this.WriteCommand.commandAllguildonstartup().then(() => {
                             this.loadothermodules.load()
                         })
@@ -43,8 +43,7 @@ class Boot {
     }
 
     on() {
-        new this.Time.setTimezone()
-        new ClientInit().intitialallclientbysettings()
+        this.ClientInit.intitialallclientbysettings()
             .then(() => {
                 this.loadEventsAndCommand.loadall()
                     .then(() => {
