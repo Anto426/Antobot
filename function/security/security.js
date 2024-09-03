@@ -144,13 +144,13 @@ class Security extends Check {
                         result = error.notInVoiceChannelError;
                     } else {
                         if (result[1] && result[0].id != result[1].id) {
-                            result = error.musicAlreadyPlayingError;
+                            result = this.codeErr.musicAlreadyPlayingError;
                         }
                     }
                 }
                 if (this.command.disTube.checklisttrack) {
                     if (!distube.getQueue(this.interaction)) {
-                        result = error.listtrackError;
+                        result = this.codeErr.listtrackError;
                     }
                 }
                 if (Array.isArray(result)) {
