@@ -73,6 +73,13 @@ class logembed extends BaseEmbed {
             .setFooter(`Utente bannato il ${this.Time.getTime()}`)
     }
 
+    guildBanRemove(user) {
+        return this.embed
+            .setTitle("🔨 Utente sbannato")
+            .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} è stato sbannato`)
+            .setFooter(`Utente sbannato il ${this.Time.getTime()}`)
+    }
+
 
 
 

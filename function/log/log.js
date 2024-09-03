@@ -95,6 +95,13 @@ class log {
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
+    guildBanRemove(user, tag) {
+        let embedmsg = new logembed(channel.guild, channel);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.guildBanRemove(user), channel.guild, tag).catch(() => { });
+        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
 
 
 
