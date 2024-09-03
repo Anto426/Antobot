@@ -247,28 +247,47 @@ class logembed extends BaseEmbed {
             .setDescription(`il bot si è avviato correttamente`)
             .addFields(
                 {
-                    name: "🔧 Versione",
-                    value: `${this.package.version}`,
+                    name: "📜 N comandi di base caricati",
+                    value: `${client.basecommands.size.toString()}`,
+                },
+                {
+                    name: "🎵 N comandi di distube caricati",
+                    value: `${client.distubecommands.size.toString()}`,
+                },
+                {
+                    name: "📅 N Eventi caricati di base",
+                    value: `${client.baseevents.size.toString()}`,
+                },
+                {
+                    name: "🎶 N Eventi caricati di ditube",
+                    value: `${client.distubeevents.size.toString()}`,
+                },
+                {
+                    name: "🔧 Nome",
+                    value: `${this.package.name}`,
                     inline: true
                 },
                 {
-                    name: "🔧 Repo",
-                    value: ` [clicca qui](${this.package.repo})`,
+                    name: "🔧 Versione",
+                    value: `${this.package.version}`,
                     inline: true
                 },
                 {
                     name: "🔧 Sviluppatore",
                     value: `${this.package.author}`,
                     inline: true
-                }
+                },
+                {
+                    name: "🔧 Repo",
+                    value: ` [clicca qui](${this.package.repo})`
+                },
 
             )
-            .setThumbnail(this.client.member.iconURL(
-                {
-                    dynamic: true,
-                    size: 256
-                }
-            ))
+            .setThumbnail(client.user.displayAvatarURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
 
     }
 
