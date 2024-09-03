@@ -351,6 +351,22 @@ class logembed extends BaseEmbed {
     }
 
 
+    roleUpdate(oldRole, changedprop) {
+        return this.embed
+            .setTitle("🔧 Ruolo modificato")
+            .setDescription(`Il ruolo ${oldRole} è stato modificato in ${newRole}`)
+            .addFields({
+                name: "🔧 Proprietà modificate",
+                value: changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n")
+            })
+            .setThumbnail(oldRole.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
+
 
 
 

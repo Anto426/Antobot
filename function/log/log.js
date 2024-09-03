@@ -160,6 +160,15 @@ class log {
     }
 
 
+    roleUpdate(oldRole, changedprop, tag) {
+        let embedmsg = new logembed(oldRole.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.roleUpdate(oldRole, changedprop), oldRole.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+    }
+
+
 
 
 
