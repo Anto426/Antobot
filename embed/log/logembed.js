@@ -81,6 +81,15 @@ class logembed extends BaseEmbed {
     }
 
 
+    guildMemberUpdate(member, changedprop) {
+        return this.embed
+            .setTitle("✏️ Utente modificato")
+            .setDescription(`L'utente ${member.globalName ? member.globalName : member.tag} è stato modificato`)
+            .addField("🔧 Proprietà modificate", changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n"))
+            .setFooter(`Utente modificato il ${this.Time.getTime()}`);
+    }
+
+
 
 
 
