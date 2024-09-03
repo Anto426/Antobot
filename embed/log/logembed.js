@@ -156,7 +156,7 @@ class logembed extends BaseEmbed {
     guildMemberUpdate(member, changedprop) {
         return this.embed
             .setTitle("✏️ Utente modificato")
-            .setDescription(`L'utente ${member.globalName ? member.globalName : member.tag} è stato modificato`)
+            .setDescription(`L'utente ${member.user.globalName ? member.user.globalName : member.user.tag} è stato modificato`)
             .addFields({
                 name: "🔧 Proprietà modificate",
                 value: changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n")
@@ -354,7 +354,7 @@ class logembed extends BaseEmbed {
     roleUpdate(oldRole, changedprop) {
         return this.embed
             .setTitle("🔧 Ruolo modificato")
-            .setDescription(`Il ruolo ${oldRole} è stato modificato in ${newRole}`)
+            .setDescription(`Il ruolo ${oldRole.name} è stato modificato`)
             .addFields({
                 name: "🔧 Proprietà modificate",
                 value: changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n")
@@ -371,25 +371,20 @@ class logembed extends BaseEmbed {
     guildMemberAdd(member) {
         return this.embed
             .setTitle("👥 Nuovo membro")
-            .setDescription(`Benvenuto ${member.globalName ? member.globalName : member.tag} nel server`)
+            .setDescription(`Benvenuto ${member.user.globalName ? member.user.globalName : member.user.tag} nel server`)
             .addFields(
                 {
                     name: "👥 Nome",
-                    value: member.globalName ? member.globalName : member.tag,
+                    value: member.user.globalName ? member.user.globalName.toString() : member.user.tag.toString(),
                     inline: true
                 },
                 {
-                    name: "👥 ID",
-                    value: member.id,
+                    name: "🆔 ID",
+                    value: member.user.id.toString(),
                     inline: true
                 },
-                {
-                    name: "👥 Data di entrata",
-                    value: this.Time.formatDate(member.joinedAt),
-                    inline: true
-                }
             )
-            .setThumbnail(member.avatarURL(
+            .setThumbnail(member.user.avatarURL(
                 {
                     dynamic: true,
                     size: 256
@@ -400,29 +395,24 @@ class logembed extends BaseEmbed {
     guildMemberAddReturn(member, rolenamelist) {
         return this.embed
             .setTitle("👥 Membro ritornato")
-            .setDescription(`Bentornato ${member.globalName ? member.globalName : member.tag} nel server`)
+            .setDescription(`Bentornato ${member.user.globalName ? member.user.globalName : member.user.tag} nel server`)
             .addFields(
                 {
                     name: "👥 Nome",
-                    value: member.globalName ? member.globalName : member.tag,
+                    value: member.user.globalName ? member.user.globalName.toString() : member.user.tag.toString(),
                     inline: true
                 },
                 {
-                    name: "👥 ID",
-                    value: member.id,
+                    name: "🆔 ID",
+                    value: member.user.id.toString(),
                     inline: true
                 },
                 {
-                    name: "👥 Data di entrata",
-                    value: this.Time.formatDate(member.joinedAt),
-                    inline: true
-                },
-                {
-                    name: "👥 Ruoli",
+                    name: "🎭 Ruoli ricevuti",
                     value: rolenamelist.join("\n")
                 }
             )
-            .setThumbnail(member.avatarURL(
+            .setThumbnail(member.user.avatarURL(
                 {
                     dynamic: true,
                     size: 256
@@ -434,11 +424,11 @@ class logembed extends BaseEmbed {
     guildMemberRemove(member) {
         return this.embed
             .setTitle("👥 Membro uscito")
-            .setDescription(`L'utente ${member.globalName ? member.globalName : member.tag} ha lasciato il server`)
+            .setDescription(`L'utente ${member.user.globalName ? member.user.globalName : member.user.tag} ha lasciato il server`)
             .addFields(
                 {
                     name: "👥 Nome",
-                    value: member.globalName ? member.globalName : member.tag,
+                    value: member.user.globalName ? member.user.globalName : member.user.tag,
                     inline: true
                 },
                 {
@@ -448,7 +438,7 @@ class logembed extends BaseEmbed {
                 },
                 {
                     name: "👥 Data di entrata",
-                    value: this.Time.formatDate(member.joinedAt),
+                    value: this.Time.formatDate(member.joinedAt).toString(),
                     inline: true
                 }
             )
