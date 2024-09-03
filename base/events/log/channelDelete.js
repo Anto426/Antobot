@@ -5,10 +5,10 @@ module.exports = {
     typeEvent: "channelDelete",
     async execute(channel) {
         const tag = true;
-        let logchannel = new log();
+        let logmodule = new log();
         let console = new BotConsole();
-        logchannel.init().then(() => {
-            logchannel.deltechannel(channel, tag);
+        logmodule.init().then(() => {
+            logmodule.deltechannel(channel, tag);
         }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
     }
 }

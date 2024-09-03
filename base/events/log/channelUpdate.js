@@ -4,9 +4,9 @@ module.exports = {
     name: "Log channelUpdate",
     typeEvent: "channelUpdate",
     async execute(oldChannel, newChannel) {
-        let logchannel = new log();
+        let logmodule = new log();
         let console = new BotConsole();
-        logchannel.init().then(() => {
+        logmodule.init().then(() => {
             const tag = true;
             let changedprop = [];
             for (let key in oldChannel) {
@@ -14,7 +14,7 @@ module.exports = {
                     changedprop.push({ key: key, old: oldChannel[key], new: newChannel[key] });
                 }
             }
-            logchannel.updatechannel(newChannel, changedprop, tag);
+            logmodule.updatechannel(newChannel, changedprop, tag);
         }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
     }
 }

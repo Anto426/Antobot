@@ -5,10 +5,10 @@ module.exports = {
     typeEvent: "emojiCreate",
     async execute(emoji) {
         const tag = true;
-        let logchannel = new log();
+        let logmodule = new log();
         let console = new BotConsole();
-        logchannel.init().then(() => {
-            logchannel.emojiCreate(emoji, tag);
+        logmodule.init().then(() => {
+            logmodule.emojiCreate(emoji, tag);
         }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
     }
 }
