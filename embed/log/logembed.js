@@ -89,13 +89,38 @@ class logembed extends BaseEmbed {
             .setFooter(`Utente modificato il ${this.Time.getTime()}`);
     }
 
-    
+
     guildUpdate(newGuild, changedprop) {
         return this.embed
             .setTitle("✏️ Server modificato")
             .setDescription(`Il server ${newGuild.name} è stato modificato`)
             .addField("🔧 Proprietà modificate", changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n"))
             .setFooter(`Server modificato il ${this.Time.getTime()}`);
+    }
+
+
+    inviteCreate(invite) {
+        return this.embed
+            .setTitle("🔗 Invito creato")
+            .setDescription(`Il nuovo invito ${invite} è stato creato`)
+            .addFields(
+                {
+                    name: "🔗 Creatore",
+                    value: `${invite.inviter.globalName ? invite.inviter.globalName : invite.inviter.tag}`,
+                    inline: true
+                },
+                {
+                    name: "🔗 Usi",
+                    value: invite.uses,
+                    inline: true
+                },
+                {
+                    name: "🔗 Scadenza",
+                    value: invite.expiresAt,
+                    inline: true
+                }
+            )
+            .setFooter(`Invito creato il ${this.Time.getTime()}`)
     }
 
 
