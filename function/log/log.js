@@ -2,7 +2,6 @@ const { BotConsole } = require("./botConsole");
 const setting = require("./../../setting/settings.json");
 const { logembed } = require("../../embed/log/logembed");
 const { Cjson } = require("../file/json");
-const { Client } = require("discord.js");
 class log {
 
     constructor() {
