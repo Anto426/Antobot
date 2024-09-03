@@ -129,7 +129,7 @@ class logembed extends BaseEmbed {
             .addFields(
                 {
                     name: "🔨 Motivo",
-                    value: reason.toString(),
+                    value: reason ? reason : "Non specificato",
                 }
             )
             .setThumbnail(user.avatarURL(
@@ -319,6 +319,37 @@ class logembed extends BaseEmbed {
                 }
             ))
     }
+
+
+    roleDelete(role) {
+        return this.embed
+            .setTitle("🔧 Ruolo eliminato")
+            .setDescription(`Il ruolo ${role} è stato eliminato`)
+            .addFields(
+                {
+                    name: "🔧 Nome",
+                    value: role.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔧 Colore",
+                    value: role.hexColor.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔧 Posizione",
+                    value: role.position.toString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(role.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
+
 
 
 

@@ -92,11 +92,12 @@ class log {
     guildBanAdd(guildban, tag) {
         let embedmsg = new logembed(guildban.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildBanAdd(guildban.user, guildban.reason), user.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.guildBanAdd(guildban.user, guildban.reason), guildban.guild, tag).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
     guildBanRemove(guildban, tag) {
+        console.log(guildban);
         let embedmsg = new logembed(guildban.guild);
         embedmsg.init().then(() => {
             this.sendlog(embedmsg.guildBanRemove(guildban.user), guildban.guild, tag).catch(() => { });
@@ -150,6 +151,13 @@ class log {
     }
 
 
+
+    roleDelete(role, tag) {
+        let embedmsg = new logembed(role.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.roleDelete(role), role.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
 
 
 
