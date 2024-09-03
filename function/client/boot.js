@@ -26,9 +26,7 @@ class Boot {
                 try {
                     client.on('ready', async () => {
                         global.Timeon = this.Time.getTime()
-                        this.LogStartup.init().then(() => {
-
-                        }).catch(() => { })
+                        this.LogStartup.log()
                         await this.WriteCommand.commandAllguildonstartup().then(() => {
                             this.loadothermodules.load()
                         })
