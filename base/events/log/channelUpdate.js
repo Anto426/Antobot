@@ -24,8 +24,8 @@ module.exports = {
                     { key: "rateLimitPerUser", label: "⏱️ slowmode" },
                     { key: "parentID", label: "🔗 parentID" },
                     { key: "bit", label: "🔒 permissionOverwrites" },
-                    { key: "bitrate", label: "🔊 bitrate" }
-
+                    { key: "bitrate", label: "🔊 bitrate" },
+                    { key: "userLimit", label: "👥 userLimit" },
                 ];
 
                 keys.forEach(({ key, label }) => {
