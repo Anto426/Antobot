@@ -142,6 +142,12 @@ class log {
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
+    roleCreate(role, tag) {
+        let embedmsg = new logembed(role.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.roleCreate(role), role.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
 
 
 

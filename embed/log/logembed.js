@@ -291,7 +291,34 @@ class logembed extends BaseEmbed {
 
     }
 
-
+    roleCreate(role) {
+        return this.embed
+            .setTitle("🔧 Nuovo ruolo creato")
+            .setDescription(`Il nuovo ruolo ${role} è stato creato`)
+            .addFields(
+                {
+                    name: "🔧 Nome",
+                    value: role.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔧 Colore",
+                    value: role.hexColor.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔧 Posizione",
+                    value: role.position.toString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(role.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
 
 
 
