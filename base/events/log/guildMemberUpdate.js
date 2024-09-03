@@ -15,7 +15,7 @@ module.exports = {
                     changedprop.push({ key: key, old: oldMember[key], new: newMember[key] });
                 }
             }
-            logmodule.guildMemberUpdate(newMember, changedprop, tag);
+            logmodule.guildMemberUpdate(oldMember, changedprop, tag);
         }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
     }
 }
