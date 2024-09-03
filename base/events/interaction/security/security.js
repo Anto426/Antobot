@@ -10,6 +10,7 @@ const setting = require("../../../../setting/settings.json")
 module.exports = {
     name: "security",
     typeEvent: "interactionCreate",
+    allowevents: true,
     async execute(interaction) {
         let erremb = new ErrEmbed(interaction.guild, interaction.member)
         erremb.init()

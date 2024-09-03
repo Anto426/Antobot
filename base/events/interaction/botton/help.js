@@ -9,6 +9,7 @@ const { ErrEmbed } = require("../../../../embed/err/errembed");
 module.exports = {
     name: "help",
     typeEvent: "interactionCreate",
+    allowevents: true,
     async execute(interaction) {
         if (interaction.isChatInputCommand()) return;
 
