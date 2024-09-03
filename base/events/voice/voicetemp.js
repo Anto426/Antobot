@@ -4,6 +4,7 @@ const setting = require("../../../setting/settings.json")
 module.exports = {
     name: "voicestateupdate",
     typeEvent: "voiceStateUpdate",
+    allowevents: true,
     async execute(oldMember, newMember) {
         if (!newMember.member.user.bot) {
             let json = new Cjson;

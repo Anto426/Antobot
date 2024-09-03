@@ -5,6 +5,7 @@ const setting = require("../../../setting/settings.json")
 module.exports = {
     name: "LeftM",
     typeEvent: "guildMemberRemove",
+    allowevents: true,
     async execute(member) {
 
         if (member.user.bot) return;

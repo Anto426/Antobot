@@ -62,9 +62,10 @@ class LoadEventsAndCommand {
         this.load("baseevents", process.env.dirbot + setting.base.events)
             .then(() => {
                 client.baseevents.forEach(x => {
-                    client.on(x.typeEvent, (...args) => {
-                        x.execute(...args)
-                    });
+                    if (x.allowevents)
+                        client.on(x.typeEvent, (...args) => {
+                            x.execute(...args)
+                        });
                 });
             })
             .catch(() => {
@@ -89,9 +90,10 @@ class LoadEventsAndCommand {
         this.load("distubeevents", process.env.dirbot + setting.distube.events)
             .then(() => {
                 client.distubeevents.forEach(x => {
-                    distube.on(x.typeEvent, (...args) => {
-                        x.execute(...args)
-                    });
+                    if (x.allowevents)
+                        distube.on(x.typeEvent, (...args) => {
+                            x.execute(...args)
+                        });
                 });
             })
             .catch(() => {

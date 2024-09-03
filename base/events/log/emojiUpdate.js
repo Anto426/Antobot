@@ -2,6 +2,7 @@ const { log } = require("../../../function/log/log");
 module.exports = {
     name: "Log emojiUpdate",
     typeEvent: "emojiUpdate",
+    allowevents: true,
     async execute(oldEmoji, newEmoji) {
         const tag = true;
         let logmodule = new log();

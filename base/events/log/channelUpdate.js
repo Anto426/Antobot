@@ -3,6 +3,7 @@ const { log } = require("../../../function/log/log");
 module.exports = {
     name: "Log channelUpdate",
     typeEvent: "channelUpdate",
+    allowevents: true,
     async execute(oldChannel, newChannel) {
         const tag = true;
         let logmodule = new log();
@@ -27,7 +28,7 @@ module.exports = {
 
             if (changedprop.length > 0)
                 logmodule.updatechannel(newChannel, changedprop, tag);
-            
+
         } catch (error) {
             console.log("Errore nell'inizializzare il modulo log:", error);
         }

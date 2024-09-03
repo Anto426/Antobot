@@ -2,6 +2,7 @@ const { log } = require("../../../function/log/log");
 module.exports = {
     name: "Log roleCreate",
     typeEvent: "roleCreate",
+    allowevents: true,
     async execute(role) {
         const tag = true;
         let logmodule = new log();

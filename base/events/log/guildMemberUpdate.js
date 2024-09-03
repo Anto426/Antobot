@@ -3,6 +3,7 @@ const { log } = require("../../../function/log/log");
 module.exports = {
     name: "Log guildMemberUpdate",
     typeEvent: "guildMemberUpdate",
+    allowevents: true,
     async execute(oldMember, newMember) {
         let logmodule = new log();
         const tag = true;

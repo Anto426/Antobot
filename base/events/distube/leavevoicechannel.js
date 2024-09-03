@@ -4,6 +4,7 @@ const { isVoiceChannelEmpty } = require("distube");
 module.exports = {
     name: "voiceStateUpdate",
     typeEvent: "voiceStateUpdate",
+    allowevents: true,
     async execute(oldState, newState) {
 
         const client = oldState.client || newState.client;

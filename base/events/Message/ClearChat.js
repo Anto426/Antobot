@@ -6,6 +6,7 @@ const setting = require("../../../setting/settings.json");
 module.exports = {
     name: "ClearChat",
     typeEvent: "messageCreate",
+    allowevents: true,
     async execute(message) {
 
         let json = new Cjson();

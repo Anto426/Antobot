@@ -4,6 +4,7 @@ const { ErrEmbed } = require("../../embed/err/errembed");
 module.exports = {
     name: "Error of distube",
     typeEvent: "error",
+    allowevents: true,
     async execute(error, queue, song) {
         try {
             console.log(error);

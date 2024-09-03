@@ -8,6 +8,7 @@ const setting = require("../../../setting/settings.json");
 module.exports = {
     name: "AddM",
     typeEvent: "guildMemberAdd",
+    allowevents: true,
     async execute(member) {
         let embedMsg = new EventEmbed(member.guild);
         embedMsg.init().then(async () => {

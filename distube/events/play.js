@@ -4,6 +4,7 @@ const { ErrEmbed } = require("../../embed/err/errembed");
 module.exports = {
     name: "Play",
     typeEvent: "playSong",
+    allowevents: true,
     async execute(queue, song) {
         const embedmsg = new EventEmbed(queue.textChannel.guild);
         embedmsg.init().then(() => {

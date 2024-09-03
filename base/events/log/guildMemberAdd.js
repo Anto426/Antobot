@@ -4,6 +4,7 @@ const setting = require("../../../setting/settings.json");
 module.exports = {
     name: "Log guildMemberAdd",
     typeEvent: "guildMemberAdd",
+    allowevents: true,
     async execute(member) {
         const tag = true;
         let logmodule = new log();

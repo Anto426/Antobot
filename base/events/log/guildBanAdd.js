@@ -2,6 +2,7 @@ const { log } = require("../../../function/log/log");
 module.exports = {
     name: "Log guildBanAdd",
     typeEvent: "guildBanAdd",
+    allowevents: true,
     async execute(guildban) {
         const tag = true;
         let logmodule = new log();
