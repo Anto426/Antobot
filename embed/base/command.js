@@ -45,7 +45,18 @@ class comandbembed extends BaseEmbed {
         return this.embed
             .setTitle("🆘 Help")
             .setDescription("🌟 Benvenuto nel comando 'help'! Hai bisogno di informazioni su un particolare comando? Clicca su quello di cui hai bisogno e io ti aiuterò! 🚀")
+            .addFields(
+                {
+                    name: "📜 N Comandi Base",
+                    value: client.basecommands.size.toString(),
+                },
+                {
+                    name: "🎵 N Comandi Distube",
+                    value: client.distubecommands.size.toString(),
+                },
+            )
             .setThumbnail(embedconfig.image.help)
+
     }
 
     eval() {

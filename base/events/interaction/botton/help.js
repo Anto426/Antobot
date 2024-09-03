@@ -25,20 +25,20 @@ module.exports = {
                                 .setTitle(`${jsonf.command[command.name].emoji}  ${command.name}`)
                                 .setColor(embedconfig.color.green)
                                 .setDescription(jsonf.command[command.name].description)
-                                .setThumbnail(embedconfig.image.help)
+                                .setThumbnail(jsonf.command[command.name].image)
                                 .addFields(
                                     {
-                                        name: "Permessi",
-                                        value: (command.permisions.size != 0 && !command.OnlyOwner) ? "🔓Libero" : "🔐Bloccato",
+                                        name: "🔑 Permessi",
+                                        value: (command.permisions.length == 0 && !command.OnlyOwner) ? "🔓Libero" : "🔐Bloccato",
                                         inline: true
                                     },
                                     {
-                                        name: "Libero su tutti i canali",
+                                        name: "🌐 Libero su tutti i canali",
                                         value: command.allowedchannels ? "⚔️No" : "🏇Si",
                                         inline: true
                                     },
                                     {
-                                        name: "Appartenente al client",
+                                        name: "🤖 Appartenente al client",
                                         value: `🤖${command.type}`,
                                         inline: true
                                     },
