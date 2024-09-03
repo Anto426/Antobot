@@ -10,37 +10,38 @@ module.exports = {
         let logmodule = new log();
         let json = new Cjson();
 
-        try {
-            await logmodule.init().then(() => {
 
-                json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((data) => {
+        await logmodule.init().then(() => {
 
-                    let changedprop = [];
-                    let keys = [
-                        { key: "name", label: "📛 name" },
-                        { key: "position", label: "📍 position" },
-                        { key: "topic", label: "📝 topic" },
-                        { key: "nsfw", label: "🔞 nsfw" },
-                        { key: "rateLimitPerUser", label: "⏱️ slowmode" },
-                        { key: "parentID", label: "🔗 parentID" },
-                    ];
+            json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((data) => {
 
-                    keys.forEach(({ key, label }) => {
-                        if (oldChannel[key] !== newChannel[key]) {
-                            changedprop.push({ key: label, old: oldChannel[key], new: newChannel[key] });
-                        }
-                    });
+                let changedprop = [];
+                let keys = [
+                    { key: "name", label: "📛 name" },
+                    { key: "position", label: "📍 position" },
+                    { key: "topic", label: "📝 topic" },
+                    { key: "nsfw", label: "🔞 nsfw" },
+                    { key: "rateLimitPerUser", label: "⏱️ slowmode" },
+                    { key: "parentID", label: "🔗 parentID" },
+                    { key: "bit", label: "🔒 permissionOverwrites" },
+                    { key: "bitrate", label: "🔊 bitrate" }
 
-                    if (changedprop.length > 0 && newChannel.parentId !== data[newChannel.guild.name].channel.hollyday.id)
-                        logmodule.updatechannel(newChannel, changedprop, tag);
+                ];
 
-                }).catch(() => { });
+                keys.forEach(({ key, label }) => {
+                    if (oldChannel[key] !== newChannel[key]) {
+                        changedprop.push({ key: label, old: oldChannel[key], new: newChannel[key] });
+                    }
+                });
+
+                if (changedprop.length > 0 && newChannel.parentId !== data[newChannel.guild.name].channel.hollyday.id)
+                    logmodule.updatechannel(newChannel, changedprop, tag);
+
+            }).catch((err) => { console.log(err) });
 
 
-            }).catch(() => { });
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log:", error); });
 
-        } catch (error) {
-            console.log("Errore nell'inizializzare il modulo log:", error);
-        }
+
     }
 }
