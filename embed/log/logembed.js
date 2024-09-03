@@ -431,10 +431,34 @@ class logembed extends BaseEmbed {
     }
 
 
-
-
-
-
+    guildMemberRemove(member) {
+        return this.embed
+            .setTitle("👥 Membro uscito")
+            .setDescription(`L'utente ${member.globalName ? member.globalName : member.tag} ha lasciato il server`)
+            .addFields(
+                {
+                    name: "👥 Nome",
+                    value: member.globalName ? member.globalName : member.tag,
+                    inline: true
+                },
+                {
+                    name: "👥 ID",
+                    value: member.id,
+                    inline: true
+                },
+                {
+                    name: "👥 Data di entrata",
+                    value: this.Time.formatDate(member.joinedAt),
+                    inline: true
+                }
+            )
+            .setThumbnail(member.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
 
 
 }

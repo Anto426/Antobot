@@ -185,6 +185,13 @@ class log {
 
 
 
+    guildMemberRemove(member, tag) {
+        let embedmsg = new logembed(member.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.guildMemberRemove(member), member.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+    }
 
 
 
