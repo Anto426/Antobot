@@ -1,5 +1,4 @@
 const { BotConsole } = require("../../../function/log/botConsole");
-const { log } = require("../../../function/log/log");
 module.exports = {
     name: "Log guildBanRemove",
     typeEvent: "guildBanRemove",
