@@ -13,7 +13,7 @@ module.exports = {
                     changedprop.push({ key: key, old: oldChannel[key], new: newChannel[key] });
                 }
             }
-            logchannel.deltechannel(newChannel, changedprop);
+            logchannel.updatechannel(newChannel, changedprop);
         }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
     }
 }
