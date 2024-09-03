@@ -168,6 +168,21 @@ class log {
 
     }
 
+    guildMemberAdd(member, tag) {
+        let embedmsg = new logembed(member.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.guildMemberAdd(member), member.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+    }
+
+    guildMemberAddReturn(member, rolenamelist, tag) {
+        let embedmsg = new logembed(member.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.guildMemberAddReturn(member, rolenamelist), member.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
 
 
 

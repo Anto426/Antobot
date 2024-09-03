@@ -368,6 +368,69 @@ class logembed extends BaseEmbed {
     }
 
 
+    guildMemberAdd(member) {
+        return this.embed
+            .setTitle("👥 Nuovo membro")
+            .setDescription(`Benvenuto ${member.globalName ? member.globalName : member.tag} nel server`)
+            .addFields(
+                {
+                    name: "👥 Nome",
+                    value: member.globalName ? member.globalName : member.tag,
+                    inline: true
+                },
+                {
+                    name: "👥 ID",
+                    value: member.id,
+                    inline: true
+                },
+                {
+                    name: "👥 Data di entrata",
+                    value: this.Time.formatDate(member.joinedAt),
+                    inline: true
+                }
+            )
+            .setThumbnail(member.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
+
+    guildMemberAddReturn(member, rolenamelist) {
+        return this.embed
+            .setTitle("👥 Membro ritornato")
+            .setDescription(`Bentornato ${member.globalName ? member.globalName : member.tag} nel server`)
+            .addFields(
+                {
+                    name: "👥 Nome",
+                    value: member.globalName ? member.globalName : member.tag,
+                    inline: true
+                },
+                {
+                    name: "👥 ID",
+                    value: member.id,
+                    inline: true
+                },
+                {
+                    name: "👥 Data di entrata",
+                    value: this.Time.formatDate(member.joinedAt),
+                    inline: true
+                },
+                {
+                    name: "👥 Ruoli",
+                    value: rolenamelist.join("\n")
+                }
+            )
+            .setThumbnail(member.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
+
+
 
 
 
