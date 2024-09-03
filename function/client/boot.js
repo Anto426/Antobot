@@ -11,6 +11,13 @@ require("dotenv").config()
 
 class Boot {
     constructor() {
+        this.LogStartup = new LogStartup()
+        this.BotConsole = new BotConsole()
+        this.loadothermodules = new Loadothermodules()
+        this.loadEventsAndCommand = new LoadEventsAndCommand()
+        this.WriteCommand = new WriteCommand()
+        this.Time = new Time('Europe/Rome')
+
     }
 
     loging() {
@@ -18,38 +25,39 @@ class Boot {
             .then(() => {
                 try {
                     client.on('ready', async () => {
-                        global.Timeon = new Date().getTime()
-                        new LogStartup().log()
-                        await new WriteCommand().commandAllguildonstartup().then(() => {
-                            new Loadothermodules().load()
+                        global.Timeon = this.Time.getTime()
+                        this.LogStartup.init().then(() => {
+
+                        }).catch(() => { })
+                        await this.WriteCommand.commandAllguildonstartup().then(() => {
+                            this.loadothermodules.load()
                         })
 
                     })
                 } catch {
-                    new BotConsole().log("Errore il Token non è valido il bot verrà killato", "red")
+                    this.BotConsole.log("Errore il Token non è valido il bot verrà killato", "red")
                 }
             })
             .catch(async () => {
-                await new BotConsole().log("Errore il Token non è valido il bot verrà killato", "red")
+                this.BotConsole.log("Errore il Token non è valido il bot verrà killato", "red")
                 process.exit(-1);
             })
     }
 
     on() {
-        new Time('Europe/Rome').setTimezone()
+        new this.Time.setTimezone()
         new ClientInit().intitialallclientbysettings()
             .then(() => {
-                new LoadEventsAndCommand().loadall()
+                this.loadEventsAndCommand.loadall()
                     .then(() => {
                         this.loging()
                     })
                     .catch(() => {
                         this.loging()
                     })
-
             })
             .catch(async () => {
-                await new BotConsole().log("Errore il client non è stato inizializato correttamete il bot verrà killato", "red")
+                this.BotConsole.log("Errore il client non è stato inizializato correttamete il bot verrà killato", "red")
                 process.exit(-1);
             })
     }
