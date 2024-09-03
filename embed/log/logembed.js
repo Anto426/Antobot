@@ -450,6 +450,94 @@ class logembed extends BaseEmbed {
             ))
     }
 
+    voiceEnter(user, channel) {
+        return this.embed
+            .setTitle("🎙️ Entrata in chat vocale")
+            .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} è entrato nel canale vocale ${channel.name}`)
+            .addFields(
+                {
+                    name: "🎙️ Nuova chat vocale",
+                    value: channel.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID chat vocale",
+                    value: channel.id.toString(),
+                    inline: true
+                },
+                {
+                    name: "👥 Utenti chat vocale",
+                    value: channel.members.size.toString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(user.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
+
+    voiceExit(user, channel) {
+        return this.embed
+            .setTitle("🎙️ Uscita dalla chat vocale")
+            .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} è uscito dal canale vocale ${channel.name}`)
+            .addFields(
+                {
+                    name: "🎙️ Nuova chat vocale",
+                    value: channel.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID chat vocale",
+                    value: channel.id.toString(),
+                    inline: true
+                },
+                {
+                    name: "👥 Utenti chat vocale",
+                    value: channel.members.size.toString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(user.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
+
+
+    voiceChange(user, channel) {
+        return this.embed
+            .setTitle("🎙️ Cambio chat vocale")
+            .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} è passato dal canale vocale ${channel.name}`)
+            .addFields(
+                {
+                    name: "🎙️ Nuova chat vocale",
+                    value: channel.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID chat vocale",
+                    value: channel.id.toString(),
+                    inline: true
+                },
+                {
+                    name: "👥 Utenti chat vocale",
+                    value: channel.members.size.toString(),
+                    inline: true
+                }
+            )
+            .setThumbnail(user.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
+
 
 }
 

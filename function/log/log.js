@@ -193,6 +193,31 @@ class log {
 
     }
 
+    voiceEnter(user, channel, tag) {
+        let embedmsg = new logembed(channel.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.voiceEnter(user, channel), channel.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+    }
+
+    voiceExit(user, channel, tag) {
+        let embedmsg = new logembed(channel.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.voiceExit(user, channel), channel.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+    }
+
+    voiceChange(user, channel, tag) {
+        let embedmsg = new logembed(channel.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.voiceChange(user, channel), channel.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+    }
+
+
 
 
 
