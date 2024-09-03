@@ -88,6 +88,13 @@ class log {
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
+    guildBanAdd(user, reason, tag) {
+        let embedmsg = new logembed(channel.guild, channel);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.guildBanAdd(user, reason), channel.guild, tag).catch(() => { });
+        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
 
 
 
