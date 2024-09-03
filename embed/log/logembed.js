@@ -18,14 +18,14 @@ class logembed extends BaseEmbed {
             .setDescription(`Il canale ${channel} è stato creato`)
             .setFooter(`Canale creato il ${this.Time.getTime()}`)
     }
-    
+
     deletechannel(channel) {
         return this.embed
             .setTitle("🗑️ Canale eliminato")
             .setDescription(`Il canale ${channel} è stato eliminato`)
             .setFooter(`Canale eliminato il ${this.Time.getTime()}`)
     }
-    
+
     updatechannel(oldChannel, changedprop) {
         return this.embed
             .setTitle("✏️ Canale modificato")
@@ -33,13 +33,21 @@ class logembed extends BaseEmbed {
             .addField("🔧 Proprietà modificate", changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n"))
             .setFooter(`Canale modificato il ${this.Time.getTime()}`);
     }
-    
+
 
     emojiCreate(emoji) {
         return this.embed
             .setTitle("🎨 Nuova emoji creata")
             .setDescription(`La nuova emoji ${emoji} è stata creata`)
             .setFooter(`Emoji creata il ${this.Time.getTime()}`)
+    }
+
+
+    emojiDelete(emoji) {
+        return this.embed
+            .setTitle("🗑️ Emoji eliminata")
+            .setDescription(`L'emoji ${emoji} è stata eliminata`)
+            .setFooter(`Emoji eliminata il ${this.Time.getTime()}`)
     }
 
 
