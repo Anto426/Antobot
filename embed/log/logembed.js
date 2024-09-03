@@ -124,6 +124,13 @@ class logembed extends BaseEmbed {
     }
 
 
+    inviteDelete(invite) {
+        return this.embed
+            .setTitle("🔗 Invito eliminato")
+            .setDescription(`L'invito ${invite} è stato eliminato`)
+            .setFooter(`Invito eliminato il ${this.Time.getTime()}`)
+    }
+
 
 
 

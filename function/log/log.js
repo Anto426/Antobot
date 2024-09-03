@@ -126,6 +126,13 @@ class log {
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
+    inviteDelete(invite, tag) {
+        let embedmsg = new logembed(channel.guild, channel);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.inviteDelete(invite), channel.guild, tag).catch(() => { });
+        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
 
 
 
