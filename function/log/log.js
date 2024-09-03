@@ -43,6 +43,15 @@ class log {
     }
 
 
+    emojiCreate(emoji) {
+        let embedmsg = new logembed(channel.guild, channel);
+        embedmsg.init().then(() => {
+            embedmsg.emojiCreate(emoji);
+            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embedmsg.emojiCreate(emoji)] });
+        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+    }
+
+
     
 
 

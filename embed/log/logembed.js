@@ -35,6 +35,14 @@ class logembed extends BaseEmbed {
     }
     
 
+    emojiCreate(emoji) {
+        return this.embed
+            .setTitle("🎨 Nuova emoji creata")
+            .setDescription(`La nuova emoji ${emoji} è stata creata`)
+            .setFooter(`Emoji creata il ${this.Time.getTime()}`)
+    }
+
+
 
 
 
