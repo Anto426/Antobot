@@ -17,42 +17,65 @@ class log {
         })
     }
 
-    addchannel(channel) {
+
+    sendlog(embed, guild, tag) {
+        return new Promise((resolve, reject) => {
+            try {
+                if (guild) {
+                    if (this.guildJson[channel.guild.name] && this.guildJson[channel.guild.name].channel.bot["private-log"]) {
+                        if (tag) guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["public-log"]).send({ embeds: [embed] });
+                        guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embed] });
+                        resolve(0);
+                    }
+                    else {
+                        this.console.log("Errore nel trovare il canale di log", "red");
+                        reject(-1);
+                    }
+                } else {
+                    this.console.log("Errore nel trovare il server", "red");
+                    reject(-1);
+                }
+            } catch (error) {
+                this.console.log("Errore nell'invio del log", "red");
+                reject(-1);
+            }
+        })
+    }
+
+    addchannel(channel, tag) {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
-            embedmsg.addchannel(channel);
-            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embedmsg.addchannel(channel)] });
+            this.sendlog(embedmsg.addchannel(channel), channel.guild, tag);
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
-    deltechannel(channel) {
+    deltechannel(channel, tag) {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
-            embedmsg.deletechannel(channel);
-            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embedmsg.deletechannel(channel)] });
+            this.sendlog(embedmsg.deletechannel(channel), channel.guild, tag);
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
 
-    updatechannel(newChannel, changedprop) {
+    updatechannel(newChannel, changedprop, tag) {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
-            embedmsg.updatechannel(channel);
-            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embedmsg.updatechannel(newChannel, changedprop)] });
+            this.sendlog(embedmsg.updatechannel(newChannel, changedprop), channel.guild, tag);
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
 
-    emojiCreate(emoji) {
+    emojiCreate(emoji, tag) {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
-            embedmsg.emojiCreate(emoji);
-            channel.guild.channels.cache.get(this.guildJson[channel.guild.name].channel.bot["private-log"]).send({ embeds: [embedmsg.emojiCreate(emoji)] });
+            this.sendlog(embedmsg.emojiCreate(emoji), channel.guild, tag);
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
 
-    
+
+
+
 
 
 
