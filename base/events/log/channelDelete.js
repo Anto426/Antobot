@@ -4,8 +4,9 @@ module.exports = {
     typeEvent: "channelDelete",
     async execute(channel) {
         let logchannel = new log();
+        let console = new BotConsole();
         logchannel.init().then(() => {
             logchannel.deltechannel(channel);
-        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
     }
 }
