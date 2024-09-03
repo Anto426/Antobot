@@ -4,7 +4,7 @@ module.exports = {
     typeEvent: "channelDelete",
     allowevents: true,
     async execute(channel) {
-        const tag = true;
+        const tag = false;
         let logmodule = new log();
         logmodule.init().then(() => {
             logmodule.deltechannel(channel, tag);

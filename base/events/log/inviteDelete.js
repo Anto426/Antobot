@@ -4,7 +4,7 @@ module.exports = {
     typeEvent: "inviteDelete",
     allowevents: true,
     async execute(invite) {
-        const tag = true;
+        const tag = false;
         let logmodule = new log();
         logmodule.init().then(() => {
             logmodule.inviteDelete(invite, tag);

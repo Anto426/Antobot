@@ -6,7 +6,7 @@ module.exports = {
     allowevents: true,
     async execute(oldMember, newMember) {
         let logmodule = new log();
-        const tag = true;
+        const tag = false;
 
         try {
             await logmodule.init();

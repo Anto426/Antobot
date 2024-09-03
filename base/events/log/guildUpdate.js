@@ -5,7 +5,7 @@ module.exports = {
     typeEvent: "guildUpdate",
     allowevents: true,
     async execute(oldGuild, newGuild) {
-        const tag = true;
+        const tag = false;
         let logmodule = new log();
 
         try {

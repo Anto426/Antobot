@@ -4,7 +4,7 @@ module.exports = {
     typeEvent: "emojiUpdate",
     allowevents: true,
     async execute(oldEmoji, newEmoji) {
-        const tag = true;
+        const tag = false;
         let logmodule = new log();
         logmodule.init().then(() => {
             logmodule.emojiUpdate(oldEmoji, newEmoji, tag);

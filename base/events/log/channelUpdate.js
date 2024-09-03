@@ -5,7 +5,7 @@ module.exports = {
     typeEvent: "channelUpdate",
     allowevents: true,
     async execute(oldChannel, newChannel) {
-        const tag = true;
+        const tag = false;
         let logmodule = new log();
 
         try {

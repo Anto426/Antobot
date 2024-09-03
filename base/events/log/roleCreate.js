@@ -4,7 +4,7 @@ module.exports = {
     typeEvent: "roleCreate",
     allowevents: true,
     async execute(role) {
-        const tag = true;
+        const tag = false;
         let logmodule = new log();
         logmodule.init().then(() => {
             logmodule.roleCreate(role, tag);

@@ -5,7 +5,7 @@ module.exports = {
     typeEvent: "roleUpdate",
     allowevents: true,
     async execute(oldRole, newRole) {
-        const tag = true;
+        const tag = false;
         let logmodule = new log();
 
         try {

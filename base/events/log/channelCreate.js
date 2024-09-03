@@ -4,7 +4,7 @@ module.exports = {
     typeEvent: "channelCreate",
     allowevents: true,
     async execute(channel) {
-        const tag = true;
+        const tag = false;
         let logmodule = new log();
         logmodule.init().then(() => {
             logmodule.addchannel(channel, tag);
