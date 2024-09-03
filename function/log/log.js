@@ -45,14 +45,14 @@ class log {
     addchannel(channel, tag) {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.addchannel(channel), channel.guild, tag);
+            this.sendlog(embedmsg.addchannel(channel), channel.guild, tag).catch(() => { });
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
     deltechannel(channel, tag) {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.deletechannel(channel), channel.guild, tag);
+            this.sendlog(embedmsg.deletechannel(channel), channel.guild, tag).catch(() => { });
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
@@ -60,7 +60,7 @@ class log {
     updatechannel(newChannel, changedprop, tag) {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.updatechannel(newChannel, changedprop), channel.guild, tag);
+            this.sendlog(embedmsg.updatechannel(newChannel, changedprop), channel.guild, tag).catch(() => { });
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
@@ -68,7 +68,7 @@ class log {
     emojiCreate(emoji, tag) {
         let embedmsg = new logembed(channel.guild, channel);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.emojiCreate(emoji), channel.guild, tag);
+            this.sendlog(embedmsg.emojiCreate(emoji), channel.guild, tag).catch(() => { });
         }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
