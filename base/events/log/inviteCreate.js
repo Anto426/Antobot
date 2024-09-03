@@ -5,10 +5,9 @@ module.exports = {
     typeEvent: "inviteCreate",
     async execute(invite) {
         let logmodule = new log();
-        let console = new BotConsole();
         logmodule.init().then(() => {
             const tag = true;
             logmodule.inviteCreate(invite, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
     }
 }

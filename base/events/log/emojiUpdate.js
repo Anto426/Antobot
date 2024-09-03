@@ -6,9 +6,8 @@ module.exports = {
     async execute(oldEmoji, newEmoji) {
         const tag = true;
         let logmodule = new log();
-        let console = new BotConsole();
-        logchannel.init().then(() => {
+        logmodule.init().then(() => {
             logmodule.emojiUpdate(oldEmoji, newEmoji, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
     }
 }

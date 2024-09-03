@@ -5,7 +5,6 @@ module.exports = {
     typeEvent: "guildUpdate",
     async execute(newGuild, oldGuild) {
         let logmodule = new log();
-        let console = new BotConsole();
         logmodule.init().then(() => {
             const tag = true;
             let changedprop = [];
@@ -15,6 +14,6 @@ module.exports = {
                 }
             }
             logmodule.guildUpdate(newGuild, changedprop, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
     }
 }

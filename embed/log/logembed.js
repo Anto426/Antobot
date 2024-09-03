@@ -1,15 +1,19 @@
+const { Time } = require("../../function/time/time");
 const { BaseEmbed } = require("../baseembed");
-const package = require("../../package.json");
 
 class logembed extends BaseEmbed {
     constructor(guild, member) {
         super(guild, member);
+        this.package = require("../../package.json");
+        this.Time = new Time();
+
     }
 
     init() {
         return new Promise((resolve, reject) => {
             super.init().then((embed) => { this.embed = embed; this.embed.setColor(embedconfig.color.orange); resolve(0); }).catch(() => { reject(-1); });
         });
+
     }
 
 
@@ -17,22 +21,64 @@ class logembed extends BaseEmbed {
         return this.embed
             .setTitle("📢 Nuovo canale creato")
             .setDescription(`Il canale ${channel} è stato creato`)
-            .setFooter(`Canale creato il ${this.Time.getTime()}`)
+            .addFields(
+                {
+                    name: "📢 Nome",
+                    value: channel.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tipo",
+                    value: channel.type == 0 ? "Testuale" : channel.type == 2 ? "Voce" : "Categoria",
+                    inline: true
+                },
+            )
+            .setThumbnail(channel.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
     deletechannel(channel) {
         return this.embed
             .setTitle("🗑️ Canale eliminato")
-            .setDescription(`Il canale ${channel} è stato eliminato`)
-            .setFooter(`Canale eliminato il ${this.Time.getTime()}`)
+            .setDescription(`Il canale ${channel.name} è stato eliminato`)
+            .addFields(
+                {
+                    name: "📢 Nome",
+                    value: channel.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tipo",
+                    value: channel.type == 0 ? "Testuale" : channel.type == 2 ? "Voce" : "Categoria",
+                    inline: true
+                },
+            )
+            .setThumbnail(channel.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
-    updatechannel(oldChannel, changedprop) {
+    updatechannel(newChannel, changedprop) {
         return this.embed
             .setTitle("✏️ Canale modificato")
-            .setDescription(`Il canale ${oldChannel.name} è stato modificato in ${newChannel.name}`)
-            .addField("🔧 Proprietà modificate", changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n"))
-            .setFooter(`Canale modificato il ${this.Time.getTime()}`);
+            .setDescription(`Il canale ${newChannel.name} è stato modificato`)
+            .addFields({
+                name: "🔧 Proprietà modificate",
+                value: changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n")
+            })
+            .setThumbnail(newChannel.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
 
@@ -40,7 +86,12 @@ class logembed extends BaseEmbed {
         return this.embed
             .setTitle("🎨 Nuova emoji creata")
             .setDescription(`La nuova emoji ${emoji} è stata creata`)
-            .setFooter(`Emoji creata il ${this.Time.getTime()}`)
+            .setThumbnail(emoji.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
 
@@ -48,7 +99,12 @@ class logembed extends BaseEmbed {
         return this.embed
             .setTitle("🗑️ Emoji eliminata")
             .setDescription(`L'emoji ${emoji} è stata eliminata`)
-            .setFooter(`Emoji eliminata il ${this.Time.getTime()}`)
+            .setThumbnail(emoji.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
 
@@ -57,7 +113,12 @@ class logembed extends BaseEmbed {
         return this.embed
             .setTitle("✏️ Emoji modificata")
             .setDescription(`L'emoji ${oldEmoji} è stata modificata in ${newEmoji}`)
-            .setFooter(`Emoji modificata il ${this.Time.getTime()}`)
+            .setThumbnail(oldEmoji.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
 
@@ -71,14 +132,24 @@ class logembed extends BaseEmbed {
                     value: reason.toString(),
                 }
             )
-            .setFooter(`Utente bannato il ${this.Time.getTime()}`)
+            .setThumbnail(user.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
     guildBanRemove(user) {
         return this.embed
             .setTitle("🔨 Utente sbannato")
             .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} è stato sbannato`)
-            .setFooter(`Utente sbannato il ${this.Time.getTime()}`)
+            .setThumbnail(user.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
 
@@ -86,8 +157,16 @@ class logembed extends BaseEmbed {
         return this.embed
             .setTitle("✏️ Utente modificato")
             .setDescription(`L'utente ${member.globalName ? member.globalName : member.tag} è stato modificato`)
-            .addField("🔧 Proprietà modificate", changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n"))
-            .setFooter(`Utente modificato il ${this.Time.getTime()}`);
+            .addFields({
+                name: "🔧 Proprietà modificate",
+                value: changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n")
+            })
+            .setThumbnail(member.avatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
 
@@ -95,8 +174,16 @@ class logembed extends BaseEmbed {
         return this.embed
             .setTitle("✏️ Server modificato")
             .setDescription(`Il server ${newGuild.name} è stato modificato`)
-            .addField("🔧 Proprietà modificate", changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n"))
-            .setFooter(`Server modificato il ${this.Time.getTime()}`);
+            .addFields({
+                name: "🔧 Proprietà modificate",
+                value: changedprop.map((prop) => { return `**${prop.key}** da ${prop.old} a ${prop.new}` }).join("\n")
+            })
+            .setThumbnail(newGuild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
 
@@ -112,16 +199,21 @@ class logembed extends BaseEmbed {
                 },
                 {
                     name: "🔗 Usi",
-                    value: invite.uses,
+                    value: invite.uses ? invite.uses.toString() : "0",
                     inline: true
                 },
                 {
                     name: "🔗 Scadenza",
-                    value: invite.expiresAt,
+                    value: invite.expiresAt ? invite.expiresAt.toString() : "Mai",
                     inline: true
                 }
             )
-            .setFooter(`Invito creato il ${this.Time.getTime()}`)
+            .setThumbnail(invite.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
 
@@ -129,7 +221,24 @@ class logembed extends BaseEmbed {
         return this.embed
             .setTitle("🔗 Invito eliminato")
             .setDescription(`L'invito ${invite} è stato eliminato`)
-            .setFooter(`Invito eliminato il ${this.Time.getTime()}`)
+            .addFields(
+                {
+                    name: "🔗 Usi",
+                    value: invite.uses ? invite.uses.toString() : "0",
+                    inline: true
+                },
+                {
+                    name: "🔗 Scadenza",
+                    value: invite.expiresAt ? invite.expiresAt.toString() : "Mai",
+                    inline: true
+                }
+            )
+            .setThumbnail(invite.guild.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
     }
 
     ready() {
@@ -139,21 +248,28 @@ class logembed extends BaseEmbed {
             .addFields(
                 {
                     name: "🔧 Versione",
-                    value: `${package.version}`,
+                    value: `${this.package.version}`,
                     inline: true
                 },
                 {
                     name: "🔧 Repo",
-                    value: ` [clicca qui](${package.repo})`,
+                    value: ` [clicca qui](${this.package.repo})`,
                     inline: true
                 },
                 {
                     name: "🔧 Sviluppatore",
-                    value: `${package.author}`,
+                    value: `${this.package.author}`,
                     inline: true
                 }
+
             )
-            .setFooter(`Bot pronto il ${this.Time.getTime()}`)
+            .setThumbnail(this.client.member.iconURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+
     }
 
 

@@ -1,5 +1,4 @@
 const { BotConsole } = require("../../../function/log/botConsole");
-const { log } = require("../../../function/log/log");
 module.exports = {
     name: "Log guildMemberUpdate",
     typeEvent: "guildMemberUpdate",
@@ -15,6 +14,6 @@ module.exports = {
                 }
             }
             logmodule.guildMemberUpdate(newMember, changedprop, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
     }
 }
