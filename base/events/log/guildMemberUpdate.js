@@ -8,8 +8,8 @@ module.exports = {
         let logmodule = new log();
         const tag = false;
 
-        try {
-            await logmodule.init();
+        await logmodule.init().then(() => {
+            
             let changedprop = [];
 
             const memberKeys = [
@@ -52,8 +52,10 @@ module.exports = {
             if (changedprop.length > 0)
                 logmodule.guildMemberUpdate(newMember, changedprop, tag);
 
-        } catch (error) {
-            console.log("Errore nell'inizializzare il modulo log:", error);
-        }
+
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+
+
+
     }
 }

@@ -8,8 +8,7 @@ module.exports = {
         const tag = false;
         let logmodule = new log();
 
-        try {
-            await logmodule.init();
+        await logmodule.init().then(() => {
 
             let changedprop = [];
             const keys = [
@@ -29,8 +28,6 @@ module.exports = {
             if (changedprop.length > 0)
                 logmodule.roleUpdate(newRole, changedprop, tag);
 
-        } catch (error) {
-            console.log("Errore nell'inizializzare il modulo log:", error);
-        }
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
     }
 }

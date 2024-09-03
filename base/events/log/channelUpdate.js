@@ -1,5 +1,6 @@
+const { Cjson } = require("../../../function/file/json");
 const { log } = require("../../../function/log/log");
-
+const setting = require("./../../../setting/settings.json")
 module.exports = {
     name: "Log channelUpdate",
     typeEvent: "channelUpdate",
@@ -7,27 +8,36 @@ module.exports = {
     async execute(oldChannel, newChannel) {
         const tag = false;
         let logmodule = new log();
+        let json = new Cjson();
 
         try {
-            await logmodule.init();
+            await logmodule.init().then(() => {
 
-            let changedprop = [];
-            let keys = [
-                { key: "name", label: "📛 name" },
-                { key: "position", label: "📍 position" },
-                { key: "topic", label: "📝 topic" },
-                { key: "nsfw", label: "🔞 nsfw" },
-                { key: "rateLimitPerUser", label: "⏱️ slowmode" },
-            ];
+                json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((data) => {
 
-            keys.forEach(({ key, label }) => {
-                if (oldChannel[key] !== newChannel[key]) {
-                    changedprop.push({ key: label, old: oldChannel[key], new: newChannel[key] });
-                }
-            });
+                    let changedprop = [];
+                    let keys = [
+                        { key: "name", label: "📛 name" },
+                        { key: "position", label: "📍 position" },
+                        { key: "topic", label: "📝 topic" },
+                        { key: "nsfw", label: "🔞 nsfw" },
+                        { key: "rateLimitPerUser", label: "⏱️ slowmode" },
+                        { key: "parentID", label: "🔗 parentID" },
+                    ];
 
-            if (changedprop.length > 0)
-                logmodule.updatechannel(newChannel, changedprop, tag);
+                    keys.forEach(({ key, label }) => {
+                        if (oldChannel[key] !== newChannel[key]) {
+                            changedprop.push({ key: label, old: oldChannel[key], new: newChannel[key] });
+                        }
+                    });
+
+                    if (changedprop.length > 0 && newChannel.parentId !== data[newChannel.guild.name].channel.hollyday.id)
+                        logmodule.updatechannel(newChannel, changedprop, tag);
+
+                }).catch(() => { });
+
+
+            }).catch(() => { });
 
         } catch (error) {
             console.log("Errore nell'inizializzare il modulo log:", error);
