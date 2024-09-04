@@ -1,8 +1,6 @@
 const { comandbembed } = require("../../../embed/base/command")
 const { ErrEmbed } = require("../../../embed/err/errembed")
 const { WriteCommand } = require("../../../function/commands/WriteCommand")
-const { BotConsole } = require("../../../function/log/botConsole")
-const setting = require("../../../setting/settings.json")
 
 module.exports = {
     name: "registercommand",
@@ -38,6 +36,13 @@ module.exports = {
 
             })
 
+        }).catch(() => {
+            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+            embedmsg.init().then(() => {
+                interaction.reply({ embeds: [embedmsg.genericError()] })
+            }).catch(() => {
+                interaction.reply({ content: "Errore", ephemeral: true })
+            })
         })
     }
 
