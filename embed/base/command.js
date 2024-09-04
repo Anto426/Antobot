@@ -232,26 +232,32 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "📜 Comandi Totali",
                     value: client.commandg.size.toString(),
+                    inline: true
                 },
                 {
                     name: "📜 N Comandi Base",
                     value: client.basecommands.size.toString(),
+                    inline: true
                 },
                 {
                     name: "🎵 N Comandi Distube",
                     value: client.distubecommands.size.toString(),
+                    inline: true
                 },
                 {
                     name: "📅 N Eventi Totali",
                     value: (client.baseevents.size + client.distubeevents.size).toString(),
+                    inline: true
                 },
                 {
                     name: "📅 N Eventi Base",
                     value: client.baseevents.size.toString(),
+                    inline: true
                 },
                 {
                     name: "🎶 N Eventi Distube",
                     value: client.distubeevents.size.toString(),
+                    inline: true
                 },
                 {
                     name: "🔖 Versione",
@@ -265,18 +271,22 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: client.user.id.toString(),
+                    inline: true
                 },
                 {
                     name: "📅 Creazione",
                     value: "1, giugno 2022",
+                    inline: true
                 },
                 {
                     name: "🔗 Sviluppatore",
                     value: "👑 " + packagejson.author.toString(),
+                    inline: true
                 },
                 {
                     name: "🪙 Repo Github",
                     value: `[Clicca qui](${packagejson.repo.toString()})`,
+                    inline: true
                 }
             )
             .setThumbnail(client.user.displayAvatarURL({
