@@ -4,7 +4,7 @@ const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json")
 const package = require("../../../package.json")
 module.exports = {
-    name: "githubcreator",
+    name: "developer",
     permisions: [],
     allowedchannels: true,
     allowebot: true,
