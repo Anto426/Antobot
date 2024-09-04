@@ -477,6 +477,13 @@ class comandbembed extends BaseEmbed {
             )
     }
 
+    clear(amount) {
+        return this.embed
+            .setTitle("🧹 Clear")
+            .setDescription(`Ho cancellato ${amount} messaggi`)
+            .setThumbnail(embedconfig.image.success)
+    }
+
 
 
 

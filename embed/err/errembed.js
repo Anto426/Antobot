@@ -214,6 +214,14 @@ class ErrEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.genericerr)
     }
 
+
+    bulkdeleteError() {
+        return this.embed
+            .setTitle("🚫 Errore")
+            .setDescription("🚫 Non posso cancellare i messaggi")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
 }
 
 
