@@ -44,7 +44,7 @@ module.exports = {
                                     },
                                     {
                                         name: "📋 Option",
-                                        value: command.data.options ? command.data.options.map(x => { return `📛 Nome: ${x.name.charAt(0).toUpperCase() + x.name.slice(1)} 📝 Descrizione: ${x.name.charAt(0).toUpperCase() + x.name.slice(1)} 📝 Tipo: ${getTypeByNumber(x.type)}` }).join("\n") : "📋 Non ci sono opzioni per questo comando",
+                                        value: command.data.options ? command.data.options.map(x => { return `📛 Nome: ${x.name.charAt(0).toUpperCase() + x.name.slice(1)} 📝 Descrizione: ${x.description.charAt(0).toUpperCase() + x.description.slice(1)}\n📝 Tipo: ${getTypeByNumber(x.type)}\n` }).join("\n") : "📋 Non ci sono opzioni per questo comando",
                                     }
                                 )
 
