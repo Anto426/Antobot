@@ -20,7 +20,6 @@
             ]
         },
         "image": {
-            
             "dir": "/canavas/image",
             "name": [
                 "background.jpg"
@@ -40,6 +39,7 @@
     "configjson": {
         "online": {
             "url": "https://raw.githubusercontent.com/Anto426/Configsbot/main",
+            "url2": "https://api.github.com/users/",
             "name": [
                 "owner.json",
                 "game.json",

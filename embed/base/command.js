@@ -525,6 +525,49 @@ class comandbembed extends BaseEmbed {
     }
 
 
+    githubcreator(data) {
+        return this.embed
+            .setTitle("👑 Sviluppatore")
+            .setDescription(`Ecco le informazioni sullo sviluppatore`)
+            .addFields(
+                {
+                    name: "📛 Username",
+                    value: data.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "📝 Bio",
+                    value: data.bio.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔗 Tag",
+                    value: data.login.toString(),
+                },
+                {
+                    name: "🔗 Profilo",
+                    value: `[Clicca qui](${data.html_url.toString()})`,
+                    inline: true
+                },
+                {
+                    name: "📜 Repo",
+                    value: data.public_repos.toString(),
+                },
+                {
+                    name: "📜 Public Repos",
+                    value: data.public_repos.toString()
+                },
+                {
+                    name: "❌ X",
+                    value: `https://x.com/${data.twitter_username.toString()}`
+                }
+
+            )
+            .setThumbnail(data.avatar_url)
+
+    }
+
+
 
 
 
