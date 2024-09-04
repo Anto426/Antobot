@@ -86,6 +86,13 @@ class EventEmbed extends BaseEmbed {
 
     }
 
+    boostEvent(member) {
+        return this.embed
+            .setTitle("🚀 Nuovo boost")
+            .setDescription(`🎉 ${member.user} ha boostato il server`)
+            .setThumbnail(embedconfig.image.boost)
+    }
+
 
 
 }
