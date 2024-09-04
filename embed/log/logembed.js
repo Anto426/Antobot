@@ -131,17 +131,19 @@ class logembed extends BaseEmbed {
     }
 
 
-    guildBanAdd(user, reason) {
+    guildBanAdd(guildban) {
+
+        console.log(guildban)
         return this.embed
             .setTitle("🔨 Utente bannato")
-            .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} è stato bannato`)
+            .setDescription(`L'utente ${guildban.user.globalName ? guildban.user.globalName : guildban.user.tag} è stato bannato`)
             .addFields(
                 {
                     name: "🔨 Motivo",
-                    value: reason ? reason : "Non specificato",
+                    value: guildban.reason ? guildban.reason : "Non specificato",
                 }
             )
-            .setThumbnail(user.avatarURL(
+            .setThumbnail(guildban.user.avatarURL(
                 {
                     dynamic: true,
                     size: 256
