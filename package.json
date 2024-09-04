@@ -22,11 +22,11 @@
     "axios": "^1.7.7",
     "canvas": "^2.11.2",
     "cli-table3": "^0.6.5",
-    "discord.js": "^14.15.3",
+    "discord.js": "^14.16.1",
     "distube": "^5.0.2",
     "dotenv": "^16.4.5",
     "libsodium-wrappers": "^0.7.15",
-    "openai": "^4.57.0",
+    "openai": "^4.57.2",
     "sodium-native": "^4.1.1"
   }
 }
