@@ -90,7 +90,21 @@ class EventEmbed extends BaseEmbed {
         return this.embed
             .setTitle("🚀 Nuovo boost")
             .setDescription(`🎉 ${member.user} ha boostato il server`)
+            .addFields(
+                {
+                    name: "🚀 Livello Server",
+                    value: member.guild.premiumTier.toString(),
+                    inline: true
+                },
+                {
+                    name: "🔢 Numero boost",
+                    value: member.guild.premiumSubscriptionCount.toString(),
+                    inline: true
+                }
+
+            )
             .setThumbnail(embedconfig.image.boost)
+            .setColor(embedconfig.color.purple)
     }
 
 
