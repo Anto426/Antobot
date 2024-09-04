@@ -262,6 +262,7 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🔖 Versione",
                     value: packagejson.version.toString(),
+                    inline: true
                 },
                 {
                     name: "📛 Tag",
