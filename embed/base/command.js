@@ -254,6 +254,10 @@ class comandbembed extends BaseEmbed {
                     value: client.distubeevents.size.toString(),
                 },
                 {
+                    name: "🔖 Versione",
+                    value: packagejson.version.toString(),
+                },
+                {
                     name: "📛 Tag",
                     value: client.user.tag.toString(),
                     inline: true
@@ -261,12 +265,10 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: client.user.id.toString(),
-                    inline: false
                 },
                 {
                     name: "📅 Creazione",
                     value: "1, giugno 2022",
-                    inline: true
                 },
                 {
                     name: "🔗 Sviluppatore",
@@ -275,7 +277,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🪙 Repo Github",
                     value: `[Clicca qui](${packagejson.repo.toString()})`,
-                    inline: true
                 }
             )
             .setThumbnail(client.user.displayAvatarURL({
