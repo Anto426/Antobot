@@ -21,7 +21,7 @@
 - 📜 **registercommand:** Registra un nuovo comando.
 - 🤖 **botinfo:** Mostra le informazioni del bot.
 - 🧹 **clear:** Cancella i messaggi in un canale.
-- 👨‍💻 **developer:** Comandi riservati agli sviluppatori.
+- 👨‍💻 **developer:** Comando per ottenere le info sullo sviluppatore
 - ❓ **help:** Mostra l'elenco dei comandi disponibili.
 - 🏓 **ping:** Verifica la latenza del bot.
 - 🏠 **serverinfo:** Mostra le informazioni del server.
