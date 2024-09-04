@@ -556,12 +556,6 @@ class comandbembed extends BaseEmbed {
                     inline: true
                 },
                 {
-                    name: "📜 Repo",
-                    value: `[Clicca qui](${data.repos_url.toString()})`,
-                    inline: true
-                },
-
-                {
                     name: "❌ X account",
                     value: `[Clicca qui](https://x.com/${data.twitter_username.toString()})`,
                     inline: true
