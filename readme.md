@@ -69,6 +69,7 @@
 - ❓ **help:** Evento per mostrare l'elenco dei comandi disponibili.
 - 🔓 **unban:** Evento per revocare il ban di un utente.
 
+
 ### 🎵 Distube
 - ⚠️ **Error of Distube:** Evento per loggare gli errori di Distube.
 - 📄 **log ffmpeg:** Evento per loggare ffmpeg.
