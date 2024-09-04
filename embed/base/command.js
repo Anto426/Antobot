@@ -47,6 +47,10 @@ class comandbembed extends BaseEmbed {
             .setDescription("🌟 Benvenuto nel comando 'help'! Hai bisogno di informazioni su un particolare comando? Clicca su quello di cui hai bisogno e io ti aiuterò! 🚀")
             .addFields(
                 {
+                    name: "📜 N Comandi Tot",
+                    value: client.commandg.size.toString(),
+                },
+                {
                     name: "📜 N Comandi Base",
                     value: client.basecommands.size.toString(),
                 },
