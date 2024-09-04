@@ -42,6 +42,10 @@ module.exports = {
                                         value: `🤖${command.type}`,
                                         inline: true
                                     },
+                                    {
+                                        name: "📋 Option",
+                                        value: command.data.options ? command.data.options.map(x => { return `📛 Nome: ${x.name.charAt(0).toUpperCase() + x.name.slice(1)} 📝 Descrizione: ${x.name.charAt(0).toUpperCase() + x.name.slice(1)} 📝 Tipo: ${getTypeByNumber(x.type)}` }).join("\n") : "📋 Non ci sono opzioni per questo comando",
+                                    }
                                 )
 
 
@@ -54,7 +58,8 @@ module.exports = {
                             interaction.update({ embeds: [embedbase], components: [row] })
 
 
-                        }).catch(() => {
+                        }).catch((err) => {
+                            console.error(err);
                             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                             embedmsg.init().then(() => {
                                 interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
@@ -114,5 +119,38 @@ module.exports = {
             }).catch(() => { })
 
         }
+
+        function getTypeByNumber(number) {
+            switch (number) {
+                case 11:
+                    return 'Attachment';
+                case 5:
+                    return 'Boolean';
+                case 7:
+                    return 'Channel';
+                case 4:
+                    return 'Intero';
+                case 9:
+                    return 'Mentionable';
+                case 10:
+                    return 'Number';
+                case 8:
+                    return 'Role';
+                case 3:
+                    return 'String';
+                case 1:
+                    return 'Subcommand';
+                case 2:
+                    return 'SubcommandGroup';
+                case 6:
+                    return 'User';
+                default:
+                    return 'Unknown';
+            }
+        }
+
+
     }
 }
+
+
