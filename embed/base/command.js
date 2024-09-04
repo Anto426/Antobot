@@ -5,6 +5,7 @@ const { Time } = require("../../function/time/time");
 class comandbembed extends BaseEmbed {
     constructor(guild, member) {
         super(guild, member)
+        this.packagejson = require("../../package.json")
     }
 
     init() {
@@ -229,6 +230,30 @@ class comandbembed extends BaseEmbed {
             .setDescription(`Ecco le informazioni di ${client.user.username}`)
             .addFields(
                 {
+                    name: "📜 Comandi Totali",
+                    value: client.commandg.size.toString(),
+                },
+                {
+                    name: "📜 N Comandi Base",
+                    value: client.basecommands.size.toString(),
+                },
+                {
+                    name: "🎵 N Comandi Distube",
+                    value: client.distubecommands.size.toString(),
+                },
+                {
+                    name: "📅 N Eventi Totali",
+                    value: (client.baseevents.size + client.distubeevents.size).toString(),
+                },
+                {
+                    name: "📅 N Eventi Base",
+                    value: client.baseevents.size.toString(),
+                },
+                {
+                    name: "🎶 N Eventi Distube",
+                    value: client.distubeevents.size.toString(),
+                },
+                {
                     name: "📛 Tag",
                     value: client.user.tag.toString(),
                     inline: true
@@ -240,19 +265,18 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "📅 Creazione",
-                    value: " 1, giugno 2022",
+                    value: "1, giugno 2022",
                     inline: true
                 },
                 {
-                    name: "🤖 Bot ",
-                    value: client.user.bot ? "Si" : "No",
-                    inline: true
+                    name: "🔗 Sviluppatore",
+                    value: "👑 " + packagejson.author.toString(),
                 },
                 {
                     name: "🪙 Repo Github",
                     value: `[Clicca qui](${packagejson.repo.toString()})`,
                     inline: true
-                },
+                }
             )
             .setThumbnail(client.user.displayAvatarURL({
                 dynamic: true,
