@@ -132,8 +132,6 @@ class logembed extends BaseEmbed {
 
 
     guildBanAdd(guildban) {
-
-        console.log(guildban)
         return this.embed
             .setTitle("🔨 Utente bannato")
             .setDescription(`L'utente ${guildban.user.globalName ? guildban.user.globalName : guildban.user.tag} è stato bannato`)
