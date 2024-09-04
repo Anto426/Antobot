@@ -13,16 +13,8 @@ module.exports = {
     test: false,
     see: true,
     data: {
-        name: "githubcreator",
-        description: "info sul creatore del bot",
-        options: [
-            {
-                name: "quantità",
-                description: "quanti messaggi cancellare",
-                type: 4,
-                required: true
-            }
-        ]
+        name: "developer",
+        description: "info sul creatore del bot"
     },
     execute(interaction) {
 
@@ -30,12 +22,19 @@ module.exports = {
         let json = new Cjson()
 
         embed.init().then(() => {
-
-            json.jsonDependencyBuffer(`setting.configjson.online.url2${package.author}`).then((data) => {
+            json.jsonDependencyBuffer(`${setting.configjson.online.url2}${package.author}`, process.env.GITTOKEN).then((data) => {
                 interaction.reply({
                     embeds: [embed.githubcreator(data)]
                 });
-            }).catch(() => { })
+            }).catch(() => {
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                }
+                ).catch((err) => {
+                    console.error(err);
+                })
+            })
 
         }).catch((err) => {
             console.log(err)
