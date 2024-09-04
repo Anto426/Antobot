@@ -15,6 +15,7 @@ module.exports = {
         let erremb = new ErrEmbed(interaction.guild, interaction.member)
         erremb.init()
         let embedf = [
+            erremb.genericError,
             erremb.ownerError,
             erremb.notPermissionError,
             erremb.botUserError,

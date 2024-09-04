@@ -14,14 +14,15 @@ class Security extends Check {
         this.command = command;
         this.interaction = interaction;
         this.codeErr = {
-            ownerError: 0,
-            notPermissionError: 1,
-            botUserError: 2,
-            selfUserError: 3,
-            highPermissionError: 4,
-            notInVoiceChannelError: 5,
-            musicAlreadyPlayingError: 6,
-            listtrackError: 7
+            genericError: 0,
+            ownerError: 1,
+            notPermissionError: 2,
+            botUserError: 3,
+            selfUserError: 4,
+            highPermissionError: 5,
+            notInVoiceChannelError: 6,
+            musicAlreadyPlayingError: 7,
+            listtrackError: 8
         }
     }
 
@@ -141,7 +142,7 @@ class Security extends Check {
 
                 if (this.command.disTube.checkchannel) {
                     if (!result[0]) {
-                        result = error.notInVoiceChannelError;
+                        result = this.codeErr.notInVoiceChannelError;
                     } else {
                         if (result[1] && result[0].id != result[1].id) {
                             result = this.codeErr.musicAlreadyPlayingError;
@@ -161,7 +162,7 @@ class Security extends Check {
 
             } catch (err) {
                 console.log(err);
-                reject(0);
+                reject(this.codeErr.genericError);
             }
         });
     }
@@ -241,6 +242,8 @@ class Security extends Check {
                         } else {
                             reject(this.codeErr.highPermissionError);
                         }
+                    } else {
+                        reject(this.codeErr.notPermissionError);
                     }
 
                 }
