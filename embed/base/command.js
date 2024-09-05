@@ -73,8 +73,8 @@ class comandbembed extends BaseEmbed {
 
         if (status == 0) {
             this.embed
-                .setTitle("Cancellazione Comandi in corso")
-                .setDescription("La cancellazione dei comandi è in corso")
+                .setTitle("Riscrittura Comandi in corso")
+                .setDescription("La Riscrittura dei comandi è in corso")
                 .setThumbnail(embedconfig.image.load)
                 .setColor(embedconfig.color.yellow)
 
@@ -86,11 +86,17 @@ class comandbembed extends BaseEmbed {
                 .setColor(embedconfig.color.green)
         } else if (status == -1) {
             this.embed
+                .setTitle("Riscrittura Comandi Completata con errori")
+                .setDescription("Riscrittura dei comandi completata con errori")
+                .setThumbnail(embedconfig.image.genericerr)
+                .setColor(embedconfig.color.yellow)
+        } else if (status == -2)
+            this.embed
                 .setTitle("Riscrittura Comandi fallita")
                 .setDescription("Riscrittura dei comandi fallita")
                 .setThumbnail(embedconfig.image.genericerr)
                 .setColor(embedconfig.color.red)
-        }
+
 
         return this.embed
 
