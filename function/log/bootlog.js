@@ -30,7 +30,6 @@ class LogStartup {
 
 
             //General
-
             const GeneralTable = new Table({
                 head: [`${packageI.name.charAt(0).toUpperCase() + packageI.name.slice(1)} v `, packageI.version],
                 colWidths: [25, 117],
@@ -51,81 +50,87 @@ class LogStartup {
                 }
             }
 
-            //Base
-            const BaseComandsTable = new Table({
-                head: ["Command Load:" + [client.basecommands.size]],
-                colWidths: [20, 40],
-                style: {
-                    head: [client.basecommands.size > 0 ? 'green' : 'red'],
-                    border: ['white'],
-                    compact: false
-                },
-                chars: settable
-            });
-
-            const BaseEventsTable = new Table({
-                head: ["Event Load:" + [client.baseevents.size]],
-                colWidths: [20, 40],
-                style: {
-                    head: [client.baseevents.size > 0 ? 'green' : 'red'],
-                    border: ['white'],
-                    compact: false
-                },
-                chars: settable,
-            });
-
-            client.basecommands.forEach(element => {
-                BaseComandsTable.push(["Name:" + element.name, "Description:" + element.data.description])
-            });
-            client.baseevents.forEach(element => {
-                BaseEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent, "Allow:" + element.allowevents])
-            });
-
-
-            //Distube
-            const DistubeGeneralTable = new Table({
-                head: ["Command Load:" + [client.distubecommands.size]],
-                colWidths: [20, 40],
-                style: {
-                    head: [client.distubecommands.size > 0 ? 'green' : 'red'],
-                    border: ['white'],
-                    compact: false
-                },
-                chars: settable
-            });
-
-            const DistubeEventsTable = new Table({
-                head: ["Event Load:" + [client.distubeevents.size]],
-                colWidths: [20, 40],
-                style: {
-                    head: [client.distubeevents.size > 0 ? 'green' : 'red'],
-                    border: ['white'],
-                    compact: false
-                },
-                chars: settable,
-            });
-
-
-            client.distubecommands.forEach(element => {
-                DistubeGeneralTable.push(["Name:" + element.name, "Description:" + element.data.description])
-            });
-            client.distubeevents.forEach(element => {
-                DistubeEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent, "Allow:" + element.allowevents])
-            });
-
-
-
-
             console.log(GeneralTable.toString())
 
-            console.log("=".repeat(64));
-            console.log("Base:")
-            console.log(BaseComandsTable.toString())
-            console.log(BaseEventsTable.toString())
-            console.log("=".repeat(64));
-            console.log("Distube:")
-            console.log(DistubeGeneralTable.toString())
-            console.log(DistubeEventsTable.toString())
+            //Base
+            if (client.basecommands.size > 0 && client.baseevents.size > 0) {
+
+
+
+                const BaseComandsTable = new Table({
+                    head: ["Command Load:" + [client.basecommands.size]],
+                    colWidths: [20, 40],
+                    style: {
+                        head: [client.basecommands.size > 0 ? 'green' : 'red'],
+                        border: ['white'],
+                        compact: false
+                    },
+                    chars: settable
+                });
+
+                const BaseEventsTable = new Table({
+                    head: ["Event Load:" + [client.baseevents.size]],
+                    colWidths: [20, 40],
+                    style: {
+                        head: [client.baseevents.size > 0 ? 'green' : 'red'],
+                        border: ['white'],
+                        compact: false
+                    },
+                    chars: settable,
+                });
+
+                client.basecommands.forEach(element => {
+                    BaseComandsTable.push(["Name:" + element.name, "Description:" + element.data.description])
+                });
+                client.baseevents.forEach(element => {
+                    BaseEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent, "Allow:" + element.allowevents])
+                });
+
+
+                console.log("=".repeat(64));
+                console.log("Base:")
+                console.log(BaseComandsTable.toString())
+                console.log(BaseEventsTable.toString())
+            }
+
+            //Distube
+            if (client.distubecommands.size > 0 && client.distubeevents.size > 0) {
+
+                const DistubeGeneralTable = new Table({
+                    head: ["Command Load:" + [client.distubecommands.size]],
+                    colWidths: [20, 40],
+                    style: {
+                        head: [client.distubecommands.size > 0 ? 'green' : 'red'],
+                        border: ['white'],
+                        compact: false
+                    },
+                    chars: settable
+                });
+
+                const DistubeEventsTable = new Table({
+                    head: ["Event Load:" + [client.distubeevents.size]],
+                    colWidths: [20, 40],
+                    style: {
+                        head: [client.distubeevents.size > 0 ? 'green' : 'red'],
+                        border: ['white'],
+                        compact: false
+                    },
+                    chars: settable,
+                });
+
+                client.distubecommands.forEach(element => {
+                    DistubeGeneralTable.push(["Name:" + element.name, "Description:" + element.data.description])
+                });
+                client.distubeevents.forEach(element => {
+                    DistubeEventsTable.push(["Name:" + element.name, "Tipo di evento:" + element.typeEvent, "Allow:" + element.allowevents])
+                });
+
+                console.log("=".repeat(64));
+                console.log("Distube:")
+                console.log(DistubeGeneralTable.toString())
+                console.log(DistubeEventsTable.toString())
+
+            }
 
 
         } catch (err) { console.log(err) }
