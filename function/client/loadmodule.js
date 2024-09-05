@@ -9,13 +9,14 @@ class LoadEventsAndCommand {
         this.BotConsole = new BotConsole();
     }
 
-    load(root) {
+    load(namecollection, root) {
         return new Promise(async (resolve, reject) => {
             try {
                 try {
                     new CreateCollection().createCollection(root, ".js")
                         .then((Collection) => {
-                            resolve(Collection)
+                            client[namecollection] = Collection;
+                            resolve(0)
                         }).catch(() => { reject(-1) })
                 } catch (err) {
                     console.log(err)
@@ -26,9 +27,8 @@ class LoadEventsAndCommand {
     }
 
     loadcommand() {
-        this.load(process.env.dirbot + setting.base.commands)
-            .then((Collection) => {
-                client.basecommands = Collection;
+        this.load("basecommands", process.env.dirbot + setting.base.commands)
+            .then(() => {
                 client.basecommands.forEach(x => {
                     x.type = "Base"
                 });
@@ -40,9 +40,8 @@ class LoadEventsAndCommand {
     }
 
     loadevents() {
-        this.load(process.env.dirbot + setting.base.events)
-            .then((Collection) => {
-                client.baseevents = Collection;
+        this.load("baseevents", process.env.dirbot + setting.base.events)
+            .then(() => {
                 client.baseevents.forEach(x => {
                     if (x.allowevents)
                         client.on(x.typeEvent, (...args) => {
@@ -58,9 +57,8 @@ class LoadEventsAndCommand {
     }
 
     loaddistubecommand() {
-        this.load(process.env.dirbot + setting.distube.commands)
-            .then((Collection) => {
-                client.distubecommands = Collection;
+        this.load("distubecommands", process.env.dirbot + setting.distube.commands)
+            .then(() => {
                 client.distubecommands.forEach(x => {
                     x.type = "Distube"
                 });
@@ -72,9 +70,8 @@ class LoadEventsAndCommand {
     }
 
     loaddistubeevents() {
-        this.load(process.env.dirbot + setting.distube.events)
-            .then((Collection) => {
-                client.distubeevents = Collection;
+        this.load("distubeevents", process.env.dirbot + setting.distube.events)
+            .then(() => {
                 client.distubeevents.forEach(x => {
                     if (x.allowevents)
                         distube.on(x.typeEvent, (...args) => {
@@ -86,7 +83,6 @@ class LoadEventsAndCommand {
                 console.log(err)
                 this.BotConsole.log("Errore non ho caricato gli eventi di distube", "red")
             })
-
     }
     loadall() {
         return new Promise(async (resolve) => {
@@ -97,7 +93,6 @@ class LoadEventsAndCommand {
                     this.loaddistubecommand()
                     this.loaddistubeevents()
                 }).catch(() => { })
-
                 resolve(0)
             } catch (err) {
                 new BotConsole().log(err)
