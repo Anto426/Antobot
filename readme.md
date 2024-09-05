@@ -18,6 +18,7 @@
 ## Nuovi Comandi Aggiunti
 
 ### 🤖 Base Client
+
 - 📜 **registercommand:** Registra un nuovo comando.
 - 🤖 **botinfo:** Mostra le informazioni del bot.
 - 🧹 **clear:** Cancella i messaggi in un canale.
@@ -34,6 +35,7 @@
 - ⏱️ **untimeout:** Revoca il timeout di un utente.
 
 ### 🎵 Distube
+
 - 🎵 **play:** Riproduce una traccia musicale.
 - ▶️ **resume:** Riprende la riproduzione musicale.
 - 🔁 **repeat:** Ripete la traccia musicale corrente.
@@ -44,6 +46,7 @@
 ## Nuovi Eventi Aggiunti
 
 ### 🤖 Base Client
+
 - ➕ **AddM:** Evento per l'aggiunta di un membro.
 - ➖ **LeftM:** Evento per la rimozione di un membro.
 - 🧹 **ClearChat:** Evento per cancellare la chat.
@@ -68,9 +71,10 @@
 - 🎙️ **Log voicestateupdate:** Evento per loggare l'aggiornamento dello stato vocale.
 - ❓ **help:** Evento per mostrare l'elenco dei comandi disponibili.
 - 🔓 **unban:** Evento per revocare il ban di un utente.
-
+- 💎 **boostevent:** Evento per segnalare quando un utente aggiunge un potenziamanto ad un server.
 
 ### 🎵 Distube
+
 - ⚠️ **Error of Distube:** Evento per loggare gli errori di Distube.
 - 📄 **log ffmpeg:** Evento per loggare ffmpeg.
 - 🎵 **Play:** Evento per segnalare una traccia in riproduzione.
