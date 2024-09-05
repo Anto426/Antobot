@@ -125,10 +125,6 @@ class Check {
     checkPosition(User, otherUser) {
         return new Promise(async (resolve, reject) => {
             try {
-
-
-
-
                 const UserhighestRole = User.roles.cache.reduce((prevRole, currRole) => {
                     return (prevRole.rawPosition > currRole.rawPosition) ? prevRole : currRole;
                 });
