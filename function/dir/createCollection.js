@@ -23,11 +23,11 @@ class CreateCollection {
                     if (filePath.endsWith(extensions)) {
                         try {
                             let file = require(filePath);
-                            if (file && (file.name || file.data)) {
+                            if (file && file.name) {
                                 this.tempCollection.set(file.name, file);
                             }
                         } catch (error) {
-                            console.error("Error loading file: " + filePath + " - " + error);
+                            console.error("Error loading file: " + filePath + ":" + error);
                         }
                     }
                 }
