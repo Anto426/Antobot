@@ -5,8 +5,6 @@ const fs = require("fs")
 
 async function createCollection(minCollection, path, folders, extensions) {
 
-
-
     return new Promise((resolve) => {
 
         folders.forEach(async folder => {
