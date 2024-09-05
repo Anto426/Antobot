@@ -124,11 +124,10 @@ class ClientInit {
 
     async intitialallclientbysettings() {
         return new Promise(async (resolve, reject) => {
-
             try {
-                this.initializeClientBase().then(() => {
-                    this.check.checkAllowDistube().then(async () => { await this.initializeClientMusic().catch(() => { }) }).catch(() => { })
-                    this.check.checkAllowOpenAI().then(async () => { await this.initializeClientAI().catch(() => { }) }).catch(() => { })
+                this.initializeClientBase().then(async () => {
+                    await this.check.checkAllowDistube().then(async () => { await this.initializeClientMusic().catch(() => { }) }).catch(() => { })
+                    await this.check.checkAllowOpenAI().then(async () => { await this.initializeClientAI().catch(() => { }) }).catch(() => { })
                     resolve(0)
                 }).catch(() => {
                     reject(-1);

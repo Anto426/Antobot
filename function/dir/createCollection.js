@@ -1,48 +1,54 @@
 
 const fs = require("fs")
+const { Collection } = require("discord.js");
 
 
+class CreateCollection {
 
-async function createCollection(minCollection, path, folders, extensions) {
+    constructor() {
+        this.tempCollection = new Collection();
+    }
 
-    return new Promise((resolve) => {
+    createCollection(root, extensions) {
+        return new Promise((resolve) => {
+            let promises = [];
+            let folders = fs.readdirSync(root);
 
-        folders.forEach(async folder => {
-            let path1;
-
-            fs.stat(`${path}/${folder}`, (err, stats) => {
-                if (err) {
-                    console.error('Error:', err);
+            folders.forEach(element => {
+                let filePath = root + "/" + element;
+                let stats = fs.statSync(filePath);
+                if (stats.isDirectory()) {
+                    promises.push(this.createCollection(filePath, extensions));
                 } else {
-                    if (stats.isDirectory()) {
-                        path1 = `${path}/${folder}`;
-                    } else {
-                        path1 = `${path}`;
-                    }
-                    let contf = fs.readdirSync(path1);
-                    if (contf.length > 0) {
-                        for (let x of contf) {
-                            if (x.endsWith(extensions)) {
-                                try {
-                                    let file = require(`${path1}/${x}`);
-                                    if (file && file.name || file.data)
-                                        minCollection.set(file.name, file);
-                                } catch (error) {
-                                    console.log(error);
-                                }
-                            } else {
-                                let path2 = `${path}/${folder}`;
-                                createCollection(minCollection, path2, Array.isArray(x) ? x : [x], extensions)
+                    if (filePath.endsWith(extensions)) {
+                        try {
+                            let file = require(filePath);
+                            if (file && (file.name || file.data)) {
+                                this.tempCollection.set(file.name, file);
                             }
+                        } catch (error) {
+                            console.error("Error loading file: " + filePath + " - " + error);
                         }
                     }
-                    resolve(0)
                 }
             });
+
+            Promise.all(promises)
+                .then(() => {
+                    resolve(this.tempCollection);
+                })
         });
-    })
+    }
 }
 
 
 
-module.exports = { createCollection }
+
+
+
+
+
+
+
+
+module.exports = { CreateCollection }
