@@ -19,7 +19,6 @@ async function createCollection(minCollection, path, folders, extensions) {
                     } else {
                         path1 = `${path}`;
                     }
-
                     let contf = fs.readdirSync(path1);
                     if (contf.length > 0) {
                         for (let x of contf) {
@@ -28,11 +27,8 @@ async function createCollection(minCollection, path, folders, extensions) {
                                     let file = require(`${path1}/${x}`);
                                     if (file && file.name || file.data)
                                         minCollection.set(file.name, file);
-
-
                                 } catch (error) {
                                     console.log(error);
-
                                 }
                             } else {
                                 let path2 = `${path}/${folder}`;

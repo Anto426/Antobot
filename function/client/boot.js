@@ -38,7 +38,6 @@ class Boot {
                         await this.WriteCommand.commandAllguildonstartup().then(() => {
                             this.loadothermodules.load()
                         })
-
                     })
                 } catch {
                     this.BotConsole.log("Errore il Token non è valido il bot verrà killato", "red")
