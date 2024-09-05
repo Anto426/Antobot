@@ -9,18 +9,20 @@ class BaseEmbed {
     init() {
         return new Promise(async (resolve, reject) => {
             try {
-                this.owner = await this.guild.fetchOwner()
-                this.embed
-                    .setTimestamp()
-                    .setAuthor({
-                        name: this.owner.user.username,
-                        iconURL: this.owner.user.displayAvatarURL({
-                            dynamic: true,
-                            format: "png",
-                            size: 512
+                if (this.guild) {
+                    this.owner = await this.guild.fetchOwner()
+                    this.embed
+                        .setTimestamp()
+                        .setAuthor({
+                            name: this.owner.user.username,
+                            iconURL: this.owner.user.displayAvatarURL({
+                                dynamic: true,
+                                format: "png",
+                                size: 512
+                            })
+    
                         })
-
-                    })
+                }
 
                 if (this.member)
                     this.embed.setFooter({
