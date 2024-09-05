@@ -19,7 +19,6 @@ class LoadEventsAndCommand {
                         }).catch(() => { reject(-1) })
                 } catch (err) {
                     console.log(err)
-                    this.BotConsole.log("Errore non ho trovato la cartella:" + root, "red")
                     reject(-1)
                 }
             } catch (err) { console.log(err); reject(-1) }
