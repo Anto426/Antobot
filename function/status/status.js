@@ -14,9 +14,7 @@ class Status {
     updateStatus() {
 
         this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[4], process.env.GITTOKEN).then((data) => {
-            console.log(data);
             let randomstatus = data.status[this.math.getRandomNumber(0, data.status.length - 1)];
-            console.log(randomstatus);
             client.user.setPresence({
                 activities: [{
                     name: randomstatus.description,
