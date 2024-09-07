@@ -1,5 +1,3 @@
-
-
 const OpenAI = require('openai');
 const { Client, Partials } = require('discord.js');
 const { DisTube } = require("distube")
