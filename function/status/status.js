@@ -1,5 +1,3 @@
-
-const { ActivityType } = require("discord.js");
 const { Cjson } = require("../file/json");
 const { MathClass } = require("../math/MathClass");
 const setting = require("./../../setting/settings.json");
@@ -10,33 +8,27 @@ class Status {
         this.statusJson = {};
         this.json = new Cjson();
         this.math = new MathClass();
-    }
-
-    async init() {
-        return new Promise(async (resolve, reject) => {
-            try {
-                const json = await this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[4], process.env.GITTOKEN);
-                this.statusJson = json;
-                resolve(0);
-            } catch (error) {
-                new BotConsole().log("Errore nell'inizializzare " + setting.configjson.online.name[4], "red");
-                reject(-1);
-            }
-        });
+        this.botConsole = new BotConsole();
     }
 
     updateStatus() {
-        try {
+
+        this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[4], process.env.GITTOKEN).then((data) => {
+            console.log(data);
+            let randomstatus = data.status[this.math.getRandomNumber(0, data.status.length - 1)];
+            console.log(randomstatus);
             client.user.setPresence({
                 activities: [{
-                    name: this.statusJson.status[this.math.getRandomNumber(0, this.statusJson.status.length - 1)],
-                    type: ActivityType.Playing,
+                    name: randomstatus.description,
+                    type: randomstatus.type,
                 }],
                 status: 'online'
             });
-        } catch (error) {
-            new BotConsole().log("Errore nell'aggiornare lo status: " + error, "red");
-        }
+            this.botConsole.log("Status aggiornato: Nuovo status" + randomstatus.description, "green");
+        }).catch((err) => {
+            console.log(err);
+            this.botConsole.log("Errore nel Aggiornare lo status", "red");
+        });
     }
 
     updateStatusEveryFiveMinutes() {
