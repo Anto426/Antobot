@@ -7,7 +7,12 @@ module.exports = {
         const tag = true;
         let logmodule = new log();
         logmodule.init().then(() => {
-            logmodule.guildMemberRemove(member, tag);
+            if (!member.user.bot) {
+                logmodule.guildMemberRemove(member, tag);
+            } else {
+                tag = false;
+                logmodule.guildMemberRemoveBot(member, tag);
+            }
         }).catch((err) => { console.log(err); console.log("Errore nell'inizializzare il modulo log") });
     }
 }

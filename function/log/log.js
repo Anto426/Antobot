@@ -216,6 +216,23 @@ class log {
 
     }
 
+
+    guildMemberAddBot(member, tag) {
+        let embedmsg = new logembed(member.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.guildMemberAddBot(member), member.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+    }
+
+    guildMemberRemoveBot(member, tag) {
+        let embedmsg = new logembed(member.guild);
+        embedmsg.init().then(() => {
+            this.sendlog(embedmsg.guildMemberRemoveBot(member), member.guild, tag).catch(() => { });
+        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+    }
+
 }
 
 module.exports = { log }

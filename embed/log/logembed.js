@@ -568,6 +568,57 @@ class logembed extends BaseEmbed {
     }
 
 
+    guildMemberAddBot(member) {
+        return this.embed
+        .setTitle("🤖 Nuovo bot aggiunto")
+        .setDescription(`Nuovo bot aggiunto al server`)
+        .addFields(
+            {
+                name: "🤖 Nome",
+                value: member.user.globalName ? member.user.globalName : member.user.tag,
+                inline: true
+            },
+            {
+                name: "🤖 ID",
+                value: member.user.id,
+                inline: true
+            },
+            {
+                name: "🤖 Data di entrata",
+                value: this.Time.formatDate(member.joinedAt),
+                inline: true
+            },
+            {
+                name: "Invitato da",
+                value: member.inviter ? member.inviter.tag : "Non specificato",
+            }
+        )
+    }
+
+    guildMemberRemoveBot(member) {
+        return this.embed
+        .setTitle("🤖 Bot rimosso")
+        .setDescription(`Bot rimosso dal server`)
+        .addFields(
+            {
+                name: "🤖 Nome",
+                value: member.user.globalName ? member.user.globalName : member.user.tag,
+                inline: true
+            },
+            {
+                name: "🤖 ID",
+                value: member.user.id,
+                inline: true
+            },
+            {
+                name: "🤖 Data di entrata",
+                value: this.Time.formatDate(member.joinedAt),
+                inline: true
+            }
+        )
+    }
+
+
 }
 
 module.exports = { logembed };
