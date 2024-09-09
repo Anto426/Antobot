@@ -42,8 +42,12 @@ module.exports = {
         promises.push(security.checkServerOwner())
         promises.push(security.checkPermission())
         promises.push(security.checkPosition())
-        promises.push(security.checkChannel(jsonow0[interaction.guild].channel.allowchannel))
+        if (jsonow0[interaction.guild])
+            promises.push(security.checkChannel(jsonow0[interaction.guild].channel.allowchannel))
+        else
+            promises.push(security.checkChannel([]))
 
+            
         Promise.all(promises).then(() => {
             security.allowCommand()
                 .then((result) => {
