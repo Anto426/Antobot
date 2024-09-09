@@ -4,7 +4,7 @@ module.exports = {
     typeEvent: "guildMemberRemove",
     allowevents: true,
     async execute(member) {
-        const tag = true;
+        let tag = true;
         let logmodule = new log();
         logmodule.init().then(() => {
             if (!member.user.bot) {
