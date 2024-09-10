@@ -6,6 +6,6 @@ module.exports = {
     typeEvent: "guildCreate",
     allowevents: true,
     async execute(guild) {
-        new WriteCommand().commandOneGuild(guild).catch(() => { });
+        new WriteCommand().commandGuild(guild).catch(() => { });
     }
 };
