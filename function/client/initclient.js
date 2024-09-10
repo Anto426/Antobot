@@ -24,7 +24,14 @@ class ClientInit {
             try {
                 global.client = new Client({
                     intents: 3276799,
-                    partials: [Partials.User, Partials.Reaction, Partials.Message, Partials.Channel]
+                    partials: [
+                        Partials.Channel,
+                        Partials.GuildMember,
+                        Partials.ThreadMember,
+                        Partials.User,
+                        Partials.Message,
+                        Partials.Reaction
+                    ]
                 })
 
                 global.embedconfig = {}
