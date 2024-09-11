@@ -34,32 +34,30 @@ class Time {
 
     formatTimeDayscale(millis) {
         let minutes = Math.floor(millis / 60000).toFixed(0);
-        let hours = 0;
-        let days = 0;
-        while (minutes >= 60) {
-            hours += 1;
-            minutes -= 60;
-        }
-        while (hours >= 24) {
-            days += 1;
-            hours -= 24;
-        }
-
+        let hours = Math.floor(minutes / 60);
+        let days = hours / 24;
+        minutes -= (hours * 60);
+        hours = hours - (days * 24);
         return `${days}d : ${hours}h : ${minutes}m`;
     }
 
     formatTimeHoursscale(millis) {
-        let minutes = 0;
-        let hours = 0;
-        while (millis >= 60) {
-            minutes += 1;
-            millis -= 60;
+        let minutes = Math.floor(millis / 60000).toFixed(0);
+        let hours = Math.floor(minutes / 60);
+        minutes -= (hours * 60);
+        hours = Math.floor(hours).toFixed(0);
+        let sec = ((millis - (minutes * 60000) - (hours * (1000 * 60 * 60))) / 1000).toFixed(0);
+        return `h:${hours} m:${minutes} s:${sec}`;
+    }
+
+
+
+    fortmatTimestamp(millis) {
+        if (millis > 86400000) {
+            return this.formatTimeDayscale(millis);
+        } else {
+            return this.formatTimeHoursscale(millis);
         }
-        while (minutes >= 60) {
-            hours += 1;
-            minutes -= 60;
-        }
-        return `h:${hours} m:${minutes} s:${millis}`;
     }
 
     formatDate(date) {

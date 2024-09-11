@@ -9,83 +9,132 @@ class Holiday {
         this.Cjson = new Cjson()
         this.hollydayjson = {}
         this.guiljson = {}
-        this.nextHoliday = {}
+        this.arrholiday = []
+        this.id = 0
+        this.id0 = 0
+        this.botconsole = new BotConsole()
         this.year = parseInt(this.Time.getCurrentYear())
     }
 
     async init() {
         return new Promise(async (resolve, reject) => {
-            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((json) => { this.guildJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return  reject(-1) })
-            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN).then((json) => { this.holidayJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
+            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN)
+                .then((json) => { this.guildJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
+            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN)
+                .then((json) => { this.hollydayjson = json; this.arrholiday = this.hollydayjson.holidays }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
             resolve(0);
         })
 
     }
 
 
-    calculateNextHoliday() {
-
+    async checkNextHoliday() {
         return new Promise(async (resolve, reject) => {
             try {
-                this.nextHoliday = this.holidayJson.holidays.find(holy => {
-                    return this.Time.getTimestampByInput(this.year, holy.date.mouth, holy.date.day) > this.Time.getCurrentTimestamp();
-                });
-
-                if (this.nextHoliday) {
-                    resolve(0)
+                if (this.arrholiday.length == 0) {
+                    this.botconsole.log("Nessuna festività presente", "yellow")
+                    reject(-1)
                 } else {
-                    this.year += 1;
-                    resolve(await this.calculateNextHoliday())
-                }
+                    let temp = {}
 
-            } catch { 
-                reject(-1) 
+                    for (let i = 0; i < this.arrholiday.length; i++) {
+                        let day = this.arrholiday[i].date.day
+                        let month = this.arrholiday[i].date.month
+                        let date = this.Time.getTimestampByInput(this.year, month, day)
+                        let now = this.Time.getCurrentTimestamp()
+                        let diff = date - now
+                        if (diff > 0) {
+                            this.arrholiday[i].timestamp = diff
+                            temp = this.arrholiday[i]
+                            break
+                        }
+                    }
+                    if (temp != {}) {
+                        this.botconsole.log("La prossima festività è " + temp.name + " fra " + this.Time.fortmatTimestamp(temp.timestamp), "yellow")
+                        resolve(temp)
+                    } else {
+                        this.year++
+                        resolve(await this.checkNextHoliday())
+                    }
+                }
+            } catch (err) {
+                console.log(err)
+                this.botconsole.log("Errore nel trovare la festività", "red")
+                reject(-1)
             }
         })
 
+
     }
 
-    async updateChannel(channelCount, id) {
+    cleartimer() {
         try {
-            let timereamining = this.Time.getTimestampByInput(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp()
-            if (timereamining > 0) {
-                let Time = `${this.Time.formatTimeDayscale(timereamining)}`
-                channelCount.setName(Time.toString()).catch(() => { new BotConsole().log("Non ho potuto aggiornare il conteggio della festa", "red") })
-            } else {
-                this.sendCongratulations(id)
-            }
-
-        } catch { new BotConsole().log("Non ho potuto aggiornare il conteggio della festa", "red") }
-
-    }
-
-    async sendCongratulations(id) {
-        if (this.Time.formatTimeDayscale(this.Time.getTimestampByInput(this.year, this.nextHoliday.date.mouth, this.nextHoliday.date.day) - this.Time.getCurrentTimestamp()) <= 0) {
-            clearInterval(id)
-            this.main()
+            clearInterval(this.id)
+            clearInterval(this.id0)
+        } catch (err) {
+            console.log(err)
+            this.botconsole.log("Errore nel cancellare il timer", "red")
         }
     }
 
-    async Timer(channelcount) {
-        const id = setInterval(() => {
-            this.updateChannel(channelcount, id)
-        }, 5000 * 60)
+    sendcongratulation(channelcongratulation, holiday) {
+        try {
+            this.botconsole.log("E' arrivato il giorno della festività " + holiday.name, "green")
+            channelcongratulation.send()
+            this.cleartimer()
+            this.main()
+        } catch (err) {
+            console.log(err)
+            this.botconsole.log("Errore nell'invio del messaggio di congratulazioni", "red")
+        }
     }
 
-    main() {
-        try {
-            const guild = client.guilds.cache.find(x => x.id == this.guildJson["Anto's  Server"].id)
-            const channelcount = guild.channels.cache.find(x => x.id == this.guildJson["Anto's  Server"].channel.hollyday.count)
-            const channelname = guild.channels.cache.find(x => x.id == this.guildJson["Anto's  Server"].channel.hollyday.name)
-            this.calculateNextHoliday().then(() => {
-                if (!guild || !channelname || !channelcount || !this.nextHoliday) return
-                new BotConsole().log("Nuova festa trovata:" + this.nextHoliday.name + " in data:" + this.nextHoliday.date.day + "/" + (this.nextHoliday.date.mouth + 1) + "/" + this.year)
-                channelname.setName(this.nextHoliday.name).catch(() => { new BotConsole().log("Non ho potuto aggiornare il nome della festa", "red") })
-                this.updateChannel(channelcount, null)
-                this.Timer(channelcount)
-            }).catch(() => { })
+    async TimeToHoliday(holiday, namechannel, timerchannel, congratulation) {
 
-        } catch(err) {  }
+        try {
+            this.id = setInterval(() => {
+                let now = this.Time.getCurrentTimestamp()
+                let diff = holiday.timestamp - now
+                if (diff <= 0) {
+                    this.sendcongratulation(congratulation, holiday)
+                }
+            }, 1000)
+
+            this.id0 = setInterval(() => {
+                let now = this.Time.getCurrentTimestamp()
+                let diff = holiday.timestamp - now
+                if (diff >= 0) {
+                    namechannel.setName(holiday.emoji + " " + holiday.name)
+                    timerchannel.setName(this.Time.fortmatTimestamp(diff))
+                }
+            }, 5000)
+        } catch (err) {
+            console.log(err)
+            this.botconsole.log("Errore nel timer", "red")
+        }
+
+    }
+
+    async main() {
+        this.checkNextHoliday().then((nextHoliday) => {
+            client.guilds.cache.forEach((guild) => {
+                let info = guildJson[guild.name]
+                if (info) {
+                    let namechannel = guild.channels.cache.get(info.channel.hollyday.name)
+                    let timerchannel = guild.channels.cache.get(info.channel.hollyday.timer)
+                    let congratulation = guild.channels.cache.get(info.channel.hollyday.congratulation)
+                    if (namechannel && timerchannel && congratulation) {
+                        this.TimeToHoliday(nextHoliday, namechannel, timerchannel, congratulation)
+                    } else {
+                        this.botconsole.log("Non ho trovato i canali", "red")
+                    }
+
+                } else {
+                    this.botconsole.log("Non posso abbilitare il il modulo holliday per questo server", "red")
+                }
+            })
+        }).catch(() => { })
+
     }
 }
 
