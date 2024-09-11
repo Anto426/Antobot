@@ -118,7 +118,6 @@ class WriteCommand {
 
             Promise.allSettled(promises).then(results => {
                 const registerguild = results.filter(result => result.status === "fulfilled").length;
-                console.log(registerguild + " " + client.guilds.cache.size);
                 if (registerguild === client.guilds.cache.size) {
                     this.BotConsole.log("Scrittura dei comandi in tutte le gilde completata", "green");
                     resolve(0);
