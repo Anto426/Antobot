@@ -8,7 +8,6 @@ class Holiday {
     constructor() {
         this.Time = new Time()
         this.Cjson = new Cjson()
-        this.eventebed = new EventEmbed()
         this.hollydayjson = {}
         this.guildJson = {}
         this.arrholiday = []
@@ -81,9 +80,10 @@ class Holiday {
 
     sendcongratulation(channelcongratulation, holiday) {
         try {
-            this.eventebed.init().then(() => {
-                channelcongratulation.send({ embeds: [this.eventebed.holiday(holiday)] })
-            }).catch(() => { this.botconsole.log("Errore nell'inizializzare l'embed", "red") })
+            let eventebed = new EventEmbed(channelcongratulation.guild)
+            eventebed.init().then(() => {
+                channelcongratulation.send({ embeds: [eventebed.holiday(holiday)] })
+            }).catch((err) => { console.log(err); this.botconsole.log("Errore nell'inizializzare l'embed", "red") })
             this.botconsole.log("E' arrivato il giorno della festività " + holiday.name, "green")
             this.cleartimer()
             this.main()
@@ -98,7 +98,7 @@ class Holiday {
         try {
             this.id = setInterval(() => {
                 let now = this.Time.getCurrentTimestamp()
-                let diff = 0
+                let diff = now - holiday.timestamp
                 if (diff <= 0) {
                     this.sendcongratulation(congratulation, holiday)
                 }
@@ -106,7 +106,7 @@ class Holiday {
 
             this.id0 = setInterval(() => {
                 let now = this.Time.getCurrentTimestamp()
-                let diff = 0
+                let diff = now - holiday.timestamp
                 if (diff >= 0) {
                     namechannel.setName(holiday.emoji + " " + holiday.name)
                     timerchannel.setName(this.Time.fortmatTimestamp(diff))
@@ -120,23 +120,28 @@ class Holiday {
     }
 
     async main() {
-        let nextHoliday = this.arrholiday[0]
-        client.guilds.cache.forEach((guild) => {
-            let info = this.guildJson[guild.name]
-            if (info) {
-                let namechannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.name)
-                let timerchannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.timer)
-                let congratulation = guild.channels.cache.find(x => x.id == info.channel.hollyday.congratulation)
-                if (namechannel && timerchannel && congratulation) {
-                    this.TimeToHoliday(nextHoliday, namechannel, timerchannel, congratulation)
-                } else {
-                    this.botconsole.log("Non ho trovato i canali", "red")
-                }
+        this.checkNextHoliday().then((nextHoliday) => {
 
-            } else {
-                this.botconsole.log("Non posso abbilitare il il modulo holliday per questo server", "red")
-            }
-        })
+            client.guilds.cache.forEach((guild) => {
+                let info = this.guildJson[guild.name]
+                if (info) {
+                    let namechannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.name)
+                    let timerchannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.count)
+                    let congratulation = guild.channels.cache.find(x => x.id == info.channel.hollyday.congratulation)
+                    if (namechannel && timerchannel && congratulation) {
+                        this.TimeToHoliday(nextHoliday, namechannel, timerchannel, congratulation)
+                    } else {
+                        this.botconsole.log("Non ho trovato i canali", "red")
+                    }
+
+                } else {
+                    this.botconsole.log("Non posso abbilitare il il modulo holliday per questo server", "red")
+                }
+            })
+
+
+        }).catch(() => { this.botconsole.log("Errore nel trovare la festività", "red") })
+
 
     }
 }
