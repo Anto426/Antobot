@@ -97,7 +97,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.green)
     }
 
@@ -211,11 +210,6 @@ class logembed extends BaseEmbed {
                     inline: true
                 },
                 {
-                    name: "🔗 Usi",
-                    value: invite.uses ? invite.uses.toString() : "0",
-                    inline: true
-                },
-                {
                     name: "🔗 Scadenza",
                     value: invite.expiresAt ? invite.expiresAt.toString() : "Mai",
                     inline: true
@@ -280,17 +274,17 @@ class logembed extends BaseEmbed {
                     value: `${client.distubeevents.size.toString()}`,
                 },
                 {
-                    name: "🔧 Nome",
+                    name: "👥 Nome",
                     value: `${this.package.name}`,
                     inline: true
                 },
                 {
-                    name: "🔧 Versione",
+                    name: "💻 Versione",
                     value: `${this.package.version}`,
                     inline: true
                 },
                 {
-                    name: "🔧 Sviluppatore",
+                    name: "⚒️ Sviluppatore",
                     value: `${this.package.author}`,
                     inline: true
                 },
@@ -321,14 +315,18 @@ class logembed extends BaseEmbed {
                     inline: true
                 },
                 {
-                    name: "🔧 Colore",
+                    name: "🔴 Colore",
                     value: role.hexColor.toString(),
                     inline: true
                 },
                 {
-                    name: "🔧 Posizione",
+                    name: "🔝 Posizione",
                     value: role.position.toString(),
                     inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: role.id.toString(),
                 }
             )
             .setThumbnail(role.guild.iconURL(
@@ -348,19 +346,22 @@ class logembed extends BaseEmbed {
             .setDescription(`Il ruolo ${role} è stato eliminato`)
             .addFields(
                 {
-                    name: "🔧 Nome",
+                    name: "👥 Nome",
                     value: role.name.toString(),
                     inline: true
                 },
                 {
-                    name: "🔧 Colore",
+                    name: "🔴 Colore",
                     value: role.hexColor.toString(),
                     inline: true
                 },
                 {
-                    name: "🔧 Posizione",
+                    name: "🔝 Posizione",
                     value: role.position.toString(),
-                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: role.id.toString(),
                 }
             )
             .setThumbnail(role.guild.iconURL(
@@ -395,17 +396,15 @@ class logembed extends BaseEmbed {
     guildMemberAdd(member) {
         return this.embed
             .setTitle("👥 Nuovo membro")
-            .setDescription(`Benvenuto ${member.user.globalName ? member.user.globalName : member.user.tag} nel server`)
+            .setDescription(`Nuovo membro ${member.user.globalName ? member.user.globalName : member.user.tag} entrato nel server`)
             .addFields(
                 {
                     name: "👥 Nome",
                     value: member.user.globalName ? member.user.globalName.toString() : member.user.tag.toString(),
-                    inline: true
                 },
                 {
                     name: "🆔 ID",
                     value: member.user.id.toString(),
-                    inline: true
                 },
             )
             .setThumbnail(member.user.avatarURL(
@@ -458,12 +457,11 @@ class logembed extends BaseEmbed {
                     inline: true
                 },
                 {
-                    name: "👥 ID",
-                    value: member.id,
-                    inline: true
+                    name: "🆔 ID",
+                    value: member.user.id
                 },
                 {
-                    name: "👥 Data di entrata",
+                    name: "📅 Data di entrata",
                     value: this.Time.formatDate(member.joinedAt).toString(),
                     inline: true
                 }
@@ -485,17 +483,14 @@ class logembed extends BaseEmbed {
                 {
                     name: "🎙️ Nuova chat vocale",
                     value: channel.name.toString(),
-                    inline: true
                 },
                 {
                     name: "🆔 ID chat vocale",
                     value: channel.id.toString(),
-                    inline: true
                 },
                 {
                     name: "👥 Utenti chat vocale",
                     value: channel.members.size.toString(),
-                    inline: true
                 }
             )
             .setThumbnail(user.avatarURL(
@@ -513,9 +508,8 @@ class logembed extends BaseEmbed {
             .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} è uscito dal canale vocale ${channel.name}`)
             .addFields(
                 {
-                    name: "🎙️ Nuova chat vocale",
+                    name: "🎙️ Vecchia chat vocale",
                     value: channel.name.toString(),
-                    inline: true
                 },
                 {
                     name: "🆔 ID chat vocale",
@@ -541,10 +535,10 @@ class logembed extends BaseEmbed {
     voiceChange(user, channel) {
         return this.embed
             .setTitle("🎙️ Cambio chat vocale")
-            .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} è passato dal canale vocale ${channel.name}`)
+            .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} ha cambiato canale vocale`)
             .addFields(
                 {
-                    name: "🎙️ Nuova chat vocale",
+                    name: "🎙️ Vecchia chat vocale",
                     value: channel.name.toString(),
                     inline: true
                 },
@@ -574,17 +568,17 @@ class logembed extends BaseEmbed {
         .setDescription(`Nuovo bot aggiunto al server`)
         .addFields(
             {
-                name: "🤖 Nome",
+                name: "👥 Nome",
                 value: member.user.globalName ? member.user.globalName : member.user.tag,
                 inline: true
             },
             {
-                name: "🤖 ID",
+                name: "🆔 ID",
                 value: member.user.id,
                 inline: true
             },
             {
-                name: "🤖 Data di entrata",
+                name: "📅 Data di entrata",
                 value: this.Time.formatDate(member.joinedAt),
                 inline: true
             },
@@ -601,17 +595,17 @@ class logembed extends BaseEmbed {
         .setDescription(`Bot rimosso dal server`)
         .addFields(
             {
-                name: "🤖 Nome",
+                name: "👥 Nome",
                 value: member.user.globalName ? member.user.globalName : member.user.tag,
                 inline: true
             },
             {
-                name: "🤖 ID",
+                name: "🆔 ID",
                 value: member.user.id,
                 inline: true
             },
             {
-                name: "🤖 Data di entrata",
+                name: "📅 Data di entrata",
                 value: this.Time.formatDate(member.joinedAt),
                 inline: true
             }
