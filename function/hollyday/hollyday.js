@@ -45,13 +45,13 @@ class Holiday {
                         let now = this.Time.getCurrentTimestamp()
                         let diff = date - now
                         if (diff > 0) {
-                            this.arrholiday[i].timestamp = diff
+                            this.arrholiday[i].timestamp = date
                             temp = this.arrholiday[i]
                             break
                         }
                     }
                     if (temp != {}) {
-                        this.botconsole.log("La prossima festività è " + temp.name + " fra " + this.Time.fortmatTimestamp(temp.timestamp), "yellow")
+                        this.botconsole.log("La prossima festività è " + temp.name + " fra " + this.Time.fortmatTimestamp(temp.timestamp - this.Time.getCurrentTimestamp()), "yellow")
                         resolve(temp)
                     } else {
                         this.year++
@@ -98,20 +98,21 @@ class Holiday {
         try {
             this.id = setInterval(() => {
                 let now = this.Time.getCurrentTimestamp()
-                let diff = now - holiday.timestamp
+                let diff = holiday.timestamp - now
                 if (diff <= 0) {
                     this.sendcongratulation(congratulation, holiday)
                 }
-            }, 1000)
+            }, 60000)
 
             this.id0 = setInterval(() => {
                 let now = this.Time.getCurrentTimestamp()
-                let diff = now - holiday.timestamp
+                let diff = holiday.timestamp - now
                 if (diff >= 0) {
                     namechannel.setName(holiday.emoji + " " + holiday.name)
                     timerchannel.setName(this.Time.fortmatTimestamp(diff))
                 }
-            }, 5000)
+            }, 300000)
+
         } catch (err) {
             console.log(err)
             this.botconsole.log("Errore nel timer", "red")

@@ -53,7 +53,8 @@ class Time {
 
 
     fortmatTimestamp(millis) {
-        if (millis > 86400000) {
+        let hours = Math.floor(millis / (60000 * 60)).toFixed(0);
+        if (hours > 24) {
             return this.formatTimeDayscale(millis);
         } else {
             return this.formatTimeHoursscale(millis);
