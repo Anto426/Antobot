@@ -111,7 +111,7 @@ class EventEmbed extends BaseEmbed {
     holiday(holiday) {
         return this.embed
             .setTitle(holiday.title)
-            .setDescription(`@everyone\n@here\n${holiday.message}`)
+            .setDescription(`@everyone\n@here\n${holiday.description}`)
             .setColor(holiday.color)
             .setThumbnail(holiday.image)
     }
