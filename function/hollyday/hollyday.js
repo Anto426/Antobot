@@ -82,7 +82,7 @@ class Holiday {
         try {
             let eventebed = new EventEmbed(channelcongratulation.guild)
             eventebed.init().then(() => {
-                channelcongratulation.send({ embeds: [eventebed.holiday(holiday)] })
+                channelcongratulation.send({ embeds: [eventebed.holiday(holiday, channelcongratulation.guild)] })
             }).catch((err) => { console.log(err); this.botconsole.log("Errore nell'inizializzare l'embed", "red") })
             this.botconsole.log("E' arrivato il giorno della festività " + holiday.name, "green")
             this.cleartimer()
