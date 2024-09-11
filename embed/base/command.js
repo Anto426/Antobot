@@ -73,30 +73,30 @@ class comandbembed extends BaseEmbed {
 
         if (status == 0) {
             this.embed
-                .setTitle("Riscrittura Comandi in corso")
-                .setDescription("La Riscrittura dei comandi è in corso")
+                .setTitle("🔄 Riscrittura Comandi in corso")
+                .setDescription("⏳ La Riscrittura dei comandi è in corso")
                 .setThumbnail(embedconfig.image.load)
                 .setColor(embedconfig.color.yellow)
 
         } else if (status == 1) {
             this.embed
-                .setTitle("Riscrittura Comandi completata")
-                .setDescription("Riscrittura dei comandi completata con successo")
+                .setTitle("✅ Riscrittura Comandi completata")
+                .setDescription("🎉 Riscrittura dei comandi completata con successo")
                 .setThumbnail(embedconfig.image.success)
                 .setColor(embedconfig.color.green)
         } else if (status == -1) {
             this.embed
-                .setTitle("Riscrittura Comandi Completata con errori")
-                .setDescription("Riscrittura dei comandi completata con errori")
+                .setTitle("⚠️ Riscrittura Comandi Completata con errori")
+                .setDescription("❗ Riscrittura dei comandi completata con errori")
                 .setThumbnail(embedconfig.image.genericerr)
                 .setColor(embedconfig.color.yellow)
-        } else if (status == -2)
+        } else if (status == -2) {
             this.embed
-                .setTitle("Riscrittura Comandi fallita")
-                .setDescription("Riscrittura dei comandi fallita")
+                .setTitle("❌ Riscrittura Comandi fallita")
+                .setDescription("💥 Riscrittura dei comandi fallita")
                 .setThumbnail(embedconfig.image.genericerr)
                 .setColor(embedconfig.color.red)
-
+        }
 
         return this.embed
 
@@ -124,7 +124,7 @@ class comandbembed extends BaseEmbed {
 
         return this.embed
             .setTitle("ℹ️ Server Info")
-            .setDescription(`Ecco le informazioni di ${guild.name}`)
+            .setDescription(`📋 Ecco le informazioni di ${guild.name}`)
             .addFields(
                 {
                     name: "👑 Proprietario",
@@ -200,7 +200,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: member.user.id.toString(),
-                    inline: true
                 },
                 {
                     name: "📅 Creazione",
@@ -321,7 +320,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: member.user.id.toString(),
-                    inline: true
                 },
                 {
                     name: "🔒 Ruoli",
@@ -359,7 +357,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: member.user.id.toString(),
-                    inline: true
                 },
                 {
                     name: "🔒 Ruoli",
@@ -397,7 +394,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: member.user.id.toString(),
-                    inline: true
                 },
                 {
                     name: "🔒 Ruoli",
@@ -439,7 +435,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: member.user.id.toString(),
-                    inline: true
                 },
                 {
                     name: "🔒 Ruoli",
@@ -500,7 +495,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "🆔 ID",
                     value: member.user.id.toString(),
-                    inline: true
                 }
             )
             .setThumbnail(member.user.displayAvatarURL({
@@ -549,7 +543,6 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "📝 Bio",
                     value: data.bio.toString(),
-                    inline: true
                 },
                 {
                     name: "🔗 Profilo",

@@ -31,7 +31,7 @@ class logembed extends BaseEmbed {
                     name: "🔗 Tipo",
                     value: channel.type == 0 ? "Testuale" : channel.type == 2 ? "Voce" : "Categoria",
                     inline: true
-                },
+                }
             )
             .setThumbnail(channel.guild.iconURL(
                 {
@@ -83,7 +83,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-            
+
     }
 
 
@@ -358,10 +358,11 @@ class logembed extends BaseEmbed {
                 {
                     name: "🔝 Posizione",
                     value: role.position.toString(),
+                    inline: true
                 },
                 {
                     name: "🆔 ID",
-                    value: role.id.toString(),
+                    value: role.id.toString()
                 }
             )
             .setThumbnail(role.guild.iconURL(
@@ -424,12 +425,10 @@ class logembed extends BaseEmbed {
                 {
                     name: "👥 Nome",
                     value: member.user.globalName ? member.user.globalName.toString() : member.user.tag.toString(),
-                    inline: true
                 },
                 {
                     name: "🆔 ID",
                     value: member.user.id.toString(),
-                    inline: true
                 },
                 {
                     name: "🎭 Ruoli ricevuti",
@@ -457,13 +456,13 @@ class logembed extends BaseEmbed {
                     inline: true
                 },
                 {
-                    name: "🆔 ID",
-                    value: member.user.id
-                },
-                {
                     name: "📅 Data di entrata",
                     value: this.Time.formatDate(member.joinedAt).toString(),
                     inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id
                 }
             )
             .setThumbnail(member.user.avatarURL(
@@ -483,15 +482,17 @@ class logembed extends BaseEmbed {
                 {
                     name: "🎙️ Nuova chat vocale",
                     value: channel.name.toString(),
+                    inline: true
+                },
+                {
+                    name: "👥 Utenti chat vocale",
+                    value: channel.members.size.toString(),
+                    inline: true
                 },
                 {
                     name: "🆔 ID chat vocale",
                     value: channel.id.toString(),
                 },
-                {
-                    name: "👥 Utenti chat vocale",
-                    value: channel.members.size.toString(),
-                }
             )
             .setThumbnail(user.avatarURL(
                 {
@@ -510,17 +511,17 @@ class logembed extends BaseEmbed {
                 {
                     name: "🎙️ Vecchia chat vocale",
                     value: channel.name.toString(),
-                },
-                {
-                    name: "🆔 ID chat vocale",
-                    value: channel.id.toString(),
                     inline: true
                 },
                 {
                     name: "👥 Utenti chat vocale",
                     value: channel.members.size.toString(),
                     inline: true
-                }
+                },
+                {
+                    name: "🆔 ID chat vocale",
+                    value: channel.id.toString(),
+                },
             )
             .setThumbnail(user.avatarURL(
                 {
@@ -538,19 +539,18 @@ class logembed extends BaseEmbed {
             .setDescription(`L'utente ${user.globalName ? user.globalName : user.tag} ha cambiato canale vocale`)
             .addFields(
                 {
-                    name: "🎙️ Vecchia chat vocale",
+                    name: "🎙️ Nuova chat vocale",
                     value: channel.name.toString(),
-                    inline: true
-                },
-                {
-                    name: "🆔 ID chat vocale",
-                    value: channel.id.toString(),
                     inline: true
                 },
                 {
                     name: "👥 Utenti chat vocale",
                     value: channel.members.size.toString(),
                     inline: true
+                },
+                {
+                    name: "🆔 ID chat vocale",
+                    value: channel.id.toString(),
                 }
             )
             .setThumbnail(user.avatarURL(
@@ -564,52 +564,49 @@ class logembed extends BaseEmbed {
 
     guildMemberAddBot(member) {
         return this.embed
-        .setTitle("🤖 Nuovo bot aggiunto")
-        .setDescription(`Nuovo bot aggiunto al server`)
-        .addFields(
-            {
-                name: "👥 Nome",
-                value: member.user.globalName ? member.user.globalName : member.user.tag,
-                inline: true
-            },
-            {
-                name: "🆔 ID",
-                value: member.user.id,
-                inline: true
-            },
-            {
-                name: "📅 Data di entrata",
-                value: this.Time.formatDate(member.joinedAt),
-                inline: true
-            },
-            {
-                name: "Invitato da",
-                value: member.inviter ? member.inviter.tag : "Non specificato",
-            }
-        )
+            .setTitle("🤖 Nuovo bot aggiunto")
+            .setDescription(`Nuovo bot aggiunto al server`)
+            .addFields(
+                {
+                    name: "👥 Nome",
+                    value: member.user.globalName ? member.user.globalName : member.user.tag,
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id,
+                },
+                {
+                    name: "📅 Data di entrata",
+                    value: this.Time.formatDate(member.joinedAt),
+                    inline: true
+                },
+                {
+                    name: "Invitato da",
+                    value: member.inviter ? member.inviter.tag : "Non specificato",
+                }
+            )
     }
 
     guildMemberRemoveBot(member) {
         return this.embed
-        .setTitle("🤖 Bot rimosso")
-        .setDescription(`Bot rimosso dal server`)
-        .addFields(
-            {
-                name: "👥 Nome",
-                value: member.user.globalName ? member.user.globalName : member.user.tag,
-                inline: true
-            },
-            {
-                name: "🆔 ID",
-                value: member.user.id,
-                inline: true
-            },
-            {
-                name: "📅 Data di entrata",
-                value: this.Time.formatDate(member.joinedAt),
-                inline: true
-            }
-        )
+            .setTitle("🤖 Bot rimosso")
+            .setDescription(`Bot rimosso dal server`)
+            .addFields(
+                {
+                    name: "👥 Nome",
+                    value: member.user.globalName ? member.user.globalName : member.user.tag,
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id,
+                },
+                {
+                    name: "📅 Data di entrata",
+                    value: this.Time.formatDate(member.joinedAt),
+                    inline: true
+                }
+            )
     }
 
 

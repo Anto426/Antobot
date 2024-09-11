@@ -73,17 +73,15 @@ class EventEmbed extends BaseEmbed {
 
     welcomeback(member, list) {
         let serverIcon = member.guild.iconURL();
-        let string = list.reverse().join('\n').toString()
+        let string = list.reverse().join('\n').toString();
         return this.embed
-            .setTitle(`╚»★Bentornato su ${member.guild.name}★«╝`)
-            .setDescription(`${member} Bentornato su  ${member.guild.name} `)
+            .setTitle(`👋 Membro rientrato`)
+            .setDescription(`🎉 ${member.user} è rientrato nel server`)
             .addFields({
-                name: "Ruoli ricevuti",
+                name: "🎭 Ruoli ricevuti",
                 value: string,
             })
-            .setThumbnail(serverIcon)
-
-
+            .setThumbnail(serverIcon);
     }
 
     boostEvent(member) {
