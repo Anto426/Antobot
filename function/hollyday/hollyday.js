@@ -2,7 +2,7 @@ const { Time } = require("../time/time");
 const { BotConsole } = require("../log/botConsole");
 const setting = require("../../setting/settings.json");
 const { Cjson } = require("../file/json");
-const { EventEmbed } = require("../../embed/distube/events");
+const { EventEmbed } = require("../../embed/base/events");
 class Holiday {
 
     constructor() {

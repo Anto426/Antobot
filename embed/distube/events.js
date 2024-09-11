@@ -45,13 +45,7 @@ class EventEmbed extends BaseEmbed {
     }
 
 
-    holiday(holiday) {
-        return this.embed
-            .setTitle(holiday.title)
-            .setDescription(holiday.description)
-            .setColor(holiday.color)
-            .setThumbnail(holiday.image)
-    }
+
 
 }
 
