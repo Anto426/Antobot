@@ -28,9 +28,7 @@ module.exports = {
                 interaction.editReply({ embeds: [embedmsg.registerCommand(1)], ephemeral: true })
             }).catch((err) => {
                 if (!Number.isNaN(err))
-                    reg.commandallguild().then(() => {
-                        interaction.editReply({ embeds: [embedmsg.registerCommand(err)], ephemeral: true })
-                    })
+                    interaction.editReply({ embeds: [embedmsg.registerCommand(err)], ephemeral: true })
                 else
                     console.log(err)
             })
