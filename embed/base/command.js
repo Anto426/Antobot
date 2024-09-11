@@ -402,7 +402,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "⏲️ Durata",
-                    value: new Time().formatTimeDayscale(time),
+                    value: new Time().fortmatTimestamp(time),
                     inline: true
                 },
                 {
@@ -443,7 +443,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "⏲️ Timeout annulato",
-                    value: new Time().formatTimeDayscale(member.communicationDisabledUntilTimestamp),
+                    value: new Time().fortmatTimestamp(member.communicationDisabledUntilTimestamp),
                     inline: true
                 }
             )
