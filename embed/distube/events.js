@@ -45,7 +45,7 @@ class EventEmbed extends BaseEmbed {
     }
 
 
-    holloway(holiday) {
+    holiday(holiday) {
         return this.embed
             .setTitle(holiday.title)
             .setDescription(holiday.description)
