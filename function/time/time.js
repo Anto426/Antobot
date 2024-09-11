@@ -35,7 +35,7 @@ class Time {
     formatTimeDayscale(millis) {
         let minutes = Math.floor(millis / 60000).toFixed(0);
         let hours = Math.floor(minutes / 60);
-        let days = hours / 24;
+        let days = Math.floor(hours / 24).toFixed(0);
         minutes -= (hours * 60);
         hours = hours - (days * 24);
         return `${days}d : ${hours}h : ${minutes}m`;
