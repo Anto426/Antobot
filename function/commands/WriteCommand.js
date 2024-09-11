@@ -116,9 +116,9 @@ class WriteCommand {
                 promises.push(promise);
             });
 
-            Promise.allSettled(promises).then(() => {
+            Promise.allSettled(promises).then(results => {
                 const registerguild = results.filter(result => result.status === "fulfilled").length;
-
+                console.log(registerguild + " " + client.guilds.cache.size);
                 if (registerguild === client.guilds.cache.size) {
                     this.BotConsole.log("Scrittura dei comandi in tutte le gilde completata", "green");
                     resolve(0);
@@ -129,7 +129,8 @@ class WriteCommand {
                     this.BotConsole.log("Errore: non ho potuto scrivere i comandi in tutte le gilde", "red");
                     reject(-1);
                 }
-            }).catch(() => {
+            }).catch((err) => {
+                console.error(err);
                 this.BotConsole.log("Errore durante la scrittura dei comandi nelle gilde", "red");
                 reject(-1);
             });
