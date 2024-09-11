@@ -44,6 +44,15 @@ class EventEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.error)
     }
 
+
+    holloway(holiday) {
+        return this.embed
+            .setTitle(holiday.title)
+            .setDescription(holiday.description)
+            .setColor(holiday.color)
+            .setThumbnail(holiday.image)
+    }
+
 }
 
 module.exports = { EventEmbed };
