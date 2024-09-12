@@ -11,18 +11,16 @@ class LoadEventsAndCommand {
 
     load(namecollection, root) {
         return new Promise(async (resolve, reject) => {
-            try {
-                try {
-                    new CreateCollection().createCollection(root, ".js")
-                        .then((Collection) => {
-                            client[namecollection] = Collection;
-                            resolve(0)
-                        }).catch(() => { reject(-1) })
-                } catch (err) {
-                    console.log(err)
-                    reject(-1)
-                }
-            } catch (err) { console.log(err); reject(-1) }
+            if (root) {
+                new CreateCollection().createCollection(root, ".js")
+                    .then((Collection) => {
+                        client[namecollection] = Collection;
+                        resolve(0)
+                    }).catch(() => { reject(-1) })
+            } else {
+                this.BotConsole.log("Errore non ho trovato la root", "red")
+                reject(-1)
+            }
         })
     }
 
@@ -84,19 +82,22 @@ class LoadEventsAndCommand {
                 this.BotConsole.log("Errore non ho caricato gli eventi di distube", "red")
             })
     }
+
+
     loadall() {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 this.loadevents()
                 this.loadcommand()
                 this.check.checkAllowDistube().then(() => {
                     this.loaddistubecommand()
                     this.loaddistubeevents()
-                }).catch(() => { })
+                }).catch(() => {})
                 resolve(0)
             } catch (err) {
-                new BotConsole().log(err)
-                resolve(0)
+                console.log("Errore", err)
+                this.BotConsole.log("Errore non ho incorporato gli eventi e i comandi", "red")
+                reject(-1)
             }
 
         })
