@@ -11,7 +11,7 @@ module.exports = {
     see: true,
     disTube: {
         checkchannel: true,
-        checklisttrack: false
+        checklisttrack: true
     },
     data: {
         name: "resume",
