@@ -31,7 +31,7 @@
         "captcha": false,
         "holiday": true,
         "opeanai": {
-            "active": true,
+            "active": false,
             "model": "gpt-turbo-3.5"
         },
         "music": true
