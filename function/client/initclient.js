@@ -55,18 +55,22 @@ class ClientInit {
     async initializeClientAI() {
         return new Promise(async (resolve, reject) => {
 
-            try {
+            this.check.checkAllowOpenAI().then(() => {
+                try {
+                    global.openai = new OpenAI({
+                        apiKey: process.env.OPENAITOKEN
+                    });
+                    new BotConsole().log("Client di AI inizializzato con successo", "green");
+                    resolve(0)
 
-                global.openai = new OpenAI({
-                    apiKey: process.env.OPENAITOKEN
-                });
-                new BotConsole().log("Client di AI inizializzato con successo", "green");
-                resolve(0)
+                } catch (err) {
+                    new BotConsole().log("Errore nell'inizializzare il client di AI", "red");
+                    reject(err);
+                }
 
-            } catch (err) {
-                new BotConsole().log("Errore nell'inizializzare il client di AI", "red");
-                reject(err);
-            }
+
+            }).catch(() => { new BotConsole().log("Modulo OpenAI non abilitato per impostazione", "yellow"); resolve(0) })
+
         })
 
     }
@@ -75,79 +79,86 @@ class ClientInit {
     async initializeClientMusic() {
         return new Promise(async (resolve, reject) => {
 
-            try {
-                this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[7], process.env.GITTOKEN)
-                    .then((cookies) => {
+            this.check.checkAllowDistube().then(() => {
 
-                        global.distube = new DisTube(client, {
-                            emitNewSongOnly: false,
-                            emitAddSongWhenCreatingQueue: false,
+                try {
+                    this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[7], process.env.GITTOKEN)
+                        .then((cookies) => {
+
+                            global.distube = new DisTube(client, {
+                                emitNewSongOnly: false,
+                                emitAddSongWhenCreatingQueue: false,
 
 
-                            plugins: [
-                                new YouTubePlugin({
-                                    cookies: cookies.youtube
-                                }),
-                                new SoundCloudPlugin(),
-                                new SpotifyPlugin(),
-                                new DeezerPlugin(),
-                            ],
-                            customFilters: {
-                                'bassboost': 'bass=g=10',
-                                '8D': 'apulsator=hz=0.08',
-                                'vaporwave': 'aresample=48000,asetrate=48000*0.8',
-                                'nightcore': 'aresample=48000,asetrate=48000*1.25',
-                                'phaser': 'aphaser=in_gain=0.4',
-                                'tremolo': 'tremolo',
-                                'vibrato': 'vibrato=f=6.5',
-                                'reverse': 'areverse',
-                                'treble': 'treble=g=5',
-                                'normalizer': 'dynaudnorm=g=101',
-                                'surrounding': 'surround',
-                                'pulsator': 'apulsator=hz=1',
-                                'subboost': 'asubboost',
-                                'karaoke': 'stereotools=mlev=0.03',
-                                'flanger': 'flanger',
-                                'gate': 'agate',
-                                'haas': 'haas',
-                                'mcompand': 'mcompand',
-                                'earwax': 'earwax',
-                            }
+                                plugins: [
+                                    new YouTubePlugin({
+                                        cookies: cookies.youtube
+                                    }),
+                                    new SoundCloudPlugin(),
+                                    new SpotifyPlugin(),
+                                    new DeezerPlugin(),
+                                ],
+                                customFilters: {
+                                    'bassboost': 'bass=g=10',
+                                    '8D': 'apulsator=hz=0.08',
+                                    'vaporwave': 'aresample=48000,asetrate=48000*0.8',
+                                    'nightcore': 'aresample=48000,asetrate=48000*1.25',
+                                    'phaser': 'aphaser=in_gain=0.4',
+                                    'tremolo': 'tremolo',
+                                    'vibrato': 'vibrato=f=6.5',
+                                    'reverse': 'areverse',
+                                    'treble': 'treble=g=5',
+                                    'normalizer': 'dynaudnorm=g=101',
+                                    'surrounding': 'surround',
+                                    'pulsator': 'apulsator=hz=1',
+                                    'subboost': 'asubboost',
+                                    'karaoke': 'stereotools=mlev=0.03',
+                                    'flanger': 'flanger',
+                                    'gate': 'agate',
+                                    'haas': 'haas',
+                                    'mcompand': 'mcompand',
+                                    'earwax': 'earwax',
+                                }
 
-                        });
-                        new BotConsole().log("Client di Distube inzializato con successo", "green");
-                        resolve(0)
+                            });
+                            new BotConsole().log("Client di Distube inzializato con successo", "green");
+                            resolve(0)
 
-                    }).catch((err) => { console.log(err); new BotConsole().log("Errore variabile json non caricata", "red") });
-            } catch (err) {
-                new BotConsole().log("Errore nel inizializare il client di Distube", "red");
-                reject(err);
-            }
+                        }).catch((err) => { console.log(err); new BotConsole().log("Errore variabile json non caricata", "red") });
+                } catch (err) {
+                    new BotConsole().log("Errore nel inizializare il client di Distube", "red");
+                    reject(err);
+                }
+            }).catch(() => {
+                new BotConsole().log("Modulo distube non abilitato per impostazione", "yellow");
+                resolve(0)
+            })
+
         })
 
     }
 
     async intitialallclientbysettings() {
         return new Promise(async (resolve, reject) => {
-            try {
-                this.initializeClientBase().then(async () => {
-                    await this.check.checkAllowDistube().then(async () => { await this.initializeClientMusic().catch(() => { }) }).catch(() => { })
-                    await this.check.checkAllowOpenAI().then(async () => { await this.initializeClientAI().catch(() => { }) }).catch(() => { })
-                    resolve(0)
-                }).catch(() => {
-                    reject(-1);
-                })
-            } catch (err) {
-                new BotConsole().log("Errore nel inizializare il i client", "red");
-                reject(err);
-            }
-        })
+            this.initializeClientBase().then(async () => {
+                await this.initializeClientMusic().catch(() => { })
+                await this.initializeClientAI().catch(() => { })
+                resolve(0)
+            }).catch((err) => {
+                console.log(err)
+                this.BotConsole.log("Non ho inizializzato nessun client", "red");
+                reject(-1)
+            })
 
+        })
     }
 
 
-
 }
+
+
+
+
 
 
 

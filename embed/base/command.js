@@ -57,7 +57,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "🎵 N Comandi Distube",
-                    value: client.distubecommands.size.toString(),
+                    value: client.distubecommands ? client.distubecommands.size.toString() : "Client off",
                 },
             )
             .setThumbnail(embedconfig.image.help)
@@ -246,7 +246,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "🎵 N Comandi Distube",
-                    value: client.distubecommands.size.toString(),
+                    value: client.distubecommands ? client.distubecommands.size.toString() : "Client off",
                     inline: true
                 },
                 {
@@ -261,7 +261,7 @@ class comandbembed extends BaseEmbed {
                 },
                 {
                     name: "🎶 N Eventi Distube",
-                    value: client.distubeevents.size.toString(),
+                    value: client.distubeevents ? client.distubeevents.size.toString() : "Client off",
                     inline: true
                 },
                 {

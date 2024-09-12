@@ -54,10 +54,12 @@ class Boot {
             .then(() => {
                 this.loadEventsAndCommand.loadall()
                     .then(() => {
+                        this.BotConsole.log("Eventi e comandi impostati correttamente", "green")
                         this.loging()
                     })
                     .catch(() => {
-                        this.loging()
+                        this.BotConsole.log("Errore non ho impostato gli eventi e i comandi il bot verrà killato", "red")
+                        process.exit(-1);
                     })
             })
             .catch(async () => {

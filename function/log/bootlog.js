@@ -220,40 +220,45 @@ class LogStartup {
 
 
             //Distube
-            if (client.distubecommands.size > 0 || client.distubeevents.size > 0) console.log("=".repeat(120) + "\n" + "Distube:" + "\n")
-            if (client.distubecommands.size > 0) {
+            if (client.distubecommands  &&  client.distubeevents) {
 
-                const DistubeGeneralTable = new Table({
-                    head: ["Name:", "Description:"],
-                    style: style,
-                    chars: defaultLayout,
-                    rowAligns: ["center", "center"],
-                    colAligns: ["center", "center"]
-                });
+                if (client.distubecommands.size > 0 || client.distubeevents.size > 0) console.log("=".repeat(120) + "\n" + "Distube:" + "\n")
 
-                client.distubecommands.forEach(element => {
-                    DistubeGeneralTable.push([element.name, element.data.description])
-                });
+                if (client.distubecommands.size > 0) {
 
-                console.log(DistubeGeneralTable.toString())
+                    const DistubeGeneralTable = new Table({
+                        head: ["Name:", "Description:"],
+                        style: style,
+                        chars: defaultLayout,
+                        rowAligns: ["center", "center"],
+                        colAligns: ["center", "center"]
+                    });
 
-            }
+                    client.distubecommands.forEach(element => {
+                        DistubeGeneralTable.push([element.name, element.data.description])
+                    });
 
-            if (client.distubeevents.size > 0) {
+                    console.log(DistubeGeneralTable.toString())
 
-                const DistubeEventsTable = new Table({
-                    head: ["Name:", "Tipo di evento:", "Allow:"],
-                    style: style,
-                    chars: defaultLayout,
-                    rowAligns: ["center", "center", "center"],
-                    colAligns: ["center", "center", "center"]
-                });
+                }
 
-                client.distubeevents.forEach(element => {
-                    DistubeEventsTable.push([element.name, element.typeEvent, element.allowevents])
-                });
+                if (client.distubeevents.size > 0) {
 
-                console.log(DistubeEventsTable.toString())
+                    const DistubeEventsTable = new Table({
+                        head: ["Name:", "Tipo di evento:", "Allow:"],
+                        style: style,
+                        chars: defaultLayout,
+                        rowAligns: ["center", "center", "center"],
+                        colAligns: ["center", "center", "center"]
+                    });
+
+                    client.distubeevents.forEach(element => {
+                        DistubeEventsTable.push([element.name, element.typeEvent, element.allowevents])
+                    });
+
+                    console.log(DistubeEventsTable.toString())
+
+                }
 
             }
 

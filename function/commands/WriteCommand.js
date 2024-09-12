@@ -140,10 +140,25 @@ class WriteCommand {
 
     async commandAllguildonstartup() {
         return new Promise(async (resolve) => {
-            client.commandg = new Collection([
-                ...client.basecommands,
-                ...client.distubecommands,
-            ]);
+
+
+
+
+            if (!client.distubecommands && !client.basecommands) {
+                this.BotConsole.log("Errore: nessun comando da registrare", "red");
+                resolve(0)
+            } else {
+                if (!client.distubecommands) {
+                    client.commandg = client.basecommands;
+                } else {
+                    client.commandg = new Collection([
+                        ...client.basecommands,
+                        ...client.distubecommands,
+                    ]);
+                }
+
+            }
+
 
             let promises = [];
 
@@ -186,7 +201,7 @@ class WriteCommand {
                         this.BotConsole.log("Errore: non ho potuto scrivere i comandi in tutte le gilde", "red");
                         reject(0);
                     }
-                    
+
                 });
             }
         });

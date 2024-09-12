@@ -263,7 +263,7 @@ class logembed extends BaseEmbed {
                 },
                 {
                     name: "🎵 N comandi di distube caricati",
-                    value: `${client.distubecommands.size.toString()}`,
+                    value: `${client.distubecommands ? client.distubecommands.size.toString() : "Client off"}`,
                 },
                 {
                     name: "📅 N Eventi caricati di base",
@@ -271,7 +271,7 @@ class logembed extends BaseEmbed {
                 },
                 {
                     name: "🎶 N Eventi caricati di ditube",
-                    value: `${client.distubeevents.size.toString()}`,
+                    value: `${client.distubeevents ? client.distubeevents.size.toString() : "Client off"}`,
                 },
                 {
                     name: "👥 Nome",
