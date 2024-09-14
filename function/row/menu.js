@@ -5,15 +5,12 @@ class Menu {
 
     }
 
-    createMenu(list, listselection, id, field, idUser, npage, type) {
-
-
-
+    createMenu(list, id, field, idUser, npage, type) {
         let row = new ActionRowBuilder();
         let row0 = new ActionRowBuilder();
 
         let incremento = 25 * npage;
-        let listtotsize = list.length + listselection.length;
+        let listsize = list.length;
         let components = [];
 
         let tlist = list;
@@ -30,20 +27,14 @@ class Menu {
             .setStyle(ButtonStyle.Success)
             .setDisabled(true);
 
+        if (!field.customId)
+            field.setCustomId(`${id}-${idUser}-${npage}-${type}`);
 
-        field.setCustomId(`${id}-${idUser}-${npage}-${type}`)
+        if (listsize >= 25) {
 
+            tlist = list.slice(0 + incremento, 25 + incremento);
 
-        if (listtotsize >= 25) {
-
-
-            list.slice(0 + incremento - listselection.length, 25 + incremento - listselection.length).forEach(element => {
-                listselection.push(element);
-            });
-
-            tlist = listselection
-
-            if (((listtotsize - listtotsize % 25) / 25) > npage) {
+            if (((listsize % 25) / 25) > npage) {
                 bup.setDisabled(false);
             }
 
@@ -51,7 +42,6 @@ class Menu {
                 bdown.setDisabled(false);
             }
         }
-
 
         tlist.forEach(element => {
             field.addOptions(element);
@@ -63,8 +53,8 @@ class Menu {
         components.push(row, row0);
 
         return components;
-
     }
+
 
 
 }
