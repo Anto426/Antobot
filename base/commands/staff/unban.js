@@ -26,7 +26,6 @@ module.exports = {
                     let CMenu = new Menu()
 
                     let comandlist = new StringSelectMenuBuilder()
-                        .setCustomId(`unbanuser-${interaction.member.id}`)
                         .setPlaceholder('Seleziona un utente da sbannare')
 
                     bans.forEach(member => {
@@ -39,7 +38,7 @@ module.exports = {
 
                     interaction.reply({
                         embeds: [embed.unbanlist(bans.size)],
-                        components: CMenu.createMenu(list, "unban", comandlist, interaction.member.id, 0),
+                        components: CMenu.createMenu(list, [], "unban", comandlist, interaction.member.id, 0, 0),
                     });
 
 

@@ -566,6 +566,45 @@ class comandbembed extends BaseEmbed {
     }
 
 
+    confirmedBan(member) {
+        return this.embed
+            .setTitle(`Stai per Sbannare ${member.user.globalName ? member.user.globalName : member.user.tag}`)
+            .setDescription(`Sicuro di voler sbannare ${member.user.globalName ? member.user.globalName : member.user.tag} `)
+            .addFields(
+                {
+                    name: "👤 Nome",
+                    value: member.user.globalName ? member.user.globalName.toString() : member.user.tag.toString(),
+                    inline: true
+                },
+                {
+                    name: "🆔 ID",
+                    value: member.user.id.toString(),
+                    inline: true
+                },
+                {
+                    name: "📅 Creato il",
+                    value: member.user.createdAt.toDateString(),
+                    inline: true
+                },
+                {
+                    name: "📝 Motivo",
+                    value: member.reason ? member.reason.toString() : "Non specificato",
+                    inline: true
+                }
+            )
+            .setThumbnail(member.user.displayAvatarURL(
+                {
+                    dynamic: true,
+                    size: 256
+                }
+            ))
+    }
+
+
+    
+
+
+
 
 
 
