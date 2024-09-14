@@ -18,7 +18,7 @@ module.exports = {
             Cbotton.checkIsYourButton(interaction)
                 .then(() => {
                     let json = new Cjson()
-                    console.log(interactioncustomId)    
+                    console.log(interactioncustomId)
                     if (interactioncustomId[3] == 0) {
                         json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
                             new BaseEmbed(interaction.guild, interaction.member).init().then((embedbase) => {
@@ -99,7 +99,7 @@ module.exports = {
                             embed.init().then(() => {
                                 interaction.update({
                                     embeds: [embed.help()],
-                                    components: CMenu.createMenu(list, [], "help", comandlist, interaction.member.id, interactioncustomId[2], 1),
+                                    components: CMenu.createMenu(list, "help", comandlist, interaction.member.id, interactioncustomId[2], 1),
                                 });
                             })
 

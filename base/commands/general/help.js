@@ -41,7 +41,7 @@ module.exports = {
             embed.init().then(() => {
                 interaction.reply({
                     embeds: [embed.help()],
-                    components: CMenu.createMenu(list, [], "help", comandlist, interaction.member.id, 0, 0),
+                    components: CMenu.createMenu(list, "help", comandlist, interaction.member.id, 0, 0),
                 });
             })
         }).catch((err) => {

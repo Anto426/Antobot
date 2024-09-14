@@ -87,7 +87,7 @@ module.exports = {
 
                                     interaction.update({
                                         embeds: [embed.unbanlist(bans.size)],
-                                        components: CMenu.createMenu(list, "unban", comandlist, interaction.member.id, 0),
+                                        components: CMenu.createMenu(list, "unban", comandlist, interaction.member.id, 0, 1),
                                     });
 
 
