@@ -34,7 +34,7 @@ module.exports = {
                     }
                 });
 
-                if (changedprop.length > 0 && newChannel.parentId !== data[newChannel.guild.name].channel.hollyday.id)
+                if (changedprop.length > 0 && newChannel.parentId !== data[newChannel.guild.id].channel.hollyday.id)
                     logmodule.updatechannel(newChannel, changedprop, tag);
 
             }).catch((err) => { console.log(err) });

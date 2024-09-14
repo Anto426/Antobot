@@ -22,9 +22,9 @@ class log {
         return new Promise((resolve, reject) => {
             try {
                 if (guild) {
-                    if (this.guildJson[guild.name] && this.guildJson[guild.name].channel.bot["private-log"]) {
-                        if (tag) guild.channels.cache.get(this.guildJson[guild.name].channel.bot["public-log"]).send({ embeds: [embed] });
-                        guild.channels.cache.get(this.guildJson[guild.name].channel.bot["private-log"]).send({ embeds: [embed] });
+                    if (this.guildJson[guild.id] && this.guildJson[guild.id].channel.bot["private-log"]) {
+                        if (tag) guild.channels.cache.get(this.guildJson[guild.id].channel.bot["public-log"]).send({ embeds: [embed] });
+                        guild.channels.cache.get(this.guildJson[guild.id].channel.bot["private-log"]).send({ embeds: [embed] });
                         resolve(0);
                     }
                     else {

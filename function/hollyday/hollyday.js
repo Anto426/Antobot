@@ -124,7 +124,7 @@ class Holiday {
         this.checkNextHoliday().then((nextHoliday) => {
 
             client.guilds.cache.forEach((guild) => {
-                let info = this.guildJson[guild.name]
+                let info = this.guildJson[guild.id]
                 if (info) {
                     let namechannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.name)
                     let timerchannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.count)
@@ -136,7 +136,7 @@ class Holiday {
                     }
 
                 } else {
-                    this.botconsole.log("Non posso abbilitare il il modulo holliday per questo server", "red")
+                    this.botconsole.log("Non posso abbilitare il il modulo holliday per " + guild.name , "red")
                 }
             })
 
