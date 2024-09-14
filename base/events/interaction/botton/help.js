@@ -99,7 +99,7 @@ module.exports = {
                             embed.init().then(() => {
                                 interaction.update({
                                     embeds: [embed.help()],
-                                    components: CMenu.createMenu(list, "help", comandlist, interaction.member.id, interactioncustomId[2], 1),
+                                    components: CMenu.createMenu(list, "help", comandlist, interaction.member.id, interactioncustomId[2], 0),
                                 });
                             })
 
