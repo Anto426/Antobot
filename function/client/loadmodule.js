@@ -63,7 +63,7 @@ class LoadEventsAndCommand {
             })
             .catch((err) => {
                 console.log(err)
-                this.BotConsole.log("Errore non ho caricato i camandi", "red")
+                this.BotConsole.log("Errore non ho caricato i comandi di distube", "red")
             })
     }
 
