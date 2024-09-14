@@ -27,8 +27,9 @@ module.exports = {
         embed.init().then(async () => {
 
             let result = await eval(command);
-            interaction.reply({ embeds: [embed.eval(result)] });
-
+            interaction.reply({ embeds: [embed.eval(result)] }).catch((err) => {
+                console.log(err)
+            })
         }).catch((err) => {
             console.log(err)
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
