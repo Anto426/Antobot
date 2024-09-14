@@ -1,7 +1,6 @@
 const { botton } = require("../../../../function/interaction/botton");
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } = require('discord.js');
 const { comandbembed } = require("../../../../embed/base/command");
-const { BaseEmbed } = require("../../../../embed/baseembed");
 const { Menu } = require("../../../../function/row/menu");
 const { ErrEmbed } = require("../../../../embed/err/errembed");
 module.exports = {
