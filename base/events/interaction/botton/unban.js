@@ -27,7 +27,7 @@ module.exports = {
 
                                     let row = new ActionRowBuilder().addComponents(
                                         new ButtonBuilder()
-                                            .setCustomId(`unban-${interaction.member.id}-${interactioncustomId[2] - 0}`)
+                                            .setCustomId(`unban-${interaction.member.id}-${interactioncustomId[2]}-1`)
                                             .setLabel('Indietro')
                                             .setStyle(ButtonStyle.Success),
                                         new ButtonBuilder()
