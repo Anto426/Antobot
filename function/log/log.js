@@ -136,10 +136,21 @@ class log {
 
 
     ready(tag) {
-        let embedmsg = new logembed(client.guilds.cache.get(this.guildJson["Anto's  Server"].id));
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.ready(), client.guilds.cache.get(this.guildJson["Anto's  Server"].id), tag).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+
+        client.guilds.cache.forEach(guild => {
+
+            if (this.guildJson[guild.id]) {
+                let embedmsg = new logembed(guild);
+                embedmsg.init().then(() => {
+                    this.sendlog(embedmsg.ready(), guild, tag).catch(() => { });
+                }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+            } else {
+                this.console.log("Non ho il canale per inviare il messagio", "red");
+            }
+
+
+        });
+
     }
 
     roleCreate(role, tag) {
