@@ -26,7 +26,6 @@ module.exports = {
         json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[6], process.env.GITTOKEN).then((jsonf) => {
 
             let comandlist = new StringSelectMenuBuilder()
-                .setCustomId(`help-${interaction.member.id}`)
                 .setPlaceholder('Scegli un comando')
 
             client.commandg.forEach(command => {
@@ -42,7 +41,7 @@ module.exports = {
             embed.init().then(() => {
                 interaction.reply({
                     embeds: [embed.help()],
-                    components: CMenu.createMenu(list, "helpm", comandlist, interaction.member.id, 0),
+                    components: CMenu.createMenu(list, [], "help", comandlist, interaction.member.id, 0, 0),
                 });
             })
         }).catch((err) => {
