@@ -2,6 +2,7 @@ const setting = require("../../setting/settings.json");
 const { CreateCollection } = require("../dir/createCollection");
 const { BotConsole } = require("../log/botConsole");
 const { Check } = require("../check/check");
+const { Collection } = require("discord.js");
 
 class LoadEventsAndCommand {
     constructor() {
@@ -14,7 +15,9 @@ class LoadEventsAndCommand {
             if (root) {
                 new CreateCollection().createCollection(root, ".js")
                     .then((Collection) => {
+                        let color = Collection.size > 0 ? "green" : "red"
                         client[namecollection] = Collection;
+                        this.BotConsole.log("Caricato " + client[namecollection].size + " file di " + namecollection, color)
                         resolve(0)
                     }).catch(() => { reject(-1) })
             } else {
@@ -25,75 +28,156 @@ class LoadEventsAndCommand {
     }
 
     loadcommand() {
-        this.load("basecommands", process.env.dirbot + setting.base.commands)
-            .then(() => {
-                client.basecommands.forEach(x => {
-                    x.type = "Base"
-                });
-            })
-            .catch((err) => {
-                console.log(err)
-                this.BotConsole.log("Errore non ho caricato i camandi:", "red")
-            })
+        return new Promise(async (resolve, reject) => {
+            this.load("basecommands", process.env.dirbot + setting.base.commands)
+                .then(() => {
+                    client.basecommands.forEach(x => {
+                        x.type = "Base"
+                    });
+                    resolve(0)
+                })
+                .catch(() => { reject(-1) })
+        })
+
     }
 
     loadevents() {
-        this.load("baseevents", process.env.dirbot + setting.base.events)
-            .then(() => {
-                client.baseevents.forEach(x => {
-                    if (x.allowevents)
-                        client.on(x.typeEvent, (...args) => {
-                            x.execute(...args)
-                        });
-                });
-            })
-            .catch((err) => {
-                console.log(err)
-                this.BotConsole.log("Errore non ho caricato gli eventi", "red")
-            })
 
+        return new Promise(async (resolve, reject) => {
+            this.load("baseevents", process.env.dirbot + setting.base.events)
+                .then(() => {
+                    client.baseevents.forEach(x => {
+                        if (x.allowevents)
+                            client.on(x.typeEvent, (...args) => {
+                                x.execute(...args)
+                            });
+                        resolve(0)
+                    });
+                })
+                .catch(() => { reject(-1) })
+
+        })
+
+    }
+
+    loadbuttonbase() {
+        return new Promise(async (resolve, reject) => {
+            this.load("basebutton", process.env.dirbot + setting.base.button)
+                .then(() => {
+                    resolve(0)
+                })
+                .catch(() => {
+                    reject(-1)
+                })
+
+        })
     }
 
     loaddistubecommand() {
-        this.load("distubecommands", process.env.dirbot + setting.distube.commands)
-            .then(() => {
-                client.distubecommands.forEach(x => {
-                    x.type = "Distube"
-                });
-            })
-            .catch((err) => {
-                console.log(err)
-                this.BotConsole.log("Errore non ho caricato i comandi di distube", "red")
-            })
+        return new Promise(async (resolve, reject) => {
+            this.load("distubecommands", process.env.dirbot + setting.distube.commands)
+                .then(() => {
+                    client.distubecommands.forEach(x => {
+                        x.type = "Distube"
+                    });
+                    resolve(0)
+                })
+                .catch(() => {
+                    reject(-1)
+                })
+        })
     }
 
     loaddistubeevents() {
-        this.load("distubeevents", process.env.dirbot + setting.distube.events)
-            .then(() => {
-                client.distubeevents.forEach(x => {
-                    if (x.allowevents)
-                        distube.on(x.typeEvent, (...args) => {
-                            x.execute(...args)
-                        });
-                });
-            })
-            .catch((err) => {
+        return new Promise(async (resolve, reject) => {
+            this.load("distubeevents", process.env.dirbot + setting.distube.events)
+                .then(() => {
+                    client.distubeevents.forEach(x => {
+                        if (x.allowevents)
+                            distube.on(x.typeEvent, (...args) => {
+                                x.execute(...args)
+                            });
+                    });
+                    resolve(0)
+                })
+                .catch(() => { reject(-1) })
+        })
+
+
+    }
+
+    loadbuttondistube() {
+        return new Promise(async (resolve, reject) => {
+            this.load("distubebutton", process.env.dirbot + setting.distube.button)
+                .then(() => { resolve(0) })
+                .catch(() => { reject(-1) })
+        })
+    }
+
+    createPrimaryCollection() {
+
+        return new Promise(async (resolve, reject) => {
+
+            try {
+                if (!client.distubecommands) {
+                    client.commandg = client.basecommands;
+                } else {
+                    client.commandg = new Collection([
+                        ...client.basecommands,
+                        ...client.distubecommands,
+                    ]);
+                }
+
+                if (!client.distubebutton) {
+
+                    client.buttong = client.basebutton;
+                } else {
+                    client.buttong = new Collection([
+                        ...client.basebutton,
+                        ...client.distubebutton,
+                    ]);
+                }
+                resolve(0)
+
+            } catch (err) {
                 console.log(err)
-                this.BotConsole.log("Errore non ho caricato gli eventi di distube", "red")
-            })
+                reject(-1)
+            }
+
+
+        })
+
     }
 
 
     loadall() {
         return new Promise(async (resolve, reject) => {
             try {
-                this.loadevents()
-                this.loadcommand()
+
+                let promise = []
+
+                promise.push(this.loadcommand())
+                promise.push(this.loadevents())
+                promise.push(this.loadbuttonbase())
                 this.check.checkAllowDistube().then(() => {
-                    this.loaddistubecommand()
-                    this.loaddistubeevents()
-                }).catch(() => {})
-                resolve(0)
+                    promise.push(this.loaddistubecommand())
+                    promise.push(this.loaddistubeevents())
+                    promise.push(this.loadbuttondistube())
+                }).catch(() => { })
+
+                await Promise.all(promise).then(() => {
+                    this.BotConsole.log("Tutti i file sono stati caricati", "green")
+                    this.createPrimaryCollection().then(() => {
+                        resolve(0)
+                    }).catch(() => {
+                        this.BotConsole.log("Errore non ho incorporato gli eventi e i comandi", "red")
+                        reject(-1)
+                    })
+                }).catch(() => {
+                    this.BotConsole.log("Errore non ho incorporato gli eventi e i comandi", "red")
+                    reject(-1)
+                })
+
             } catch (err) {
                 console.log("Errore", err)
                 this.BotConsole.log("Errore non ho incorporato gli eventi e i comandi", "red")
