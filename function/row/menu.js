@@ -17,13 +17,15 @@ class Menu {
 
         let bup = new ButtonBuilder()
             .setCustomId(`${id}-${idUser}-${parseInt(npage) + 1}-${type}`)
-            .setLabel('Avanti')
+            .setLabel('Pagina Successiva')
+            .setEmoji('🔼')
             .setStyle(ButtonStyle.Success)
             .setDisabled(true);
 
         let bdown = new ButtonBuilder()
             .setCustomId(`${id}-${idUser}-${parseInt(npage) - 1}-${type}`)
-            .setLabel('Indietro')
+            .setLabel('Pagina Precedente')
+            .setEmoji('🔽')
             .setStyle(ButtonStyle.Success)
             .setDisabled(true);
 
