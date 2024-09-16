@@ -1,5 +1,4 @@
 
-const { Collection } = require("discord.js");
 const { BotConsole } = require("../log/botConsole");
 
 class WriteCommand {
@@ -141,24 +140,10 @@ class WriteCommand {
     async commandAllguildonstartup() {
         return new Promise(async (resolve) => {
 
-
-
-
             if (!client.distubecommands && !client.basecommands) {
                 this.BotConsole.log("Errore: nessun comando da registrare", "red");
                 resolve(0)
-            } else {
-                if (!client.distubecommands) {
-                    client.commandg = client.basecommands;
-                } else {
-                    client.commandg = new Collection([
-                        ...client.basecommands,
-                        ...client.distubecommands,
-                    ]);
-                }
-
             }
-
 
             let promises = [];
 
