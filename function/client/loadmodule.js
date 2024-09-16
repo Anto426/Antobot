@@ -164,10 +164,10 @@ class LoadEventsAndCommand {
                     promise.push(this.loaddistubeevents())
                     promise.push(this.loadbuttondistube())
                 }).catch(() => { })
-
-                await Promise.all(promise).then(() => {
+                Promise.all(promise).then(() => {
                     this.BotConsole.log("Tutti i file sono stati caricati", "green")
                     this.createPrimaryCollection().then(() => {
+                        this.BotConsole.log("Collezioni create", "green")
                         resolve(0)
                     }).catch(() => {
                         this.BotConsole.log("Errore non ho incorporato gli eventi e i comandi", "red")
