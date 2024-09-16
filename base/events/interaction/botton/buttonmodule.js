@@ -48,7 +48,6 @@ module.exports = {
             embed.init().then(() => {
                 interaction.reply({ embeds: [embed.wrongButtonError()], ephemeral: true })
             })
-            reject(-1)
         })
 
 
