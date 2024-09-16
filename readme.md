@@ -1,3 +1,10 @@
+# 💻 Changelog per Anto's Bot v6.1.1
+
+## Miglioramenti Generali
+- **🐛 Fixati molti bug**: 
+- **⚙️ Ottimizzato il modulo di gestione dei bottoni**: Aggiunta una gestione più efficiente degli eventi di click.
+
+
 # 💻 Changelog per Anto's Bot v6.1.0 (Beta 2)
 
 ## Miglioramenti Generali
