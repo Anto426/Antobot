@@ -222,6 +222,29 @@ class ErrEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.genericerr)
     }
 
+    buttonnotvalidError() {
+        return this.embed
+            .setTitle("🚫 Errore")
+            .setDescription("⚠️ Questo bottone non è più valido.Prova a rieseguire il comando.\n❗ Se il problema persiste, contatta un amministratore.")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+    CommandNotFountError() {
+        return this.embed
+            .setTitle("🚫 Errore")
+            .setDescription("⚠️ Questo comando non esiste.")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+
+    membernotfoundError() {
+        return this.embed
+            .setTitle("🚫 Errore")
+            .setDescription("⚠️ Membro non trovato.")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+
+
 }
 
 
