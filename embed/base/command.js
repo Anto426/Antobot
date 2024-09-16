@@ -601,11 +601,66 @@ class comandbembed extends BaseEmbed {
     }
 
 
-    
 
 
 
 
+    intitguild(guild) {
+        return this.embed
+            .setTitle("🔧 Inizializzazione Server")
+            .setDescription(`Inizializzazione del server ${guild.name}`)
+            .setThumbnail(guild.iconURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+    }
+
+
+    setchannelAllow() {
+        return this.embed
+            .setTitle("🔧 Canali")
+            .setDescription("Seleziona i canali in cui il bot puo esequire i comandi")
+            .setThumbnail(embedconfig.image.load)
+
+    }
+
+    askallowedtempchannelmodule() {
+        return this.embed
+            .setTitle("🔧 Canali")
+            .setDescription("Vuoi abilitare il modulo dei canali temporanei?")
+            .setThumbnail(embedconfig.image.load)
+    }
+
+
+    commandInformation(command, data) {
+        return this.embed
+            .setTitle(`${data.command[command.name].emoji}  ${command.name}`)
+            .setColor(embedconfig.color.green)
+            .setDescription(data.command[command.name].description)
+            .setThumbnail(data.command[command.name].image)
+            .addFields(
+                {
+                    name: "🔑 Permessi",
+                    value: (command.permisions.length == 0 && !command.OnlyOwner) ? "🔓Libero" : "🔐Bloccato",
+                    inline: true
+                },
+                {
+                    name: "🌐 Libero su tutti i canali",
+                    value: command.allowedchannels ? "⚔️No" : "🏇Si",
+                    inline: true
+                },
+                {
+                    name: "🤖 Appartenente al client",
+                    value: `🤖${command.type}`,
+                    inline: true
+                },
+                {
+                    name: "📋 Option",
+                    value: command.data.options ? command.data.options.map(x => { return `📛 Nome: ${x.name.charAt(0).toUpperCase() + x.name.slice(1)} 📝 Descrizione: ${x.description.charAt(0).toUpperCase() + x.description.slice(1)}` }).join("\n") : "📋 Non ci sono opzioni per questo comando",
+                }
+            )
+    }
 
 
 
