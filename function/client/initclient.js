@@ -144,7 +144,8 @@ class ClientInit {
                 await this.initializeClientMusic().catch(() => { })
                 await this.initializeClientAI().catch(() => { })
                 resolve(0)
-            }).catch((err) => {
+            }).catch((err) => { 
+                
                 console.log(err)
                 this.BotConsole.log("Non ho inizializzato nessun client", "red");
                 reject(-1)
