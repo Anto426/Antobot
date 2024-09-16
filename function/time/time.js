@@ -47,7 +47,7 @@ class Time {
         minutes -= (hours * 60);
         hours = Math.floor(hours).toFixed(0);
         let sec = ((millis - (minutes * 60000) - (hours * (1000 * 60 * 60))) / 1000).toFixed(0);
-        return `h:${hours} m:${minutes} s:${sec}`;
+        return `${hours}h : ${minutes}m : ${sec}s`;
     }
 
 
