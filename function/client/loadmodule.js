@@ -156,13 +156,13 @@ class LoadEventsAndCommand {
 
                 let promise = []
 
-                promise.push(this.loadcommand())
-                promise.push(this.loadevents())
-                promise.push(this.loadbuttonbase())
+                promise.push(this.loadcommand().catch(() => { }))
+                promise.push(this.loadevents().catch(() => { }))
+                promise.push(this.loadbuttonbase().catch(() => { }))
                 this.check.checkAllowDistube().then(() => {
-                    promise.push(this.loaddistubecommand())
-                    promise.push(this.loaddistubeevents())
-                    promise.push(this.loadbuttondistube())
+                    promise.push(this.loaddistubecommand().catch(() => { }))
+                    promise.push(this.loaddistubeevents().catch(() => { }))
+                    promise.push(this.loadbuttondistube().catch(() => { }))
                 }).catch(() => { })
                 Promise.all(promise).then(() => {
                     this.BotConsole.log("Tutti i file sono stati caricati", "green")
