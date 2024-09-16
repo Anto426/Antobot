@@ -1,15 +1,18 @@
 {
     "database": {
         "root": "/Database",
-        "listoldmebers": "oldmember.json"
+        "listoldmebers": "oldmember.json",
+        "guildconfig": "guildconfig.json"
     },
     "base": {
         "commands": "/base/commands",
-        "events": "/base/events"
+        "events": "/base/events",
+        "button": "/base/button"
     },
     "distube": {
         "commands": "/distube/commands",
-        "events": "/distube/events"
+        "events": "/distube/events",
+        "button": "/distube/button"
     },
     "canavas": {
         "font": {
