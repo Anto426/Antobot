@@ -14,9 +14,9 @@ module.exports = {
     },
     execute(interaction) {
 
-        let help = new helppagebuilder()
+        let helpbuilder = new helppagebuilder()
 
-        help.mainpage(interaction).then((menu) => {
+        helpbuilder.mainpage(interaction).then((menu) => {
             interaction.reply({ embeds: menu[0], components: menu[1] });
         }).catch((err) => {
             console.log(err);
