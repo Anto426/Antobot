@@ -1,5 +1,5 @@
 const { PermissionsBitField } = require("discord.js");
-const { unbanpagebuilder } = require("../../../function/interaction/button/unbanmenubuilder");
+const { unbanpagebuilder } = require("../../../function/interaction/button/unbanpagebuilder");
 module.exports = {
     name: "unban",
     permisions: [PermissionsBitField.Flags.BanMembers],
