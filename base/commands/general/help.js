@@ -1,4 +1,4 @@
-const { helppagebuilder } = require("../../../function/interaction/button/helpmenubuilder");
+const { helppagebuilder } = require("../../../function/interaction/button/helppagebuilder");
 module.exports = {
     name: "help",
     permisions: [],
