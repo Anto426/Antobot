@@ -357,7 +357,7 @@ class initguildpagebuilder {
                             roleChannel = guild.roles.cache.get(data[interaction.guild.id].channel.rule) ? guild.roles.cache.get(data[interaction.guild.id].channel.rule).name : "Non impostato"
                             annunceChannel = guild.channels.cache.get(data[interaction.guild.id].channel.events) ? guild.channels.cache.get(data[interaction.guild.id].channel.events).name : "Non impostato"
                             welcomeChannel = guild.channels.cache.get(data[interaction.guild.id].channel.welcome) ? guild.channels.cache.get(data[interaction.guild.id].channel.welcome).name : "Non impostato"
-                            userroledefault = guild.roles.cache.get(data[interaction.guild.id].role.roledefault) ? guild.roles.cache.get(data[interaction.guild.id].role.userroledefault).name : "Non impostato"
+                            userroledefault = guild.roles.cache.get(data[interaction.guild.id].role.roledefault) ? guild.roles.cache.get(data[interaction.guild.id].role.roledefault).name : "Non impostato"
                             botroledefault = guild.roles.cache.get(data[interaction.guild.id].role.botroledefault) ? guild.roles.cache.get(data[interaction.guild.id].role.botroledefault).name : "Non impostato"
                             hollyday = data[interaction.guild.id].hollyday ? "✅ Abilitato" : "❌ Disabilitato";
                             tempchannel = data[interaction.guild.id].tempchannel ? "✅ Abilitato" : "❌ Disabilitato";
