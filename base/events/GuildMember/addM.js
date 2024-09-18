@@ -39,16 +39,14 @@ module.exports = {
                     } else {
 
                         let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
-                        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((jsonf0) => {
+                        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((data) => {
                             let embedmsg = new EventEmbed(member.guild)
                             embedmsg.init().then(async () => {
                                 let send = await embedmsg.welcome(member, humans.size).catch(() => { })
-                                member.guild.channels.cache.find(x => x.id === jsonf0[member.guild.id].channel.info.welcome).send({ embeds: [send[0]], files: [send[1]] });
+                                member.guild.channels.cache.get(data[member.guild.id].channel.welcome).send({ embeds: [send[0]], files: [send[1]] });
 
                             }).catch(() => { })
-                            try {
-                                member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[member.guild.id].role.user));
-                            } catch { }
+                            member.roles.add(member.guild.roles.cache.find(x => x.id === data[member.guild.id].role.user)).catch(() => { new BotConsole().log("Non sono riuscito ad aggiungere il ruolo", "red") })
 
                         })
 
@@ -62,7 +60,7 @@ module.exports = {
 
                 try {
                     json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((jsonf0) => {
-                        member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[member.guild.id].role.bot));
+                        member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[member.guild.id].role.botroledefault));
                     })
                 } catch (err) {
                     new BotConsole().log(err, "red");
