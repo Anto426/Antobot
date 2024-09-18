@@ -29,12 +29,9 @@ module.exports = {
         const command = client.commandg.get(interaction.commandName)
         let json = new Cjson();
         let security = new Security(interaction, command)
-
-        let jsonow = {}
-        let jsonow0 = {}
         let promises = []
-        await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[0], process.env.GITTOKEN).then((jsonowner) => { jsonow = jsonowner }).catch(() => { })
-        await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((jsonguild) => { jsonow0 = jsonguild }).catch(() => { })
+        let jsonow = await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[0], process.env.GITTOKEN).catch(() => { })
+        let jsonow0 = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).catch(() => { })
 
         promises.push(security.checkOwner(jsonow.owner))
         promises.push(security.checkIsYou())
@@ -42,12 +39,13 @@ module.exports = {
         promises.push(security.checkServerOwner())
         promises.push(security.checkPermission())
         promises.push(security.checkPosition())
-        if (jsonow0[interaction.guild])
-            promises.push(security.checkChannel(jsonow0[interaction.guild].channel.allowchannel))
+        if (jsonow0[interaction.guild.id]) {
+            promises.push(security.checkChannel(jsonow0[interaction.guild.id].channel.allowchannel))
+        }
         else
             promises.push(security.checkChannel([]))
 
-            
+
         Promise.all(promises).then(() => {
             security.allowCommand()
                 .then((result) => {
