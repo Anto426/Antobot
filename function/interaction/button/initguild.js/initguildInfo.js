@@ -23,16 +23,16 @@ class InitguildInfo {
                             for (let i in tempchannel) {
                                 console.log(i)
                                 if (i != "id")
-                                    guild.channels.cache.get(tempchannel[i].id).delete()
+                                    guild.channels.cache.get(tempchannel[i].id).delete().catch((err) => { console.log(err) })
                                 else
-                                    guild.channels.cache.get(tempchannel[i]).delete()
+                                    guild.channels.cache.get(tempchannel[i]).delete().catch((err) => { console.log(err) })
                             }
                         }
                         if (data[guild.id].channel.hollyday) {
                             let hollyday = data[guild.id].channel.hollyday
                             for (let i in hollyday) {
                                 if (i != "send")
-                                    guild.channels.cache.get(hollyday[i]).delete()
+                                    guild.channels.cache.get(hollyday[i]).delete().catch((err) => { console.log(err) })
                             }
                         }
                     } catch (err) {
@@ -65,9 +65,9 @@ class InitguildInfo {
                         let tempchannel = data[guild.id].channel.tempchannel
                         for (let i in tempchannel) {
                             if (i != "id")
-                                guild.channels.cache.get(tempchannel[i].id).delete()
+                                guild.channels.cache.get(tempchannel[i].id).delete().catch((err) => { console.log(err) })
                             else
-                                guild.channels.cache.get(tempchannel[i]).delete()
+                                guild.channels.cache.get(tempchannel[i]).delete().catch((err) => { console.log(err) })
                         }
                         delete data[guild.id].channel.tempchannel
                         this.Cjson.createJSONFile(root, data).then(() => {
@@ -95,7 +95,7 @@ class InitguildInfo {
                         let hollyday = data[guild.id].channel.hollyday
                         for (let i in hollyday) {
                             if (i != "send")
-                                guild.channels.cache.get(hollyday[i]).delete()
+                                guild.channels.cache.get(hollyday[i]).delete().catch((err) => { console.log(err) })
                         }
                         delete data[guild.id].channel.hollyday
                         this.Cjson.createJSONFile(root, data).then(() => {
