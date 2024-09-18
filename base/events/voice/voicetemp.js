@@ -21,7 +21,7 @@ module.exports = {
                         if (newMember && x != "id")
                             if (newMember.channel.id == jsonGuild[newMember.guild.id].channel.tempchannel[x].id) {
                                 if (channel) {
-                                    channel.setUserLimit(jsonGuild[newMember.guild.id].channel.tempchannel[x].limite);
+                                    channel.setUserLimit(jsonGuild[newMember.guild.id].channel.tempchannel[x].limit);
                                     member.voice.setChannel(channel);
                                     return;
                                 } else {
@@ -29,7 +29,7 @@ module.exports = {
                                         name: member.user.globalName.toString(),
                                         type: 2,
                                         parent: category,
-                                        userLimit: jsonGuild[newMember.guild.id].channel.tempchannel[x].limite,
+                                        userLimit: jsonGuild[newMember.guild.id].channel.tempchannel[x].limit,
                                     });
                                     member.voice.setChannel(channel);
                                     return;
@@ -40,7 +40,7 @@ module.exports = {
 
                 try {
                     for (let x in jsonGuild[oldMember.guild.id].channel.tempchannel) {
-                        if (x != "id" &&newMember.channel != newMember.guild.channels.cache.find(y => y.id == jsonGuild[oldMember.guild.id].channel.tempchannel.function[x].id) && oldMember.channel == channel) {
+                        if (x != "id" && newMember.channel != newMember.guild.channels.cache.find(y => y.id == jsonGuild[oldMember.guild.id].channel.tempchannel[x].id) && oldMember.channel == channel) {
                             let intervalId = setInterval(async () => {
                                 try {
                                     if (channel.members.size == 0) {
