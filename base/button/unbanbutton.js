@@ -7,7 +7,7 @@ module.exports = {
         let unbanbuilder = new unbanpagebuilder()
 
         if (interactioncustomId[2] === "0") {
-            unbanbuilder.mainpage(interaction).then((menu) => {
+            unbanbuilder.mainpage(interaction, interactioncustomId).then((menu) => {
                 interaction.update({ embeds: menu[0], components: menu[1] });
             }).catch((err) => {
                 console.log(err);

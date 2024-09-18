@@ -9,7 +9,7 @@ class unbanpagebuilder {
         this.Menu = new Menu();
     }
 
-    async mainpage(interaction) {
+    async mainpage(interaction, interactioncustomId) {
 
         return await new Promise((resolve) => {
 
@@ -19,19 +19,19 @@ class unbanpagebuilder {
                 if (bans.size > 0) {
                     embed.init().then(() => {
                         let list = []
-                        let CMenu = new Menu()
 
                         let comandlist = new StringSelectMenuBuilder()
+                            .setCustomId(`unban-${interaction.member.id}-1-${interactioncustomId[3]}`)
                             .setPlaceholder('Seleziona un utente da sbannare')
 
-                        bans.forEach(member => {
+                        bans.sort().forEach(member => {
                             list.push(new StringSelectMenuOptionBuilder()
                                 .setLabel(`🏴‍☠️ ${member.user.globalName ? member.user.globalName : member.user.tag}`)
                                 .setDescription(`ID: ${member.user.id}`)
                                 .setValue(`${member.user.id}`))
                         });
 
-                        resolve([[embed.unbanlist(list.length)], CMenu.createMenu(list, "unban", comandlist, interaction.member.id, 1, 0)])
+                        resolve([[embed.unbanlist(list.length)], this.Menu.createMenu(list, "unban", comandlist, interaction.member.id, 0, 0)])
 
 
                     }).catch((err) => {
@@ -102,7 +102,7 @@ class unbanpagebuilder {
 
                             let row = new ActionRowBuilder().addComponents(
                                 new ButtonBuilder()
-                                    .setCustomId(`unban-${interaction.member.id}-0-${interactioncustomId[2]}`)
+                                    .setCustomId(`unban-${interaction.member.id}-0-${interactioncustomId[3]}`)
                                     .setLabel('Indietro')
                                     .setStyle(ButtonStyle.Success),
                                 new ButtonBuilder()
@@ -164,7 +164,7 @@ class unbanpagebuilder {
                 interaction.guild.members.unban(member.user, "Unbanned").then(() => {
                     let row = new ActionRowBuilder().addComponents(
                         new ButtonBuilder()
-                            .setCustomId(`unban-${interaction.member.id}-${interaction.customId.split("-")[3]}-1`)
+                            .setCustomId(`unban-${interaction.member.id}-1-${interaction.customId.split("-")[3]}`)
                             .setLabel('Indietro')
                             .setStyle(ButtonStyle.Success)
                     )
