@@ -9,10 +9,11 @@ module.exports = {
     allowevents: true,
     async execute(message) {
 
+
         let json = new Cjson();
 
         json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((jsonf) => {
-            jsonf[message.guild].channel.allowchannel.forEach(x => {
+            jsonf[message.guild.id].channel.allowchannel.forEach(x => {
                 try {
                     if (message.channel.id == x && !message.author.bot) {
                         message.delete().catch(() => { });
@@ -21,7 +22,7 @@ module.exports = {
                 } catch (err) { new BotConsole().log("Errore non sono riuscito a cancellare il messaggio", "red"); }
 
             });
-        }).catch(() => { });
+        }).catch((err) => {console.log(err); });
 
 
     }
