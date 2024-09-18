@@ -601,38 +601,6 @@ class comandbembed extends BaseEmbed {
     }
 
 
-
-
-
-
-    intitguild(guild) {
-        return this.embed
-            .setTitle("🔧 Inizializzazione Server")
-            .setDescription(`Inizializzazione del server ${guild.name}`)
-            .setThumbnail(guild.iconURL({
-                dynamic: true,
-                format: "png",
-                size: 512
-            }))
-    }
-
-
-    setchannelAllow() {
-        return this.embed
-            .setTitle("🔧 Canali")
-            .setDescription("Seleziona i canali in cui il bot puo esequire i comandi")
-            .setThumbnail(embedconfig.image.load)
-
-    }
-
-    askallowedtempchannelmodule() {
-        return this.embed
-            .setTitle("🔧 Canali")
-            .setDescription("Vuoi abilitare il modulo dei canali temporanei?")
-            .setThumbnail(embedconfig.image.load)
-    }
-
-
     commandInformation(command, data) {
         return this.embed
             .setTitle(`${data.command[command.name].emoji}  ${command.name}`)
@@ -661,6 +629,141 @@ class comandbembed extends BaseEmbed {
                 }
             )
     }
+
+
+    intitguild(guild) {
+        return this.embed
+            .setTitle("� Inizializzazione del Server")
+            .setDescription(`🔧 Inizializzazione del server **${guild.name}**`)
+            .setThumbnail(guild.iconURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+            .setColor("#00FF00")
+            .addFields(
+                {
+                    name: "📅 Data di Creazione",
+                    value: guild.createdAt.toDateString(),
+                },
+                {
+                    name: "👑 Proprietario",
+                    value: `<@${guild.ownerId}>`,
+                }
+            );
+    }
+
+    setchannelAllow(pageNumber) {
+        return this.embed
+            .setTitle(`📜 Configurazione Canali | Pagina ${pageNumber}`)
+            .setDescription("📋 Seleziona i canali in cui il bot può eseguire i comandi.")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#FFA500")
+    }
+
+    SetRulechannel(pageNumber) {
+        return this.embed
+            .setTitle(`📜 Configurazione canale delle regole | Pagina ${pageNumber}`)
+            .setDescription("📋 Seleziona il canale delle regole.")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#FFA500")
+    }
+
+    SetAnnuncechannel(pageNumber) {
+        return this.embed
+            .setTitle(`📜 Configurazione canale degli annunci. | Pagina ${pageNumber}`)
+            .setDescription("📋 Seleziona il canale degli annunci.")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#FFA500")
+    }
+
+    SetWelcomechannel(pageNumber) {
+        return this.embed
+            .setTitle(`📜 Configurazione canale di benvenuto. | Pagina ${pageNumber}`)
+            .setDescription("📋 Seleziona il canale di benvenuto.")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#FFA500")
+    }
+
+    SetDefaultRole(pageNumber) {
+        return this.embed
+            .setTitle(`🎭 Configurazione ruolo di default | Pagina ${pageNumber}`)
+            .setDescription("📋 Seleziona il ruolo di default.")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#0000FF")
+    }
+
+    SetBotRole(pageNumber) {
+        return this.embed
+            .setTitle(`🎭 Configurazione ruolo del bot | Pagina ${pageNumber}`)
+            .setDescription("📋 Seleziona il ruolo del bot.")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#0000FF")
+    }
+
+    AllowHollyday() {
+        return this.embed
+            .setTitle(`📦 Modulo della festività`)
+            .setDescription("❓ Vuoi abilitare il modulo della festività?")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#FFA500")
+    }
+
+    AllowTempChannel() {
+        return this.embed
+            .setTitle(`📦 Modulo Canali temporanei`)
+            .setDescription("❓ Vuoi abilitare i canali temporanei?")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#FFA500")
+    }
+
+    ConfirmGuildConfig(guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel) {
+        return this.embed
+            .setTitle(`📦 Conferma Configurazione`)
+            .setDescription("🔧 Conferma la configurazione per " + guild.name)
+            .setThumbnail(guild.iconURL({
+                dynamic: true,
+                format: "png",
+                size: 512
+            }))
+            .setColor("#FFA500")
+            .addFields(
+                {
+                    name: "📜 Canali Comandi",
+                    value: allowcommandchennelname,
+                },
+                {
+                    name: "📜 Canale Regole",
+                    value: roleChannel,
+                },
+                {
+                    name: "📢 Canale Annunci",
+                    value: annunceChannel,
+                },
+                {
+                    name: "👋 Canale Benvenuto",
+                    value: welcomeChannel,
+                },
+                {
+                    name: "👤 Ruolo Utente Default",
+                    value: userroledefault,
+                },
+                {
+                    name: "🤖 Ruolo Bot Default",
+                    value: botroledefault,
+                },
+                {
+                    name: "🎉 Moduolo Festività",
+                    value: hollyday,
+                },
+                {
+                    name: "⏳ Moduolo Canali Temporanei",
+                    value: tempchannel,
+                }
+            );
+    }
+
+
 
 
 
