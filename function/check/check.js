@@ -65,10 +65,10 @@ class Check {
         });
     }
 
-    checkSOwner(idUser, idGuild) {
+    checkSOwner(idUser, Guild) {
         return new Promise(async (resolve, reject) => {
             try {
-                if (idUser == client.guilds.cache.find(x => x.id == idGuild).ownerId) {
+                if (idUser == Guild.ownerId) {
                     resolve(0);
                 } else {
                     reject(-1);
@@ -147,22 +147,8 @@ class Check {
         });
     }
 
-    checkPChannel(idChannel, arr) {
-        return new Promise(async (resolve, reject) => {
-            if (arr.length != 0) {
-                this.checkValArr(arr, idChannel)
-                    .then(() => {
-                        resolve(0);
-                    })
-                    .catch(() => {
-                        reject(-1);
-                    });
-            } else {
-                resolve(0);
-            }
 
-        });
-    }
+
 
     checkAllowOpenAI() {
         return new Promise(async (resolve, reject) => {
