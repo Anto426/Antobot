@@ -5,7 +5,7 @@ class Menu {
 
     }
 
-    createMenu(list, id, field, idUser, npage, type) {
+    createMenu(list, id, field, idUser, type, npage) {
         let row = new ActionRowBuilder();
         let row0 = new ActionRowBuilder();
 
@@ -16,21 +16,18 @@ class Menu {
         let tlist = list;
 
         let bup = new ButtonBuilder()
-            .setCustomId(`${id}-${idUser}-${parseInt(npage) + 1}-${type}`)
+            .setCustomId(`${id}-${idUser}-${type}-${parseInt(npage) + 1}`)
             .setLabel('Pagina Successiva')
             .setEmoji('🔼')
             .setStyle(ButtonStyle.Success)
             .setDisabled(true);
 
         let bdown = new ButtonBuilder()
-            .setCustomId(`${id}-${idUser}-${parseInt(npage) - 1}-${type}`)
+            .setCustomId(`${id}-${idUser}-${type}-${parseInt(npage) - 1}`)
             .setLabel('Pagina Precedente')
             .setEmoji('🔽')
             .setStyle(ButtonStyle.Success)
             .setDisabled(true);
-
-        if (!field.customId)
-            field.setCustomId(`${id}-${idUser}-${npage}-${type}`);
 
         if (listsize >= 25) {
 
