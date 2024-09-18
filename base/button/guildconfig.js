@@ -64,7 +64,7 @@ module.exports = {
         } else if (interactioncustomId[2] === "5") {
             if (interaction.values) {
                 let channel = interaction.guild.channels.cache.get(interaction.values[0])
-                initguild.singleChannel(channel, root, "boost").catch(() => { })
+                initguild.singleChannel(channel, root, "log").catch(() => { })
             }
             guildconfigbuilder.Channellog(interaction, interactioncustomId).then((menu) => {
                 interaction.update({ embeds: menu[0], components: menu[1] });
