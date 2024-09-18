@@ -57,7 +57,7 @@ module.exports = {
                 initguild.SavedRole(root, interaction.values[0], interaction.guild.id, "roledefault").then(() => {
                 }).catch(() => { })
             }
-            guildconfigbuilder.roleDefault(interaction, interactioncustomId, "roledefault").then((menu) => {
+            guildconfigbuilder.roleDefault(interaction, interactioncustomId).then((menu) => {
                 interaction.update({ embeds: menu[0], components: menu[1] });
             }).catch((err) => {
                 console.log(err);

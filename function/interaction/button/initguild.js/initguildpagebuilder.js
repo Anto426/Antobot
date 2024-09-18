@@ -354,7 +354,7 @@ class initguildpagebuilder {
                                 temp.push(guild.channels.cache.get(element).name)
                             })
                             allowcommandchennelname = temp.join("\n")
-                            roleChannel = guild.roles.cache.get(data[interaction.guild.id].role.roledefault) ? guild.roles.cache.get(data[interaction.guild.id].role.roledefault).name : "Non impostato"
+                            roleChannel = guild.roles.cache.get(data[interaction.guild.id].channel.role) ? guild.roles.cache.get(data[interaction.guild.id].channel.role).name : "Non impostato"
                             annunceChannel = guild.channels.cache.get(data[interaction.guild.id].channel.events) ? guild.channels.cache.get(data[interaction.guild.id].channel.events).name : "Non impostato"
                             welcomeChannel = guild.channels.cache.get(data[interaction.guild.id].channel.welcome) ? guild.channels.cache.get(data[interaction.guild.id].channel.welcome).name : "Non impostato"
                             userroledefault = guild.roles.cache.get(data[interaction.guild.id].role.roledefault) ? guild.roles.cache.get(data[interaction.guild.id].role.userroledefault).name : "Non impostato"
