@@ -63,7 +63,8 @@ module.exports = {
 
         } else if (interactioncustomId[2] === "5") {
             if (interaction.values) {
-                initguild.SavedRole(root, interaction.values[0], interaction.guild.id, "log").catch(() => { })
+                let channel = interaction.guild.channels.cache.get(interaction.values[0])
+                initguild.singleChannel(channel, root, "boost").catch(() => { })
             }
             guildconfigbuilder.Channellog(interaction, interactioncustomId).then((menu) => {
                 interaction.update({ embeds: menu[0], components: menu[1] });
@@ -123,6 +124,9 @@ module.exports = {
             guildconfigbuilder.ConfirmGuildConfig(interaction, interactioncustomId, root)
                 .then((menu) => {
                     interaction.update({ embeds: menu[0], components: menu[1] });
+                    client.holidaymodule.restart()
+                }).catch((err) => {
+                    console.log(err);
                 })
 
         }
