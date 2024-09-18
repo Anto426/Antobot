@@ -39,7 +39,7 @@ module.exports = {
                     } else {
 
                         let [bots, humans] = (await member.guild.members.fetch()).partition(member => member.user.bot);
-                        json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
+                        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((jsonf0) => {
                             let embedmsg = new EventEmbed(member.guild)
                             embedmsg.init().then(async () => {
                                 let send = await embedmsg.welcome(member, humans.size).catch(() => { })
@@ -61,7 +61,7 @@ module.exports = {
             } else {
 
                 try {
-                    json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonf0) => {
+                    json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((jsonf0) => {
                         member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[member.guild.id].role.bot));
                     })
                 } catch (err) {

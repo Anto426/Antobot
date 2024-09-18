@@ -10,7 +10,7 @@ module.exports = {
             let embedmsg = new EventEmbed(oldMember.guild, oldMember);
             let json = new Cjson();
             embedmsg.init().then(() => {
-                json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((data) => {
+                json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((data) => {
                     if (data[newMember.guild.id]) {
                         let channel = newMember.guild.channels.cache.find(x => x.id === data[newMember.guild.id].channel.info.boost)
                         channel.send({ embeds: [embedmsg.boostEvent(newMember)] })

@@ -8,7 +8,7 @@ module.exports = {
     async execute(oldMember, newMember) {
         if (!newMember.member.user.bot) {
             let json = new Cjson;
-            await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then(async (jsonGuild) => {
+            await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then(async (jsonGuild) => {
 
 
                 if(!jsonGuild[newMember.guild.id]) return;

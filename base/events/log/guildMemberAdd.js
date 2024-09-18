@@ -6,7 +6,7 @@ module.exports = {
     typeEvent: "guildMemberAdd",
     allowevents: true,
     async execute(member) {
-        let tag = true;
+        
         let logmodule = new log();
         let json = new Cjson();
         logmodule.init().then(() => {

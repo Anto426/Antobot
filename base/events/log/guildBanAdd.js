@@ -4,7 +4,7 @@ module.exports = {
     typeEvent: "guildBanAdd",
     allowevents: true,
     async execute(guildban) {
-        const tag = true;
+        
         let logmodule = new log();
         logmodule.init().then(() => {
             logmodule.guildBanAdd(guildban, tag);

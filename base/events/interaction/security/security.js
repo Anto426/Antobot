@@ -34,7 +34,7 @@ module.exports = {
         let jsonow0 = {}
         let promises = []
         await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[0], process.env.GITTOKEN).then((jsonowner) => { jsonow = jsonowner }).catch(() => { })
-        await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN).then((jsonguild) => { jsonow0 = jsonguild }).catch(() => { })
+        await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((jsonguild) => { jsonow0 = jsonguild }).catch(() => { })
 
         promises.push(security.checkOwner(jsonow.owner))
         promises.push(security.checkIsYou())

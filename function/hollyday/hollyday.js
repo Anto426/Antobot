@@ -19,7 +19,7 @@ class Holiday {
 
     async init() {
         return new Promise(async (resolve, reject) => {
-            await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[2], process.env.GITTOKEN)
+            await this.Cjson.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig)
                 .then((json) => { this.guildJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
             await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN)
                 .then((json) => { this.hollydayjson = json; this.arrholiday = this.hollydayjson.holidays }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
