@@ -392,13 +392,15 @@ class initguildpagebuilder {
                                 buttonreset.setDisabled(true)
                             }
 
-                            let guild = interaction.guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel
+                            let guild = interaction.guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel, log, boostchannel
                             let temp = []
                             data[interaction.guild.id].channel.allowchannel.forEach((element) => {
                                 temp.push(guild.channels.cache.get(element).name)
                             })
                             allowcommandchennelname = temp.join("\n")
                             roleChannel = guild.channels.cache.get(data[interaction.guild.id].channel.rule) ? guild.channels.cache.get(data[interaction.guild.id].channel.rule).name : "Non impostato"
+                            log = guild.channels.cache.get(data[interaction.guild.id].channel.log) ? guild.channels.cache.get(data[interaction.guild.id].channel.log).name : "Non impostato"
+                            boostchannel = guild.channels.cache.get(data[interaction.guild.id].channel.boost) ? guild.channels.cache.get(data[interaction.guild.id].channel.boost).name : "Non impostato"
                             annunceChannel = guild.channels.cache.get(data[interaction.guild.id].channel.events) ? guild.channels.cache.get(data[interaction.guild.id].channel.events).name : "Non impostato"
                             welcomeChannel = guild.channels.cache.get(data[interaction.guild.id].channel.welcome) ? guild.channels.cache.get(data[interaction.guild.id].channel.welcome).name : "Non impostato"
                             userroledefault = guild.roles.cache.get(data[interaction.guild.id].role.roledefault) ? guild.roles.cache.get(data[interaction.guild.id].role.roledefault).name : "Non impostato"
@@ -410,7 +412,7 @@ class initguildpagebuilder {
                             )
                             let embed = new comandbembed(interaction.guild, interaction.member)
                             embed.init().then(() => {
-                                resolve([[embed.ConfirmGuildConfig(guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel)], [row]])
+                                resolve([[embed.ConfirmGuildConfig(guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel, log, boostchannel)], [row]])
                             }).catch((err) => {
                                 console.log(err)
                                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)

@@ -734,7 +734,7 @@ class comandbembed extends BaseEmbed {
     }
 
 
-    ConfirmGuildConfig(guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel) {
+    ConfirmGuildConfig(guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel, logchannel, boosterchannel) {
         return this.embed
             .setTitle(`📦 Conferma Configurazione`)
             .setDescription("🔧 Conferma la configurazione per " + guild.name)
@@ -760,6 +760,14 @@ class comandbembed extends BaseEmbed {
                 {
                     name: "👋 Canale Benvenuto",
                     value: welcomeChannel,
+                },
+                {
+                    name: "💎 Canale Boost",
+                    value: boosterchannel,
+                },
+                {
+                    name: "📜 Canale Log",
+                    value: logchannel,
                 },
                 {
                     name: "👤 Ruolo Utente Default",
