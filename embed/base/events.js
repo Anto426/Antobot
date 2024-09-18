@@ -115,6 +115,15 @@ class EventEmbed extends BaseEmbed {
     }
 
 
+    newguild(guild) {
+        return this.embed
+            .setTitle("🎉 Grazie per avermi invitato in " + guild.name)
+            .setDescription(`Per iniziare a configurare il bot scrivi /initguild`)
+            .setThumbnail(client.user.displayAvatarURL(
+                { dynamic: true }
+            ))
+    }
+
 }
 
 module.exports = { EventEmbed }
