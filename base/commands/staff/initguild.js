@@ -27,7 +27,7 @@ module.exports = {
             let embedmsg = embed.intitguild(interaction.guild)
             let button = new ButtonBuilder()
                 .setCustomId(`initguild-${interaction.member.id}-0-0`)
-                .setLabel('🚀 Riavvia il processo di configurazione')
+                .setLabel('🚀 Avvia')
                 .setStyle(ButtonStyle.Success)
 
             json.readJson(root).then((data) => {
