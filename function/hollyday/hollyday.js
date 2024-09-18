@@ -20,7 +20,13 @@ class Holiday {
     async init() {
         return new Promise(async (resolve, reject) => {
             await this.Cjson.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig)
-                .then((json) => { this.guildJson = json }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red"); return reject(-1) })
+                .then((json) => {
+                    this.guildJson = json
+                })
+                .catch(() => {
+                    new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[2], "red");
+                    return reject(-1)
+                })
             await this.Cjson.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[3], process.env.GITTOKEN)
                 .then((json) => { this.hollydayjson = json; this.arrholiday = this.hollydayjson.holidays }).catch(() => { new BotConsole().log("Errore nell'inizializzare il json " + setting.configjson.online.name[3], "red"); return reject(-1) })
             resolve(0);
@@ -120,15 +126,22 @@ class Holiday {
 
     }
 
+    async restart() {
+        this.cleartimer()
+        await this.init()
+        this.main()
+    }
+
     async main() {
         this.checkNextHoliday().then((nextHoliday) => {
 
             client.guilds.cache.forEach((guild) => {
                 let info = this.guildJson[guild.id]
+                console.log(info)
                 if (info) {
                     let namechannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.name)
-                    let timerchannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.count)
-                    let congratulation = guild.channels.cache.find(x => x.id == info.channel.hollyday.congratulation)
+                    let timerchannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.date)
+                    let congratulation = guild.channels.cache.find(x => x.id == info.channel.hollyday.send)
                     if (namechannel && timerchannel && congratulation) {
                         this.TimeToHoliday(nextHoliday, namechannel, timerchannel, congratulation)
                     } else {
@@ -136,7 +149,7 @@ class Holiday {
                     }
 
                 } else {
-                    this.botconsole.log("Non posso abbilitare il il modulo holliday per " + guild.name , "red")
+                    this.botconsole.log("Non posso abbilitare il il modulo holliday per " + guild.name, "red")
                 }
             })
 
