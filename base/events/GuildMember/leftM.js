@@ -10,18 +10,18 @@ module.exports = {
 
         if (member.user.bot) return;
         let json = new Cjson();
-        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then((jsonf) => {
+        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then((data) => {
 
-            if (!jsonf[member.guild.id]) {
-                jsonf[member.guild.id] = {};
+            if (!data[member.guild.id]) {
+                data[member.guild.id] = {};
             }
 
-            if (!jsonf[member.guild.id][member.id]) {
-                jsonf[member.guild.id][member.id] = {};
+            if (!data[member.guild.id][member.id]) {
+                data[member.guild.id][member.id] = {};
             }
 
-            jsonf[member.guild.id][member.id].roles = Array.from(member.roles.cache).map(role => role[1].id);
-            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsonf).catch(() => { });
+            data[member.guild.id][member.id].roles = Array.from(member.roles.cache).map(role => role[1].id);
+            json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, data).catch(() => { });
 
         }).catch((err) => {
             new BotConsole().log(err);
