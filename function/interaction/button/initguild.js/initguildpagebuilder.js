@@ -354,13 +354,13 @@ class initguildpagebuilder {
                                 temp.push(guild.channels.cache.get(element).name)
                             })
                             allowcommandchennelname = temp.join("\n")
-                            roleChannel = guild.roles.cache.get(data[interaction.guild.id].channel.rule) ? guild.roles.cache.get(data[interaction.guild.id].channel.rule).name : "Non impostato"
+                            roleChannel = guild.channels.cache.get(data[interaction.guild.id].channel.rule) ? guild.channels.cache.get(data[interaction.guild.id].channel.rule).name : "Non impostato"
                             annunceChannel = guild.channels.cache.get(data[interaction.guild.id].channel.events) ? guild.channels.cache.get(data[interaction.guild.id].channel.events).name : "Non impostato"
                             welcomeChannel = guild.channels.cache.get(data[interaction.guild.id].channel.welcome) ? guild.channels.cache.get(data[interaction.guild.id].channel.welcome).name : "Non impostato"
                             userroledefault = guild.roles.cache.get(data[interaction.guild.id].role.roledefault) ? guild.roles.cache.get(data[interaction.guild.id].role.roledefault).name : "Non impostato"
                             botroledefault = guild.roles.cache.get(data[interaction.guild.id].role.botroledefault) ? guild.roles.cache.get(data[interaction.guild.id].role.botroledefault).name : "Non impostato"
-                            hollyday = data[interaction.guild.id].hollyday ? "✅ Abilitato" : "❌ Disabilitato";
-                            tempchannel = data[interaction.guild.id].tempchannel ? "✅ Abilitato" : "❌ Disabilitato";
+                            hollyday = data[interaction.guild.id].channel.hollyday ? "✅ Abilitato" : "❌ Disabilitato";
+                            tempchannel = data[interaction.guild.id].channel.tempchannel ? "✅ Abilitato" : "❌ Disabilitato";
                             let row = new ActionRowBuilder().addComponents(
                                 buttonconfirm, buttonreset
                             )
