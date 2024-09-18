@@ -13,7 +13,7 @@ class helppagebuilder {
         this.Cjson = new Cjson();
     }
 
-    async mainpage(interaction) {
+    async mainpage(interaction, interactioncustomId) {
 
         return await new Promise((resolve) => {
 
@@ -24,9 +24,10 @@ class helppagebuilder {
                 embed.init().then(() => {
 
                     let comandlist = new StringSelectMenuBuilder()
+                        .setCustomId(`help-${interaction.member.id}-1-0`)
                         .setPlaceholder('Scegli un comando');
 
-                    client.commandg.forEach(command => {
+                    client.commandg.sort().forEach(command => {
                         if (command.see) {
                             list.push(new StringSelectMenuOptionBuilder()
                                 .setLabel(`${jsonf.command[command.name] ? jsonf.command[command.name].emoji : "⚙️"} ${command.data.name}`)
@@ -36,7 +37,7 @@ class helppagebuilder {
 
                     });
 
-                    resolve([[embed.help()], this.Menu.createMenu(list, "help", comandlist, interaction.member.id, 1, 0)]);
+                    resolve([[embed.help()], this.Menu.createMenu(list, "help", comandlist, interaction.member.id, 0, interactioncustomId[3])]);
 
                 }).catch((err) => {
                     console.log(err);
@@ -63,7 +64,7 @@ class helppagebuilder {
         });
     }
 
-    async commandpage(interaction, command) {
+    async commandpage(interaction, command, interactioncustomId) {
 
         let interactioncustomId = interaction.customId.toString().split("-");
 
@@ -76,7 +77,7 @@ class helppagebuilder {
 
                     if (command) {
                         let row = new ActionRowBuilder().addComponents(new ButtonBuilder()
-                            .setCustomId(`help-${interaction.member.id}-0-${interactioncustomId[2]}`)
+                            .setCustomId(`help-${interaction.member.id}-0-${interactioncustomId[3]}`)
                             .setLabel('Indietro')
                             .setStyle(ButtonStyle.Success))
 
