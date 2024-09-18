@@ -41,7 +41,7 @@ class Security extends Check {
 
     checkServerOwner() {
         return new Promise((resolve) => {
-            super.checkSOwner(this.interaction.member.id, this.interaction.guild.id)
+            super.checkSOwner(this.interaction.member.id, this.interaction.guild)
                 .then(() => {
                     this.serverOwner = true;
                     resolve(0);
@@ -54,19 +54,14 @@ class Security extends Check {
 
     checkChannel(arr) {
         return new Promise((resolve) => {
-            if (this.command.allowedChannels) {
-                super.checkPChannel(this.interaction.channel.id, arr)
-                    .then(() => {
-                        this.channel = true;
-                        resolve(0);
-                    })
-                    .catch(() => {
-                        resolve(0);
-                    });
+            if (this.command.allowedchannels) {
+                arr.includes(this.interaction.channel.id) ?
+                    this.channel = true :
+                    this.channel = false;
             } else {
-                resolve(0);
                 this.channel = true;
             }
+            resolve(0);
         });
     }
 
