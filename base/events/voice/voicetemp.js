@@ -10,19 +10,18 @@ module.exports = {
             let json = new Cjson;
             await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then(async (jsonGuild) => {
 
-
-                if(!jsonGuild[newMember.guild.id]) return;
-                let category = newMember.guild.channels.cache.get(jsonGuild[oldMember.guild.id].channel.temp.id);
+                if (!jsonGuild[newMember.guild.id]) return;
+                let category = newMember.guild.channels.cache.get(jsonGuild[oldMember.guild.id].channel.tempchannel.id);
                 let member = newMember.guild.members.cache.get(newMember.id);
                 let channel = newMember.guild.channels.cache.find(x => x.parent == category && x.name == member.user.globalName.toString());
 
                 if (!category && !member && !channel) return;
                 try {
-                    for (let x in jsonGuild[newMember.guild.id].channel.temp.function) {
-                        if (newMember)
-                            if (newMember.channel.id == jsonGuild[newMember.guild.id].channel.temp.function[x].id) {
+                    for (let x in jsonGuild[newMember.guild.id].channel.tempchannel) {
+                        if (newMember && x != "id")
+                            if (newMember.channel.id == jsonGuild[newMember.guild.id].channel.tempchannel[x].id) {
                                 if (channel) {
-                                    channel.setUserLimit(jsonGuild[newMember.guild.id].channel.temp.function[x].limite);
+                                    channel.setUserLimit(jsonGuild[newMember.guild.id].channel.tempchannel[x].limite);
                                     member.voice.setChannel(channel);
                                     return;
                                 } else {
@@ -30,7 +29,7 @@ module.exports = {
                                         name: member.user.globalName.toString(),
                                         type: 2,
                                         parent: category,
-                                        userLimit: jsonGuild[newMember.guild.id].channel.temp.function[x].limite,
+                                        userLimit: jsonGuild[newMember.guild.id].channel.tempchannel[x].limite,
                                     });
                                     member.voice.setChannel(channel);
                                     return;
@@ -40,8 +39,8 @@ module.exports = {
                 } catch (err) { }
 
                 try {
-                    for (let x in jsonGuild[oldMember.guild.id].channel.temp.function) {
-                        if (newMember.channel != newMember.guild.channels.cache.find(y => y.id == jsonGuild[oldMember.guild.id].channel.temp.function[x].id) && oldMember.channel == channel) {
+                    for (let x in jsonGuild[oldMember.guild.id].channel.tempchannel) {
+                        if (x != "id" &&newMember.channel != newMember.guild.channels.cache.find(y => y.id == jsonGuild[oldMember.guild.id].channel.tempchannel.function[x].id) && oldMember.channel == channel) {
                             let intervalId = setInterval(async () => {
                                 try {
                                     if (channel.members.size == 0) {
