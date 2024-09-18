@@ -337,6 +337,10 @@ class InitguildInfo {
                                     "Squad": {
                                         "id": NaN,
                                         "limit": 3
+                                    },
+                                    "noLimit": {
+                                        "id": NaN,
+                                        "limit": 0
                                     }
                                 }
                                 for (let i in newdata) {
