@@ -105,7 +105,51 @@ class initguildpagebuilder {
         return this.buttondefault(this.Menu.createMenu(list, "initguild", comandlist, interaction.member.id, interactioncustomId[2], interactioncustomId[3]), interaction, interactioncustomId)
     }
 
+    async ChannelBoost(interaction, interactioncustomId) {
 
+        return new Promise((resolve) => {
+
+            let embed = new comandbembed(interaction.guild, interaction.member)
+
+            embed.init().then(async () => {
+
+                let sendrow = await this.channelMenu(interaction, interactioncustomId, 1)
+                resolve([[embed.SetBoosterchannel(interactioncustomId[3])], sendrow])
+
+            }).catch((err) => {
+                console.log(err)
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                }).catch((err) => {
+                    console.error(err);
+                })
+            })
+
+        })
+    }
+
+
+    async Channellog(interaction, interactioncustomId) {
+        return new Promise((resolve) => {
+            let embed = new comandbembed(interaction.guild, interaction.member)
+            embed.init().then(async () => {
+
+                let sendrow = await this.channelMenu(interaction, interactioncustomId, 1)
+                resolve([[embed.SetLogchannel(interactioncustomId[3])], sendrow])
+
+            }).catch((err) => {
+                console.log(err)
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                }).catch((err) => {
+                    console.error(err);
+                })
+            })
+
+        })
+    }
 
     async channelAllowpage(interaction, interactioncustomId) {
 

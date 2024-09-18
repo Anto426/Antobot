@@ -12,7 +12,7 @@ module.exports = {
             embedmsg.init().then(() => {
                 json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((data) => {
                     if (data[newMember.guild.id]) {
-                        let channel = newMember.guild.channels.cache.find(x => x.id === data[newMember.guild.id].channel.info.boost)
+                        let channel = newMember.guild.channels.cache.find(x => x.id === data[newMember.guild.id].channel.boost)
                         channel.send({ embeds: [embedmsg.boostEvent(newMember)] })
                     }
                 }).catch((err) => {

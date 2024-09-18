@@ -685,6 +685,22 @@ class comandbembed extends BaseEmbed {
             .setColor("#FFA500")
     }
 
+    SetBoosterchannel(pageNumber) {
+        return this.embed
+            .setTitle(`📜 Configurazione canale dei boost | Pagina ${pageNumber}`)
+            .setDescription("📋 Seleziona il canale dei boost.")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#FFA500")
+    }
+
+    SetLogchannel(pageNumber) {
+        return this.embed
+            .setTitle(`📜 Configurazione canale dei log | Pagina ${pageNumber}`)
+            .setDescription("📋 Seleziona il canale dei log.")
+            .setThumbnail(embedconfig.image.load)
+            .setColor("#FFA500")
+    }
+
     SetDefaultRole(pageNumber) {
         return this.embed
             .setTitle(`🎭 Configurazione ruolo di default | Pagina ${pageNumber}`)
@@ -716,6 +732,7 @@ class comandbembed extends BaseEmbed {
             .setThumbnail(embedconfig.image.load)
             .setColor("#FFA500")
     }
+
 
     ConfirmGuildConfig(guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel) {
         return this.embed

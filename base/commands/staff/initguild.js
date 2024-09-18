@@ -31,16 +31,20 @@ module.exports = {
                 .setStyle(ButtonStyle.Success)
 
             json.readJson(root).then((data) => {
-
                 if (data[interaction.guild.id]) {
-                    embedmsg.setDescription(`Il server **${guild.name}** è già stato inizializzato\n\n🔧 Se vuoi reinizializzare il server clicca sul bottone qui sotto`)
+                    embedmsg.setDescription(`Il server **${interaction.guild.name}** è già stato inizializzato\n🔧 Se vuoi reinizializzare il server clicca sul bottone qui sotto`)
                     button.setLabel('🚀 Modifica la configurazione').setCustomId(`initguild-${interaction.member.id}-0-0-r`)
                 }
 
-            }).catch(() => { })
+                let actionRow = new ActionRowBuilder().addComponents(button)
+                interaction.reply({ embeds: [embedmsg], components: [actionRow] })
 
-            let actionRow = new ActionRowBuilder().addComponents(button)
-            interaction.reply({ embeds: [embedmsg], components: [actionRow] })
+            }).catch((err) => {
+                console.log(err)
+                let actionRow = new ActionRowBuilder().addComponents(button)
+                interaction.reply({ embeds: [embedmsg], components: [actionRow] })
+
+            })
 
 
         }).catch((err) => {
