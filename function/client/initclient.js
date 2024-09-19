@@ -34,13 +34,8 @@ class ClientInit {
                     ]
                 })
 
-                global.embedconfig = {}
-
-                await this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[5], process.env.GITTOKEN).then((jsonf) => { embedconfig = jsonf }).catch(() => { new BotConsole().log("Errore variabile json non caricata", "red") });
-
-
+                global.embedconfig = await this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[5], process.env.GITTOKEN).catch(() => { new BotConsole().log("Impossibile importare la configurazione degli embed") });
                 new BotConsole().log("Client di base inizializzato con successo", "green");
-
                 resolve(0);
 
 
@@ -124,7 +119,7 @@ class ClientInit {
                             new BotConsole().log("Client di Distube inzializato con successo", "green");
                             resolve(0)
 
-                        }).catch((err) => { console.log(err); new BotConsole().log("Errore variabile json non caricata", "red") });
+                        }).catch(() => { new BotConsole().log("Errore impossibile importare i cookies", "red") });
                 } catch (err) {
                     new BotConsole().log("Errore nel inizializare il client di Distube", "red");
                     reject(err);
@@ -139,13 +134,13 @@ class ClientInit {
     }
 
     async intitialallclientbysettings() {
+
         return new Promise(async (resolve, reject) => {
             this.initializeClientBase().then(async () => {
                 await this.initializeClientMusic().catch(() => { })
                 await this.initializeClientAI().catch(() => { })
                 resolve(0)
-            }).catch((err) => { 
-                
+            }).catch((err) => {
                 console.log(err)
                 this.BotConsole.log("Non ho inizializzato nessun client", "red");
                 reject(-1)
