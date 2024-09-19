@@ -39,9 +39,8 @@ module.exports = {
         promises.push(security.checkServerOwner())
         promises.push(security.checkPermission())
         promises.push(security.checkPosition())
-        if (jsonow0[interaction.guild.id]) {
+        if (jsonow0[interaction.guild.id])
             promises.push(security.checkChannel(jsonow0[interaction.guild.id].channel.allowchannel))
-        }
         else
             promises.push(security.checkChannel([]))
 
