@@ -54,7 +54,7 @@ class Security extends Check {
 
     checkChannel(arr) {
         return new Promise((resolve) => {
-            if (this.command.allowedchannels) {
+            if (this.command.allowedchannels && arr.length != 0) {
                 arr.includes(this.interaction.channel.id) ?
                     this.channel = true :
                     this.channel = false;
@@ -237,6 +237,8 @@ class Security extends Check {
                         } else {
                             reject(this.codeErr.highPermissionError);
                         }
+
+                        
                     } else {
                         reject(this.codeErr.notPermissionError);
                     }
