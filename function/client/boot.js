@@ -31,9 +31,7 @@ class Boot {
                         new LogStartup().log()
                         this.log.init().then(() => {
                             this.log.ready(true)
-                        }).catch(() => {
-                            this.BotConsole.log("Errore nell'inizializzare il modulo log", "red")
-                        })
+                        }).catch(() => { })
                         await this.WriteCommand.commandAllguildonstartup().then(() => {
                             this.loadothermodules.load()
                         })
@@ -54,12 +52,7 @@ class Boot {
                 this.loadEventsAndCommand.loadall()
                     .then(() => {
                         this.BotConsole.log("Eventi e comandi impostati correttamente", "green")
-                        if (client.guilds.cache.size !== 0) {
-                            this.loging()
-                        } else {
-                            this.BotConsole.log("Il bot non è in nessun server il bot verrà killato", "red")
-                        }
-
+                        this.loging()
                     })
                     .catch(() => {
                         this.BotConsole.log("Errore non ho impostato gli eventi e i comandi il bot verrà killato", "red")
