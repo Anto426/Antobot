@@ -66,8 +66,6 @@ class helppagebuilder {
 
     async commandpage(interaction, command, interactioncustomId) {
 
-        let interactioncustomId = interaction.customId.toString().split("-");
-
         return await new Promise((resolve) => {
 
             let embed = new comandbembed(interaction.guild, interaction.member);
