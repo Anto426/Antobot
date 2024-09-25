@@ -37,7 +37,7 @@ class helppagebuilder {
 
                     });
 
-                    resolve([[embed.help()], this.Menu.createMenu(list, "help", comandlist, interaction.member.id, 0, interactioncustomId[3])]);
+                    resolve([[embed.help()], this.Menu.createMenu(list, "help", comandlist, interaction.member.id, 0, interactioncustomId ? interactioncustomId[3] : 0)]);
 
                 }).catch((err) => {
                     console.log(err);
