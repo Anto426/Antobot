@@ -15,7 +15,7 @@ class LogStartup {
         this.openAiToken = process.env.OPENAITOKEN;
         this.gitToken = process.env.GITTOKEN;
         this.inviteLink = `https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permisions=8&scope=applications.commands+bot`,
-            this.link = packageI.repo;
+        this.link = packageI.repo;
 
     }
 
@@ -263,9 +263,10 @@ class LogStartup {
             }
 
             //Guilds
-            if (client.guilds.cache.size > 0) console.log("=".repeat(120) + "\n" + "Guilds:" + "\n")
             if (client.guilds.cache.size > 0) {
 
+                console.log("=".repeat(120) + "\n" + "Guilds:" + "\n")
+                
                 const GuildsTable = new Table({
                     head: ["Name:", "ID:"],
                     style: style,
