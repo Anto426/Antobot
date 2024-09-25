@@ -1,8 +1,9 @@
 const { InitguildInfo } = require("../../../function/interaction/button/initguild.js/initguildInfo");
+const setting = require("../../../setting/settings.json");
 
 module.exports = {
-    name: "NewGuild",
-    typeEvent: "guildRemove",
+    name: "RemoveGuild",
+    typeEvent: "guildDelete",
     allowevents: true,
     async execute(guild) {
         let initguild = new InitguildInfo(guild)
