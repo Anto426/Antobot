@@ -12,7 +12,7 @@ class log {
 
     init() {
         return new Promise(async (resolve, reject) => {
-            await this.json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((json) => { this.guildJson = json }).catch(() => { new BotConsole().log(`Errore nell'inizializzare il json  + ${setting.configjson.online.name[2]}`, "red"); return reject(-1) })
+            this.guildJson = await this.json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).catch(() => { new BotConsole().log(`Errore nell'inizializzare il guild json`, "red"); return reject(-1) })
             resolve(0);
         })
     }
