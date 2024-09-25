@@ -130,12 +130,11 @@ class Holiday {
     }
 
     async main() {
-        this.checkNextHoliday().then((nextHoliday) => {
 
+        this.checkNextHoliday().then((nextHoliday) => {
             client.guilds.cache.forEach((guild) => {
                 let info = this.guildJson[guild.id]
-                console.log(info)
-                if (info) {
+                if (info && info.channel && info.channel.hollyday) {
                     let namechannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.name)
                     let timerchannel = guild.channels.cache.find(x => x.id == info.channel.hollyday.date)
                     let congratulation = guild.channels.cache.find(x => x.id == info.channel.hollyday.send)
@@ -151,7 +150,7 @@ class Holiday {
             })
 
 
-        }).catch(() => { this.botconsole.log("Errore nel trovare la festività", "red") })
+        }).catch(() => {  })
 
 
     }
