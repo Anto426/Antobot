@@ -18,11 +18,12 @@ class Security extends Check {
             ownerError: 1,
             notPermissionError: 2,
             botUserError: 3,
-            selfUserError: 4,
-            highPermissionError: 5,
-            notInVoiceChannelError: 6,
-            musicAlreadyPlayingError: 7,
-            listtrackError: 8
+            channelError : 4,
+            selfUserError: 5,
+            highPermissionError: 6,
+            notInVoiceChannelError: 7,
+            musicAlreadyPlayingError: 8,
+            listtrackError: 9
         }
     }
 
@@ -190,7 +191,7 @@ class Security extends Check {
                     reject(this.codeErr.ownerError);
                 }
             } else {
-                if (this.serverOwner && this.owner) {
+                if (this.serverOwner || this.owner) {
                     if (!this.isYou) {
                         if (!this.isBot) {
                             if (this.command.type == "Distube") {
@@ -226,7 +227,7 @@ class Security extends Check {
                                             resolve(0);
                                         }
                                     } else {
-                                        reject(this.codeErr.notPermissionError);
+                                        reject(this.codeErr.channelError);
                                     }
                                 } else {
                                     reject(this.codeErr.selfUserError);

@@ -19,6 +19,7 @@ module.exports = {
             erremb.ownerError,
             erremb.notPermissionError,
             erremb.botUserError,
+            erremb.ChannelError,
             erremb.selfUserError,
             erremb.highPermissionError,
             erremb.notInVoiceChannelError,

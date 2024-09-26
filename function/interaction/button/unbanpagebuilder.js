@@ -14,14 +14,15 @@ class unbanpagebuilder {
         return await new Promise((resolve) => {
 
             let embed = new comandbembed(interaction.guild, interaction.member)
+            if (interaction.guild.bans.cache.size > 0) {
 
-            interaction.guild.bans.fetch().then((bans) => {
-                if (bans.size > 0) {
+                interaction.guild.bans.fetch().then((bans) => {
+
                     embed.init().then(() => {
                         let list = []
 
                         let comandlist = new StringSelectMenuBuilder()
-                            .setCustomId(`unban-${interaction.member.id}-1-${interactioncustomId[3]}`)
+                            .setCustomId(`unban-${interaction.member.id}-1-${interactioncustomId ? interactioncustomId[3] : 0}`)
                             .setPlaceholder('Seleziona un utente da sbannare')
 
                         bans.sort().forEach(member => {
@@ -46,37 +47,39 @@ class unbanpagebuilder {
                     })
 
 
-                } else {
 
-                    let embed = new comandbembed(interaction.guild, interaction.member)
-                    embed.init().then(() => {
-                        interaction.reply({
-                            embeds: [embed.notbanlist()],
-                        });
-                    }).catch((err) => {
-                        console.log(err)
-                        let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                        embedmsg.init().then(() => {
-                            interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
-                        }
-                        ).catch((err) => {
-                            console.error(err);
-                        })
+
+                }).catch((err) => {
+                    console.log(err)
+                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                    embedmsg.init().then(() => {
+                        interaction.reply({ embeds: [embedmsg.notlistbanerror()], ephemeral: true })
+                    }
+                    ).catch((err) => {
+                        console.error(err);
                     })
-
-                }
-
-            }).catch((err) => {
-                console.log(err)
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notlistbanerror()], ephemeral: true })
-                }
-                ).catch((err) => {
-                    console.error(err);
                 })
-            })
 
+            } else {
+
+                let embed = new comandbembed(interaction.guild, interaction.member)
+                embed.init().then(() => {
+                    interaction.reply({
+                        embeds: [embed.notbanlist(),],
+                        ephemeral: true
+                    });
+                }).catch((err) => {
+                    console.log(err)
+                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                    embedmsg.init().then(() => {
+                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                    }
+                    ).catch((err) => {
+                        console.error(err);
+                    })
+                })
+
+            }
 
         });
 
@@ -164,7 +167,7 @@ class unbanpagebuilder {
                 interaction.guild.members.unban(member.user, "Unbanned").then(() => {
                     let row = new ActionRowBuilder().addComponents(
                         new ButtonBuilder()
-                            .setCustomId(`unban-${interaction.member.id}-1-${interaction.customId.split("-")[3]}`)
+                            .setCustomId(`unban-${interaction.member.id}-0-${interaction.customId.split("-")[3]}`)
                             .setLabel('Indietro')
                             .setStyle(ButtonStyle.Success)
                     )
@@ -196,7 +199,7 @@ class unbanpagebuilder {
             console.log(err)
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.notlistbanerror()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.notUserfoundError()], ephemeral: true })
             }
             ).catch((err) => {
                 console.error(err);

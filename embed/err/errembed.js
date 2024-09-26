@@ -25,6 +25,12 @@ class ErrEmbed extends BaseEmbed {
 
     }
 
+    ChannelError() {
+        return this.embed
+            .setTitle("⚠️ Errore: Canale non valido ⚠️")
+            .setDescription("🚫 Spiacenti, non puoi eseguire questo comando in questo canale. Contatta un amministratore per assistenza.")
+            .setThumbnail(embedconfig.image.notpermission)
+    }
 
     wrongButtonError() {
         return this.embed
@@ -41,6 +47,14 @@ class ErrEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.notpermission)
 
     }
+
+    BotnotPermissionError() {
+        return this.embed
+            .setTitle("⚠️ Errore: Permesso negato ⚠️")
+            .setDescription("🚫 Spiacenti, non ho i permessi necessari per eseguire questa azione. Prova ad ancdare nelle impostazioni del server e a spostare il ruolo di "  + client.user.tag + " in alto")
+            .setThumbnail(embedconfig.image.notpermission)
+    }
+    
     botUserError() {
         return this.embed
             .setTitle("⚠️ L'utente è un bot ⚠️")
@@ -193,6 +207,13 @@ class ErrEmbed extends BaseEmbed {
             .setThumbnail(embedconfig.image.genericerr)
     }
 
+    notUserfoundError() {
+        return this.embed
+            .setTitle("🚫 Non è stato possibile trovare l'utente")
+            .setDescription("non posso trovare l'utente")
+            .setThumbnail(embedconfig.image.genericerr)
+    }
+    
     notunbannedError() {
         return this.embed
             .setTitle("🚫 Non è stato possibile sbannare l'utente")
