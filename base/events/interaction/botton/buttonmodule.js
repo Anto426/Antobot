@@ -10,10 +10,11 @@ module.exports = {
         let check = new Check()
         let interactioncustomId = interaction.customId.toString().split("-")
 
-        console.log(interactioncustomId)
+
+
         check.checkIsYou(interactioncustomId[1], interaction.member.id).then(() => {
 
-            if (client.buttong.size > 0) {
+            if (client.buttong.size > 0 && interactioncustomId.length  > 3) {
 
                 let interactionbutton = client.basebutton.get(interactioncustomId[0])
 
