@@ -44,9 +44,9 @@ module.exports = {
                             embedmsg.init().then(async () => {
                                 let send = await embedmsg.welcome(member, humans.size).catch(() => { })
                                 member.guild.channels.cache.get(data[member.guild.id].channel.welcome).send({ embeds: [send[0]], files: [send[1]] });
-
+                                member.roles.add(member.guild.roles.cache.find(x => x.id === data[member.guild.id].role.roledefault)).catch(() => { new BotConsole().log("Non sono riuscito ad aggiungere il ruolo", "red") })
                             }).catch(() => { })
-                            member.roles.add(member.guild.roles.cache.find(x => x.id === data[member.guild.id].role.user)).catch(() => { new BotConsole().log("Non sono riuscito ad aggiungere il ruolo", "red") })
+
 
                         })
 
@@ -57,10 +57,9 @@ module.exports = {
 
 
             } else {
-
                 try {
-                    json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((jsonf0) => {
-                        member.roles.add(member.guild.roles.cache.find(x => x.id === jsonf0[member.guild.id].role.botroledefault));
+                    json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((data) => {
+                        member.roles.add(member.guild.roles.cache.find(x => x.id === data[member.guild.id].role.botroledefault));
                     })
                 } catch (err) {
                     new BotConsole().log(err, "red");
