@@ -134,14 +134,14 @@ class log {
     }
 
 
-    ready(tag) {
+    ready() {
 
         client.guilds.cache.forEach(guild => {
 
             if (this.guildJson[guild.id]) {
                 let embedmsg = new logembed(guild);
                 embedmsg.init().then(() => {
-                    this.sendlog(embedmsg.ready(), guild, tag).catch(() => { });
+                    this.sendlog(embedmsg.ready(), guild).catch(() => { });
                 }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
             } else {
                 this.console.log("Non ho il canale per inviare il messagio", "red");
@@ -152,27 +152,27 @@ class log {
 
     }
 
-    roleCreate(role, tag) {
+    roleCreate(role) {
         let embedmsg = new logembed(role.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.roleCreate(role), role.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.roleCreate(role), role.guild).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
 
 
-    roleDelete(role, tag) {
+    roleDelete(role) {
         let embedmsg = new logembed(role.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.roleDelete(role), role.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.roleDelete(role), role.guild).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
     }
 
 
-    roleUpdate(oldRole, changedprop, tag) {
+    roleUpdate(oldRole, changedprop) {
         let embedmsg = new logembed(oldRole.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.roleUpdate(oldRole, changedprop), oldRole.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.roleUpdate(oldRole, changedprop), oldRole.guild).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
 
     }
@@ -194,43 +194,43 @@ class log {
 
 
 
-    guildMemberRemove(member, tag) {
+    guildMemberRemove(member) {
         let embedmsg = new logembed(member.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildMemberRemove(member), member.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.guildMemberRemove(member), member.guild).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
 
     }
 
-    voiceEnter(user, channel, tag) {
+    voiceEnter(user, channel) {
         let embedmsg = new logembed(channel.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.voiceEnter(user, channel), channel.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.voiceEnter(user, channel), channel.guild).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
 
     }
 
-    voiceExit(user, channel, tag) {
+    voiceExit(user, channel) {
         let embedmsg = new logembed(channel.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.voiceExit(user, channel), channel.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.voiceExit(user, channel), channel.guild).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
 
     }
 
-    voiceChange(user, channel, tag) {
+    voiceChange(user, channel) {
         let embedmsg = new logembed(channel.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.voiceChange(user, channel), channel.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.voiceChange(user, channel), channel.guild).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
 
     }
 
 
-    guildMemberAddBot(member, tag) {
+    guildMemberAddBot(member) {
         let embedmsg = new logembed(member.guild);
         embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildMemberAddBot(member), member.guild, tag).catch(() => { });
+            this.sendlog(embedmsg.guildMemberAddBot(member), member.guild).catch(() => { });
         }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
 
     }

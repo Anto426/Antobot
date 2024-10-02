@@ -16,26 +16,27 @@ module.exports = {
                 json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then(async (jsondatabase) => {
 
                     if (!jsondatabase[member.guild.id]) {
-                        logmodule.guildMemberAdd(member, tag);
-                    } else
+
+                        logmodule.guildMemberAdd(member);
+                    } else{
                         if (!jsondatabase[member.guild.id][member.id]) {
-                            logmodule.guildMemberAdd(member, tag);
+                            logmodule.guildMemberAdd(member);
                         } else {
                             let roles = jsondatabase[member.guild.id][member.id].roles
                             let rolesname = [];
                             roles.forEach((role) => {
                                 member.guild.roles.cache.find(r => r.id === role) ? rolesname.push(member.guild.roles.cache.find(r => r.id === role).name) : null;
                             });
-
-                            logmodule.guildMemberAddReturn(member, rolesname, tag);
+                            logmodule.guildMemberAddReturn(member, rolesname);
 
                         }
+                    }
+
 
                 }).catch((err) => { console.log(err) });
                 
             } else {
-                tag = false;
-                logmodule.guildMemberAddBot(member, tag);
+                logmodule.guildMemberAddBot(member);
             }
 
 
