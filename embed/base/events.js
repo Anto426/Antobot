@@ -111,7 +111,7 @@ class EventEmbed extends BaseEmbed {
             .setTitle(holiday.title)
             .setDescription(`${guild.roles.everyone}\n${holiday.description}`)
             .setColor(holiday.color)
-            .setThumbnail(holiday.image)
+            .setImage(holiday.image)
     }
 
 
