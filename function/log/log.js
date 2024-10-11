@@ -243,6 +243,22 @@ class log {
 
     }
 
+    UpdateRecived(head_commit){
+
+        client.guilds.cache.forEach(guild => {
+
+            if (this.guildJson[guild.id]) {
+                let embedmsg = new logembed(guild);
+                embedmsg.init().then(() => {
+                    this.sendlog(embedmsg.UpdateRecived(head_commit), guild).catch(() => { });
+                }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+            } else {
+                this.console.log("Non ho il canale per inviare il messagio", "red");
+            }
+
+        });
+    }
+
 }
 
 module.exports = { log }
