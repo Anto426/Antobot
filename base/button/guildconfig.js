@@ -21,7 +21,9 @@ module.exports = {
                 initguild.SavedAllowChannel(root, interaction.values, interaction.guild.id).catch(() => { })
             }
             guildconfigbuilder.channelAllowpage(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                })
             }).catch((err) => {
                 console.log(err);
             })
@@ -32,7 +34,9 @@ module.exports = {
                 initguild.singleChannel(channel, root, "rule").catch(() => { })
             }
             guildconfigbuilder.channelRule(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch(() => { })
 
         } else if (interactioncustomId[2] === "2") {
@@ -41,7 +45,9 @@ module.exports = {
                 initguild.singleChannel(channel, root, "welcome").catch(() => { })
             }
             guildconfigbuilder.ChannelWelcome(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch(() => { })
         } else if (interactioncustomId[2] === "3") {
             if (interaction.values) {
@@ -50,7 +56,9 @@ module.exports = {
                 }).catch(() => { })
             }
             guildconfigbuilder.ChannelEvent(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch(() => { })
         } else if (interactioncustomId[2] === "4") {
             if (interaction.values) {
@@ -58,7 +66,9 @@ module.exports = {
                 initguild.singleChannel(channel, root, "boost").catch(() => { })
             }
             guildconfigbuilder.ChannelBoost(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch(() => { })
 
         } else if (interactioncustomId[2] === "5") {
@@ -67,7 +77,9 @@ module.exports = {
                 initguild.singleChannel(channel, root, "log").catch(() => { })
             }
             guildconfigbuilder.Channellog(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch((err) => {
                 console.log(err);
             })
@@ -76,7 +88,9 @@ module.exports = {
                 initguild.SavedRole(root, interaction.values[0], interaction.guild.id, "roledefault").catch(() => { })
             }
             guildconfigbuilder.roleDefault(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch((err) => {
                 console.log(err);
             })
@@ -85,7 +99,9 @@ module.exports = {
                 initguild.SavedRole(root, interaction.values[0], interaction.guild.id, "botroledefault").catch(() => { })
             }
             guildconfigbuilder.roleBotDefault(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch((err) => {
                 console.log(err);
             })
@@ -100,7 +116,9 @@ module.exports = {
                 })
             }
             guildconfigbuilder.AllowTempChannel(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch((err) => {
                 console.log(err);
             })
@@ -115,7 +133,9 @@ module.exports = {
                 })
             }
             guildconfigbuilder.AllowHollyday(interaction, interactioncustomId).then((menu) => {
-                interaction.update({ embeds: menu[0], components: menu[1] });
+                interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.log(err);
+                });
             }).catch((err) => {
                 console.log(err);
             })
@@ -123,7 +143,9 @@ module.exports = {
         } else if (interactioncustomId[2] == "10") {
             guildconfigbuilder.ConfirmGuildConfig(interaction, interactioncustomId, root)
                 .then((menu) => {
-                    interaction.update({ embeds: menu[0], components: menu[1] });
+                    interaction.update({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                        console.log(err);
+                    });
                     client.holidaymodule.restart()
                 }).catch((err) => {
                     console.log(err);

@@ -190,7 +190,9 @@ class unbanpagebuilder {
                             .setStyle(ButtonStyle.Success)
                     )
 
-                    interaction.update({ embeds: [embed.unban(member)], components: [row] })
+                    interaction.update({ embeds: [embed.unban(member)], components: [row] }).catch((err) => {
+                        console.log(err);
+                    })
                 }).catch((err) => {
                     console.log(err)
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
