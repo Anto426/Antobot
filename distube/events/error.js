@@ -15,7 +15,9 @@ module.exports = {
                 console.error(err);
                 let embedmsg = new ErrEmbed(queue.textChannel.guild);
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true });
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    });
                 }).catch((err) => {
                     console.error(err);
                 });

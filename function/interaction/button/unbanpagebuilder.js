@@ -39,7 +39,11 @@ class unbanpagebuilder {
                         console.log(err)
                         let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                         embedmsg.init().then(() => {
-                            interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                            interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                                console.error(err);
+                            }).catch((err) => {
+                                console.error(err);
+                            })
                         }
                         ).catch((err) => {
                             console.error(err);
@@ -53,7 +57,11 @@ class unbanpagebuilder {
                     console.log(err)
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.notlistbanerror()], ephemeral: true })
+                        interaction.reply({ embeds: [embedmsg.notlistbanerror()], ephemeral: true }).catch((err) => {
+                            console.error(err);
+                        }).catch((err) => {
+                            console.error(err);
+                        })
                     }
                     ).catch((err) => {
                         console.error(err);
@@ -67,12 +75,16 @@ class unbanpagebuilder {
                     interaction.reply({
                         embeds: [embed.notbanlist(),],
                         ephemeral: true
+                    }).catch((err) => {
+                        console.error(err);
                     });
                 }).catch((err) => {
                     console.log(err)
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                            console.error(err);
+                        })
                     }
                     ).catch((err) => {
                         console.error(err);
@@ -118,7 +130,9 @@ class unbanpagebuilder {
                         } else {
                             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                             embedmsg.init().then(() => {
-                                interaction.reply({ embeds: [embedmsg.membernotfoundError()], ephemeral: true })
+                                interaction.reply({ embeds: [embedmsg.membernotfoundError()], ephemeral: true }).catch((err) => {
+                                    console.error(err);
+                                })
                             }
                             ).catch((err) => {
                                 console.error(err);
@@ -129,7 +143,9 @@ class unbanpagebuilder {
                         console.log(err)
                         let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                         embedmsg.init().then(() => {
-                            interaction.reply({ embeds: [embedmsg.notlistbanerror()], ephemeral: true })
+                            interaction.reply({ embeds: [embedmsg.notlistbanerror()], ephemeral: true }).catch((err) => {
+                                console.error(err);
+                            })
                         }
                         ).catch((err) => {
                             console.error(err);
@@ -140,7 +156,9 @@ class unbanpagebuilder {
                     console.log(err)
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                            console.error(err);
+                        })
                     }
                     ).catch((err) => {
                         console.error(err);
@@ -177,7 +195,9 @@ class unbanpagebuilder {
                     console.log(err)
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.notunbannedError()], ephemeral: true })
+                        interaction.reply({ embeds: [embedmsg.notunbannedError()], ephemeral: true }).catch((err) => {
+                            console.error(err);
+                        })
                     }
                     ).catch((err) => {
                         console.error(err);
@@ -188,7 +208,9 @@ class unbanpagebuilder {
                 console.log(err)
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 }
                 ).catch((err) => {
                     console.error(err);
@@ -199,7 +221,9 @@ class unbanpagebuilder {
             console.log(err)
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.notUserfoundError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.notUserfoundError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }
             ).catch((err) => {
                 console.error(err);

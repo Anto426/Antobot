@@ -23,11 +23,15 @@ module.exports = {
         let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
         embedmsg.init().then(() => {
             distube.stop(interaction).then(() => {
-                interaction.reply({ embeds: [embedmsg.stop()] })
+                interaction.reply({ embeds: [embedmsg.stop()] }).catch((err) => {
+                    console.error(err);
+                })
             }).catch(() => {
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notstopError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.notstopError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 }).catch((err) => {
                     console.error(err);
                 })
@@ -36,7 +40,9 @@ module.exports = {
             console.error(err);
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }).catch((err) => {
                 console.error(err);
             })

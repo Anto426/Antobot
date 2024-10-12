@@ -25,12 +25,16 @@ module.exports = {
         embedmsg.init()
             .then(async () => {
                 distube.resume(interaction.guild)
-                interaction.reply({ embeds: [embedmsg.resume()] })
+                interaction.reply({ embeds: [embedmsg.resume()] }).catch((err) => {
+                    console.error(err);
+                })
             }).catch((err) => {
                 console.error(err);
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notresumeError()], ephemeral: true });
+                    interaction.reply({ embeds: [embedmsg.notresumeError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    });
                 }).catch((err) => {
                     console.error(err);
                 });

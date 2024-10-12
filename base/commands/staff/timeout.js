@@ -79,15 +79,21 @@ module.exports = {
                 member.timeout(time, reason).then(() => {
                     interaction.reply({
                         embeds: [embed.timeout(member, time, reason)],
+                    }).catch((err) => {
+                        console.error(err);
                     });
                 }).catch((err) => {
                     console.log(err)
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
                         if (err.code == 50013) {
-                            interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true })
+                            interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true }).catch((err) => {
+                                console.error(err);
+                            })
                         } else {
-                            interaction.reply({ embeds: [embedmsg.nottimeoutError()], ephemeral: true })
+                            interaction.reply({ embeds: [embedmsg.nottimeoutError()], ephemeral: true }).catch((err) => {
+                                console.error(err);
+                            })
                         }
                     }
                     ).catch((err) => {
@@ -98,7 +104,9 @@ module.exports = {
                 console.log(err)
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 }
                 ).catch((err) => {
                     console.error(err);
@@ -110,7 +118,9 @@ module.exports = {
             console.log("utente già timeoutato")
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.isjusttimeoutError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.isjusttimeoutError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }
             ).catch((err) => {
                 console.error(err);

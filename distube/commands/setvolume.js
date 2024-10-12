@@ -32,12 +32,16 @@ module.exports = {
         let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
         embedmsg.init().then(() => {
             queue.setVolume(volume)
-            interaction.reply({ embeds: [embedmsg.volume(volume)] })
+            interaction.reply({ embeds: [embedmsg.volume(volume)] }).catch((err) => {
+                console.error(err);
+            })
         }).catch((err) => {
             console.error(err);
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.notvolumeError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.notvolumeError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }).catch((err) => {
                 console.error(err);
             })

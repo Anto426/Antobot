@@ -25,13 +25,17 @@ module.exports = {
                         console.log(err)
                         let embed = new ErrEmbed(interaction.guild, interaction.member)
                         embed.init().then(() => {
-                            interaction.reply({ embeds: [embed.genericError()], ephemeral: true })
+                            interaction.reply({ embeds: [embed.genericError()], ephemeral: true }).catch((err) => {
+                                console.error(err);
+                            })
                         })
                     }
                 } else {
                     let embed = new ErrEmbed(interaction.guild, interaction.member)
                     embed.init().then(() => {
-                        interaction.reply({ embeds: [embed.buttonnotvalidError()], ephemeral: true })
+                        interaction.reply({ embeds: [embed.buttonnotvalidError()], ephemeral: true }).catch((err) => {
+                            console.error(err);
+                        })
                     })
                 }
 
@@ -39,7 +43,9 @@ module.exports = {
 
                 let embed = new ErrEmbed(interaction.guild, interaction.member)
                 embed.init().then(() => {
-                    interaction.reply({ embeds: [embed.buttonnotvalidError()], ephemeral: true })
+                    interaction.reply({ embeds: [embed.buttonnotvalidError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 })
 
             }
@@ -48,7 +54,9 @@ module.exports = {
             console.log(err)
             let embed = new ErrEmbed(interaction.guild, interaction.member)
             embed.init().then(() => {
-                interaction.reply({ embeds: [embed.wrongButtonError()], ephemeral: true })
+                interaction.reply({ embeds: [embed.wrongButtonError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             })
         })
 

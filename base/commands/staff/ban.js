@@ -36,15 +36,21 @@ module.exports = {
             member.ban({ reason: reason }).then(() => {
                 interaction.reply({
                     embeds: [embed.ban(member, reason)],
+                }).catch((err) => {
+                    console.error(err);
                 });
             }).catch((err) => {
                 console.log(err)
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
                     if (err.code == 50013) {
-                        interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true })
+                        interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true }).catch((err) => {
+                            console.error(err);
+                        })
                     } else {
-                        interaction.reply({ embeds: [embedmsg.notbanError()], ephemeral: true })
+                        interaction.reply({ embeds: [embedmsg.notbanError()], ephemeral: true }).catch((err) => {
+                            console.error(err);
+                        })
                     }
                 }
                 ).catch((err) => {
@@ -55,7 +61,9 @@ module.exports = {
             console.log(err)
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }
             ).catch((err) => {
                 console.error(err);

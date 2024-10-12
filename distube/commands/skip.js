@@ -25,11 +25,15 @@ module.exports = {
         if (queue.songs.length == 1) {
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.notrakskipableError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.notrakskipableError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }).catch(() => {
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 }).catch((err) => {
                     console.error(err);
                 })
@@ -39,12 +43,16 @@ module.exports = {
             let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
                 distube.skip(interaction)
-                interaction.reply({ embeds: [embedmsg.skip()] })
+                interaction.reply({ embeds: [embedmsg.skip()] }).catch((err) => {
+                    console.error(err);
+                })
             }).catch((err) => {
                 console.log(err);
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notskipError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.notskipError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 }).catch((err) => {
                     console.error(err);
                 })

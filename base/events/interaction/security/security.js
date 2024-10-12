@@ -57,14 +57,18 @@ module.exports = {
                         }
 
                     } catch (err) {
-                        interaction.reply({ embeds: [erremb.genericError()], ephemeral: true })
+                        interaction.reply({ embeds: [erremb.genericError()], ephemeral: true }).catch((err) => {
+                            console.error(err);
+                        })
                         new BotConsole().log("Errore durante esecuzione del comando", "red")
                         console.log(err)
                     }
                 })
                 .catch((err) => {
                     console.log(err)
-                    interaction.reply({ embeds: [embedf[err].call(erremb)], ephemeral: true })
+                    interaction.reply({ embeds: [embedf[err].call(erremb)], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 })
         })
 

@@ -43,12 +43,6 @@ module.exports = {
                         interaction.reply({
                             embeds: [embedmsg.play(song)]
                         }).catch((err) => {
-                            let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-                            embedmsg.init().then(() => {
-                                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
-                            }).catch((err) => {
-                                console.error(err);
-                            })
                             console.error(err);
                         })
                     }
@@ -67,7 +61,9 @@ module.exports = {
             console.error('Error playing the song:', error);
             embedmsg.init()
                 .then(() => {
-                    interaction.reply({ embeds: [embedmsg.nottrackfoundError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.nottrackfoundError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 }
                 ).catch((err) => {
                     console.log(err);

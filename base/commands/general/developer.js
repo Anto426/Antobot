@@ -25,11 +25,13 @@ module.exports = {
             json.jsonDependencyBuffer(`${setting.configjson.online.url2}${package.author}`, process.env.GITTOKEN).then((data) => {
                 interaction.reply({
                     embeds: [embed.githubcreator(data)]
-                });
+                }).catch((err) => { console.log(err)});
             }).catch(() => {
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 }
                 ).catch((err) => {
                     console.error(err);
@@ -40,7 +42,9 @@ module.exports = {
             console.log(err)
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }
             ).catch((err) => {
                 console.error(err);

@@ -18,7 +18,9 @@ module.exports = {
         let unbanbuilder = new unbanpagebuilder()
 
         unbanbuilder.mainpage(interaction).then((menu) => {
-            interaction.reply({ embeds: menu[0], components: menu[1] });
+            interaction.reply({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                console.error(err);
+            });
         }).catch((err) => {
             console.log(err);
         });

@@ -22,13 +22,19 @@ module.exports = {
         let reg = new WriteCommand()
         embedmsg.init().then(async () => {
 
-            interaction.reply({ embeds: [embedmsg.registerCommand(0)], ephemeral: true })
+            interaction.reply({ embeds: [embedmsg.registerCommand(0)], ephemeral: true }).catch((err) => {
+                console.log(err)
+            })
 
             reg.commandallguild().then(() => {
-                interaction.editReply({ embeds: [embedmsg.registerCommand(1)], ephemeral: true })
+                interaction.editReply({ embeds: [embedmsg.registerCommand(1)], ephemeral: true }).catch((err) => {
+                    console.log(err)
+                })
             }).catch((err) => {
                 if (!Number.isNaN(err))
-                    interaction.editReply({ embeds: [embedmsg.registerCommand(err)], ephemeral: true })
+                    interaction.editReply({ embeds: [embedmsg.registerCommand(err)], ephemeral: true }).catch((err) => {
+                        console.log(err)
+                    })
                 else
                     console.log(err)
             })
@@ -36,9 +42,13 @@ module.exports = {
         }).catch(() => {
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }).catch(() => {
-                interaction.reply({ content: "Errore", ephemeral: true })
+                interaction.reply({ content: "Errore", ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             })
         })
     }

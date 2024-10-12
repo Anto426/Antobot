@@ -33,12 +33,16 @@ module.exports = {
                 interaction.reply({
                     embeds: [embed.clear(amount)],
                     ephemeral: true
+                }).catch((err) => {
+                    console.log(err)
                 });
             }).catch((err) => {
                 console.log(err)
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.bulkdeleteError()], ephemeral: true })
+                    interaction.reply({ embeds: [embedmsg.bulkdeleteError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    })
                 }
                 ).catch((err) => {
                     console.error(err);
@@ -48,7 +52,9 @@ module.exports = {
             console.log(err)
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true })
+                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                    console.error(err);
+                })
             }
             ).catch((err) => {
                 console.error(err);
