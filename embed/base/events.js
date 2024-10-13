@@ -90,7 +90,7 @@ class EventEmbed extends BaseEmbed {
                     ctx.font = "80px asapCondensed"
                     ctx.fillText("Benvenuto", 500, 200)
                     ctx.font = "100px asapCondensed", "100px NotoSansJP-Bold"
-                    ctx.fillText(member.user.username.slice(0, 25), 500, canvas.height / 2)
+                    ctx.fillText(member.user.globalName.slice(0, 25), 500, canvas.height / 2)
                     ctx.font = "50px asapCondensed"
                     ctx.fillText(`${count}° membro`, 500, 400)
                     let attachment = new AttachmentBuilder(canvas.toBuffer(), { name: "welcomecanavas.png" })
