@@ -1,9 +1,10 @@
-const ColorThief  = require('colorthief');
+const ColorThief = require('colorthief');
 const { ColorFunctions } = require('./ColorFunctions');
 class DynamicColor {
 
     constructor() {
         this.Img;
+        this.Numcolorextract = 4;
         this.threshold = 50;
         this.Palette = [];
         this.ColorFunctions = new ColorFunctions();
@@ -19,24 +20,20 @@ class DynamicColor {
     }
 
 
+    setNumcolorextract(Numcolorextract) {
+        this.Numcolorextract = Numcolorextract;
+    }
 
     // Function for extract the palette
     ExtractPalet() {
-        return new Promise((resolve, reject) => {
-            let Numcolor = 3;
-            if (this.Img.complete) {
-                this.Palette = ColorThief.getPalette(this.Img, Numcolor);
+        return new Promise(async(resolve, reject) => {
+            if (this.Img) {
+                console.log("Image loaded properly.");
+                this.Palette = await ColorThief.getPalette(this.Img, this.Numcolorextract);
+                console.log(this.Palette);
                 resolve(0);
             } else {
-                this.Img.addEventListener('load', () => {
-                    if (this.Img.naturalWidth > 0 && this.Img.naturalHeight > 0) {
-                        console.log("Image loaded successfully");
-                        this.Palette = ColorThief.getPalette(this.Img, Numcolor);
-                        resolve(0);
-                    } else {
-                        reject("Image not loaded properly.");
-                    }
-                });
+                reject("Image not loaded properly.");
             }
         });
     }
@@ -100,11 +97,11 @@ class DynamicColor {
     }
 
 
-    ReturnPalletandTextColor(){
+    ReturnPalletandTextColor() {
         return new Promise((resolve, reject) => {
             this.ExtractPalet().then(() => {
                 this.FilterPalet().then(() => {
-                    resolve({ palette: this.Palette, textcolor: this.CalculateTextcolor() });
+                    resolve({ palette: this.Palette, textcolor: this.ColorFunctions.ArrayToRgb(this.CalculateTextcolor()) });
                 }).catch((err) => {
                     reject(err);
                 })
