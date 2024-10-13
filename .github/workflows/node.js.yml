@@ -15,12 +15,11 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [19.x]
-
+        node-version: [20.x]
     steps:
 
-    - name: Sleep for 2 minutes
-      run: sleep 120 
+    - name: Sleep for 1 minutes
+      run: sleep 60 
 
     - name: Stop Systemctl module "Antobot"
       run: sudo systemctl stop antobot
