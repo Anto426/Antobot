@@ -26,7 +26,7 @@ class DynamicColor {
 
     // Function for extract the palette
     ExtractPalet() {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             if (this.Img) {
                 console.log("Image loaded properly.");
                 this.Palette = await ColorThief.getPalette(this.Img, this.Numcolorextract);
@@ -101,7 +101,7 @@ class DynamicColor {
         return new Promise((resolve, reject) => {
             this.ExtractPalet().then(() => {
                 this.FilterPalet().then(() => {
-                    resolve({ palette: this.Palette, textcolor: this.ColorFunctions.ArrayToRgb(this.CalculateTextcolor()) });
+                    resolve({ palette: this.Palette, textcolor: this.CalculateTextcolor() });
                 }).catch((err) => {
                     reject(err);
                 })

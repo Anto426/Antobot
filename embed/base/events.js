@@ -17,12 +17,14 @@ class EventEmbed extends BaseEmbed {
 
     welcome(member, count) {
 
+
         return new Promise(async (resolve, reject) => {
             try {
                 registerFont(process.env.dirbot + setting.canavas.font.dir + "/" + setting.canavas.font.name[0], { family: setting.canavas.font.name[0].split(".")[0] });
                 registerFont(process.env.dirbot + setting.canavas.font.dir + "/" + setting.canavas.font.name[1], { family: setting.canavas.font.name[1].split(".")[0] })
 
                 let dynamicColor = new DynamicColor()
+                let ColorFunctions = dynamicColor.ColorFunctions
                 let canvas = await createCanvas(1700, 600)
                 let ctx = await canvas.getContext("2d")
                 let Numcolor = 4;
@@ -79,11 +81,11 @@ class EventEmbed extends BaseEmbed {
                     ctx.drawImage(img, 150, canvas.height / 2 - 300 / 2, 300, 300);
                     ctx.restore();
                     ctx.lineWidth = 5; 
-                    ctx.strokeStyle = PalletandText.textcolor; 
+                    ctx.strokeStyle = ColorFunctions.ArrayToRgb(PalletandText.textcolor); 
                     ctx.beginPath(); 
                     ctx.arc(150 + 300 / 2, canvas.height / 2, 150, 0, 2 * Math.PI, false); // Disegna il cerchio
                     ctx.stroke(); 
-                    ctx.fillStyle = PalletandText.textcolor;
+                    ctx.fillStyle = ColorFunctions.ArrayToRgb(PalletandText.textcolor);
                     ctx.textBaseline = "middle"
                     ctx.font = "80px asapCondensed"
                     ctx.fillText("Benvenuto", 500, 200)
@@ -97,6 +99,7 @@ class EventEmbed extends BaseEmbed {
                         .setTitle("👋 Benvenuto")
                         .setDescription(`🎉 ${member.user} benvenuto su ${this.guild} sei il ${count}° membro`)
                         .setImage('attachment://welcomecanavas.png')
+                        .setColor(ColorFunctions.rgbToHex(PalletandText.textcolor[0], PalletandText.textcolor[1], PalletandText.textcolor[2]))
 
                     let send = [this.embed, attachment]
 
