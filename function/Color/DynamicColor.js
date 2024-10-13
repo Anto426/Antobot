@@ -2,7 +2,6 @@ const ColorThief  = require('colorthief');
 const { ColorFunctions } = require('./ColorFunctions');
 class DynamicColor {
 
-
     constructor() {
         this.Img;
         this.threshold = 50;
@@ -101,51 +100,18 @@ class DynamicColor {
     }
 
 
-
-
-    // Function for update the gradient and the text color
-    UpdateGradient() {
-        return new Promise((resolve, reject) => {
-            try {
-                let textcolor = this.CalculateTextcolor();
-                console.log("New Palette color :");
-                console.log(this.Palette);
-                console.log("New Text color " + textcolor);
-
-                const paletteColors = this.Palette.map(color => `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-                document.documentElement.style.setProperty('--default-item-color', this.ColorFunctions.ArrayToRgb(textcolor));
-                document.documentElement.style.setProperty('--default-bg-gradient', `linear-gradient(to right, ${paletteColors.join(', ')})`);
-                resolve(0);
-            } catch (error) {
-                reject(error);
-            }
-
-        });
-
-    }
-
-
-    // Function for apply the theme
-    applyTheme() {
+    ReturnPalletandTextColor(){
         return new Promise((resolve, reject) => {
             this.ExtractPalet().then(() => {
                 this.FilterPalet().then(() => {
-                    this.UpdateGradient().then(() => {
-                        resolve(0);
-                    }).catch(error => {
-                        reject(error);
-                    });
-                }).catch(error => {
-                    reject(error);
-                    console.error(error);
-                });
-            }).catch(error => {
-                reject(error);
-                console.error(error);
-            });
-
+                    resolve({ palette: this.Palette, textcolor: this.CalculateTextcolor() });
+                }).catch((err) => {
+                    reject(err);
+                })
+            }).catch((err) => {
+                reject(err);
+            })
         });
-
     }
 
 
