@@ -36,13 +36,12 @@ class Boot {
                             this.loadothermodules.load()
                         })
                     })
-                } catch {
-                    this.BotConsole.log("Errore il Token non è valido il bot verrà killato", "red")
+                } catch(err) {
+                    console.log(err)
                 }
             })
-            .catch(async () => {
+            .catch(async (err) => {
                 this.BotConsole.log("Errore il Token non è valido il bot verrà killato", "red")
-                process.exit(-1);
             })
     }
 
@@ -54,8 +53,8 @@ class Boot {
                         this.BotConsole.log("Eventi e comandi impostati correttamente", "green")
                         this.loging()
                     })
-                    .catch(() => {
-                        this.BotConsole.log("Errore non ho impostato gli eventi e i comandi il bot verrà killato", "red")
+                    .catch(async () => {
+                        await this.BotConsole.log("Errore non ho impostato gli eventi e i comandi il bot verrà killato", "red")
                         process.exit(-1);
                     })
             })

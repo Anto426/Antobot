@@ -134,7 +134,6 @@ class ClientInit {
     }
 
     async intitialallclientbysettings() {
-
         return new Promise(async (resolve, reject) => {
             this.initializeClientBase().then(async () => {
                 await this.initializeClientMusic().catch(() => { })
