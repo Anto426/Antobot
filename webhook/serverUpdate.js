@@ -19,7 +19,14 @@ class serverUpdate {
         return new Promise((resolve, reject) => {
             try {
                 this.app.post('/webhook', (req, res) => {
-                    res.status(200).send('Webhook processed');
+                    res.status(200).send('Webhook processed');                    
+                    const authors = [...new Set(req.body.commits.map(commit => commit.author))];
+                    console.log(authors);
+
+
+                
+
+
                     this.log.init().then(() => {
                         this.log.UpdateRecived(req.body.head_commit);
                     }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
