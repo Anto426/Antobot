@@ -1,3 +1,7 @@
+const sharp = require('sharp');
+const fetch = require('node-fetch');
+
+
 class emojiMenager {
     constructor() { }
 
@@ -31,7 +35,7 @@ class emojiMenager {
                 });
                 resolve(emoji);
             } catch (error) {
-                reject(-1);
+                reject(error);
             }
         })
     }
@@ -42,7 +46,7 @@ class emojiMenager {
                 await client.application?.emojis.delete(emoji);
                 resolve(0);
             } catch (error) {
-                reject(-1);
+                reject(error);
             }
         })
     }
@@ -56,16 +60,29 @@ class emojiMenager {
                 let newEmoji = await this.addEmoji(url, type, name).catch((err) => { reject(err) });
                 resolve(newEmoji);
             } catch (error) {
-                reject(-1);
+                reject(error);
             }
 
         })
     }
 
 
+    findEmoji(name) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const result = await client.application?.emojis.fetch();   
+                const emoji = result.find(emoji => emoji.name === name);
+                resolve(emoji);
+            } catch (error) {
+                reject(error);
+            }
+        })
+    }
 
 
+}
 
 
-
+module.exports = {
+    emojiMenager
 }

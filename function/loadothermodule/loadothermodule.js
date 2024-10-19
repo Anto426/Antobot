@@ -13,7 +13,6 @@ class Loadothermodules {
 
 
     load() {
-        
         client.holidaymodule = new Holiday()
         client.statusmodule = new Status()
         this.serverUpdate.init().then(() => { this.BotConsole.log("Server inizializzato", "green"); this.serverUpdate.StartServer() }).catch(() => { this.BotConsole.log("Server non inizializzato", "red") })

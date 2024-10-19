@@ -244,9 +244,9 @@ class log {
     }
 
     UpdateRecived(commits, authors, emojiMap) {
+        console.log(this.guildJson)
 
         client.guilds.cache.forEach(guild => {
-
             if (this.guildJson[guild.id]) {
                 let embedmsg = new logembed(guild);
                 embedmsg.init().then(() => {
