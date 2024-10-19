@@ -610,32 +610,30 @@ class logembed extends BaseEmbed {
     }
 
 
-    UpdateRecived(head_commit){
+    UpdateRecived(commits, authors, emojiMap) {
         return this.embed
             .setTitle("🔄 Aggiornamento ricevuto")
-            .setDescription(`Aggiornamento ricevuto il bot si riavvierà per applicare le modifiche`)
-            .addFields(
-                {
-                    name: "🔧 Commit",
-                    value: head_commit.message,
-                },
-                {
-                    name: "🆔 SHA",
-                    value: head_commit.id,
-                },
-                {
-                    name: "👥 Autore",
-                    value: head_commit.author.name,
-                    inline: true
-                }
-            )
+            .setDescription(`Aggiornamento ricevuto dal server`)
             .setThumbnail(client.user.displayAvatarURL({
                 dynamic: true,
-                format: "png",
-                size: 512
+                size: 256
             }))
-            .setColor(embedconfig.color.green)
+            .addFields(
+                {
+                    name: "📜 Commits",
+                    value: commits.map(commit => `**${commit.message}**`).join("\n")
+                },
+                {
+                    name: "👥 Autori",
+                    value: authors.map((author) => {
+                        const emoji = emojiMap.find(emoji => emoji.name === author.name);
+                        console.log(emoji);
+                        return `**${emoji ? `<:${emoji.name}:${emoji.id}> ${author.name}` : author.name}**`;
+                    }).join("\n")
+                }
+            );
     }
+    
 
 
 }

@@ -1,6 +1,6 @@
 const { Cjson } = require("../file/json");
 const { MathClass } = require("../math/MathClass");
-const setting = require("./../../setting/settings.json");
+const setting = require("../../setting/settings.json");
 const { BotConsole } = require("../log/botConsole");
 
 class Status {
