@@ -41,7 +41,7 @@ class serverUpdate {
             try {
                 this.app.post('/webhook', async (req, res) => {
                     res.status(200).send('Webhook processed');
-
+                    if (!req.body.commits) return;
                     const authors = [...new Set(req.body.commits.map(commit => commit.author))];
                     const commits = req.body.commits.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                     const emoji = await client.application?.emojis.fetch()
