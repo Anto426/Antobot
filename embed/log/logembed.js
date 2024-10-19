@@ -624,7 +624,7 @@ class logembed extends BaseEmbed {
                     value: commits.map(commit => `**${commit.message}**`).join("\n")
                 },
                 {
-                    name: "👥 Autori",
+                    name: "👥 Autori ",
                     value: authors.map((author) => {
                         const emoji = emojiMap.find(emoji => emoji.name === author.name);
                         console.log(emoji);
