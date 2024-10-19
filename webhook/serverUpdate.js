@@ -62,6 +62,7 @@ class serverUpdate {
                             console.error(`Error processing author ${author.name}: ${err.message}`);
                         }
                     }
+                    
 
                     this.log.init()
                         .then(() => this.log.UpdateRecived(commits, authors, emojiMap))
