@@ -1,10 +1,9 @@
 const express = require('express');
+const fetch = require('node-fetch');
+const sharp = require('sharp');
 const { BotConsole } = require("../function/log/botConsole");
 const { log } = require('../function/log/log');
 const { GitFun } = require('../function/Git/GitFun');
-const fetch = require('node-fetch');
-const sharp = require('sharp');
-
 
 
 class serverUpdate {
@@ -62,8 +61,6 @@ class serverUpdate {
                             console.error(`Error processing author ${author.name}: ${err.message}`);
                         }
                     }
-                    
-
                     this.log.init()
                         .then(() => this.log.UpdateRecived(commits, authors, emojiMap))
                         .catch(() => console.error("Errore nell'inizializzare il modulo log"));
