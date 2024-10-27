@@ -41,16 +41,16 @@ module.exports = {
         embed.init().then(async () => {
             let json = new Cjson();
             let data = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig);
-            
-            if (!data[interaction.guild.id].rule || interaction.guild.channels.cache.get(data[interaction.guild.id].rule) ) {
-                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-                    embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.ChannelnotFoundError()], ephemeral: true }).catch((err) => {
-                            console.error(err);
-                        });
-                    }).catch((err) => {
+
+            if (!data[interaction.guild.id].rule || interaction.guild.channels.cache.get(data[interaction.guild.id].rule)) {
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.ChannelnotFoundError()], ephemeral: true }).catch((err) => {
                         console.error(err);
                     });
+                }).catch((err) => {
+                    console.error(err);
+                });
             } else {
                 let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].rule);
                 channel.send({ embeds: [embed.annunce(message, everyone)] }).then(() => {
