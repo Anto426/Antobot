@@ -67,6 +67,14 @@ class ErrEmbed extends BaseEmbed {
             .setDescription("🪃La persona a cui stati cercando di applicare la seguente azione sei tu quindi non posso fare nulla.")
             .setThumbnail(embedconfig.image.notpermission)
     }
+
+    ChannelnotFoundError() {
+        return this.embed
+            .setTitle("⚠️ Canale non trovato ⚠️")
+            .setDescription("🚫 Spiacenti, non ho trovato il canale specificato. Contatta un amministratore per assistenza.")
+            .setThumbnail(embedconfig.image.notpermission)
+    }
+
     notInVoiceChannelError() {
         return this.embed
             .setTitle("🎵 Non ti trovi in una chat vocale 🎵")
