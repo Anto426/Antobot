@@ -3,7 +3,7 @@ const { ErrEmbed } = require("../../../embed/err/errembed");
 const { PermissionsBitField } = require("discord.js");
 const setting = require("../../../setting/settings.json");
 module.exports = {
-    name: "clear",
+    name: "annunce",
     permisions: [PermissionsBitField.Flags.ManageGuild],
     allowedchannels: true,
     allowebot: true,
