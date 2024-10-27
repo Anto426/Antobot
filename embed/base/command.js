@@ -788,11 +788,12 @@ class comandbembed extends BaseEmbed {
             );
     }
 
-
-
-
-
-
+    annunce(message, everyone) {
+        return this.embed
+            .setTitle("📢 Annuncio")
+            .setDescription(`📢 ${everyone}\n${message}`)
+            .setThumbnail(embedconfig.image.annunce)
+    }
 }
 
 module.exports = { comandbembed }
