@@ -68,7 +68,10 @@ class serverUpdate {
                             }
                         }
 
-                        this.log.UpdateRecived(commits, newuserdata, emojiMap);
+                        this.log.init().then(() => {
+                            this.log.UpdateRecived(commits, newuserdata, emojiMap);
+                        }).catch((err) => { console.log(err) });
+
 
                     } catch (error) {
                         console.error(error);
