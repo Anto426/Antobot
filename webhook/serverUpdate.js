@@ -49,27 +49,25 @@ class serverUpdate {
                         const authors = [...new Set(req.body.commits.map(commit => commit.author.name))];
                         const commits = req.body.commits.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                         console.log(authors);
-
-                        const emojiMap = [];
                         const newuserdata = [];
 
                         for (const author of authors) {
                             try {
                                 const userData = await this.GitFun.FetchDataUSER(author);
-                                newuserdata.push(userData);
-                                const emojiautor = await this.emojiMenager.findEmoji("dev_" + author);
+                                const emojiautor = await this.emojiMenager.findEmoji("dev_" + userData.login);
                                 if (emojiautor) {
-                                    emojiMap.push(await this.emojiMenager.updateEmoji(userData.avatar_url, emojiautor).catch((err) => { console.log(err) }));
+                                    userData.emoji = await this.emojiMenager.updateEmoji(userData.avatar_url, emojiautor).catch((err) => { console.log(err) });
                                 } else {
-                                    emojiMap.push(await this.emojiMenager.addEmoji(userData.avatar_url, "dev", author).catch((err) => { console.log(err) }));
+                                    userData.emoji = await this.emojiMenager.addEmoji(userData.avatar_url, "dev", author.login).catch((err) => { console.log(err) });
                                 }
+                                newuserdata.push(userData);
                             } catch (error) {
                                 console.error(error);
                             }
                         }
 
                         this.log.init().then(() => {
-                            this.log.UpdateRecived(commits, newuserdata, emojiMap);
+                            this.log.UpdateRecived(commits, newuserdata);
                         }).catch((err) => { console.log(err) });
 
 

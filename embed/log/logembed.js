@@ -610,30 +610,34 @@ class logembed extends BaseEmbed {
     }
 
 
-    UpdateRecived(commits, authors, emojiMap) {
+    UpdateRecived(commits, authors) {
         return this.embed
             .setTitle("🔄 Aggiornamento ricevuto")
             .setDescription(`Aggiornamento ricevuto dal server`)
             .setThumbnail(client.user.displayAvatarURL({
-                dynamic: true,
-                size: 256
+            dynamic: true,
+            size: 256
             }))
             .addFields(
-                {
-                    name: "📜 Commits",
-                    value: commits.map(commit => `**${commit.message}**`).join("\n")
-                },
-                {
-                    name: "👥 Autori ",
-                    value: authors.map((author) => {
-                        const emoji = emojiMap.find(emoji => emoji.name === author.name);
-                        console.log(emoji);
-                        return `**${emoji ? `<:${emoji.name}:${emoji.id}> ${author.name}` : author.name}**`;
-                    }).join("\n")
-                }
-            );
+            {
+                name: "📜 Commits",
+                value: `${commits.map(commit => `[**${commit.message}**](${commit.url})`).join("\n")}`
+            },
+            {
+                name: "📅 Data",
+                value: new Date().toLocaleString(),
+                inline: true
+            },
+            {
+                name: "👥 Autori",
+                value: authors.map((author) => {
+                return `**${author.emoji ? `<:${author.emoji.name}:${author.emoji.id}> ${author.name}` : author.name}**`;
+                }).join("\n")
+            }
+            )
+            .setColor(embedconfig.color.blue);
     }
-    
+
 
 
 }
