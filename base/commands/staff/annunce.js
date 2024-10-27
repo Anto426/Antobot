@@ -3,8 +3,8 @@ const { ErrEmbed } = require("../../../embed/err/errembed");
 const { PermissionsBitField } = require("discord.js");
 const setting = require("../../../setting/settings.json");
 module.exports = {
-    name: "annunce",
-    permisions: [PermissionsBitField.Flags.ManageGuild],
+    name: "announce",
+    permissions: [PermissionsBitField.Flags.ManageGuild],
     allowedchannels: true,
     allowebot: true,
     OnlyOwner: false,
@@ -12,9 +12,10 @@ module.exports = {
     test: false,
     see: true,
     data: {
-        name: "annunce",
+        name: "announce",
         description: "Comando per inviare un annuncio nel Server",
-        options: [
+        options: 
+        [
             {
                 name: "message",
                 description: "Il messaggio da inviare",
