@@ -23,7 +23,7 @@ module.exports = {
                 required: true
             },
             {
-                name: "Tag everyone",
+                name: "tag_everyone",
                 description: "Vuoi taggare everyone?",
                 type: 5,
                 required: true
@@ -34,7 +34,7 @@ module.exports = {
 
         let embed = new comandbembed(interaction.guild, interaction.member)
         let message = interaction.options.getString('message')
-        let tag = interaction.options.getBoolean('Tag everyone')
+        let tag = interaction.options.getBoolean('tag_everyone')
         let everyone = tag ? interaction.guild.roles.everyone : ""
 
         embed.init().then(async () => {
