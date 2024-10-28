@@ -28,6 +28,24 @@ module.exports = {
                     description: "Vuoi taggare everyone?",
                     type: 5,
                     required: true
+                },
+                {
+                    name: "thumbnail",
+                    description: "Vuoi inser una thumbnail?",
+                    type: 3,
+                    required: false
+                },
+                {
+                    name: "image",
+                    description: "Vuoi inserire un immagine?",
+                    type: 3,
+                    required: false
+                },
+                {
+                    name: "color",
+                    description: "Vuoi inserire un colore?",
+                    type: 3,
+                    required: false
                 }
             ]
     },
@@ -36,7 +54,14 @@ module.exports = {
             let embed = new comandbembed(interaction.guild, interaction.member);
             let message = interaction.options.getString('message');
             let tag = interaction.options.getBoolean('tag_everyone');
+            let thumbnail = interaction.options.getString('thumbnail');
+            let image = interaction.options.getString('image');
+            let color = interaction.options.getString('color');
+            console
+            let embedcolor = color ? color.match(/^#(?:[0-9a-fA-F]{3}){1,2}$/) ? color : null : null;
+
             let everyone = tag ? interaction.guild.roles.everyone : "";
+
 
             await embed.init();
             let json = new Cjson();
@@ -48,7 +73,7 @@ module.exports = {
                 await interaction.reply({ embeds: [embedmsg.ChannelnotFoundError()], ephemeral: true });
             } else {
                 let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].channel.rule);
-                await channel.send({ embeds: [embed.annunce(message, everyone)] });
+                await channel.send({ embeds: [embed.annunce(message, everyone, thumbnail, image, embedcolor)] });
                 await interaction.reply({
                     content: "Annuncio inviato con successo!",
                     ephemeral: true

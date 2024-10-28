@@ -788,11 +788,24 @@ class comandbembed extends BaseEmbed {
             );
     }
 
-    annunce(message, everyone) {
-        return this.embed
+    annunce(message, everyone, thumbnail, image, color) {
+        this.embed
             .setTitle("📢 Annuncio")
             .setDescription(`📢 ${everyone}\n${message}`)
-            .setThumbnail(embedconfig.image.annunce)
+
+        if (thumbnail) {
+            this.embed.setThumbnail(thumbnail)
+        }
+
+        if (image) {
+            this.embed.setImage(image)
+        }
+
+        if (color) {
+            this.embed.setColor(color)
+        }
+
+        return this.embed
     }
 }
 
