@@ -18,7 +18,7 @@ class Security extends Check {
             ownerError: 1,
             notPermissionError: 2,
             botUserError: 3,
-            channelError : 4,
+            channelError: 4,
             selfUserError: 5,
             highPermissionError: 6,
             notInVoiceChannelError: 7,
@@ -239,7 +239,7 @@ class Security extends Check {
                             reject(this.codeErr.highPermissionError);
                         }
 
-                        
+
                     } else {
                         reject(this.codeErr.notPermissionError);
                     }
