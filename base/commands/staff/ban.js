@@ -27,8 +27,7 @@ module.exports = {
         }]
     },
     execute(interaction) {
-
-        let embed = new comandbembed(interaction.guild, interaction.member)
+        let embed = new comandbembed(interaction.guild, interaction.member);
         let member = interaction.options.getMember('user');
         let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
 
@@ -40,36 +39,33 @@ module.exports = {
                     console.error(err);
                 });
             }).catch((err) => {
-                console.log(err)
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                console.error(err);
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
                 embedmsg.init().then(() => {
-                    if (err.code == 50013) {
+                    if (err.code === 50013) {
                         interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true }).catch((err) => {
                             console.error(err);
-                        })
+                        });
                     } else {
                         interaction.reply({ embeds: [embedmsg.notbanError()], ephemeral: true }).catch((err) => {
                             console.error(err);
-                        })
+                        });
                     }
-                }
-                ).catch((err) => {
+                }).catch((err) => {
                     console.error(err);
-                })
-            })
+                });
+            });
         }).catch((err) => {
-            console.log(err)
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+            console.error(err);
+            let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
             embedmsg.init().then(() => {
                 interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
                     console.error(err);
-                })
-            }
-            ).catch((err) => {
+                });
+            }).catch((err) => {
                 console.error(err);
-            })
-        })
-
+            });
+        });
 
 
 

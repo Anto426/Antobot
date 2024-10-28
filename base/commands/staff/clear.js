@@ -24,10 +24,9 @@ module.exports = {
     },
     execute(interaction) {
 
-        let embed = new comandbembed(interaction.guild, interaction.member)
-        let tempamount = interaction.options.getInteger('quantità')
-        let amount = tempamount < 100 ? tempamount ? tempamount : 1 : 100
-
+        let embed = new comandbembed(interaction.guild, interaction.member);
+        let tempamount = interaction.options.getInteger('quantità');
+        let amount = tempamount < 100 ? (tempamount ? tempamount : 1) : 100;
 
         embed.init().then(() => {
             interaction.channel.bulkDelete(amount).then(() => {
@@ -35,32 +34,30 @@ module.exports = {
                     embeds: [embed.clear(amount)],
                     ephemeral: true
                 }).catch((err) => {
-                    console.log(err)
+                    console.error(err);
                 });
             }).catch((err) => {
-                console.log(err)
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+                console.error(err);
+                let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
                 embedmsg.init().then(() => {
                     interaction.reply({ embeds: [embedmsg.bulkdeleteError()], ephemeral: true }).catch((err) => {
                         console.error(err);
-                    })
-                }
-                ).catch((err) => {
+                    });
+                }).catch((err) => {
                     console.error(err);
-                })
-            })
+                });
+            });
         }).catch((err) => {
-            console.log(err)
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+            console.error(err);
+            let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
             embedmsg.init().then(() => {
                 interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
                     console.error(err);
-                })
-            }
-            ).catch((err) => {
+                });
+            }).catch((err) => {
                 console.error(err);
-            })
-        })
+            });
+        });
 
 
 
