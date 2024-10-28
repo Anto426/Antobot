@@ -31,57 +31,38 @@ module.exports = {
                 }
             ]
     },
-    execute(interaction) {
+    execute: async (interaction) => {
+        try {
+            let embed = new comandbembed(interaction.guild, interaction.member);
+            let message = interaction.options.getString('message');
+            let tag = interaction.options.getBoolean('tag_everyone');
+            let everyone = tag ? interaction.guild.roles.everyone : "";
 
-        let embed = new comandbembed(interaction.guild, interaction.member);
-        let message = interaction.options.getString('message');
-        let tag = interaction.options.getBoolean('tag_everyone');
-        let everyone = tag ? interaction.guild.roles.everyone : "";
-
-        embed.init().then(async () => {
+            await embed.init();
             let json = new Cjson();
             let data = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig);
 
-            if (!data[interaction.guild.id].rule || interaction.guild.channels.cache.get(data[interaction.guild.id].rule)) {
+            if (!data[interaction.guild.id].channel.rule || !interaction.guild.channels.cache.get(data[interaction.guild.id].channel.rule)) {
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-                embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.ChannelnotFoundError()], ephemeral: true }).catch((err) => {
-                        console.error(err);
-                    });
-                }).catch((err) => {
-                    console.error(err);
-                });
+                await embedmsg.init();
+                await interaction.reply({ embeds: [embedmsg.ChannelnotFoundError()], ephemeral: true });
             } else {
-                let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].rule);
-                channel.send({ embeds: [embed.annunce(message, everyone)] }).then(() => {
-                    interaction.reply({
-                        embeds: [embed.annunce(message, everyone)],
-                        ephemeral: true
-                    }).catch((err) => {
-                        console.error(err);
-                    });
-                }).catch((err) => {
-                    console.error(err);
-                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-                    embedmsg.init().then(() => {
-                        interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
-                            console.error(err);
-                        });
-                    }).catch((err) => {
-                        console.error(err);
-                    });
+                let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].channel.rule);
+                await channel.send({ embeds: [embed.annunce(message, everyone)] });
+                await interaction.reply({
+                    content: "Annuncio inviato con successo!",
+                    ephemeral: true
                 });
             }
-        }).catch((err) => {
+        } catch (err) {
             console.error(err);
             let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-            embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
-                    console.error(err);
-                });
-            }).catch((err) => {
-                console.error(err);
-            });
-        });
+            try {
+                await embedmsg.init();
+                await interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true });
+            } catch (innerErr) {
+                console.error(innerErr);
+            }
+        }
     }
 }
