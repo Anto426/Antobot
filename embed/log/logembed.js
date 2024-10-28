@@ -255,22 +255,22 @@ class logembed extends BaseEmbed {
     ready() {
         return this.embed
             .setTitle("🟢 Bot pronto")
-            .setDescription(`il bot si è avviato correttamente`)
+            .setDescription(`Il bot si è avviato correttamente`)
             .addFields(
                 {
-                    name: "📜 N comandi di base caricati",
+                    name: "📜 Numero di comandi di base caricati",
                     value: `${client.basecommands.size.toString()}`,
                 },
                 {
-                    name: "🎵 N comandi di distube caricati",
+                    name: "🎵 Numero di comandi di distube caricati",
                     value: `${client.distubecommands ? client.distubecommands.size.toString() : "Client off"}`,
                 },
                 {
-                    name: "📅 N Eventi caricati di base",
+                    name: "📅 Numero di eventi di base caricati",
                     value: `${client.baseevents.size.toString()}`,
                 },
                 {
-                    name: "🎶 N Eventi caricati di ditube",
+                    name: "🎶 Numero di eventi di distube caricati",
                     value: `${client.distubeevents ? client.distubeevents.size.toString() : "Client off"}`,
                 },
                 {
@@ -289,19 +289,16 @@ class logembed extends BaseEmbed {
                     inline: true
                 },
                 {
-                    name: "🔧 Repo",
-                    value: ` [clicca qui](${this.package.repo})`
+                    name: "🔧 Repository",
+                    value: `[Clicca qui](${this.package.repo})`
                 },
-
             )
             .setThumbnail(client.user.displayAvatarURL({
                 dynamic: true,
                 format: "png",
                 size: 512
             }))
-
             .setColor(embedconfig.color.green)
-
     }
 
     roleCreate(role) {

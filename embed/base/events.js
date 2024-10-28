@@ -25,8 +25,8 @@ class EventEmbed extends BaseEmbed {
 
                 let dynamicColor = new DynamicColor()
                 let ColorFunctions = dynamicColor.ColorFunctions
-                let canvas = await createCanvas(1700, 600)
-                let ctx = await canvas.getContext("2d")
+                let canvas =  createCanvas(1700, 600)
+                let ctx =  canvas.getContext("2d")
                 let Numcolor = 3;
                 let distancecoloror = canvas.width / Numcolor;
                 let position = 0;
