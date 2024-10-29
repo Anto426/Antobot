@@ -17,7 +17,7 @@
     "@distube/soundcloud": "^2.0.4",
     "@distube/spotify": "^2.0.2",
     "@distube/youtube": "^1.0.4",
-    "@distube/ytdl-core": "^4.15.0",
+    "@distube/ytdl-core": "^4.15.1",
     "@distube/ytsr": "^2.0.4",
     "axios": "^1.7.7",
     "canvas": "^3.0.0-rc2",
