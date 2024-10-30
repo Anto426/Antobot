@@ -6,9 +6,9 @@ class ErrorManager {
         this.member = member;
     }
 
-    getError(errorCode) {
+    async getError(errorCode) {
         const errEmbed = new ErrEmbed(this.guild, this.member);
-        errEmbed.init(); 
+        await errEmbed.init(); 
         const errorHandlers = [
             errEmbed.genericError,
             errEmbed.notPermissionError,
