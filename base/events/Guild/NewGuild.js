@@ -22,7 +22,6 @@ module.exports = {
                 console.error('Errore nel recupero degli inviti:', error);
             }
         
-            guild.channels.cache.filter(x => x.type === ChannelType.GuildText).first().send({ embeds: [embed.newguild(guild)] }).catch((err) => { console.log(err) });
         }).catch(() => { })
     }
 };
