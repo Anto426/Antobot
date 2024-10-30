@@ -3,6 +3,7 @@ const { ErrEmbed } = require("../../../embed/err/errembed");
 const { comandbembed } = require("../../../embed/base/command");
 const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json");
+const { errorIndex } = require("../../../function/err/errormenager");
 module.exports = {
     name: "initguild",
     permisions: [PermissionsBitField.Flags.ManageGuild],
@@ -17,51 +18,44 @@ module.exports = {
         description: "Inzia un processo per abilitare il bot in un server"
     },
     execute(interaction) {
+        return new Promise((resolve, reject) => {
 
-        let embed = new comandbembed(interaction.guild, interaction.member)
-        let json = new Cjson()
-        let root = process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig
+            let embed = new comandbembed(interaction.guild, interaction.member)
+            let json = new Cjson()
+            let root = process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig
 
-        embed.init().then(() => {
+            embed.init().then(() => {
 
-            let embedmsg = embed.intitguild(interaction.guild)
-            let button = new ButtonBuilder()
-                .setCustomId(`initguild-${interaction.member.id}-0-0`)
-                .setLabel('🚀 Avvia')
-                .setStyle(ButtonStyle.Success)
+                let embedmsg = embed.intitguild(interaction.guild)
+                let button = new ButtonBuilder()
+                    .setCustomId(`initguild-${interaction.member.id}-0-0`)
+                    .setLabel('🚀 Avvia')
+                    .setStyle(ButtonStyle.Success)
 
-            json.readJson(root).then((data) => {
-                if (data[interaction.guild.id]) {
-                    embedmsg.setDescription(`Il server **${interaction.guild.name}** è già stato inizializzato\n🔧 Se vuoi reinizializzare il server clicca sul bottone qui sotto`)
-                    button.setLabel('🚀 Modifica la configurazione').setCustomId(`initguild-${interaction.member.id}-0-0-r`)
-                }
+                json.readJson(root).then((data) => {
+                    if (data[interaction.guild.id]) {
+                        embedmsg.setDescription(`Il server **${interaction.guild.name}** è già stato inizializzato\n🔧 Se vuoi reinizializzare il server clicca sul bottone qui sotto`)
+                        button.setLabel('🚀 Modifica la configurazione').setCustomId(`initguild-${interaction.member.id}-0-0-r`)
+                    }
 
-                let actionRow = new ActionRowBuilder().addComponents(button)
-                interaction.reply({ embeds: [embedmsg], components: [actionRow] }).catch((err) => {
-                    console.error(err);
+                    let actionRow = new ActionRowBuilder().addComponents(button)
+                    interaction.reply({ embeds: [embedmsg], components: [actionRow] }).catch((err) => {
+                        console.error(err);
+                    })
+                    resolve(0)
+
+                }).catch((err) => {
+                    console.log(err)
+                    reject(errorIndex.GENERIC_ERROR)
+
                 })
 
             }).catch((err) => {
                 console.log(err)
-                let actionRow = new ActionRowBuilder().addComponents(button)
-                interaction.reply({ embeds: [embedmsg], components: [actionRow] }).catch((err) => {
-                    console.error(err);
-                })
-
+                reject(errorIndex.GENERIC_ERROR)
             })
 
+        });
 
-        }).catch((err) => {
-            console.log(err)
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
-                    console.error(err);
-                })
-            }
-            ).catch((err) => {
-                console.error(err);
-            })
-        })
     }
 }

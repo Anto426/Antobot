@@ -1,6 +1,5 @@
 const { comandbembed } = require("../../../embed/base/command");
-const { ErrEmbed } = require("../../../embed/err/errembed");
-
+const { errorIndex } = require("../../../function/err/errormenager");
 module.exports = {
     name: "eval",
     permisions: [],
@@ -22,26 +21,22 @@ module.exports = {
     },
 
     async execute(interaction) {
-        let embed = new comandbembed(interaction.guild, interaction.member)
-        let command = interaction.options.getString('comand');
-        embed.init().then(async () => {
 
-            let result = await eval(command);
-            interaction.reply({ embeds: [embed.eval(result)] }).catch((err) => {
-                console.log(err)
-            })
-        }).catch((err) => {
-            console.log(err)
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.evaleError()], ephemeral: true }).catch((err) => {
-                    console.error(err);
+        return new Promise((resolve, reject) => {
+            let embed = new comandbembed(interaction.guild, interaction.member)
+            let command = interaction.options.getString('comand');
+            embed.init().then(async () => {
+
+                let result = await eval(command);
+                interaction.reply({ embeds: [embed.eval(result)] }).catch((err) => {
+                    console.log(err)
                 })
+                resolve(0)
             }).catch((err) => {
-                console.error(err);
+                console.log(err)
+                reject(errorIndex.EVAL_ERROR)
             })
-        })
-
+        });
 
     }
 

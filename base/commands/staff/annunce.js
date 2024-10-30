@@ -1,8 +1,8 @@
 const { comandbembed } = require("../../../embed/base/command");
-const { ErrEmbed } = require("../../../embed/err/errembed");
 const { PermissionsBitField } = require("discord.js");
 const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json");
+const { errorIndex } = require("../../../function/err/errormenager");
 module.exports = {
     name: "announce",
     permisions: [PermissionsBitField.Flags.ManageGuild],
@@ -49,43 +49,38 @@ module.exports = {
                 }
             ]
     },
-    execute: async (interaction) => {
-        try {
-            let embed = new comandbembed(interaction.guild, interaction.member);
-            let message = interaction.options.getString('message');
-            let tag = interaction.options.getBoolean('tag_everyone');
-            let thumbnail = interaction.options.getString('thumbnail');
-            let image = interaction.options.getString('image');
-            let color = interaction.options.getString('color');
-            let embedcolor = color ? color.match(/^#(?:[0-9a-fA-F]{3}){1,2}$/) ? color : null : null;
-            let everyone = tag ? interaction.guild.roles.everyone : "";
+    async execute(interaction) {
 
-
-            await embed.init();
-            let json = new Cjson();
-            let data = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig);
-
-            if (!data[interaction.guild.id].channel.events || !interaction.guild.channels.cache.get(data[interaction.guild.id].channel.events)) {
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-                await embedmsg.init();
-                await interaction.reply({ embeds: [embedmsg.ChannelnotFoundError()], ephemeral: true });
-            } else {
-                let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].channel.events);
-                await channel.send({ embeds: [embed.annunce(message, everyone, thumbnail, image, embedcolor)] });
-                await interaction.reply({
-                    content: "Annuncio inviato con successo!",
-                    ephemeral: true
-                });
-            }
-        } catch (err) {
-            console.error(err);
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
+        return new Promise(async (resolve, reject) => {
             try {
-                await embedmsg.init();
-                await interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true });
-            } catch (innerErr) {
-                console.error(innerErr);
+                let embed = new comandbembed(interaction.guild, interaction.member);
+                let message = interaction.options.getString('message');
+                let tag = interaction.options.getBoolean('tag_everyone');
+                let thumbnail = interaction.options.getString('thumbnail');
+                let image = interaction.options.getString('image');
+                let color = interaction.options.getString('color');
+                let embedcolor = color ? color.match(/^#(?:[0-9a-fA-F]{3}){1,2}$/) ? color : null : null;
+                let everyone = tag ? interaction.guild.roles.everyone : "";
+                await embed.init();
+                let json = new Cjson();
+                let data = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig);
+
+                if (!data[interaction.guild.id].channel.events || !interaction.guild.channels.cache.get(data[interaction.guild.id].channel.events)) {
+                    reject(errorIndex.CHANNEL_NOT_FOUND_ERROR);
+                } else {
+                    let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].channel.events);
+                    await channel.send({ embeds: [embed.annunce(message, everyone, thumbnail, image, embedcolor)] });
+                    await interaction.reply({
+                        content: "Annuncio inviato con successo!",
+                        ephemeral: true
+                    });
+                }
+                resolve(0);
+            } catch (err) {
+                console.error(err);
+                reject(errorIndex.GENERIC_ERROR);
             }
-        }
+        });
+
     }
 }

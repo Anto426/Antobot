@@ -1,3 +1,4 @@
+const { errorIndex } = require("../../../function/err/errormenager");
 const { helppagebuilder } = require("../../../function/interaction/button/helppagebuilder");
 module.exports = {
     name: "help",
@@ -14,15 +15,18 @@ module.exports = {
     },
     execute(interaction) {
 
-        let helpbuilder = new helppagebuilder()
+        return new Promise((resolve, reject) => {
+            let helpbuilder = new helppagebuilder()
 
-        helpbuilder.mainpage(interaction).then((menu) => {
-            interaction.reply({ embeds: menu[0], components: menu[1] }).catch((err) => {
-                console.error(err);
+            helpbuilder.mainpage(interaction).then((menu) => {
+                interaction.reply({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.error(err);
+                });
+                resolve(0);
+            }).catch((err) => {
+                console.log(err);
+                reject(errorIndex.GENERIC_ERROR);
             });
-        }).catch((err) => {
-            console.log(err);
         });
-
     }
 }

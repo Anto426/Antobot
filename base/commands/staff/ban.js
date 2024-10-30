@@ -1,6 +1,7 @@
 const { PermissionsBitField } = require("discord.js");
-const { ErrEmbed } = require("../../../embed/err/errembed");
 const { comandbembed } = require("../../../embed/base/command");
+const { errorIndex } = require("../../../function/err/errormenager");
+
 module.exports = {
     name: "ban",
     permisions: [PermissionsBitField.Flags.BanMembers],
@@ -27,45 +28,41 @@ module.exports = {
         }]
     },
     execute(interaction) {
-        let embed = new comandbembed(interaction.guild, interaction.member);
-        let member = interaction.options.getMember('user');
-        let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
 
-        embed.init().then(() => {
-            member.ban({ reason: reason }).then(() => {
-                interaction.reply({
-                    embeds: [embed.ban(member, reason)],
+        return new Promise((resolve, reject) => {
+            let embed = new comandbembed(interaction.guild, interaction.member);
+            let member = interaction.options.getMember('user');
+            let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
+
+            embed.init().then(() => {
+                member.ban({ reason: reason }).then(() => {
+                    interaction.reply({
+                        embeds: [embed.ban(member, reason)],
+                    }).catch((err) => {
+                        console.error(err);
+                    });
                 }).catch((err) => {
-                    console.error(err);
+                    if (err.code == 50035) {
+                        reject(errorIndex.BOT_NOT_PERMISSION_ERROR)
+                    } else {
+                        reject(errorIndex.GENERIC_ERROR)
+                    }
                 });
             }).catch((err) => {
                 console.error(err);
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
                 embedmsg.init().then(() => {
-                    if (err.code === 50013) {
-                        interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true }).catch((err) => {
-                            console.error(err);
-                        });
-                    } else {
-                        interaction.reply({ embeds: [embedmsg.notbanError()], ephemeral: true }).catch((err) => {
-                            console.error(err);
-                        });
-                    }
+                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
+                        console.error(err);
+                    });
                 }).catch((err) => {
                     console.error(err);
                 });
             });
-        }).catch((err) => {
-            console.error(err);
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-            embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
-                    console.error(err);
-                });
-            }).catch((err) => {
-                console.error(err);
-            });
+
+
         });
+
 
 
 

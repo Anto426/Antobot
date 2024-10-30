@@ -1,6 +1,3 @@
-const { comandbembed } = require("../../../embed/base/command");
-const { ErrEmbed } = require("../../../embed/err/errembed");
-
 module.exports = {
     name: "reboot",
     permisions: [],
@@ -15,16 +12,9 @@ module.exports = {
         description: "Comando per riavviare il bot",
     },
     async execute(interaction) {
-
-        await interaction.reply({ content: "Il bot si sta riavviando...", ephemeral: true });
-        process.exit(0);
-        
-
-
-        
-
-
+        return new Promise(async () => {
+            await interaction.reply({ content: "Il bot si sta riavviando...", ephemeral: true }).catch((err) => { console.log(err) });
+            process.exit(0);
+        });
     }
-
-
 }

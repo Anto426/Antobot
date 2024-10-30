@@ -15,15 +15,20 @@ module.exports = {
     },
     execute(interaction) {
 
-        let unbanbuilder = new unbanpagebuilder()
+        return new Promise((resolve, reject) => {
+            let unbanbuilder = new unbanpagebuilder()
 
-        unbanbuilder.mainpage(interaction).then((menu) => {
-            interaction.reply({ embeds: menu[0], components: menu[1] }).catch((err) => {
-                console.error(err);
+            unbanbuilder.mainpage(interaction).then((menu) => {
+                interaction.reply({ embeds: menu[0], components: menu[1] }).catch((err) => {
+                    console.error(err);
+                });
+                resolve(0);
+            }).catch((err) => {
+                console.log(err);
+                reject();ù
             });
-        }).catch((err) => {
-            console.log(err);
         });
+
 
     }
 }

@@ -1,5 +1,5 @@
 const { comandbembed } = require("../../../embed/base/command")
-const { ErrEmbed } = require("../../../embed/err/errembed")
+const { errorIndex } = require("../../../function/err/errormenager");
 const { WriteCommand } = require("../../../function/commands/WriteCommand")
 
 module.exports = {
@@ -18,39 +18,37 @@ module.exports = {
 
     async execute(interaction) {
 
-        let embedmsg = new comandbembed(interaction.guild, interaction.member)
-        let reg = new WriteCommand()
-        embedmsg.init().then(async () => {
-
-            interaction.reply({ embeds: [embedmsg.registerCommand(0)], ephemeral: true }).catch((err) => {
-                console.log(err)
-            })
-
-            reg.commandallguild().then(() => {
-                interaction.editReply({ embeds: [embedmsg.registerCommand(1)], ephemeral: true }).catch((err) => {
+        return new Promise((resolve, reject) => {
+            let reg = new WriteCommand()
+            let embedmsg = new comandbembed(interaction.guild, interaction.member)
+            embedmsg.init().then(async () => {
+                interaction.reply({ embeds: [embedmsg.registerCommand(0)], ephemeral: true }).catch((err) => {
                     console.log(err)
                 })
-            }).catch((err) => {
-                if (!Number.isNaN(err))
-                    interaction.editReply({ embeds: [embedmsg.registerCommand(err)], ephemeral: true }).catch((err) => {
+
+                reg.commandallguild().then(() => {
+                    interaction.editReply({ embeds: [embedmsg.registerCommand(1)], ephemeral: true }).catch((err) => {
                         console.log(err)
                     })
-                else
-                    console.log(err)
+                }).catch((err) => {
+                    if (!Number.isNaN(err))
+                        interaction.editReply({ embeds: [embedmsg.registerCommand(err)], ephemeral: true }).catch((err) => {
+                            console.log(err)
+                        })
+                    else
+                        console.log(err)
+                })
+
+                resolve(0)
+
+            }).catch(() => {
+                reject(errorIndex.GENERIC_ERROR)
             })
 
-        }).catch(() => {
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
-                    console.error(err);
-                })
-            }).catch(() => {
-                interaction.reply({ content: "Errore", ephemeral: true }).catch((err) => {
-                    console.error(err);
-                })
-            })
-        })
+
+        });
+
+
     }
 
 }

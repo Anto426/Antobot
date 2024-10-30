@@ -1,6 +1,6 @@
 const { PermissionsBitField } = require("discord.js");
-const { ErrEmbed } = require("../../../embed/err/errembed");
 const { comandbembed } = require("../../../embed/base/command");
+const { errorIndex } = require("../../../function/err/errormenager");
 
 module.exports = {
     name: "timeout",
@@ -64,68 +64,44 @@ module.exports = {
             required: false
         }]
     },
-    execute(interaction) {
+    async execute(interaction) {
 
-        let member = interaction.options.getMember('user');
-        let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
-        let time = interaction.options.getInteger('durata') * 1000 * 60;
+        return new Promise((resolve, reject) => {
+            let member = interaction.options.getMember('user');
+            let reason = interaction.options.getString('motivo') || "nessun motivo specificato";
+            let time = interaction.options.getInteger('durata') * 1000 * 60;
 
 
 
-        if (member.communicationDisabledUntilTimestamp == null || member.communicationDisabledUntilTimestamp < Date.now()) {
+            if (member.communicationDisabledUntilTimestamp == null || member.communicationDisabledUntilTimestamp < Date.now()) {
 
-            let embed = new comandbembed(interaction.guild, interaction.member)
-            embed.init().then(() => {
-                member.timeout(time, reason).then(() => {
-                    interaction.reply({
-                        embeds: [embed.timeout(member, time, reason)],
+                let embed = new comandbembed(interaction.guild, interaction.member)
+                embed.init().then(() => {
+                    member.timeout(time, reason).then(() => {
+                        interaction.reply({
+                            embeds: [embed.timeout(member, time, reason)],
+                        }).catch((err) => {
+                            console.error(err);
+                        });
                     }).catch((err) => {
-                        console.error(err);
-                    });
+                        console.log(err)
+                        if (err.code == 50013) {
+                            reject(errorIndex.BOT_NOT_PERMISSION_ERROR)
+                        } else {
+                            reject(errorIndex.GENERIC_ERROR)
+                        }
+                    })
+
                 }).catch((err) => {
                     console.log(err)
-                    let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                    embedmsg.init().then(() => {
-                        if (err.code == 50013) {
-                            interaction.reply({ embeds: [embedmsg.notPermissionError()], ephemeral: true }).catch((err) => {
-                                console.error(err);
-                            })
-                        } else {
-                            interaction.reply({ embeds: [embedmsg.nottimeoutError()], ephemeral: true }).catch((err) => {
-                                console.error(err);
-                            })
-                        }
-                    }
-                    ).catch((err) => {
-                        console.error(err);
-                    })
+                    reject(errorIndex.NOT_TIMEOUT_ERROR)
                 })
-            }).catch((err) => {
-                console.log(err)
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
-                        console.error(err);
-                    })
-                }
-                ).catch((err) => {
-                    console.error(err);
-                })
-            })
-
-
-        } else {
-            console.log("utente già timeoutato")
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.isjusttimeoutError()], ephemeral: true }).catch((err) => {
-                    console.error(err);
-                })
+            } else {
+                console.log("utente già timeoutato")
+                reject(errorIndex.IS_JUST_TIMEOUT_ERROR)
             }
-            ).catch((err) => {
-                console.error(err);
-            })
-        }
+
+        });
 
 
     }

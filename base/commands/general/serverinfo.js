@@ -17,29 +17,28 @@ module.exports = {
     execute(interaction) {
 
 
-        let embed = new comandbembed(interaction.guild, interaction.member)
+        return new Promise((resolve, reject) => {
 
-        embed.init().then(() => {
-            interaction.guild.invites.create(interaction.guild.channels.cache.filter(channel => channel.type === ChannelType.GuildText).first().id, { maxAge: 18000, maxUses: 0 }).then((invites) => {
-                interaction.reply({
-                    embeds: [embed.serverinfo(interaction.guild, invites)],
-                }).catch((err) => {
-                    console.error(err);
-                });
-            })
-        }).catch((err) => {
-            console.log(err)
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
+            let embed = new comandbembed(interaction.guild, interaction.member)
 
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
-                    console.error(err);
+            embed.init().then(() => {
+                interaction.guild.invites.create(interaction.guild.channels.cache.filter(channel => channel.type === ChannelType.GuildText).first().id, { maxAge: 18000, maxUses: 0 }).then((invites) => {
+                    interaction.reply({
+                        embeds: [embed.serverinfo(interaction.guild, invites)],
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+                    resolve(0)
                 })
-            }
-            ).catch((err) => {
-                console.error(err);
+            }).catch((err) => {
+                console.log(err)
+                reject(ErrEmbed.GENERIC_ERROR)
             })
-        })
+
+        });
+
+
+
 
     }
 }
