@@ -35,7 +35,7 @@ module.exports = {
 
         Promise.all(promises).then(() => {
             security.allowCommand()
-                .then((result) => {
+                .then(async (result) => {
                     try {
                         if (Array.isArray(result)) {
                             command.execute(interaction, result).catch((err) => {
@@ -44,23 +44,23 @@ module.exports = {
                                 })
                             })
                         } else {
-                            command.execute(interaction).catch((err) => {
-                                interaction.reply({ embeds: [errorManager.getError(err)], ephemeral: true }).catch((err) => {
+                            command.execute(interaction).catch(async (err) => {
+                                interaction.reply({ embeds: [await errorManager.getError(err)], ephemeral: true }).catch((err) => {
                                     console.error(err);
                                 })
                             })
                         }
 
                     } catch (err) {
-                        interaction.reply({ embeds: [errorManager.getError(errorIndex.GENERIC_ERROR)], ephemeral: true }).catch((err) => {
+                        interaction.reply({ embeds: [await errorManager.getError(errorIndex.GENERIC_ERROR)], ephemeral: true }).catch((err) => {
                             console.error(err);
                         })
                         new BotConsole().log("Errore durante esecuzione del comando", "red")
                         console.log(err)
                     }
                 })
-                .catch((err) => {
-                    interaction.reply({ embeds: [errorManager.getError(err)], ephemeral: true }).catch((err) => {
+                .catch(async (err) => {
+                    interaction.reply({ embeds: [await errorManager.getError(err)], ephemeral: true }).catch((err) => {
                         console.error(err);
                     })
                 })
