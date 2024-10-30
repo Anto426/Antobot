@@ -15,6 +15,30 @@ class DynamicColor {
         this.Img = img;
     }
 
+    setImgUrl(url) {
+        return new Promise((resolve, reject) => {
+
+            fetch(url)
+                .then(async response => {
+                    if (!response.ok) {
+                        throw new Error("Image not loaded properly.");
+                    } else {
+                        return await response.arrayBuffer(); 
+                    }
+                })
+                .then(buffer => {
+                    this.Img = Buffer.from(buffer); 
+                    resolve(0); 
+                })
+                .catch(error => {
+                    console.error('Error fetching image:', error);
+                    reject(error); 
+                });
+
+        });
+    }
+
+
     setThreshold(threshold) {
         this.threshold = threshold;
     }
@@ -30,8 +54,7 @@ class DynamicColor {
             if (this.Img) {
                 console.log("Image loaded properly.");
                 this.Palette = await ColorThief.getPalette(this.Img, this.Numcolorextract);
-                console.log(this.Palette);
-                resolve(0);
+                resolve(this.Palette);
             } else {
                 reject("Image not loaded properly.");
             }
