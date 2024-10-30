@@ -11,7 +11,7 @@ class EventEmbed extends BaseEmbed {
         });
     }
 
-    trackStart(queen, song) {
+    trackStart(queen, song, colorqueue) {
         return this.embed
             .setTitle("🎵 Traccia in riproduzione")
             .setDescription(`${song.name} è in riproduzione ora!`)
@@ -25,7 +25,8 @@ class EventEmbed extends BaseEmbed {
                 { name: '🧑‍🎨 Artist', value: song.uploader.name, inline: true },
                 { name: '🔗 URL Artist', value: `[Clicca qui](${song.uploader.url})`, inline: true }
             )
-            .setThumbnail(song.thumbnail);
+            .setThumbnail(song.thumbnail)
+            .setColor(colorqueue);
     }
 
     error(song) {
