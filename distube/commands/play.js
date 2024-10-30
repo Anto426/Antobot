@@ -1,4 +1,5 @@
 const { CommandEmbed } = require("../../embed/distube/command");
+const { DynamicColor } = require("../../function/Color/DynamicColor");
 const { errorIndex } = require("../../function/err/errormenager");
 
 module.exports = {
@@ -28,20 +29,33 @@ module.exports = {
         try {
             const embedmsg = new CommandEmbed(interaction.guild, interaction.member);
             let songQuery = interaction.options.getString("song");
+            let dynamiccolor = new DynamicColor();
+            dynamiccolor.setNumcolorextract(2);
+            dynamiccolor.setThreshold(50);
+
+            interaction.reply("Caricamento...").catch((err) => {
+                console.error(err);
+            });
             embedmsg.init()
                 .then(async () => {
                     distube.play(channels[0] || channels[1], songQuery, {
                         member: interaction.member,
                         textChannel: interaction.channel,
                         message: songQuery.name
-                    }).then(() => {
+                    }).then(async() => {
                         let queue = distube.getQueue(interaction);
                         let song = distube.getQueue(interaction).songs[queue.songs.length - 1];
-                        interaction.reply({
-                            embeds: [embedmsg.play(song)]
+                        await dynamiccolor.setImgUrl(song.thumbnail).catch((err) => { console.error(err) });
+                        dynamiccolor.ExtractPalet().then((pallet) => {
+                            interaction.editReply({
+                                embeds: [embedmsg.play(song, dynamiccolor.ColorFunctions.rgbToHex(pallet[0][0], pallet[0][1], pallet[0][2]))],
+                                content : ""
+                            }).catch((err) => {
+                                console.error(err);
+                            });
                         }).catch((err) => {
                             console.error(err);
-                        })
+                        });
                         resolve(0);
                     }).catch((err) => {
                         console.log(err);

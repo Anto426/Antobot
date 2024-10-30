@@ -11,7 +11,7 @@ class CommandEmbed extends BaseEmbed {
         });
     }
 
-    play(song) {
+    play(song, songcolor) {
         return this.embed
             .setTitle("🎵 Traccia Aggiunta alla coda")
             .addFields(
@@ -23,7 +23,7 @@ class CommandEmbed extends BaseEmbed {
                 { name: '🔗 URL Artista', value: `[Clicca qui](${song.uploader.url.toString()})`, inline: true }
             )
             .setThumbnail(song.thumbnail)
-            .setColor(embedconfig.color.green);
+            .setColor(songcolor);
     }
 
     repeat(mode) {
