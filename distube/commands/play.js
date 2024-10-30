@@ -1,5 +1,5 @@
 const { CommandEmbed } = require("../../embed/distube/command");
-const { ErrEmbed } = require("../../embed/err/errembed");
+const { errorIndex } = require("../../function/err/errormenager");
 
 module.exports = {
     name: "play",
@@ -24,7 +24,7 @@ module.exports = {
         }]
     },
     async execute(interaction, channels) {
-
+    return new Promise((resolve, reject) => {
         try {
             const embedmsg = new CommandEmbed(interaction.guild, interaction.member);
             let songQuery = interaction.options.getString("song");
@@ -47,28 +47,17 @@ module.exports = {
                         })
                     }
                     ).catch((err) => {
-                        let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-                        embedmsg.init().then(() => {
-                            interaction.reply({ embeds: [embedmsg.playError()], ephemeral: true })
-                        }).catch((err) => {
-                            console.error(err);
-                        })
+                        console.log(err);
+                        reject(errorIndex.PLAY_ERROR);
                     })
                 })
 
         } catch (error) {
-            const embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-            console.error('Error playing the song:', error);
-            embedmsg.init()
-                .then(() => {
-                    interaction.reply({ embeds: [embedmsg.nottrackfoundError()], ephemeral: true }).catch((err) => {
-                        console.error(err);
-                    })
-                }
-                ).catch((err) => {
-                    console.log(err);
-                })
+            console.log(error);
+            reject(errorIndex.GENERIC_ERROR);
         }
+    })
+        
     }
 
 }
