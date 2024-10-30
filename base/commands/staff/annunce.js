@@ -1,8 +1,8 @@
 const { comandbembed } = require("../../../embed/base/command");
 const { ErrEmbed } = require("../../../embed/err/errembed");
 const { PermissionsBitField } = require("discord.js");
-const setting = require("../../../setting/settings.json");
 const { Cjson } = require("../../../function/file/json");
+const setting = require("../../../setting/settings.json");
 module.exports = {
     name: "announce",
     permisions: [PermissionsBitField.Flags.ManageGuild],
@@ -57,9 +57,7 @@ module.exports = {
             let thumbnail = interaction.options.getString('thumbnail');
             let image = interaction.options.getString('image');
             let color = interaction.options.getString('color');
-            console
             let embedcolor = color ? color.match(/^#(?:[0-9a-fA-F]{3}){1,2}$/) ? color : null : null;
-
             let everyone = tag ? interaction.guild.roles.everyone : "";
 
 
@@ -67,12 +65,12 @@ module.exports = {
             let json = new Cjson();
             let data = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig);
 
-            if (!data[interaction.guild.id].channel.rule || !interaction.guild.channels.cache.get(data[interaction.guild.id].channel.rule)) {
+            if (!data[interaction.guild.id].channel.events || !interaction.guild.channels.cache.get(data[interaction.guild.id].channel.events)) {
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
                 await embedmsg.init();
                 await interaction.reply({ embeds: [embedmsg.ChannelnotFoundError()], ephemeral: true });
             } else {
-                let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].channel.rule);
+                let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].channel.events);
                 await channel.send({ embeds: [embed.annunce(message, everyone, thumbnail, image, embedcolor)] });
                 await interaction.reply({
                     content: "Annuncio inviato con successo!",
