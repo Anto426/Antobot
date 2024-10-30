@@ -22,7 +22,8 @@ class CommandEmbed extends BaseEmbed {
                 { name: '🧑‍🎨 Artista', value: song.uploader.name.toString(), inline: true },
                 { name: '🔗 URL Artista', value: `[Clicca qui](${song.uploader.url.toString()})`, inline: true }
             )
-            .setThumbnail(song.thumbnail);
+            .setThumbnail(song.thumbnail)
+            .setColor(embedconfig.color.green);
     }
 
     repeat(mode) {
