@@ -1,5 +1,6 @@
 const { ChannelType } = require("discord.js");
 const { Check } = require("../check/check");
+const { errorIndex } = require("../../function/err/errormenager");
 
 class Security extends Check {
     constructor(interaction, command) {
@@ -13,18 +14,7 @@ class Security extends Check {
         this.isYou = false;
         this.command = command;
         this.interaction = interaction;
-        this.codeErr = {
-            genericError: 0,
-            ownerError: 1,
-            notPermissionError: 2,
-            botUserError: 3,
-            channelError: 4,
-            selfUserError: 5,
-            highPermissionError: 6,
-            notInVoiceChannelError: 7,
-            musicAlreadyPlayingError: 8,
-            listtrackError: 9
-        }
+        this.codeErr = errorIndex;
     }
 
     checkOwner(arr) {
@@ -138,16 +128,16 @@ class Security extends Check {
 
                 if (this.command.disTube.checkchannel) {
                     if (!result[0]) {
-                        result = this.codeErr.notInVoiceChannelError;
+                        result = this.codeErr.NOT_IN_VOICE_CHANNEL_ERROR;
                     } else {
                         if (result[1] && result[0].id != result[1].id) {
-                            result = this.codeErr.musicAlreadyPlayingError;
+                            result = this.codeErr.MUSIC_ALREADY_PLAYING_ERROR;
                         }
                     }
                 }
                 if (this.command.disTube.checklisttrack) {
                     if (!distube.getQueue(this.interaction)) {
-                        result = this.codeErr.listtrackError;
+                        result = this.codeErr.LIST_TRACK_ERROR;
                     }
                 }
                 if (Array.isArray(result)) {
@@ -158,7 +148,7 @@ class Security extends Check {
 
             } catch (err) {
                 console.log(err);
-                reject(this.codeErr.genericError);
+                reject(this.codeErr.GENERIC_ERROR);
             }
         });
     }
@@ -182,13 +172,13 @@ class Security extends Check {
                                 resolve(0);
                             }
                         } else {
-                            reject(this.codeErr.botUserError);
+                            reject(this.codeErr.BOT_USER_ERROR);
                         }
                     } else {
-                        reject(this.codeErr.selfUserError);
+                        reject(this.codeErr.SELF_USER_ERROR);
                     }
                 } else {
-                    reject(this.codeErr.ownerError);
+                    reject(this.codeErr.OWNER_ERROR);
                 }
             } else {
                 if (this.serverOwner || this.owner) {
@@ -205,10 +195,10 @@ class Security extends Check {
                                 resolve(0);
                             }
                         } else {
-                            reject(this.codeErr.botUserError);
+                            reject(this.codeErr.BOT_USER_ERROR);
                         }
                     } else {
-                        reject(this.codeErr.selfUserError);
+                        reject(this.codeErr.SELF_USER_ERROR);
                     }
                 } else {
                     if (this.staff) {
@@ -227,21 +217,21 @@ class Security extends Check {
                                             resolve(0);
                                         }
                                     } else {
-                                        reject(this.codeErr.channelError);
+                                        reject(this.codeErr.CHANNEL_ERROR);
                                     }
                                 } else {
-                                    reject(this.codeErr.selfUserError);
+                                    reject(this.codeErr.SELF_USER_ERROR);
                                 }
                             } else {
-                                reject(this.codeErr.botUserError);
+                                reject(this.codeErr.BOT_USER_ERROR);
                             }
                         } else {
-                            reject(this.codeErr.highPermissionError);
+                            reject(this.codeErr.HIGH_PERMISSION_ERROR);
                         }
 
 
                     } else {
-                        reject(this.codeErr.notPermissionError);
+                        reject(this.codeErr.NOT_PERMISSION_ERROR);
                     }
 
                 }

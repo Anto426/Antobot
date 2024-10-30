@@ -1,10 +1,10 @@
 
-const { ErrEmbed } = require("../../../../embed/err/errembed");
 const { Cjson } = require("../../../../function/file/json");
 const { BotConsole } = require("../../../../function/log/botConsole");
 const { Security } = require("../../../../function/security/security");
 
-const setting = require("../../../../setting/settings.json")
+const setting = require("../../../../setting/settings.json");
+const { ErrorManager, errorIndex } = require("../../../../function/err/errormenager");
 
 
 module.exports = {
@@ -12,20 +12,7 @@ module.exports = {
     typeEvent: "interactionCreate",
     allowevents: true,
     async execute(interaction) {
-        let erremb = new ErrEmbed(interaction.guild, interaction.member)
-        erremb.init()
-        let embedf = [
-            erremb.genericError,
-            erremb.ownerError,
-            erremb.notPermissionError,
-            erremb.botUserError,
-            erremb.ChannelError,
-            erremb.selfUserError,
-            erremb.highPermissionError,
-            erremb.notInVoiceChannelError,
-            erremb.musicAlreadyPlayingError,
-            erremb.listtrackError
-        ]
+        let errorManager = new ErrorManager(interaction.guild, interaction.member)
         if (!interaction.isChatInputCommand()) return;
         const command = client.commandg.get(interaction.commandName)
         let json = new Cjson();
@@ -51,13 +38,21 @@ module.exports = {
                 .then((result) => {
                     try {
                         if (Array.isArray(result)) {
-                            command.execute(interaction, result)
+                            command.execute(interaction, result).catch((err) => {
+                                interaction.reply({ embeds: [errorManager.getError(err)], ephemeral: true }).catch((err) => {
+                                    console.error(err);
+                                })
+                            })
                         } else {
-                            command.execute(interaction)
+                            command.execute(interaction).catch((err) => {
+                                interaction.reply({ embeds: [errorManager.getError(err)], ephemeral: true }).catch((err) => {
+                                    console.error(err);
+                                })
+                            })
                         }
 
                     } catch (err) {
-                        interaction.reply({ embeds: [erremb.genericError()], ephemeral: true }).catch((err) => {
+                        interaction.reply({ embeds: [errorManager.getError(errorIndex.GENERIC_ERROR)], ephemeral: true }).catch((err) => {
                             console.error(err);
                         })
                         new BotConsole().log("Errore durante esecuzione del comando", "red")
@@ -65,8 +60,7 @@ module.exports = {
                     }
                 })
                 .catch((err) => {
-                    console.log(err)
-                    interaction.reply({ embeds: [embedf[err].call(erremb)], ephemeral: true }).catch((err) => {
+                    interaction.reply({ embeds: [errorManager.getError(err)], ephemeral: true }).catch((err) => {
                         console.error(err);
                     })
                 })
