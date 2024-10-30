@@ -1,5 +1,5 @@
 const { CommandEmbed } = require("../../embed/distube/command");
-const { ErrEmbed } = require("../../embed/err/errembed");
+const { errorIndex } = require("../../function/err/errormenager");
 
 module.exports = {
     name: "pause",
@@ -18,31 +18,20 @@ module.exports = {
         description: "metti in pausa la canzone",
     },
     async execute(interaction) {
-
-
-        let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-
-
-        embedmsg.init()
-            .then(async () => {
-                distube.pause(interaction.guild)
-                interaction.reply({ embeds: [embedmsg.pause()] }).catch((err) => {
-                    console.error(err);
-                })
-
-            }).catch((err) => {
-                console.error(err);
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-                embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notpauseError()], ephemeral: true }).catch((err) => {
+        return new Promise((resolve, reject) => {
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+            embedmsg.init()
+                .then(async () => {
+                    distube.pause(interaction.guild)
+                    interaction.reply({ embeds: [embedmsg.pause()] }).catch((err) => {
                         console.error(err);
-                    });
+                    })
+                    resolve(0);
                 }).catch((err) => {
                     console.error(err);
+                    reject(errorIndex.GENERIC_ERROR);
                 });
-            });
-
-
+        })
     }
 
 }

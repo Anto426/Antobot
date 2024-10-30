@@ -1,5 +1,6 @@
 const { CommandEmbed } = require("../../embed/distube/command")
 const { ErrEmbed } = require("../../embed/err/errembed")
+const { errorIndex } = require("../../function/err/errormenager")
 
 module.exports = {
     name: "stop",
@@ -19,34 +20,21 @@ module.exports = {
     },
     async execute(interaction) {
 
-
-        let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-        embedmsg.init().then(() => {
-            distube.stop(interaction).then(() => {
-                interaction.reply({ embeds: [embedmsg.stop()] }).catch((err) => {
-                    console.error(err);
-                })
-            }).catch(() => {
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notstopError()], ephemeral: true }).catch((err) => {
+        return new Promise((resolve, reject) => {
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+            embedmsg.init().then(() => {
+                distube.stop(interaction).then(() => {
+                    interaction.reply({ embeds: [embedmsg.stop()] }).catch((err) => {
                         console.error(err);
                     })
-                }).catch((err) => {
-                    console.error(err);
-                })
-            })
-        }).catch((err) => {
-            console.error(err);
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-            embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.genericError()], ephemeral: true }).catch((err) => {
-                    console.error(err);
+                    resolve(0);
+                }).catch(() => {
+                    reject(errorIndex.NOT_STOP_ERROR)
                 })
             }).catch((err) => {
                 console.error(err);
             })
-        })
 
+        })
     }
 }

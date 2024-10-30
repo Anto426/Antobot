@@ -28,11 +28,8 @@ module.exports = {
         try {
             const embedmsg = new CommandEmbed(interaction.guild, interaction.member);
             let songQuery = interaction.options.getString("song");
-
-
             embedmsg.init()
                 .then(async () => {
-
                     distube.play(channels[0] || channels[1], songQuery, {
                         member: interaction.member,
                         textChannel: interaction.channel,
@@ -45,13 +42,12 @@ module.exports = {
                         }).catch((err) => {
                             console.error(err);
                         })
-                    }
-                    ).catch((err) => {
+                        resolve(0);
+                    }).catch((err) => {
                         console.log(err);
                         reject(errorIndex.PLAY_ERROR);
                     })
                 })
-
         } catch (error) {
             console.log(error);
             reject(errorIndex.GENERIC_ERROR);

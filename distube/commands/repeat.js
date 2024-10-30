@@ -1,6 +1,5 @@
-const { RepeatMode } = require("distube")
 const { CommandEmbed } = require("../../embed/distube/command")
-const { ErrEmbed } = require("../../embed/err/errembed")
+const { errorIndex } = require("../../function/err/errormenager")
 
 module.exports = {
     name: "repeat",
@@ -36,33 +35,21 @@ module.exports = {
     },
     async execute(interaction) {
 
-
-
-        let queue = distube.getQueue(interaction)
-        let mode = interaction.options.getInteger("mode")
-
-
-        let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-        embedmsg.init().then(() => {
-            queue.setRepeatMode(mode)
-            interaction.reply({ embeds: [embedmsg.repeat(mode)] }).catch((err) => {
-                console.error(err);
-            })
-        }).catch((err) => {
-            console.error(err);
-            let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
+        return new Promise((resolve, reject) => {
+            let queue = distube.getQueue(interaction)
+            let mode = interaction.options.getInteger("mode")
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
             embedmsg.init().then(() => {
-                interaction.reply({ embeds: [embedmsg.notrepeatError()], ephemeral: true }).catch((err) => {
+                queue.setRepeatMode(mode)
+                interaction.reply({ embeds: [embedmsg.repeat(mode)] }).catch((err) => {
                     console.error(err);
                 })
+                resolve(0);
             }).catch((err) => {
                 console.error(err);
+                reject(errorIndex.NOT_REPEAT_ERROR);
             })
         })
-
-
-
-
 
 
     }

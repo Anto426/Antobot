@@ -1,5 +1,5 @@
 const { CommandEmbed } = require("../../embed/distube/command");
-const { ErrEmbed } = require("../../embed/err/errembed");
+const { errorIndex } = require("../../function/err/errormenager");
 
 module.exports = {
     name: "resume",
@@ -19,28 +19,20 @@ module.exports = {
     },
     async execute(interaction) {
 
-
-        let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
-
-        embedmsg.init()
-            .then(async () => {
-                distube.resume(interaction.guild)
-                interaction.reply({ embeds: [embedmsg.resume()] }).catch((err) => {
-                    console.error(err);
-                })
-            }).catch((err) => {
-                console.error(err);
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member);
-                embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.notresumeError()], ephemeral: true }).catch((err) => {
+        return new Promise((resolve, reject) => {
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+            embedmsg.init()
+                .then(async () => {
+                    distube.resume(interaction.guild)
+                    interaction.reply({ embeds: [embedmsg.resume()] }).catch((err) => {
                         console.error(err);
-                    });
+                    })
+                    resolve(0);
                 }).catch((err) => {
+                    reject(errorIndex.PLAY_ERROR);
                     console.error(err);
                 });
-            });
-
-
+        })
     }
 
 }
