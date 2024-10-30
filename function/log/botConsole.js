@@ -19,11 +19,11 @@ class BotConsole {
         } else if (Array.isArray(data)) {
             message = data.join(', ');
         } else if (data instanceof Promise) {
-            message = colorize(await data, color);
+            message = await this.colorize(await data, color);
         } else if (typeof data === 'object') {
             message = JSON.stringify(data);
         } else {
-            message = String
+            message = String(data);
         }
 
         return `${selectedColor}${message}${this.colors.reset}`;
@@ -32,7 +32,7 @@ class BotConsole {
     async log(message, color) {
         const messageColored = await this.colorize(message, color ? color : "white");
         const separatorLength = messageColored.length + 6;
-        const separator = this.colorize("=".repeat(separatorLength), "white");
+        const separator = await this.colorize("=".repeat(separatorLength), "white");
 
         console.log(`${separator}\n=> ${messageColored}`);
     }

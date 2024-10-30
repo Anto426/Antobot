@@ -1,8 +1,9 @@
 const { Time } = require("../time/time");
 const { BotConsole } = require("../log/botConsole");
-const setting = require("../../setting/settings.json");
 const { Cjson } = require("../file/json");
 const { EventEmbed } = require("../../embed/base/events");
+const setting = require("../../setting/settings.json");
+
 class Holiday {
 
     constructor() {
@@ -155,6 +156,8 @@ class Holiday {
 
     }
 }
+
+
 
 
 module.exports = { Holiday }
