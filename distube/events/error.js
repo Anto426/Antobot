@@ -1,5 +1,4 @@
 const { EventEmbed } = require("../../embed/distube/events");
-const { ErrEmbed } = require("../../embed/err/errembed");
 
 module.exports = {
     name: "Error of distube",
