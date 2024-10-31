@@ -18,18 +18,18 @@ module.exports = {
 
         if (!channelbot) return;
 
-
-        if (isVoiceChannelEmpty(channelbot)) {
-            const voice = distube.voices.get(channelbot);
-            if (voice) {
-                const queue = distube.getQueue(guild);
-                if (queue) {
-                    distube.stop(guild);
+        setTimeout(() => {
+            if (isVoiceChannelEmpty(channelbot)) {
+                const voice = distube.voices.get(channelbot);
+                if (voice) {
+                    const queue = distube.getQueue(guild);
+                    if (queue) {
+                        distube.stop(guild);
+                    }
+                    voice.leave();
                 }
-                voice.leave();
             }
-        }
-
+        }, 1000 * 60 * 5);
 
     }
 }

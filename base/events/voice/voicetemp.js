@@ -19,8 +19,10 @@ module.exports = {
                     for (let x in jsonGuild[newMember.guild.id].channel.tempchannel) {
                         if (newMember && x != "id")
                             if (newMember.channel.id == jsonGuild[newMember.guild.id].channel.tempchannel[x].id) {
+                                let userLimit = jsonGuild[newMember.guild.id].channel.tempchannel[x].limit;
                                 if (channel) {
-                                    channel.setUserLimit(jsonGuild[newMember.guild.id].channel.tempchannel[x].limit);
+                                    if(channel.members.has(client.user.id)) userLimit++;
+                                    channel.setUserLimit(userLimit);
                                     member.voice.setChannel(channel);
                                     return;
                                 } else {
@@ -28,7 +30,7 @@ module.exports = {
                                         name: member.user.globalName.toString(),
                                         type: 2,
                                         parent: category,
-                                        userLimit: jsonGuild[newMember.guild.id].channel.tempchannel[x].limit,
+                                        userLimit: userLimit,
                                     });
                                     member.voice.setChannel(channel);
                                     return;
