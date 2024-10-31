@@ -39,10 +39,10 @@ class CommandEmbed extends BaseEmbed {
     skip(oldSong, newSong) {
         return this.embed
             .setTitle("⏭️ **Salta**")
-            .setDescription(`La canzone **${oldSong.title}** è stata saltata con successo! Ora in riproduzione: **${newSong.title}**`)
+            .setDescription(`La canzone **${oldSong.name}** è stata saltata con successo! Ora in riproduzione: **${newSong.name}**`)
             .addFields(
-                { name: "⏭️ **Canzone Precedente**", value: oldSong.title, inline: true },
-                { name: "▶️ **Canzone Attuale**", value: newSong.title, inline: true }
+                { name: "⏭️ **Canzone Precedente**", value: oldSong.name.toString(), inline: true },
+                { name: "▶️ **Canzone Attuale**", value: newSong.name.toString(), inline: true }
             )
             .setThumbnail(newSong.thumbnail || embedconfig.image.skip)
             .setColor(embedconfig.color.blue);
