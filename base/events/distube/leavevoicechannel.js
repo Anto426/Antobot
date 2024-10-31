@@ -2,7 +2,7 @@ const { ChannelType } = require("discord.js");
 const { isVoiceChannelEmpty } = require("distube");
 
 module.exports = {
-    name: "voiceStateUpdate",
+    name: "leavevoicechannel",
     typeEvent: "voiceStateUpdate",
     allowevents: true,
     async execute(oldState, newState) {

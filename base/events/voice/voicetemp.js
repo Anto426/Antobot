@@ -2,14 +2,13 @@ const { Cjson } = require("../../../function/file/json");
 
 const setting = require("../../../setting/settings.json")
 module.exports = {
-    name: "voicestateupdate",
+    name: "voicetemp",
     typeEvent: "voiceStateUpdate",
     allowevents: true,
     async execute(oldMember, newMember) {
         if (!newMember.member.user.bot) {
             let json = new Cjson;
             await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then(async (jsonGuild) => {
-
                 if (!jsonGuild[newMember.guild.id]) return;
                 let category = newMember.guild.channels.cache.get(jsonGuild[oldMember.guild.id].channel.tempchannel.id);
                 let member = newMember.guild.members.cache.get(newMember.id);
