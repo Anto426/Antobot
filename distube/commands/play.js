@@ -44,7 +44,7 @@ module.exports = {
                             message: songQuery.name
                         }).then(async () => {
                             let queue = distube.getQueue(interaction);
-                            let song = distube.getQueue(interaction).songs[queue.songs.length - 1];
+                            let song = queue.songs[queue.songs.length - 1];
                             await dynamiccolor.setImgUrl(song.thumbnail).catch((err) => { console.error(err) });
                             dynamiccolor.ExtractPalet().then((pallet) => {
                                 interaction.editReply({
