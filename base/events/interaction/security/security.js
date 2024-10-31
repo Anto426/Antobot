@@ -39,36 +39,23 @@ module.exports = {
                     try {
                         if (Array.isArray(result)) {
                             command.execute(interaction, result).catch((err) => {
-                                interaction.reply({ embeds: [errorManager.getError(err)], ephemeral: true }).catch((err) => {
-                                    console.error(err);
-                                })
+                                errorManager.replyError(interaction, err)
                             })
                         } else {
-                            command.execute(interaction).catch(async (err) => {
-                                interaction.reply({ embeds: [await errorManager.getError(err)], ephemeral: true }).catch((err) => {
-                                    console.error(err);
-                                })
+                            command.execute(interaction).catch((err) => {
+                                errorManager.replyError(interaction, err)
                             })
                         }
-
                     } catch (err) {
-                        interaction.reply({ embeds: [await errorManager.getError(errorIndex.GENERIC_ERROR)], ephemeral: true }).catch((err) => {
-                            console.error(err);
+                        errorManager.replyError(err).catch((err) => {
+                            errorManager.replyError(interaction, err)
                         })
-                        new BotConsole().log("Errore durante esecuzione del comando", "red")
-                        console.log(err)
                     }
                 })
                 .catch(async (err) => {
-                    interaction.reply({ embeds: [await errorManager.getError(err)], ephemeral: true }).catch((err) => {
-                        console.error(err);
-                    })
+                    errorManager.replyError(interaction, err)
                 })
         })
-
-
-
-
     }
 
 }

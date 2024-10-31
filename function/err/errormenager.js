@@ -8,7 +8,7 @@ class ErrorManager {
 
     async getError(errorCode) {
         const errEmbed = new ErrEmbed(this.guild, this.member);
-        await errEmbed.init(); 
+        await errEmbed.init();
         const errorHandlers = [
             errEmbed.genericError,
             errEmbed.notPermissionError,
@@ -50,6 +50,25 @@ class ErrorManager {
         ];
 
         return (errorHandlers[errorCode] || errEmbed.genericError).call(errEmbed);
+    }
+
+    async replyError(interaction, errorCode) {
+        const errorEmbed = await this.getError(errorCode);
+        if (interaction.replied) {
+            interaction.editReply({
+                embeds: [errorEmbed],
+                content: null
+            }).catch((err) => {
+                console.error(err);
+            });
+        } else {
+            interaction.reply({
+                embeds: [errorEmbed],
+                content: null
+            }).catch((err) => {
+                console.error(err);
+            });
+        }
     }
 }
 
