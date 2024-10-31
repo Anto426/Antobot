@@ -21,7 +21,7 @@ module.exports = {
                             if (newMember.channel.id == jsonGuild[newMember.guild.id].channel.tempchannel[x].id) {
                                 let userLimit = jsonGuild[newMember.guild.id].channel.tempchannel[x].limit;
                                 if (channel) {
-                                    if(channel.members.has(client.user.id)) userLimit++;
+                                    if(channel.members.has(client.user.id)) userLimit != 0 ? userLimit = userLimit + 1 : userLimit = 0;
                                     channel.setUserLimit(userLimit);
                                     member.voice.setChannel(channel);
                                     return;
