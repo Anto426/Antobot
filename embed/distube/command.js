@@ -27,13 +27,16 @@ class CommandEmbed extends BaseEmbed {
     }
 
     repeat(mode) {
+        const modeDescription = mode ? (mode === 2 ? '🔁 Ripeti coda' : '🔂 Ripeti canzone') : "⏹️ Off";
         return this.embed
-            .setTitle("🔁 Ripetizione")
+            .setTitle("🔁 **Ripetizione**")
             .setDescription("Il modo di ripetizione è stato cambiato con successo!")
             .addFields(
-                { name: "Stato", value: mode ? (mode === 2 ? 'Ripeti coda' : 'Ripeti canzone') : "Off", inline: true }
+                { name: "🔄 **Stato**", value: modeDescription, inline: true },
+                { name: "💡 **Suggerimento**", value: "Usa il comando `/repeat` per cambiare il modo di ripetizione.", inline: true }
             )
-            .setThumbnail(embedconfig.image.repeat);
+            .setThumbnail(embedconfig.image.repeat)
+            .setColor(embedconfig.color.orange);
     }
 
     skip(oldSong, newSong) {
