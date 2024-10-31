@@ -23,7 +23,9 @@ module.exports = {
             embedmsg.init()
                 .then(async () => {
                     distube.pause(interaction.guild)
-                    interaction.reply({ embeds: [embedmsg.pause()] }).catch((err) => {
+                const queue = distube.getQueue(interaction.guild);
+                    const currentTrack = queue.songs[0];
+                    interaction.reply({ embeds: [embedmsg.pause(currentTrack)] }).catch((err) => {
                         console.error(err);
                     })
                     resolve(0);

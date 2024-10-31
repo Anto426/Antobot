@@ -27,7 +27,6 @@ module.exports = {
     async execute(interaction) {
         
         return new Promise((resolve, reject) => {
-
             let queue = distube.getQueue(interaction)
             let temp = interaction.options.getInteger("volume")
             let volume = (temp < 100 ? (temp ? temp : 0) : 100)

@@ -23,8 +23,8 @@ module.exports = {
             let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
             embedmsg.init()
                 .then(async () => {
-                    distube.resume(interaction.guild)
-                    interaction.reply({ embeds: [embedmsg.resume()] }).catch((err) => {
+                    let queen = await distube.resume(interaction.guild)
+                    interaction.reply({ embeds: [embedmsg.resume(queen.songs[0])] }).catch((err) => {
                         console.error(err);
                     })
                     resolve(0);
