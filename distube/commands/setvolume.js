@@ -1,5 +1,4 @@
 const { CommandEmbed } = require("../../embed/distube/command")
-const { ErrEmbed } = require("../../embed/err/errembed")
 const { errorIndex } = require("../../function/err/errormenager")
 
 module.exports = {
@@ -25,7 +24,7 @@ module.exports = {
         }]
     },
     async execute(interaction) {
-        
+
         return new Promise((resolve, reject) => {
             let queue = distube.getQueue(interaction)
             let temp = interaction.options.getInteger("volume")

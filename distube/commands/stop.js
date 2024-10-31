@@ -1,5 +1,4 @@
 const { CommandEmbed } = require("../../embed/distube/command")
-const { ErrEmbed } = require("../../embed/err/errembed")
 const { errorIndex } = require("../../function/err/errormenager")
 
 module.exports = {

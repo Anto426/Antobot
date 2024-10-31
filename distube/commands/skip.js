@@ -1,5 +1,4 @@
 const { CommandEmbed } = require("../../embed/distube/command")
-const { ErrEmbed } = require("../../embed/err/errembed")
 const { errorIndex } = require("../../function/err/errormenager")
 
 module.exports = {
@@ -23,19 +22,16 @@ module.exports = {
         return new Promise((resolve, reject) => {
             let queue = distube.getQueue(interaction)
             if (queue.songs.length == 1) {
-                let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
-                embedmsg.init().then(() => {
-                    reject(errorIndex.NOT_TRACK_SKIPABLE_ERROR)
-                }).catch(() => {
-                    console.error(err);
-                })
+                reject(errorIndex.NOT_TRACK_SKIPABLE_ERROR)
             } else {
                 let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    distube.skip(interaction)
-                    interaction.reply({ embeds: [embedmsg.skip()] }).catch((err) => {
+                    let currentTrack = queue.songs[0];
+                    let nextTrack = queue.songs[1];
+                    distube.skip(interaction);
+                    interaction.reply({ embeds: [embedmsg.skip(currentTrack, nextTrack)] }).catch((err) => {
                         console.error(err);
-                    })
+                    });
                     resolve(0);
                 }).catch((err) => {
                     console.error(err);
