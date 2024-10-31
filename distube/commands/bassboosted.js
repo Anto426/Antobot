@@ -2,7 +2,7 @@ const { CommandEmbed } = require("../../embed/distube/command")
 const { errorIndex } = require("../../function/err/errormenager")
 
 module.exports = {
-    name: "bastboosted",
+    name: "bassboosted",
     permisions: [],
     allowedchannels: true,
     allowebot: true,
@@ -14,7 +14,7 @@ module.exports = {
         checklisttrack: true
     },
     data: {
-        name: "bastboosted",
+        name: "bassboosted",
         description: "volume boost",
         options: [{
             name: "volume",
