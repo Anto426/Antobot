@@ -415,7 +415,7 @@ class initguildpagebuilder {
                             let guild = interaction.guild, allowcommandchennelname, roleChannel, annunceChannel, welcomeChannel, userroledefault, botroledefault, hollyday, tempchannel, log, boostchannel
                             let temp = []
                             data[interaction.guild.id].channel.allowchannel.forEach((element) => {
-                                temp.push(guild.channels.cache.get(element).name)
+                                temp.push(guild.channels.cache.get(element))
                             })
                             allowcommandchennelname = temp.join("\n")
                             roleChannel = guild.channels.cache.get(data[interaction.guild.id].channel.rule) ? guild.channels.cache.get(data[interaction.guild.id].channel.rule).name : "Non impostato"

@@ -84,7 +84,7 @@ class Holiday {
         try {
             let eventebed = new EventEmbed(channelcongratulation.guild)
             eventebed.init().then(() => {
-                channelcongratulation.send({ embeds: [eventebed.holiday(holiday, channelcongratulation.guild)] })
+                channelcongratulation.send({ embeds: [eventebed.holiday(holiday, channelcongratulation.guild)] }).catch((err) => { console.log(err); })
             }).catch((err) => { console.log(err); this.botconsole.log("Errore nell'inizializzare l'embed", "red") })
             this.cleartimer(this.guildid[channelcongratulation.guild.id].id, this.guildid[channelcongratulation.guild.id].id0)
             delete this.guildid[channelcongratulation.guild.id];
@@ -113,8 +113,8 @@ class Holiday {
                 let now = this.Time.getCurrentTimestamp()
                 let diff = holiday.timestamp - now
                 if (diff >= 0) {
-                    namechannel.setName(holiday.emoji + " " + holiday.name)
-                    timerchannel.setName(this.Time.fortmatTimestamp(diff))
+                    namechannel.setName(holiday.emoji + " " + holiday.name).catch((err) => { console.log(err); })
+                    timerchannel.setName(this.Time.fortmatTimestamp(diff)).catch((err) => { console.log(err); })
                 }
             }, 300000)
 
