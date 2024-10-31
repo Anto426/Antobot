@@ -15,7 +15,7 @@ module.exports = {
     },
     data: {
         name: "bassboosted",
-        description: "volume boost",
+        description: "setvolume extreme",
         options: [{
             name: "volume",
             description: "volume",
