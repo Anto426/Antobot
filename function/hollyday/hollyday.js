@@ -12,8 +12,7 @@ class Holiday {
         this.hollydayjson = {}
         this.guildJson = {}
         this.arrholiday = []
-        this.id = 0
-        this.id0 = 0
+        this.guildid = {}
         this.botconsole = new BotConsole()
         this.year = parseInt(this.Time.getCurrentYear())
     }
@@ -41,7 +40,6 @@ class Holiday {
                     reject(-1)
                 } else {
                     let temp = {}
-
                     for (let i = 0; i < this.arrholiday.length; i++) {
                         let day = this.arrholiday[i].date.day
                         let month = this.arrholiday[i].date.month
@@ -72,10 +70,10 @@ class Holiday {
 
     }
 
-    cleartimer() {
+    cleartimer(id, id0) {
         try {
-            clearInterval(this.id)
-            clearInterval(this.id0)
+            clearInterval(id)
+            clearInterval(id0)
         } catch (err) {
             console.log(err)
             this.botconsole.log("Errore nel cancellare il timer", "red")
@@ -89,8 +87,12 @@ class Holiday {
                 channelcongratulation.send({ embeds: [eventebed.holiday(holiday, channelcongratulation.guild)] })
             }).catch((err) => { console.log(err); this.botconsole.log("Errore nell'inizializzare l'embed", "red") })
             this.botconsole.log("E' arrivato il giorno della festività " + holiday.name, "green")
-            this.cleartimer()
-            this.main()
+            this.cleartimer(this.guildid[channelcongratulation.guild.id].id, this.guildid[channelcongratulation.guild.id].id0)
+            delete this.guildid[channelcongratulation.guild.id];
+            console.log(Object.keys(this.guildid).length === 0)
+            if (Object.keys(this.guildid).length > 0) {
+                this.main()
+            }
         } catch (err) {
             console.log(err)
             this.botconsole.log("Errore nell'invio del messaggio di congratulazioni", "red")
@@ -100,7 +102,8 @@ class Holiday {
     async TimeToHoliday(holiday, namechannel, timerchannel, congratulation) {
 
         try {
-            this.id = setInterval(() => {
+            this.guildid[congratulation.guild.id] = {};
+            this.guildid[congratulation.guild.id].id = setInterval(() => {
                 let now = this.Time.getCurrentTimestamp()
                 let diff = holiday.timestamp - now
                 if (diff <= 0) {
@@ -108,7 +111,7 @@ class Holiday {
                 }
             }, 60000)
 
-            this.id0 = setInterval(() => {
+            this.guildid[congratulation.guild.id].id0 = setInterval(() => {
                 let now = this.Time.getCurrentTimestamp()
                 let diff = holiday.timestamp - now
                 if (diff >= 0) {
@@ -151,7 +154,7 @@ class Holiday {
             })
 
 
-        }).catch(() => {  })
+        }).catch(() => { })
 
 
     }
