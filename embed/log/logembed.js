@@ -2,8 +2,8 @@ const { Time } = require("../../function/time/time");
 const { BaseEmbed } = require("../baseembed");
 
 class logembed extends BaseEmbed {
-    constructor(guild, member) {
-        super(guild, member);
+    constructor(guild, member, image) {
+        super(guild, member, image)
         this.package = require("../../package.json");
         this.Time = new Time();
 

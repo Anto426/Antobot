@@ -3,8 +3,9 @@ const packagejson = require("../../package.json");
 const { ChannelType } = require("discord.js");
 const { Time } = require("../../function/time/time");
 class comandbembed extends BaseEmbed {
-    constructor(guild, member) {
-        super(guild, member)
+    
+    constructor(guild, member, image) {
+        super(guild, member, image)
         this.packagejson = require("../../package.json")
     }
 
@@ -525,7 +526,7 @@ class comandbembed extends BaseEmbed {
 
 
     githubcreator(data) {
-        return this.embed
+        this.embed
             .setTitle("👑 Sviluppatore")
             .setDescription(`Ecco le informazioni sullo sviluppatore`)
             .addFields(
@@ -561,6 +562,8 @@ class comandbembed extends BaseEmbed {
 
             )
             .setThumbnail(data.avatar_url)
+
+        return this.embed
 
     }
 

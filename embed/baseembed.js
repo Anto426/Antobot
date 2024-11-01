@@ -2,11 +2,12 @@ const { EmbedBuilder } = require("discord.js")
 const { DynamicColor } = require("../function/Color/DynamicColor")
 
 class BaseEmbed {
-    constructor(guild, member) {
+    constructor(guild, member, image = client.user.displayAvatarURL() ) {
         this.guild = guild
         this.member = member
         this.embed = new EmbedBuilder()
         this.color = new DynamicColor()
+        this.image = image
     }
     init() {
         return new Promise(async (resolve, reject) => {
@@ -36,7 +37,7 @@ class BaseEmbed {
                         })
                     });
 
-                await this.color.setImgUrl(client.user.displayAvatarURL().replace("webp", "png"))
+                await this.color.setImgUrl(this.image)
                 this.color.setThreshold(50)
                 this.color.setNumcolorextract(2)
                 await this.color.ExtractPalet().then((palette) => {

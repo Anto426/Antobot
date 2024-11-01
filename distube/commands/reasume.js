@@ -19,11 +19,12 @@ module.exports = {
     },
     async execute(interaction) {
 
-        return new Promise((resolve, reject) => {
-            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+        return new Promise(async (resolve, reject) => {
+
+            let queen = await distube.resume(interaction.guild)
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member, queen.songs[0].thumbnail);
             embedmsg.init()
                 .then(async () => {
-                    let queen = await distube.resume(interaction.guild)
                     interaction.reply({ embeds: [embedmsg.resume(queen.songs[0])] }).catch((err) => {
                         console.error(err);
                     })

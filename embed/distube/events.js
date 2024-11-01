@@ -1,8 +1,8 @@
 const { BaseEmbed } = require("../baseembed");
 
 class EventEmbed extends BaseEmbed {
-    constructor(guild, member) {
-        super(guild, member);
+    constructor(guild, member, image) {
+        super(guild, member, image)
     }
 
     init() {
@@ -11,7 +11,7 @@ class EventEmbed extends BaseEmbed {
         });
     }
 
-    trackStart(queen, song, colorqueue) {
+    trackStart(queen, song) {
         return this.embed
             .setTitle("🎵 Traccia in riproduzione")
             .setDescription(`${song.name} è in riproduzione ora!`)
@@ -25,7 +25,6 @@ class EventEmbed extends BaseEmbed {
                 { name: '🧑‍🎨 Artist', value: `[${song.uploader.name}](${song.uploader.url})`, inline: false },
             )
             .setThumbnail(song.thumbnail)
-            .setColor(colorqueue);
     }
 
     error(song) {

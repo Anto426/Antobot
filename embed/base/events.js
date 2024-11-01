@@ -5,8 +5,8 @@ const { createCanvas, loadImage, registerFont } = require("canvas")
 const setting = require("./../../setting/settings.json");
 const fetch = require('node-fetch');
 class EventEmbed extends BaseEmbed {
-    constructor(guild, member) {
-        super(guild, member)
+    constructor(guild, member, image) {
+        super(guild, member, image)
     }
 
     init() {

@@ -1,8 +1,8 @@
 const { BaseEmbed } = require("../baseembed");
 
 class CommandEmbed extends BaseEmbed {
-    constructor(guild, member) {
-        super(guild, member);
+    constructor(guild, member, image) {
+        super(guild, member, image)
     }
 
     init() {
@@ -11,7 +11,7 @@ class CommandEmbed extends BaseEmbed {
         });
     }
 
-    play(song, songcolor) {
+    play(song) {
         return this.embed
             .setTitle("🎵 Traccia Aggiunta alla coda")
             .addFields(
@@ -22,11 +22,16 @@ class CommandEmbed extends BaseEmbed {
                 { name: '🧑‍🎨 Artist', value: `[${song.uploader.name}](${song.uploader.url})`, inline: false },
             )
             .setThumbnail(song.thumbnail)
-            .setColor(songcolor);
     }
 
     repeat(mode) {
-        const modeDescription = mode ? (mode === 2 ? '🔁 Ripeti coda' : '🔂 Ripeti canzone') : "⏹️ Off";
+        const modeDescriptions = {
+            0: "⏹️ Off",
+            1: "🔂 Ripeti canzone",
+            2: "🔁 Ripeti coda"
+        };
+        const modeDescription = modeDescriptions[mode] || "⏹️ Off";
+
         return this.embed
             .setTitle("🔁 **Ripetizione**")
             .setDescription("Il modo di ripetizione è stato cambiato con successo!")
@@ -34,7 +39,7 @@ class CommandEmbed extends BaseEmbed {
                 { name: "🔄 **Stato**", value: modeDescription, inline: true },
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/repeat` per cambiare il modo di ripetizione.", inline: true }
             )
-            .setThumbnail(embedconfig.image.repeat)
+            .setThumbnail(embedconfig.image.repeat);
     }
 
     skip(oldSong, newSong) {
@@ -48,13 +53,15 @@ class CommandEmbed extends BaseEmbed {
             .setThumbnail(newSong.thumbnail || embedconfig.image.skip)
     }
 
-    stop() {
+    stop(queen) {
         return this.embed
             .setTitle("⏹️ **Stop**")
             .setDescription("La coda è stata pulita con successo!")
             .addFields(
-                { name: "🛑 **Stato**", value: "Fermato", inline: true },
-                { name: "💡 **Suggerimento**", value: "Usa il comando `/play` per aggiungere nuove tracce alla coda.", inline: true }
+                { name: "🛑 **Stato**", value: "Stop", inline: true },
+                { name: "🎵 **Canzoni Rimosse**", value: `${queen.length} canzoni`, inline: false },
+                { name: "💡 **Suggerimento**", value: "Usa il comando `/play` per aggiungere nuove tracce alla coda.", inline: false }
+
             )
             .setThumbnail(embedconfig.image.stop)
     }
@@ -82,7 +89,12 @@ class CommandEmbed extends BaseEmbed {
             .setDescription(`La canzone **${song.name}** è stata messa in pausa con successo!`)
             .addFields(
                 { name: "⏸️ **Stato**", value: "In pausa", inline: true },
-                { name: "💡 **Suggerimento**", value: "Usa il comando `/resume` per riprendere la riproduzione.", inline: true } // Suggerimento utile
+                { name: '🎶 Name', value: `[${song.name}](${song.url})`, inline: false },
+                { name: '⌚ Duration', value: song.formattedDuration, inline: true },
+                { name: '👁️ Views', value: song.views.toString(), inline: true },
+                { name: '💖 Like', value: song.likes.toString(), inline: true },
+                { name: '🧑‍🎨 Artist', value: `[${song.uploader.name}](${song.uploader.url})`, inline: false },
+                { name: "💡 **Suggerimento**", value: "Usa il comando `/resume` per riprendere la riproduzione.", inline: true }
             )
             .setThumbnail(song.thumbnail || embedconfig.image.pause)
     }
@@ -91,12 +103,17 @@ class CommandEmbed extends BaseEmbed {
     resume(song) {
         return this.embed
             .setTitle("▶️ **Riprendi**")
-            .setDescription(`La canzone **${song.name}** è stata ripresa con successo!`)
+            .setDescription(`La canzone **[${song.name}](${song.url})** è stata ripresa con successo!`)
             .addFields(
-                { name: "▶️ **Stato**", value: "In riproduzione", inline: true },
-                { name: "💡 **Suggerimento**", value: "Usa il comando `/pause` per mettere in pausa la riproduzione.", inline: true } // Suggerimento utile
+                { name: "▶️ **Stato**", value: "In riproduzione", inline: false },
+                { name: '🎶 Name', value: `[${song.name}](${song.url})`, inline: false },
+                { name: '⌚ Duration', value: song.formattedDuration, inline: true },
+                { name: '👁️ Views', value: song.views.toString(), inline: true },
+                { name: '💖 Like', value: song.likes.toString(), inline: true },
+                { name: '🧑‍🎨 Artist', value: `[${song.uploader.name}](${song.uploader.url})`, inline: false },
+                { name: "💡 **Suggerimento**", value: "Usa il comando `/pause` per mettere in pausa la riproduzione.", inline: false },
             )
-            .setThumbnail(song.thumbnail || embedconfig.image.resume)
+            .setThumbnail(song.thumbnail || embedconfig.image.resume);
     }
 
 
