@@ -76,7 +76,6 @@ class comandbembed extends BaseEmbed {
                 .setTitle("🔄 Riscrittura Comandi in corso")
                 .setDescription("⏳ La Riscrittura dei comandi è in corso")
                 .setThumbnail(embedconfig.image.load)
-                .setColor(embedconfig.color.yellow)
 
         } else if (status == 1) {
             this.embed
@@ -604,7 +603,6 @@ class comandbembed extends BaseEmbed {
     commandInformation(command, data) {
         return this.embed
             .setTitle(`${data.command[command.name].emoji}  ${command.name}`)
-            .setColor(embedconfig.color.green)
             .setDescription(data.command[command.name].description)
             .setThumbnail(data.command[command.name].image)
             .addFields(
@@ -640,7 +638,6 @@ class comandbembed extends BaseEmbed {
                 format: "png",
                 size: 512
             }))
-            .setColor("#00FF00")
             .addFields(
                 {
                     name: "📅 Data di Creazione",
@@ -658,7 +655,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`📜 Configurazione Canali | Pagina ${pageNumber}`)
             .setDescription("📋 Seleziona i canali in cui il bot può eseguire i comandi.")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#FFA500")
     }
 
     SetRulechannel(pageNumber) {
@@ -666,7 +662,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`📜 Configurazione canale delle regole | Pagina ${pageNumber}`)
             .setDescription("📋 Seleziona il canale delle regole.")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#FFA500")
     }
 
     SetAnnuncechannel(pageNumber) {
@@ -674,7 +669,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`📜 Configurazione canale degli annunci. | Pagina ${pageNumber}`)
             .setDescription("📋 Seleziona il canale degli annunci.")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#FFA500")
     }
 
     SetWelcomechannel(pageNumber) {
@@ -682,7 +676,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`📜 Configurazione canale di benvenuto. | Pagina ${pageNumber}`)
             .setDescription("📋 Seleziona il canale di benvenuto.")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#FFA500")
     }
 
     SetBoosterchannel(pageNumber) {
@@ -690,7 +683,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`📜 Configurazione canale dei boost | Pagina ${pageNumber}`)
             .setDescription("📋 Seleziona il canale dei boost.")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#FFA500")
     }
 
     SetLogchannel(pageNumber) {
@@ -698,7 +690,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`📜 Configurazione canale dei log | Pagina ${pageNumber}`)
             .setDescription("📋 Seleziona il canale dei log.")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#FFA500")
     }
 
     SetDefaultRole(pageNumber) {
@@ -706,7 +697,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`🎭 Configurazione ruolo di default | Pagina ${pageNumber}`)
             .setDescription("📋 Seleziona il ruolo di default.")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#0000FF")
     }
 
     SetBotRole(pageNumber) {
@@ -714,7 +704,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`🎭 Configurazione ruolo del bot | Pagina ${pageNumber}`)
             .setDescription("📋 Seleziona il ruolo del bot.")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#0000FF")
     }
 
     AllowHollyday() {
@@ -722,7 +711,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`📦 Modulo della festività`)
             .setDescription("❓ Vuoi abilitare il modulo della festività?")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#FFA500")
     }
 
     AllowTempChannel() {
@@ -730,7 +718,6 @@ class comandbembed extends BaseEmbed {
             .setTitle(`📦 Modulo Canali temporanei`)
             .setDescription("❓ Vuoi abilitare i canali temporanei?")
             .setThumbnail(embedconfig.image.load)
-            .setColor("#FFA500")
     }
 
 
@@ -743,7 +730,6 @@ class comandbembed extends BaseEmbed {
                 format: "png",
                 size: 512
             }))
-            .setColor("#FFA500")
             .addFields(
                 {
                     name: "📜 Canali Comandi",

@@ -297,7 +297,6 @@ class logembed extends BaseEmbed {
                 format: "png",
                 size: 512
             }))
-            .setColor(embedconfig.color.green)
     }
 
     roleCreate(role) {
@@ -631,7 +630,6 @@ class logembed extends BaseEmbed {
                 }).join("\n")
             }
             )
-            .setColor(embedconfig.color.blue);
     }
 
 
