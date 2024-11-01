@@ -24,6 +24,14 @@ class ClientInit {
             try {
                 global.client = new Client({
                     intents: 3276799,
+
+                    allowedMentions: {
+                        parse: ["users", "roles", "everyone"],
+                        repliedUser: true,
+                        roles: true,
+                        users: true
+                    },
+
                     partials: [
                         Partials.Channel,
                         Partials.GuildMember,
