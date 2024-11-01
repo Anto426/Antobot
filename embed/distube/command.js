@@ -15,12 +15,11 @@ class CommandEmbed extends BaseEmbed {
         return this.embed
             .setTitle("🎵 Traccia Aggiunta alla coda")
             .addFields(
-                { name: '🎶 Nome', value: song.name.toString(), inline: true },
-                { name: '🔗 URL Canzone', value: `[Clicca qui](${song.url.toString()})`, inline: true },
-                { name: '⌚ Durata', value: song.formattedDuration.toString(), inline: true },
-                { name: '👁️ Visualizzazioni', value: song.views.toString(), inline: true },
-                { name: '🧑‍🎨 Artista', value: song.uploader.name.toString(), inline: true },
-                { name: '🔗 URL Artista', value: `[Clicca qui](${song.uploader.url.toString()})`, inline: true }
+                { name: '🎶 Name', value: `[${song.name}](${song.url})`, inline: false },
+                { name: '⌚ Duration', value: song.formattedDuration, inline: true },
+                { name: '👁️ Views', value: song.views.toString(), inline: true },
+                { name: '💖 Like', value: song.likes.toString(), inline: true },
+                { name: '🧑‍🎨 Artist', value: `[${song.uploader.name}](${song.uploader.url})`, inline: false },
             )
             .setThumbnail(song.thumbnail)
             .setColor(songcolor);
