@@ -25,8 +25,8 @@ class EventEmbed extends BaseEmbed {
 
                 let dynamicColor = new DynamicColor()
                 let ColorFunctions = dynamicColor.ColorFunctions
-                let canvas =  createCanvas(1700, 600)
-                let ctx =  canvas.getContext("2d")
+                let canvas = createCanvas(1700, 600)
+                let ctx = canvas.getContext("2d")
                 let Numcolor = 3;
                 let distancecoloror = canvas.width / Numcolor;
                 let position = 0;
@@ -80,17 +80,17 @@ class EventEmbed extends BaseEmbed {
                     ctx.clip();
                     ctx.drawImage(img, 150, canvas.height / 2 - 300 / 2, 300, 300);
                     ctx.restore();
-                    ctx.lineWidth = 5; 
-                    ctx.strokeStyle = ColorFunctions.ArrayToRgb(PalletandText.textcolor); 
-                    ctx.beginPath(); 
+                    ctx.lineWidth = 5;
+                    ctx.strokeStyle = ColorFunctions.ArrayToRgb(PalletandText.textcolor);
+                    ctx.beginPath();
                     ctx.arc(150 + 300 / 2, canvas.height / 2, 150, 0, 2 * Math.PI, false); // Disegna il cerchio
-                    ctx.stroke(); 
+                    ctx.stroke();
                     ctx.fillStyle = ColorFunctions.ArrayToRgb(PalletandText.textcolor);
                     ctx.textBaseline = "middle"
                     ctx.font = "80px asapCondensed"
                     ctx.fillText("Benvenuto", 500, 200)
                     ctx.font = "100px asapCondensed", "100px NotoSansJP-Bold"
-                    ctx.fillText((member.user.globalName ? member.user.globalName :  member.user.username).slice(0, 25), 500, canvas.height / 2)
+                    ctx.fillText((member.user.globalName ? member.user.globalName : member.user.username).slice(0, 25), 500, canvas.height / 2)
                     ctx.font = "50px asapCondensed"
                     ctx.fillText(`${count}° membro`, 500, 400)
                     let attachment = new AttachmentBuilder(canvas.toBuffer(), { name: "welcomecanavas.png" })
