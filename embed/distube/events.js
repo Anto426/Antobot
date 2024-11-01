@@ -33,12 +33,9 @@ class EventEmbed extends BaseEmbed {
             .setDescription("Si è verificato un errore durante la riproduzione della canzone!")
             .addFields(
                 { name: '🎶 Name', value: `[${song.name}](${song.url})`, inline: false },
-                { name: '🔗 URL Song', value: `[Clicca qui](${song.url})`, inline: true },
+                { name: '⌚ Duration', value: song.formattedDuration, inline: true },
                 { name: '👁️ Views', value: song.views.toString(), inline: true },
                 { name: '💖 Like', value: song.likes.toString(), inline: true },
-                { name: '⌚ Duration', value: song.formattedDuration, inline: true },
-                { name: "🔊 Volume", value: queen.volume.toString(), inline: true },
-                { name: "💫 Autoplay", value: queen.autoplay ? "🟢 Attivato" : "🔴 Disattivato", inline: true },
                 { name: '🧑‍🎨 Artist', value: `[${song.uploader.name}](${song.uploader.url})`, inline: false },
             )
             .setThumbnail(embedconfig.image.error);
