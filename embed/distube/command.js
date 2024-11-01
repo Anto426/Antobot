@@ -80,7 +80,6 @@ class CommandEmbed extends BaseEmbed {
                 { name: "🔊 **Livello Volume**", value: `${volume}%`, inline: true },
                 { name: "📊 **Barra Volume**", value: coloredVolumeBar, inline: true }
             )
-            .setThumbnail(embedconfig.image.volume);
     }
 
     pause(song) {
@@ -103,7 +102,7 @@ class CommandEmbed extends BaseEmbed {
     resume(song) {
         return this.embed
             .setTitle("▶️ **Riprendi**")
-            .setDescription(`La canzone **[${song.name}](${song.url})** è stata ripresa con successo!`)
+            .setDescription(`La canzone **${song.name}** è stata ripresa con successo!`)
             .addFields(
                 { name: "▶️ **Stato**", value: "In riproduzione", inline: false },
                 { name: '🎶 Name', value: `[${song.name}](${song.url})`, inline: false },
