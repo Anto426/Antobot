@@ -1,5 +1,4 @@
 const { CommandEmbed } = require("../../embed/distube/command");
-const { DynamicColor } = require("../../function/Color/DynamicColor");
 const { errorIndex } = require("../../function/err/errormenager");
 
 module.exports = {
