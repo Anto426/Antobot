@@ -83,7 +83,7 @@ class CommandEmbed extends BaseEmbed {
     pause(song) {
         return this.embed
             .setTitle("⏸️ **Pausa**")
-            .setDescription(`La canzone **${song.title}** è stata messa in pausa con successo!`)
+            .setDescription(`La canzone **${song.name}** è stata messa in pausa con successo!`)
             .addFields(
                 { name: "⏸️ **Stato**", value: "In pausa", inline: true },
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/resume` per riprendere la riproduzione.", inline: true } // Suggerimento utile
@@ -96,7 +96,7 @@ class CommandEmbed extends BaseEmbed {
     resume(song) {
         return this.embed
             .setTitle("▶️ **Riprendi**")
-            .setDescription(`La canzone **${song.title}** è stata ripresa con successo!`)
+            .setDescription(`La canzone **${song.name}** è stata ripresa con successo!`)
             .addFields(
                 { name: "▶️ **Stato**", value: "In riproduzione", inline: true },
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/pause` per mettere in pausa la riproduzione.", inline: true } // Suggerimento utile
