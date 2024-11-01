@@ -28,24 +28,24 @@ module.exports = {
     async execute(interaction) {
 
         return new Promise((resolve, reject) => {
-            let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member, queen.songs[0].thumbnail);
             let exit = interaction.options.getBoolean("exit_on_channel") || false
-            embedmsg.init().then(() => {
-                distube.stop(interaction).then(() => {
-                    console.log(exit)
-                    if (exit)
-                        distube.voices.leave(interaction.guild.id)
-                    interaction.reply({ embeds: [embedmsg.stop()] }).catch((err) => {
+            distube.stop(interaction).then(() => {
+                console.log(exit)
+                if (exit)
+                    distube.voices.leave(interaction.guild.id)
+                embedmsg.init().then(() => {
+                    interaction.reply({ embeds: [embedmsg.stop(queen)] }).catch((err) => {
                         console.error(err);
                     })
                     resolve(0);
-                }).catch(() => {
-                    reject(errorIndex.NOT_STOP_ERROR)
+                }).catch((err) => {
+                    console.error(err);
+                    reject(errorIndex.GENERIC_ERROR);
                 })
-            }).catch((err) => {
-                console.error(err);
+            }).catch(() => {
+                reject(errorIndex.NOT_STOP_ERROR)
             })
-
         })
     }
 }

@@ -59,7 +59,6 @@ class CommandEmbed extends BaseEmbed {
             .setDescription("La coda è stata pulita con successo!")
             .addFields(
                 { name: "🛑 **Stato**", value: "Stop", inline: true },
-                { name: "🎵 **Canzoni Rimosse**", value: `${queen.length} canzoni`, inline: false },
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/play` per aggiungere nuove tracce alla coda.", inline: false }
 
             )
