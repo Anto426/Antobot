@@ -6,7 +6,7 @@ module.exports = {
     allowevents: true,
     async execute(error, queue, song) {
         console.log(error);
-        let embedmsg = new EventEmbed(queue.textChannel.guild);
+        let embedmsg = new EventEmbed(queue.textChannel.guild, null, song.thumbnail);
         embedmsg.init().then(() => {
             queue.textChannel.send({ embeds: [embedmsg.error(song)], ephemeral: true });
         }).catch((err) => {

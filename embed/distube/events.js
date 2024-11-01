@@ -38,7 +38,7 @@ class EventEmbed extends BaseEmbed {
                 { name: '💖 Like', value: song.likes.toString(), inline: true },
                 { name: '🧑‍🎨 Artist', value: `[${song.uploader.name}](${song.uploader.url})`, inline: false },
             )
-            .setThumbnail(embedconfig.image.error);
+            .setThumbnail(song.thumbnail);
     }
 }
 
