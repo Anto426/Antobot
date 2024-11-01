@@ -3,7 +3,7 @@ const packagejson = require("../../package.json");
 const { ChannelType } = require("discord.js");
 const { Time } = require("../../function/time/time");
 class comandbembed extends BaseEmbed {
-    
+
     constructor(guild, member, image) {
         super(guild, member, image)
         this.packagejson = require("../../package.json")
@@ -525,47 +525,50 @@ class comandbembed extends BaseEmbed {
     }
 
 
-    githubcreator(data) {
+    developer(data) {
         this.embed
             .setTitle("👑 Sviluppatore")
-            .setDescription(`Ecco le informazioni sullo sviluppatore`)
+            .setDescription("Ecco le informazioni sullo sviluppatore:")
             .addFields(
                 {
-                    name: "📛 Username",
-                    value: data.name.toString(),
-                    inline: true
-                },
-                {
-                    name: "🔗 Tag",
-                    value: data.login.toString(),
-                    inline: true
+                    name: "📛 Nome",
+                    value: `[${data.name || data.login}](${data.html_url})`,
+                    inline: false
                 },
                 {
                     name: "📝 Bio",
-                    value: data.bio.toString(),
+                    value: data.bio || "Non specificato",
                 },
                 {
-                    name: "🔗 Profilo",
-                    value: `[Clicca qui](${data.html_url.toString()})`,
+                    name: "📊 Followers",
+                    value: data.followers.toString(),
                     inline: true
                 },
                 {
-                    name: "📜 Public Repos",
+                    name: "📊 Following",
+                    value: data.following.toString(),
+                    inline: true
+                },
+                {
+                    name: "📊 Repos",
                     value: data.public_repos.toString(),
                     inline: true
                 },
                 {
-                    name: "❌ X account",
-                    value: `[Clicca qui](https://x.com/${data.twitter_username.toString()})`,
-                    inline: true
+                    name: "🔗 Sito Web",
+                    value: data.blog || "Non specificato",
+                    inline: false
+                },
+                {
+                    name: "Twitter",
+                    value: data.twitter_username ? `https://x.com/${data.twitter_username}` : "Non specificato",
                 }
-
             )
             .setThumbnail(data.avatar_url)
 
-        return this.embed
-
+        return this.embed;
     }
+
 
 
     confirmedBan(member) {

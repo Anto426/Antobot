@@ -26,7 +26,7 @@ module.exports = {
                 let embed = new comandbembed(interaction.guild, interaction.member, data.avatar_url)
                 embed.init().then(() => {
                     interaction.reply({
-                        embeds: [embed.githubcreator(data)]
+                        embeds: [embed.developer(data)]
                     }).catch((err) => { console.log(err) });
                     resolve(0)
                 }).catch((err) => {
