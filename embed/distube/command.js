@@ -35,7 +35,6 @@ class CommandEmbed extends BaseEmbed {
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/repeat` per cambiare il modo di ripetizione.", inline: true }
             )
             .setThumbnail(embedconfig.image.repeat)
-            .setColor(embedconfig.color.orange);
     }
 
     skip(oldSong, newSong) {
@@ -47,7 +46,6 @@ class CommandEmbed extends BaseEmbed {
                 { name: "▶️ **Canzone Attuale**", value: newSong.name.toString(), inline: true }
             )
             .setThumbnail(newSong.thumbnail || embedconfig.image.skip)
-            .setColor(embedconfig.color.blue);
     }
 
     stop() {
@@ -59,7 +57,6 @@ class CommandEmbed extends BaseEmbed {
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/play` per aggiungere nuove tracce alla coda.", inline: true }
             )
             .setThumbnail(embedconfig.image.stop)
-            .setColor(embedconfig.color.red);
     }
 
     volume(volume) {
@@ -88,7 +85,6 @@ class CommandEmbed extends BaseEmbed {
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/resume` per riprendere la riproduzione.", inline: true } // Suggerimento utile
             )
             .setThumbnail(song.thumbnail || embedconfig.image.pause)
-            .setColor(embedconfig.color.yellow);
     }
 
 
@@ -101,7 +97,6 @@ class CommandEmbed extends BaseEmbed {
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/pause` per mettere in pausa la riproduzione.", inline: true } // Suggerimento utile
             )
             .setThumbnail(song.thumbnail || embedconfig.image.resume)
-            .setColor(embedconfig.color.green);
     }
 
 
