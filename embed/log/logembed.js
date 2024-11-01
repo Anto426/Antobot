@@ -11,7 +11,7 @@ class logembed extends BaseEmbed {
 
     init() {
         return new Promise((resolve, reject) => {
-            super.init().then((embed) => { this.embed = embed; this.embed.setColor(embedconfig.color.orange); resolve(0); }).catch(() => { reject(-1); });
+            super.init().then((embed) => { this.embed = embed; resolve(0); }).catch(() => { reject(-1); });
         });
 
     }
@@ -39,7 +39,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.green)
     }
 

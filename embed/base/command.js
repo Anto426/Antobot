@@ -10,7 +10,7 @@ class comandbembed extends BaseEmbed {
 
     init() {
         return new Promise((resolve, reject) => {
-            super.init().then((embed) => { this.embed = embed; this.embed.setColor(embedconfig.color.green); resolve(0) }).catch(() => { reject(-1) })
+            super.init().then((embed) => { this.embed = embed; resolve(0) }).catch(() => { reject(-1) })
         })
     }
 
