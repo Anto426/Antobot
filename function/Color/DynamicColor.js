@@ -1,5 +1,6 @@
 const ColorThief = require('colorthief');
 const { ColorFunctions } = require('./ColorFunctions');
+const { BotConsole } = require('../log/botConsole');
 class DynamicColor {
 
     constructor() {
@@ -8,6 +9,7 @@ class DynamicColor {
         this.threshold = 50;
         this.Palette = [];
         this.ColorFunctions = new ColorFunctions();
+        this.botconsole = new BotConsole();
     }
 
 
@@ -17,11 +19,11 @@ class DynamicColor {
 
     setImgUrl(url) {
         return new Promise((resolve, reject) => {
-
+            this.botconsole.log("Fetching image from url: " + url, "green");
             fetch(url)
                 .then(async response => {
                     if (!response.ok) {
-                        throw new Error("Image not loaded properly.");
+                        reject("Error fetching image: " + response.statusText);
                     } else {
                         return await response.arrayBuffer(); 
                     }
