@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [23.x]
     steps:
 
     - name: Sleep for 1 minutes
