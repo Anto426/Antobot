@@ -57,14 +57,16 @@ class ErrorManager {
         if (interaction.replied) {
             interaction.editReply({
                 embeds: [errorEmbed],
-                content: null
+                content: null,
+                ephemeral: true
             }).catch((err) => {
                 console.error(err);
             });
         } else {
             interaction.reply({
                 embeds: [errorEmbed],
-                content: null
+                content: null,
+                ephemeral: true
             }).catch((err) => {
                 console.error(err);
             });
