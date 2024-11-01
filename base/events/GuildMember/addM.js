@@ -15,7 +15,7 @@ module.exports = {
             let json = new Cjson();
             if (!member.user.bot) {
                 await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then(async (jsonf) => {
-                    if (jsonf[member.guild.id][member.id]) {
+                    if (json[member.guild.id] && jsonf[member.guild.id][member.id]) {
                         let listrole = [];
                         jsonf[member.guild.id][member.id].roles.forEach(element => {
                             let role = member.guild.roles.cache.find(x => x.id === element);
@@ -26,15 +26,11 @@ module.exports = {
                                         member.roles.add(role);
                                     } catch { }
                                 }
-
                         });
-
                         try {
                             let send = embedMsg.welcomeback(member, listrole);
                             member.send({ embeds: [send] }).catch(() => { new BotConsole().log("Non sono riuscito ad inviare il messaggio", "red") })
                         } catch { }
-
-
 
                     } else {
 
@@ -54,8 +50,6 @@ module.exports = {
                 }).catch(async (err) => {
                     new BotConsole().log(err, "red");
                 })
-
-
             } else {
                 try {
                     json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((data) => {

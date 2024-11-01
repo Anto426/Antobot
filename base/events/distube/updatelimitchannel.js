@@ -16,7 +16,6 @@ module.exports = {
                 await channel.setUserLimit(limit + 1);
         }
         else if (newState.member.id === newState.guild.members.me.id && (oldState.channel || newState.channel !== oldState.channel)) {
-            console.log("User joined or left a channel");
             if (limit > 0) {
                 await channel.setUserLimit(limit - 1);
             }
