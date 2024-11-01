@@ -89,7 +89,6 @@ class EventEmbed extends BaseEmbed {
                     .setTitle("👋 Benvenuto")
                     .setDescription(`🎉 ${member.user} benvenuto su ${this.guild} sei il ${count}° membro`)
                     .setImage('attachment://welcomecanavas.png')
-                    .setColor(ColorFunctions.rgbToHex(PalletandText.textcolor[0], PalletandText.textcolor[1], PalletandText.textcolor[2]))
 
                 let send = [this.embed, attachment]
 
