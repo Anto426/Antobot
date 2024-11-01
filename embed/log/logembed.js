@@ -82,6 +82,8 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.orange)
+
 
     }
 
@@ -110,7 +112,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.red)
     }
 
@@ -126,6 +127,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.orange)
     }
 
 
@@ -145,7 +147,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.red)
     }
 
@@ -159,7 +160,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.green)
     }
 
@@ -178,6 +178,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.orange)
     }
 
 
@@ -195,6 +196,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.orange)
     }
 
 
@@ -220,7 +222,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.green)
     }
 
@@ -247,7 +248,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.red)
     }
 
@@ -330,7 +330,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.green)
     }
 
@@ -366,7 +365,6 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
-
             .setColor(embedconfig.color.red)
     }
 
@@ -385,6 +383,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.orange)
 
     }
 
@@ -554,6 +553,7 @@ class logembed extends BaseEmbed {
                     size: 256
                 }
             ))
+            .setColor(embedconfig.color.orange)
     }
 
 
@@ -580,6 +580,8 @@ class logembed extends BaseEmbed {
                     value: member.inviter ? member.inviter.tag : "Non specificato",
                 }
             )
+            .setColor(embedconfig.color.green)
+
     }
 
     guildMemberRemoveBot(member) {
@@ -602,6 +604,7 @@ class logembed extends BaseEmbed {
                     inline: true
                 }
             )
+            .setColor(embedconfig.color.red)
     }
 
 
@@ -610,25 +613,25 @@ class logembed extends BaseEmbed {
             .setTitle("🔄 Aggiornamento ricevuto")
             .setDescription(`Aggiornamento ricevuto dal server`)
             .setThumbnail(client.user.displayAvatarURL({
-            dynamic: true,
-            size: 256
+                dynamic: true,
+                size: 256
             }))
             .addFields(
-            {
-                name: "📜 Commits",
-                value: `${commits.map(commit => `[**${commit.message}**](${commit.url})`).join("\n")}`
-            },
-            {
-                name: "📅 Data",
-                value: new Date().toLocaleString(),
-                inline: true
-            },
-            {
-                name: "👥 Autori",
-                value: authors.map((author) => {
-                return `**${author.emoji ? `<:${author.emoji.name}:${author.emoji.id}> ${author.name}` : author.name}**`;
-                }).join("\n")
-            }
+                {
+                    name: "📜 Commits",
+                    value: `${commits.map(commit => `[**${commit.message}**](${commit.url})`).join("\n")}`
+                },
+                {
+                    name: "📅 Data",
+                    value: new Date().toLocaleString(),
+                    inline: true
+                },
+                {
+                    name: "👥 Autori",
+                    value: authors.map((author) => {
+                        return `**${author.emoji ? `<:${author.emoji.name}:${author.emoji.id}> ${author.name}` : author.name}**`;
+                    }).join("\n")
+                }
             )
     }
 
