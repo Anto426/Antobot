@@ -19,15 +19,13 @@ module.exports = {
     },
     async execute(interaction) {
 
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             let queue = distube.getQueue(interaction)
             if (queue.songs.length == 1 && !queue.autoplay) {
                 reject(errorIndex.NOT_TRACK_SKIPABLE_ERROR)
             } else {
-
                 let currentTrack = queue.songs[0];
-                let nextTrack = queue.songs[1];
-                distube.skip(interaction);
+                let nextTrack = await distube.skip(interaction.guild);
                 let embedmsg = new CommandEmbed(interaction.guild, interaction.member, nextTrack.thumbnail)
                 embedmsg.init().then(() => {
                     interaction.reply({ embeds: [embedmsg.skip(currentTrack, nextTrack)] }).catch((err) => {
