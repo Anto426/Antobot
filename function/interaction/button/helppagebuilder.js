@@ -27,7 +27,7 @@ class helppagebuilder {
                         .setCustomId(`help-${interaction.member.id}-1-0`)
                         .setPlaceholder('Scegli un comando');
 
-                    client.commandg.sort().forEach(command => {
+                    client.commandg.forEach(command => {
                         if (command.see) {
                             list.push(new StringSelectMenuOptionBuilder()
                                 .setLabel(`${jsonf.command[command.name] ? jsonf.command[command.name].emoji : "⚙️"} ${command.data.name}`)
@@ -36,7 +36,6 @@ class helppagebuilder {
                         }
 
                     });
-
                     resolve([[embed.help()], this.Menu.createMenu(list, "help", comandlist, interaction.member.id, 0, interactioncustomId ? interactioncustomId[3] : 0)]);
 
                 }).catch((err) => {
