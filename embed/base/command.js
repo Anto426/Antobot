@@ -780,10 +780,10 @@ class comandbembed extends BaseEmbed {
             );
     }
 
-    annunce(message, everyone, thumbnail, image, color) {
+    annunce(title, message, thumbnail, image, color) {
         this.embed
-            .setTitle("📢 Annuncio")
-            .setDescription(`📢 ${everyone}\n${message}`)
+            .setTitle(title)
+            .setDescription(`📢 ${message}`)
 
         if (thumbnail) {
             this.embed.setThumbnail(thumbnail)
