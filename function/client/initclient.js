@@ -83,6 +83,8 @@ class ClientInit {
                             global.distube = new DisTube(client, {
                                 emitNewSongOnly: false,
                                 emitAddSongWhenCreatingQueue: false,
+
+
                                 plugins: [
                                     new YouTubePlugin({
                                         cookies: cookies.youtube
@@ -92,62 +94,26 @@ class ClientInit {
                                     new DeezerPlugin(),
                                 ],
                                 customFilters: {
-                                    // Effetti di spazialità
-                                    "3D": "apulsator=hz=0.125",
-                                    "8D": "apulsator=hz=0.08",
-                                    "Stereo": "extrastereo",
-                                    "Stereo Swap": "extrastereo=m=-1",
-                                    "Wide Stereo": "extrastereo=w=2", // Stereo più ampio
-                                
-                                    // Effetti di panoramica
-                                    "Pan Left": "stereotools=mpan=-0.75",
-                                    "Pan Middle": "stereotools=mpan=0",
-                                    "Pan Right": "stereotools=mpan=0.75",
-                                
-                                    // Equalizzazione e bassi
-                                    "Low Bass": "bass=g=-20",
-                                    "Light Bass": "bass=g=4",
-                                    "Heavy Bass": "bass=g=8",
-                                    "Max Bass": "bass=g=20",
-                                    "Subboost": "asubboost=boost=12",
-                                
-                                    // Compressore per enfatizzare la dinamica
-                                    "Phonk": "acompressor=level_in=4:mode=upward",
-                                    "Concert": "acompressor=level_in=8",
-                                
-                                    // Effetti di voce
-                                    "Vocals (1)": "speechnorm=e=12.5:r=0.0001:l=1",
-                                    "Vocals (2)": "speechnorm=e=25:r=0.0001:l=1",
-                                    "Vocals (3)": "speechnorm=e=50:r=0.0001:l=1",
-                                
-                                    // Effetti di riverbero ed eco
-                                    "Echo": "aecho=0.8:0.9:1000:0.3",
-                                    "Long Echo": "aecho=0.8:0.9:2000:0.4", // Eco più lungo
-                                    "Reverb": "aecho=0.8:0.9:500:0.5", // Riverbero generico
-                                
-                                    // Effetti di modulazione
-                                    "Flanger": "flanger=delay=20:depth=10",
-                                    "Chorus": "chorus=0.6:0.9:50|60:0.4|0.32:0.25|0.4:2|1.39",
-                                    "Phaser": "aphaser=in_gain=0.4:out_gain=0.7:delay=3:decay=0.4:depth=3:speed=1.2",
-                                    "Shiver": "tremolo=f=8",
-                                    "Funny": "vibrato=f=8",
-                                    "Crying": "vibrato=f=8:d=1",
-                                
-                                    // Effetti di risintonizzazione
-                                    "Vaporwave": "aresample=48000,asetrate=48000*0.8",
-                                    "Nightcore": "aresample=48000,asetrate=48000*1.2",
-                                
-                                    // Equalizzazione aggiuntiva
-                                    "Sharp": "treble=g=10",
-                                    "Warm": "bass=g=5:treble=g=-2", // Aggiunta di calore con bassi e riduzione degli alti
-                                    "Clarity": "treble=g=5", // Schiarimento delle alte frequenze
-                                
-                                    // Filtri di frequenza
-                                    "44.1kHz": "aresample=44100",
-                                    "Smooth": "adynamicsmooth",
-                                    "Flat": "asuperpass=level=2"
+                                    'bassboost': 'bass=g=10',
+                                    '8D': 'apulsator=hz=0.08',
+                                    'vaporwave': 'aresample=48000,asetrate=48000*0.8',
+                                    'nightcore': 'aresample=48000,asetrate=48000*1.25',
+                                    'phaser': 'aphaser=in_gain=0.4',
+                                    'tremolo': 'tremolo',
+                                    'vibrato': 'vibrato=f=6.5',
+                                    'reverse': 'areverse',
+                                    'treble': 'treble=g=5',
+                                    'normalizer': 'dynaudnorm=g=101',
+                                    'surrounding': 'surround',
+                                    'pulsator': 'apulsator=hz=1',
+                                    'subboost': 'asubboost',
+                                    'karaoke': 'stereotools=mlev=0.03',
+                                    'flanger': 'flanger',
+                                    'gate': 'agate',
+                                    'haas': 'haas',
+                                    'mcompand': 'mcompand',
+                                    'earwax': 'earwax',
                                 }
-                                
 
                             });
                             new BotConsole().log("Client di Distube inzializato con successo", "green");
