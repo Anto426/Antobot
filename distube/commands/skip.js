@@ -21,7 +21,7 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
             let queue = distube.getQueue(interaction)
-            if (queue.songs.length == 1) {
+            if (queue.songs.length == 1 && !queue.autoplay) {
                 reject(errorIndex.NOT_TRACK_SKIPABLE_ERROR)
             } else {
 
