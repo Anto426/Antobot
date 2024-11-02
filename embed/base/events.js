@@ -141,10 +141,10 @@ class EventEmbed extends BaseEmbed {
     }
 
 
-    holiday(holiday, guild) {
+    holiday(holiday) {
         return this.embed
             .setTitle(holiday.title)
-            .setDescription(`${guild.roles.everyone}\n${holiday.description}`)
+            .setDescription(`${holiday.description}`)
             .setImage(holiday.image)
     }
 

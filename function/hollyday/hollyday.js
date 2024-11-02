@@ -84,11 +84,11 @@ class Holiday {
         try {
             let eventebed = new EventEmbed(channelcongratulation.guild)
             eventebed.init().then(() => {
-                channelcongratulation.send({ embeds: [eventebed.holiday(holiday, channelcongratulation.guild)] }).catch((err) => { console.log(err); })
+                channelcongratulation.send({ content: channelcongratulation.guild.roles.everyone.toString(), embeds: [eventebed.holiday(holiday)] }).catch((err) => { console.log(err); })
             }).catch((err) => { console.log(err); this.botconsole.log("Errore nell'inizializzare l'embed", "red") })
             this.cleartimer(this.guildid[channelcongratulation.guild.id].id, this.guildid[channelcongratulation.guild.id].id0)
             delete this.guildid[channelcongratulation.guild.id];
-            if(Object.keys(this.guildid).length === 0){
+            if (Object.keys(this.guildid).length === 0) {
                 this.main()
             }
         } catch (err) {
