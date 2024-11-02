@@ -24,19 +24,22 @@ module.exports = {
             if (queue.songs.length == 1) {
                 reject(errorIndex.NOT_TRACK_SKIPABLE_ERROR)
             } else {
-                let embedmsg = new CommandEmbed(interaction.guild, interaction.member)
+
+                let currentTrack = queue.songs[0];
+                let nextTrack = queue.songs[1];
+                distube.skip(interaction);
+                let embedmsg = new CommandEmbed(interaction.guild, interaction.member, nextTrack.thumbnail)
                 embedmsg.init().then(() => {
-                    let currentTrack = queue.songs[0];
-                    let nextTrack = queue.songs[1];
-                    distube.skip(interaction);
                     interaction.reply({ embeds: [embedmsg.skip(currentTrack, nextTrack)] }).catch((err) => {
                         console.error(err);
                     });
-                    resolve(0);
                 }).catch((err) => {
                     console.error(err);
                     reject(errorIndex.NOT_SKIP_ERROR)
                 })
+
+                resolve(0);
+
             }
         })
 
