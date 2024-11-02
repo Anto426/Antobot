@@ -18,8 +18,8 @@ jobs:
         node-version: [23.x]
     steps:
 
-    - name: Sleep for 1 minutes
-      run: sleep 60 
+    - name: Sleep for 20 Seconds
+      run: sleep 20 
 
     - name: Stop Systemctl module "Antobot"
       run: sudo systemctl stop antobot
