@@ -53,12 +53,13 @@ class CommandEmbed extends BaseEmbed {
             .setThumbnail(newSong.thumbnail || embedconfig.image.skip)
     }
 
-    stop(queen) {
+    stop(n) {
         return this.embed
             .setTitle("⏹️ **Stop**")
             .setDescription("La coda è stata pulita con successo!")
             .addFields(
                 { name: "🛑 **Stato**", value: "Stop", inline: true },
+                { name: "🎵 **Brani eliminati**", value: n.toString(), inline: true },
                 { name: "💡 **Suggerimento**", value: "Usa il comando `/play` per aggiungere nuove tracce alla coda.", inline: false }
 
             )

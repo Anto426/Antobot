@@ -28,14 +28,15 @@ module.exports = {
     async execute(interaction) {
 
         return new Promise((resolve, reject) => {
-            let embedmsg = new CommandEmbed(interaction.guild, interaction.member, queen.songs[0].thumbnail);
-            let exit = interaction.options.getBoolean("exit_on_channel") || false
+
+            let songlength = distube.getQueue(interaction.guild).songs.length;
+            let embedmsg = new CommandEmbed(interaction.guild, interaction.member);
+            let exit = interaction.options.getBoolean("exit_on_channel") || false;
             distube.stop(interaction).then(() => {
-                console.log(exit)
                 if (exit)
                     distube.voices.leave(interaction.guild.id)
                 embedmsg.init().then(() => {
-                    interaction.reply({ embeds: [embedmsg.stop(queen)] }).catch((err) => {
+                    interaction.reply({ embeds: [embedmsg.stop(songlength)] }).catch((err) => {
                         console.error(err);
                     })
                     resolve(0);
