@@ -1,14 +1,15 @@
-const OpenAI = require('openai');
 const { Client, Partials } = require('discord.js');
 const { DisTube } = require("distube")
 const { SpotifyPlugin } = require("@distube/spotify")
 const { SoundCloudPlugin } = require("@distube/soundcloud")
 const { Check } = require('../check/check');
 const { Cjson } = require('../file/json');
-const setting = require("./../../setting/settings.json");
 const { BotConsole } = require('../log/botConsole');
 const { default: DeezerPlugin } = require('@distube/deezer');
-const { YouTubePlugin } = require('@distube/youtube');
+const { YouTubePlugin } = require('@distube/youtube');2
+const OpenAI = require('openai');
+const setting = require("./../../setting/settings.json");
+
 
 class ClientInit {
 
@@ -22,6 +23,7 @@ class ClientInit {
         return new Promise(async (resolve, reject) => {
 
             try {
+
                 global.client = new Client({
                     intents: 3276799,
                     partials: [
@@ -31,8 +33,10 @@ class ClientInit {
                         Partials.User,
                         Partials.Message,
                         Partials.Reaction
-                    ]
-                })
+                    ],
+
+                    allowedMentions: { parse: ['roles', 'users', 'everyone'], repliedUser: true }
+                });
 
                 global.embedconfig = await this.json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[5], process.env.GITTOKEN).catch(() => { new BotConsole().log("Impossibile importare la configurazione degli embed") });
                 new BotConsole().log("Client di base inizializzato con successo", "green");
