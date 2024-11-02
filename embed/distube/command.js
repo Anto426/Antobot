@@ -115,6 +115,17 @@ class CommandEmbed extends BaseEmbed {
             .setThumbnail(song.thumbnail || embedconfig.image.resume);
     }
 
+    autoplay(autoplay) {
+        return this.embed
+            .setTitle("🔄 **Autoplay**")
+            .setDescription(`L'autoplay è stato impostato con successo!`)
+            .addFields(
+                { name: "🔄 **Stato**", value: autoplay ? "🟢 Abilitato" : "🔴 Disabilitato", inline: true },
+                { name: "💡 **Suggerimento**", value: "Usa il comando `/autoplay` per cambiare lo stato dell'autoplay.", inline: true }
+            )
+            .setThumbnail(embedconfig.image.autoplay);
+    }
+
 
 }
 
