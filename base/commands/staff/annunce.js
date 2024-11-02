@@ -21,7 +21,7 @@ module.exports = {
                     name: "title",
                     description: "Il titolo dell'annuncio",
                     type: 3,
-                    required: false
+                    required: true
                 },
                 {
                     name: "message",
@@ -67,7 +67,7 @@ module.exports = {
                 let color = interaction.options.getString('color');
                 let embedcolor = color ? color.match(/^#(?:[0-9a-fA-F]{3}){1,2}$/) ? color : null : null;
                 let everyone = tag ? interaction.guild.roles.everyone : "";
-                let title = interaction.options.getString('title') || "Annuncio";
+                let title = interaction.options.getString('title');
                 await embed.init();
                 let json = new Cjson();
                 let data = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig);
