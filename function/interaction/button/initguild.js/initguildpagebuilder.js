@@ -214,7 +214,7 @@ class initguildpagebuilder {
 
         return new Promise((resolve) => {
 
-            let embed = new comandbembed(interaction.guild, interaction.member, 1)
+            let embed = new comandbembed(interaction.guild, interaction.member)
 
             embed.init().then(async () => {
 
@@ -242,7 +242,7 @@ class initguildpagebuilder {
 
         return new Promise((resolve) => {
 
-            let embed = new comandbembed(interaction.guild, interaction.member, 1)
+            let embed = new comandbembed(interaction.guild, interaction.member)
 
             embed.init().then(async () => {
 

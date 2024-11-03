@@ -2,12 +2,12 @@ const { EmbedBuilder } = require("discord.js")
 const { DynamicColor } = require("../function/Color/DynamicColor")
 
 class BaseEmbed {
-    constructor(guild, member, image = client.user.displayAvatarURL() ) {
+    constructor(guild, member, image) {
         this.guild = guild
         this.member = member
         this.embed = new EmbedBuilder()
         this.color = new DynamicColor()
-        this.image = image
+        this.image = typeof image === "string" ? image : client.user.displayAvatarURL({ format: "png", size: 512 })
     }
     init() {
         return new Promise(async (resolve, reject) => {
