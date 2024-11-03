@@ -1,5 +1,4 @@
 const { ErrEmbed } = require("../../../../embed/err/errembed");
-const { Check } = require("../../../../function/check/check");
 
 module.exports = {
     name: "buttonmodule",
@@ -7,14 +6,12 @@ module.exports = {
     allowevents: true,
     async execute(interaction) {
         if (interaction.isChatInputCommand()) return;
-        let check = new Check()
         let interactioncustomId = interaction.customId.toString().split("-")
 
 
+        if (interactioncustomId[1] === interaction.member.id) {
 
-        check.checkIsYou(interactioncustomId[1], interaction.member.id).then(() => {
-
-            if (client.buttong.size > 0 && interactioncustomId.length  > 3) {
+            if (client.buttong.size > 0 && interactioncustomId.length > 3) {
 
                 let interactionbutton = client.basebutton.get(interactioncustomId[0])
 
@@ -50,7 +47,7 @@ module.exports = {
 
             }
 
-        }).catch((err) => {
+        } else {
             console.log(err)
             let embed = new ErrEmbed(interaction.guild, interaction.member)
             embed.init().then(() => {
@@ -58,7 +55,7 @@ module.exports = {
                     console.error(err);
                 })
             })
-        })
+        }
 
 
     }
