@@ -48,7 +48,7 @@ class ColorFunctions {
 
 
 
-        return [somme.r, somme.b, somme.g];
+        return [somme.r, somme.g, somme.b];
     }
 
 
