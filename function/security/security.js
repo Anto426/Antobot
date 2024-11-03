@@ -1,10 +1,15 @@
 const { ChannelType } = require("discord.js");
-const { Check } = require("../check/check");
 const { errorIndex } = require("../../function/err/errormenager");
 
-class Security extends Check {
-    constructor(interaction, command) {
-        super();
+class Security {
+    constructor(interaction, command, owner, guildconfig) {
+        this.command = command;
+        this.interaction = interaction;
+        this.ownerlist = owner;
+        this.channelallow = guildconfig;
+
+
+        // variabili di controllo
         this.owner = false;
         this.serverOwner = false;
         this.staff = false;
@@ -12,232 +17,143 @@ class Security extends Check {
         this.channel = false;
         this.isBot = false;
         this.isYou = false;
-        this.command = command;
-        this.interaction = interaction;
         this.codeErr = errorIndex;
     }
 
-    checkOwner(arr) {
-        return new Promise((resolve) => {
-            super.checkOwner(arr, this.interaction.member.id)
-                .then(() => {
-                    this.owner = true;
-                    resolve(0);
-                })
-                .catch(() => {
-                    resolve(0);
-                });
-        });
+    async checkOwner() {
+        if (this.ownerlist.includes(this.interaction.member.id)) {
+            this.owner = true;
+        }
     }
 
-    checkServerOwner() {
-        return new Promise((resolve) => {
-            super.checkSOwner(this.interaction.member.id, this.interaction.guild)
-                .then(() => {
-                    this.serverOwner = true;
-                    resolve(0);
-                })
-                .catch(() => {
-                    resolve(0);
-                });
-        });
+    async checkServerOwner() {
+        if (this.interaction.guild.ownerId === this.interaction.member.id) {
+            this.serverOwner = true;
+        }
     }
 
-    checkChannel(arr) {
-        return new Promise((resolve) => {
-            if (this.command.allowedchannels && arr.length != 0) {
-                arr.includes(this.interaction.channel.id) ?
-                    this.channel = true :
-                    this.channel = false;
-            } else {
+    async checkChannel() {
+        if (this.channelallow.length > 0) {
+            if (this.channelallow.includes(this.interaction.channel.id)) {
                 this.channel = true;
             }
-            resolve(0);
-        });
+        } else {
+            this.channel = true;
+        }
     }
 
-    checkPermission() {
-        return new Promise((resolve) => {
-            super.checkPermission(this.interaction.member, this.command.permisions)
-                .then(() => {
-                    this.staff = true;
-                    resolve(0);
-                })
-                .catch(() => {
-                    resolve(0);
-                });
-        });
+    async checkPermission() {
+        if (this.command.permisions.length > 0) {
+            let permcount = 0;
+            this.command.permisions.forEach(element => {
+                if (this.interaction.member.permissions.has(element)) {
+                    permcount++;
+                }
+            });
+            if (permcount === this.command.permisions.length) {
+                this.staff = true;
+            }
+        } else {
+            this.staff = true;
+        }
     }
 
-    checkPosition() {
-        return new Promise((resolve) => {
-            let otherUser = this.interaction.options.getMember("user")
-            if (this.command.position && otherUser) {
-                super.checkPosition(this.interaction.member, otherUser)
-                    .then(() => {
-                        this.position = true;
-                        resolve(0);
-                    })
-                    .catch(() => {
-                        resolve(0);
-                    });
-            } else {
+    async checkPosition() {
+        let User = this.interaction.member;
+        let otherUser = this.interaction.options.getMember("user");
+        if (otherUser) {
+            const UserhighestRole = User.roles.highest;
+            const otherUserhighestRole = otherUser.roles.highest;
+
+            if (UserhighestRole.rawPosition > otherUserhighestRole.rawPosition) {
                 this.position = true;
-                resolve(0);
             }
-        });
+        }
     }
 
-    checkIsYou() {
-        return new Promise((resolve) => {
-            let otherUser = this.interaction.options.getMember("user")
-            if (this.command.position && otherUser) {
-                super.checkIsYou(this.interaction.member.id, otherUser.id).then(() => {
-                    this.isYou = true;
-                    resolve(0);
-                }).catch(() => {
-                    resolve(0);
-                });
-            } else {
-                resolve(0);
-            }
-        });
+    async checkIsYou() {
+        let otherUser = this.interaction.options.getMember("user");
+        if (otherUser && this.interaction.member.id === otherUser.id) {
+            this.isYou = true;
+        }
     }
 
-    checkIsBot() {
-        return new Promise((resolve) => {
-            let otherUser = this.interaction.options.getMember("user")
-            if (otherUser && !this.command.allowebot) {
-                super.checkIsBot(this.interaction.options.getUser("user")).then(() => {
-                    this.isBot = true;
-                    resolve(0);
-                }).catch(() => {
-                    resolve(0);
-                });
-            } else {
-                resolve(0);
-            }
-        });
+    async checkIsBot() {
+        if (this.interaction.member.user.bot) {
+            this.isBot = true;
+        }
     }
 
-    checkDistube() {
-        return new Promise((resolve, reject) => {
-            try {
+    async checkDistube() {
+        let result = [this.interaction.member.voice.channel, this.interaction.guild.channels.cache.find(x => x.type === ChannelType.GuildVoice && x.members.has(client.user.id))];
 
-                let result = [this.interaction.member.voice.channel, this.interaction.guild.channels.cache.find(x => x.type == ChannelType.GuildVoice && x.members.has(client.user.id))];
+        if (this.command.disTube.checkchannel) {
+            if (!result[0]) {
+                result = this.codeErr.NOT_IN_VOICE_CHANNEL_ERROR;
+            } else if (result[1] && result[0].id !== result[1].id) {
+                result = this.codeErr.MUSIC_ALREADY_PLAYING_ERROR;
+            }
+        }
+        if (this.command.disTube.checklisttrack && !distube.getQueue(this.interaction)) {
+            result = this.codeErr.LIST_TRACK_ERROR;
+        }
+        if (Array.isArray(result)) {
+            return result;
+        } else {
+            throw result;
+        }
+    }
 
-                if (this.command.disTube.checkchannel) {
-                    if (!result[0]) {
-                        result = this.codeErr.NOT_IN_VOICE_CHANNEL_ERROR;
+    async allowCommand() {
+
+        await this.checkOwner();
+        await this.checkServerOwner();
+        await this.checkPermission();
+        await this.checkPosition();
+        await this.checkIsYou();
+        await this.checkIsBot();
+        await this.checkChannel();
+
+
+        if (this.command.OnlyOwner) {
+            if (this.owner) {
+                if (!this.isYou && !this.isBot) {
+                    if (this.command.type === "Distube") {
+                        return await this.checkDistube();
                     } else {
-                        if (result[1] && result[0].id != result[1].id) {
-                            result = this.codeErr.MUSIC_ALREADY_PLAYING_ERROR;
-                        }
-                    }
-                }
-                if (this.command.disTube.checklisttrack) {
-                    if (!distube.getQueue(this.interaction)) {
-                        result = this.codeErr.LIST_TRACK_ERROR;
-                    }
-                }
-                if (Array.isArray(result)) {
-                    resolve(result);
-                } else {
-                    reject(result);
-                }
-
-            } catch (err) {
-                console.log(err);
-                reject(this.codeErr.GENERIC_ERROR);
-            }
-        });
-    }
-
-    allowCommand() {
-        console.log("owner", this.owner, "serverOwner", this.serverOwner, "staff", this.staff, "isBot", this.isBot, "isYou", this.isYou, "position", this.position, "channel", this.channel);
-        return new Promise(async (resolve, reject) => {
-
-            if (this.command.OnlyOwner) {
-                if (this.owner) {
-                    if (!this.isYou) {
-                        if (!this.isBot) {
-                            if (this.command.type == "Distube") {
-                                this.checkDistube()
-                                    .then((result) => {
-                                        resolve(result);
-                                    }).catch((err) => {
-                                        reject(err);
-                                    });
-                            } else {
-                                resolve(0);
-                            }
-                        } else {
-                            reject(this.codeErr.BOT_USER_ERROR);
-                        }
-                    } else {
-                        reject(this.codeErr.SELF_USER_ERROR);
+                        return 0;
                     }
                 } else {
-                    reject(this.codeErr.OWNER_ERROR);
+                    throw this.isBot ? this.codeErr.BOT_USER_ERROR : this.codeErr.SELF_USER_ERROR;
                 }
             } else {
-                if (this.serverOwner || this.owner) {
-                    if (!this.isYou) {
-                        if (!this.isBot) {
-                            if (this.command.type == "Distube") {
-                                this.checkDistube()
-                                    .then((result) => {
-                                        resolve(result);
-                                    }).catch((err) => {
-                                        reject(err);
-                                    });
-                            } else {
-                                resolve(0);
-                            }
-                        } else {
-                            reject(this.codeErr.BOT_USER_ERROR);
-                        }
+                throw this.codeErr.OWNER_ERROR;
+            }
+        } else {
+            if (this.serverOwner || this.owner) {
+                if (!this.isYou && !this.isBot) {
+                    if (this.command.type === "Distube") {
+                        return await this.checkDistube();
                     } else {
-                        reject(this.codeErr.SELF_USER_ERROR);
+                        return 0;
                     }
                 } else {
-                    if (this.staff) {
-                        if (this.position) {
-                            if (!this.isBot) {
-                                if (!this.isYou) {
-                                    if (this.channel) {
-                                        if (this.command.type == "Distube") {
-                                            this.checkDistube()
-                                                .then((result) => {
-                                                    resolve(result);
-                                                }).catch((err) => {
-                                                    reject(err);
-                                                });
-                                        } else {
-                                            resolve(0);
-                                        }
-                                    } else {
-                                        reject(this.codeErr.CHANNEL_ERROR);
-                                    }
-                                } else {
-                                    reject(this.codeErr.SELF_USER_ERROR);
-                                }
-                            } else {
-                                reject(this.codeErr.BOT_USER_ERROR);
-                            }
-                        } else {
-                            reject(this.codeErr.HIGH_PERMISSION_ERROR);
-                        }
-
-
-                    } else {
-                        reject(this.codeErr.NOT_PERMISSION_ERROR);
-                    }
-
+                    throw this.isBot ? this.codeErr.BOT_USER_ERROR : this.codeErr.SELF_USER_ERROR;
                 }
+            } else if (this.staff) {
+                if (this.position && !this.isBot && !this.isYou && this.channel) {
+                    if (this.command.type === "Distube") {
+                        return await this.checkDistube();
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    throw this.isBot ? this.codeErr.BOT_USER_ERROR : this.isYou ? this.codeErr.SELF_USER_ERROR : this.position ? this.codeErr.CHANNEL_ERROR : this.codeErr.HIGH_PERMISSION_ERROR;
+                }
+            } else {
+                throw this.codeErr.NOT_PERMISSION_ERROR;
             }
-
-        });
+        }
     }
 }
 
