@@ -111,11 +111,6 @@ class comandbembed extends BaseEmbed {
                 format: "png",
                 size: 512
             }))
-            .setThumbnail(member.guild.iconURL({
-                dynamic: true,
-                format: "png",
-                size: 512
-            }))
     }
 
 
