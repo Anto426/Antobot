@@ -40,11 +40,18 @@ class serverUpdate {
             try {
                 this.app.post('/webhook', async (req, res) => {
                     try {
-                        res.status(200).send('Webhook processed');
-                        if (!req.body.commits) {
-                            res.status(400).send('No commits found');
-                            return;
+
+
+                        if (!req.body.commits || !Array.isArray(req.body.commits) || req.body.commits.length === 0) {
+                            return res.status(400).send('No commits found');
                         }
+
+                        if (req.body.ref !== 'refs/heads/host') {
+                            return res.status(400).send('Invalid branch');
+                        }
+
+                        res.status(200).send('Webhook processed');
+
 
                         const authors = [...new Set(req.body.commits.map(commit => commit.author.name))];
                         const commits = req.body.commits.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
