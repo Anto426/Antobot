@@ -3,6 +3,7 @@ const { CreateCollection } = require("../dir/createCollection");
 const { BotConsole } = require("../log/botConsole");
 const { Check } = require("../check/check");
 const { Collection } = require("discord.js");
+const { ErrorManager } = require("../err/errormenager");
 
 class LoadEventsAndCommand {
     constructor() {
@@ -49,7 +50,8 @@ class LoadEventsAndCommand {
                     client.baseevents.forEach(x => {
                         if (x.allowevents)
                             client.on(x.typeEvent, (...args) => {
-                                x.execute(...args)
+                                let errorManager = new ErrorManager();
+                                x.execute(...args).catch((err) => { errorManager.replyError(err[0], err[1]) })
                             });
                         resolve(0)
                     });

@@ -1,13 +1,11 @@
 const { ErrEmbed } = require("../../embed/err/errembed");
 class ErrorManager {
 
-    constructor(guild, member) {
-        this.guild = guild;
-        this.member = member;
+    constructor() {
     }
 
-    async getError(errorCode) {
-        const errEmbed = new ErrEmbed(this.guild, this.member);
+    async getError(errorCode, guild, member) {
+        const errEmbed = new ErrEmbed(guild, member);
         await errEmbed.init();
         const errorHandlers = [
             errEmbed.genericError,
@@ -53,7 +51,7 @@ class ErrorManager {
     }
 
     async replyError(interaction, errorCode) {
-        const errorEmbed = await this.getError(errorCode);
+        const errorEmbed = await this.getError(errorCode, interaction.guild, interaction.member);
         if (interaction.replied) {
             interaction.editReply({
                 embeds: [errorEmbed],

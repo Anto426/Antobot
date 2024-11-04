@@ -3,7 +3,6 @@ const { BaseEmbed } = require("../baseembed");
 const { DynamicColor } = require("../../function/Color/DynamicColor");
 const { createCanvas, loadImage, registerFont } = require("canvas")
 const setting = require("./../../setting/settings.json");
-const fetch = require('node-fetch');
 class EventEmbed extends BaseEmbed {
     constructor(guild, member, image) {
         super(guild, member, image)
