@@ -7,8 +7,9 @@ module.exports = {
         return new Promise((resolve, reject) => {
             const tag = false;
             let logmodule = new log();
-            logmodule.init().then(() => {
-                logmodule.deltechannel(channel, tag);
+            logmodule.init().then(async () => {
+                await logmodule.deltechannel(channel, tag).catch((err) => { reject(err) });
+                resolve(0);
             }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
         })
 

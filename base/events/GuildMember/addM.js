@@ -1,4 +1,5 @@
 const { EventEmbed } = require("../../../embed/base/events");
+const { errorIndex } = require("../../../function/err/errormenager");
 const { Cjson } = require("../../../function/file/json");
 const { BotConsole } = require("../../../function/log/botConsole");
 const setting = require("../../../setting/settings.json");
@@ -34,8 +35,8 @@ module.exports = {
                             });
                             try {
                                 let send = embedMsg.welcomeback(member, listrole);
-                                member.send({ embeds: [send] }).catch(() => { botconsole.log("Non sono riuscito ad inviare il messaggio", "red") })
-                            } catch { }
+                                member.send({ embeds: [send] }).catch(() => { reject(errorIndex.SYSTEM_ERRORS.SEND_MESSAGE_ERROR) })
+                            } catch { reject(errorIndex.SYSTEM_ERRORS.GENERIC_ERROR) }
 
                         } else {
 
@@ -43,9 +44,9 @@ module.exports = {
                             json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((data) => {
                                 let embedmsg = new EventEmbed(member.guild)
                                 embedmsg.init().then(async () => {
-                                    let send = await embedmsg.welcome(member, humans.size).catch(() => { })
+                                    let send = await embedmsg.welcome(member, humans.size).catch(() => { reject(errorIndex.SYSTEM_ERRORS.SEND_MESSAGE_ERROR) });
                                     member.guild.channels.cache.get(data[member.guild.id].channel.welcome).send({ embeds: [send[0]], files: [send[1]] });
-                                    member.roles.add(member.guild.roles.cache.find(x => x.id === data[member.guild.id].role.roledefault)).catch(() => { botconsole.log("Non sono riuscito ad aggiungere il ruolo", "red") })
+                                    member.roles.add(member.guild.roles.cache.find(x => x.id === data[member.guild.id].role.roledefault)).catch(() => { reject(errorIndex.SYSTEM_ERRORS.ADD_ROLE_ERROR) });
                                 }).catch(() => { })
 
 
@@ -63,9 +64,10 @@ module.exports = {
                     } catch (err) {
                         botconsole.log(err, "red");
                     }
+                    resolve(0)
                 }
 
-            }).catch(() => { botconsole.log("Non sono riuscito a iniziallizzare embed di base", "red") })
+            }).catch(() => { reject(errorIndex.SYSTEM_ERRORS.INIT_ERROR) })
 
         })
 

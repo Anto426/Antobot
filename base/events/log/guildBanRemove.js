@@ -1,5 +1,7 @@
 const { BotConsole } = require("../../../function/log/botConsole");
 const { log } = require("../../../function/log/log");
+const { errorIndex } = require("../../../function/err/errormenager");
+
 module.exports = {
     name: "Log guildBanRemove",
     typeEvent: "guildBanRemove",
@@ -11,7 +13,9 @@ module.exports = {
             let console = new BotConsole();
             logmodule.init().then(() => {
                 logmodule.guildBanRemove(guildban);
-            }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
+            }).catch(reject(interaction, errorIndex.SYSTEM_ERRORS.LOG_INIT_ERROR));
+
+            resolve(0);
         })
 
 

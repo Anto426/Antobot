@@ -1,5 +1,5 @@
+const { errorIndex } = require("../../../function/err/errormenager");
 const { Cjson } = require("../../../function/file/json");
-const { BotConsole } = require("../../../function/log/botConsole");
 const setting = require("../../../setting/settings.json")
 
 module.exports = {
@@ -22,10 +22,9 @@ module.exports = {
                 }
 
                 data[member.guild.id][member.id].roles = Array.from(member.roles.cache).map(role => role[1].id);
-                json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, data).catch(() => { });
+                json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, data).catch(reject(interaction, errorIndex.SYSTEM_ERRORS.CREATE_JSON_ERROR));
 
-            }).catch((err) => {
-                new BotConsole().log(err);
+            }).catch(() => {
                 const jsons = {
                     [member.guild.id]: {
                         [member.id]: {
@@ -34,8 +33,11 @@ module.exports = {
                     }
                 };
 
-                json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch((err) => { new BotConsole().log(err, "red"); });
+                json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch(reject(interaction, errorIndex.SYSTEM_ERRORS.CREATE_JSON_ERROR));
             });
+        
+        resolve(0);
+
         })
     }
 }

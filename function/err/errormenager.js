@@ -98,6 +98,9 @@ const errorIndex = {
         FETCH_DATA_USER_ERROR: { code: prefix | 48, message: "C'è stato un errore nel recupero dei dati dell'utente." },
         FIND_EMOJI_ERROR: { code: prefix | 49, message: "C'è stato un errore nel trovare l'emoji." },
         GENERIC_ERROR: { code: prefix | 50, message: "Si è verificato un errore generico." },
+        CREATE_JSON_ERROR: { code: prefix | 51, message: "C'è stato un errore nella creazione del file JSON." },
+        SEND_MESSAGE_ERROR: { code: prefix | 52, message: "C'è stato un errore nell'invio del messaggio." },
+        ADD_ROLE_ERROR: { code: prefix | 53, message: "C'è stato un errore nell'aggiunta del ruolo." },
     }
 };
 

@@ -1,6 +1,8 @@
 const { Cjson } = require("../../../function/file/json");
 const { log } = require("../../../function/log/log");
 const setting = require("./../../../setting/settings.json")
+const { errorIndex } = require("../../../function/err/errormenager");
+
 module.exports = {
     name: "Log channelUpdate",
     typeEvent: "channelUpdate",
@@ -39,10 +41,10 @@ module.exports = {
                     if (changedprop.length > 0 && newChannel.parentId !== data[newChannel.guild.id].channel.hollyday.id)
                         logmodule.updatechannel(newChannel, changedprop, tag);
 
-                }).catch((err) => { console.log(err) });
+                }).catch(reject(interaction, errorIndex.SYSTEM_ERRORS.READ_JSON_ERROR));
 
 
-            }).catch(() => { console.log("Errore nell'inizializzare il modulo log:", error); });
+            }).catch(reject(interaction, errorIndex.SYSTEM_ERRORS.LOG_INIT_ERROR));
         })
 
 

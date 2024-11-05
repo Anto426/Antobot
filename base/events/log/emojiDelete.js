@@ -1,4 +1,5 @@
 const { log } = require("../../../function/log/log");
+const { errorIndex } = require("../../../function/err/errormenager");
 module.exports = {
     name: "Log emojiDelete",
     typeEvent: "emojiDelete",
@@ -9,7 +10,9 @@ module.exports = {
             let logmodule = new log();
             logmodule.init().then(() => {
                 logmodule.emojiDelete(emoji, tag);
-            }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+            }).catch(reject(interaction, errorIndex.SYSTEM_ERRORS.LOG_INIT_ERROR));
+        
+        resolve(0);
         })
     }
 }

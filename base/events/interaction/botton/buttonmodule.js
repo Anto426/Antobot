@@ -1,4 +1,5 @@
 const { ErrEmbed } = require("../../../../embed/err/errembed");
+const { errorIndex } = require("../../../../function/err/errormenager");
 
 module.exports = {
     name: "buttonmodule",
@@ -9,7 +10,6 @@ module.exports = {
             if (interaction.isChatInputCommand()) return;
             let interactioncustomId = interaction.customId.toString().split("-")
 
-
             if (interactioncustomId[1] === interaction.member.id) {
 
                 if (client.buttong.size > 0 && interactioncustomId.length > 3) {
@@ -17,46 +17,24 @@ module.exports = {
                     let interactionbutton = client.basebutton.get(interactioncustomId[0])
 
                     if (interactionbutton) {
-                        try {
-                            interactionbutton.execute(interaction, interactioncustomId)
-                        } catch (err) {
-                            console.log(err)
-                            let embed = new ErrEmbed(interaction.guild, interaction.member)
-                            embed.init().then(() => {
-                                interaction.reply({ embeds: [embed.genericError()], ephemeral: true }).catch((err) => {
-                                    console.error(err);
-                                })
-                            })
-                        }
-                    } else {
-                        let embed = new ErrEmbed(interaction.guild, interaction.member)
-                        embed.init().then(() => {
-                            interaction.reply({ embeds: [embed.buttonnotvalidError()], ephemeral: true }).catch((err) => {
-                                console.error(err);
-                            })
+                        interactionbutton.execute(interaction, interactioncustomId).catch((err) => {
+                            reject(interaction, err)
                         })
+
+                    } else {
+                        reject(interaction, errorIndex.REPLY_ERRORS.BUTTON_NOT_VALID_ERROR)
                     }
 
                 } else {
-
-                    let embed = new ErrEmbed(interaction.guild, interaction.member)
-                    embed.init().then(() => {
-                        interaction.reply({ embeds: [embed.buttonnotvalidError()], ephemeral: true }).catch((err) => {
-                            console.error(err);
-                        })
-                    })
-
+                    reject(interaction, errorIndex.REPLY_ERRORS.BUTTON_NOT_VALID_ERROR)
                 }
 
             } else {
                 console.log(err)
-                let embed = new ErrEmbed(interaction.guild, interaction.member)
-                embed.init().then(() => {
-                    interaction.reply({ embeds: [embed.wrongButtonError()], ephemeral: true }).catch((err) => {
-                        console.error(err);
-                    })
-                })
+                reject(interaction, errorIndex.REPLY_ERRORS.WRONG_BUTTON_ERROR)
             }
+
+            resolve(0);
         })
 
 
