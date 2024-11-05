@@ -2,7 +2,7 @@
 const { Cjson } = require("../../../../function/file/json");
 const { Security } = require("../../../../function/security/security");
 const setting = require("../../../../setting/settings.json");
-const { ErrorManager, errorIndex } = require("../../../../function/err/errormenager");
+const { errorIndex } = require("../../../../function/err/errormenager");
 
 
 module.exports = {
@@ -14,8 +14,6 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             if (!interaction.isChatInputCommand()) return;
 
-            const errorManager = new ErrorManager(interaction.guild, interaction.member);
-            const error = errorManager.replyError.bind(errorManager);
             const command = client.commandg.get(interaction.commandName);
 
             if (command) {
@@ -35,7 +33,7 @@ module.exports = {
                     })
 
             } else {
-                reject([interaction, errorIndex.COMMAND_NOT_FOUND_ERROR])
+                reject([interaction, errorIndex.REPLY_ERRORS.GENERIC_ERROR])
             }
         })
     }

@@ -51,7 +51,9 @@ class LoadEventsAndCommand {
                         if (x.allowevents)
                             client.on(x.typeEvent, (...args) => {
                                 let errorManager = new ErrorManager();
-                                x.execute(...args).catch((err) => { errorManager.replyError(err[0], err[1]) })
+                                x.execute(...args).catch((err) => {
+                                    Array.isArray(err) ? errorManager.menagerError(err[0], err[1]) : errorManager.menagerError(null, err)
+                                })
                             });
                         resolve(0)
                     });

@@ -89,13 +89,13 @@ class Security {
 
         if (this.command.disTube.checkchannel) {
             if (!result[0]) {
-                result = this.codeErr.NOT_IN_VOICE_CHANNEL_ERROR;
+                result = this.codeErr.REPLY_ERRORS.NOT_IN_VOICE_CHANNEL_ERROR;
             } else if (result[1] && result[0].id !== result[1].id) {
-                result = this.codeErr.MUSIC_ALREADY_PLAYING_ERROR;
+                result = this.codeErr.REPLY_ERRORS.MUSIC_ALREADY_PLAYING_ERROR;
             }
         }
         if (this.command.disTube.checklisttrack && !distube.getQueue(this.interaction)) {
-            result = this.codeErr.LIST_TRACK_ERROR;
+            result = this.codeErr.REPLY_ERRORS.LIST_TRACK_ERROR;
         }
         if (Array.isArray(result)) {
             return result;
@@ -124,10 +124,10 @@ class Security {
                         return 0;
                     }
                 } else {
-                    throw this.isBot ? this.codeErr.BOT_USER_ERROR : this.codeErr.SELF_USER_ERROR;
+                    throw this.isBot ? this.codeErr.REPLY_ERRORS.BOT_USER_ERROR : this.codeErr.REPLY_ERRORS.SELF_USER_ERROR;
                 }
             } else {
-                throw this.codeErr.OWNER_ERROR;
+                throw this.codeErr.REPLY_ERRORS.OWNER_ERROR;
             }
         } else {
             if (this.serverOwner || this.owner) {
@@ -138,7 +138,7 @@ class Security {
                         return 0;
                     }
                 } else {
-                    throw this.isBot ? this.codeErr.BOT_USER_ERROR : this.codeErr.SELF_USER_ERROR;
+                    throw this.isBot ? this.codeErr.REPLY_ERRORS.BOT_USER_ERROR : this.codeErr.REPLY_ERRORS.SELF_USER_ERROR;
                 }
             } else if (this.staff) {
                 if (this.position && !this.isBot && !this.isYou && this.channel) {
@@ -148,10 +148,10 @@ class Security {
                         return 0;
                     }
                 } else {
-                    throw this.isBot ? this.codeErr.BOT_USER_ERROR : this.isYou ? this.codeErr.SELF_USER_ERROR : this.position ? this.codeErr.CHANNEL_ERROR : this.codeErr.HIGH_PERMISSION_ERROR;
+                    throw this.isBot ? this.codeErr.REPLY_ERRORS.BOT_USER_ERROR : this.isYou ? this.codeErr.REPLY_ERRORS.SELF_USER_ERROR : this.position ? this.codeErr.REPLY_ERRORS.CHANNEL_ERROR : this.codeErr.REPLY_ERRORS.HIGH_PERMISSION_ERROR;
                 }
             } else {
-                throw this.codeErr.NOT_PERMISSION_ERROR;
+                throw this.codeErr.REPLY_ERRORS.NOT_PERMISSION_ERROR;
             }
         }
     }

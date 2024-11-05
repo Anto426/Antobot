@@ -8,29 +8,37 @@ class ErrorManager {
         this.botconsole = new BotConsole();
     }
 
-    async menagerError(interaction, errorCode) {
-        if (interaction && errorCode.handler) {
-            let errorEmbed = new ErrEmbed(interaction.guild, interaction.member);
-            await errorEmbed.init().catch(() => { });
+    async menagerError(interaction, error) {
 
-            if (interaction.replied) {
-                interaction.editReply({
-                    embeds: [errorCode.handler(errorEmbed)],
-                    content: null
-                }).catch((err) => {
-                    console.error(err);
-                });
-            } else {
-                interaction.reply({
-                    embeds: [errorCode.handler(errorEmbed)],
-                    ephemeral: true
-                }).catch((err) => {
-                    console.error(err);
-                });
+        try {
+            if (interaction && error.handler) {
+                let errorEmbed = new ErrEmbed(interaction.guild, interaction.member);
+                await errorEmbed.init().catch(() => { });
+                let embed = await error.handler(errorEmbed).call(errorEmbed);
+
+                if (interaction.replied) {
+                    interaction.editReply({
+                        embeds: [embed],
+                        content: null
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+                } else {
+                    interaction.reply({
+                        embeds: [embed],
+                        ephemeral: true
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+                }
+
+                this.botconsole.log("Error code: " + error.code + " Message:" + error.message, "red");
             }
-
-            this.botconsole.error("Error code: " + errorCode.code + "Message" + errorCode.message);
+        } catch (error) {
+            this.botconsole.log("Error: " + error, "red");
         }
+
+
 
     }
 }
@@ -89,6 +97,7 @@ const errorIndex = {
         WRITE_COMMAND_ERROR: { code: prefix | 47, message: "C'è stato un errore nella scrittura del comando." },
         FETCH_DATA_USER_ERROR: { code: prefix | 48, message: "C'è stato un errore nel recupero dei dati dell'utente." },
         FIND_EMOJI_ERROR: { code: prefix | 49, message: "C'è stato un errore nel trovare l'emoji." },
+        GENERIC_ERROR: { code: prefix | 50, message: "Si è verificato un errore generico." },
     }
 };
 
