@@ -5,13 +5,16 @@ module.exports = {
     typeEvent: "error",
     allowevents: true,
     async execute(error, queue, song) {
-        console.log(error);
-        let embedmsg = new EventEmbed(queue.textChannel.guild, null, song.thumbnail);
-        embedmsg.init().then(() => {
-            queue.textChannel.send({ embeds: [embedmsg.error(song)], ephemeral: true });
-        }).catch((err) => {
-            console.error(err);
+        return new Promise((resolve, reject) => {
+            console.log(error);
+            let embedmsg = new EventEmbed(queue.textChannel.guild, null, song.thumbnail);
+            embedmsg.init().then(() => {
+                queue.textChannel.send({ embeds: [embedmsg.error(song)], ephemeral: true });
+            }).catch((err) => {
+                console.error(err);
+            });
         });
+
     }
 }
 

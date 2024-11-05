@@ -4,10 +4,13 @@ module.exports = {
     typeEvent: "roleCreate",
     allowevents: true,
     async execute(role) {
-        const tag = false;
-        let logmodule = new log();
-        logmodule.init().then(() => {
-            logmodule.roleCreate(role, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+        return new Promise((resolve, reject) => {
+            const tag = false;
+            let logmodule = new log();
+            logmodule.init().then(() => {
+                logmodule.roleCreate(role, tag);
+            }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+        })
+
     }
 }

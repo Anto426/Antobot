@@ -4,10 +4,13 @@ module.exports = {
     typeEvent: "inviteDelete",
     allowevents: true,
     async execute(invite) {
-        const tag = false;
-        let logmodule = new log();
-        logmodule.init().then(() => {
-            logmodule.inviteDelete(invite, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+        return new Promise((resolve, reject) => {
+            const tag = false;
+            let logmodule = new log();
+            logmodule.init().then(() => {
+                logmodule.inviteDelete(invite, tag);
+            }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+        })
+
     }
 }

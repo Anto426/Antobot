@@ -5,57 +5,58 @@ module.exports = {
     typeEvent: "guildMemberUpdate",
     allowevents: true,
     async execute(oldMember, newMember) {
-        let logmodule = new log();
-        const tag = false;
+        return new Promise(async (resolve, reject) => {
+            let logmodule = new log();
+            const tag = false;
 
-        await logmodule.init().then(() => {
-            
-            let changedprop = [];
+            await logmodule.init().then(() => {
 
-            const memberKeys = [
-                { key: "nickname", label: "👤 Nickname" },
-            ];
+                let changedprop = [];
 
-            memberKeys.forEach(({ key, label }) => {
-                if (oldMember[key] !== newMember[key]) {
-                    changedprop.push({ key: label, old: oldMember[key], new: newMember[key] });
-                }
-            });
+                const memberKeys = [
+                    { key: "nickname", label: "👤 Nickname" },
+                ];
 
-            const userKeys = [
-                { key: "username", label: "👤 Username" },
-                { key: "discriminator", label: "🔢 Discriminator" },
-                { key: "avatar", label: "🖼️ Avatar" }
-            ];
+                memberKeys.forEach(({ key, label }) => {
+                    if (oldMember[key] !== newMember[key]) {
+                        changedprop.push({ key: label, old: oldMember[key], new: newMember[key] });
+                    }
+                });
 
-            userKeys.forEach(({ key, label }) => {
-                if (oldMember.user[key] !== newMember.user[key]) {
-                    changedprop.push({ key: label, old: oldMember.user[key], new: newMember.user[key] });
-                }
-            });
+                const userKeys = [
+                    { key: "username", label: "👤 Username" },
+                    { key: "discriminator", label: "🔢 Discriminator" },
+                    { key: "avatar", label: "🖼️ Avatar" }
+                ];
 
-            let oldRoles = oldMember.roles.cache.map(role => role.name);
-            let newRoles = newMember.roles.cache.map(role => role.name);
+                userKeys.forEach(({ key, label }) => {
+                    if (oldMember.user[key] !== newMember.user[key]) {
+                        changedprop.push({ key: label, old: oldMember.user[key], new: newMember.user[key] });
+                    }
+                });
 
-            oldRoles.forEach((role) => {
-                if (!newRoles.includes(role)) {
-                    changedprop.push({ key: "🏤 Ruolo rimosso", old: role, new: null });
-                }
-            });
+                let oldRoles = oldMember.roles.cache.map(role => role.name);
+                let newRoles = newMember.roles.cache.map(role => role.name);
 
-            newRoles.forEach((role) => {
-                if (!oldRoles.includes(role)) {
-                    changedprop.push({ key: "🏤 Ruolo aggiunto", old: null, new: role });
-                }
-            });
+                oldRoles.forEach((role) => {
+                    if (!newRoles.includes(role)) {
+                        changedprop.push({ key: "🏤 Ruolo rimosso", old: role, new: null });
+                    }
+                });
 
-            if (changedprop.length > 0)
-                logmodule.guildMemberUpdate(newMember, changedprop, tag);
+                newRoles.forEach((role) => {
+                    if (!oldRoles.includes(role)) {
+                        changedprop.push({ key: "🏤 Ruolo aggiunto", old: null, new: role });
+                    }
+                });
 
-
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+                if (changedprop.length > 0)
+                    logmodule.guildMemberUpdate(newMember, changedprop, tag);
 
 
+            }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+
+        });
 
     }
 }

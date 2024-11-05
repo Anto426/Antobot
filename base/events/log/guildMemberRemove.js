@@ -4,15 +4,17 @@ module.exports = {
     typeEvent: "guildMemberRemove",
     allowevents: true,
     async execute(member) {
-        
-        let logmodule = new log();
-        logmodule.init().then(() => {
-            if (!member.user.bot) {
-                logmodule.guildMemberRemove(member);
-            } else {
-                tag = false;
-                logmodule.guildMemberRemoveBot(member);
-            }
-        }).catch((err) => { console.log(err); console.log("Errore nell'inizializzare il modulo log") });
+        return new Promise((resolve, reject) => {
+            let logmodule = new log();
+            logmodule.init().then(() => {
+                if (!member.user.bot) {
+                    logmodule.guildMemberRemove(member);
+                } else {
+                    tag = false;
+                    logmodule.guildMemberRemoveBot(member);
+                }
+            }).catch((err) => { console.log(err); console.log("Errore nell'inizializzare il modulo log") });
+        })
+
     }
 }

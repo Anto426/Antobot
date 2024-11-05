@@ -4,10 +4,12 @@ module.exports = {
     typeEvent: "emojiUpdate",
     allowevents: true,
     async execute(oldEmoji, newEmoji) {
-        const tag = false;
-        let logmodule = new log();
-        logmodule.init().then(() => {
-            logmodule.emojiUpdate(oldEmoji, newEmoji, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+        return new Promise((resolve, reject) => {
+            const tag = false;
+            let logmodule = new log();
+            logmodule.init().then(() => {
+                logmodule.emojiUpdate(oldEmoji, newEmoji, tag);
+            }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+        })
     }
 }

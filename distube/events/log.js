@@ -3,6 +3,7 @@ module.exports = {
     typeEvent: "ffmpegDebug",
     allowevents: false,
     async execute(debug) {
+         
         console.log(debug);
     }
 }

@@ -5,10 +5,15 @@ module.exports = {
     typeEvent: "guildBanRemove",
     allowevents: true,
     async execute(guildban) {
-        let logmodule = new log();
-        let console = new BotConsole();
-        logmodule.init().then(() => {
-            logmodule.guildBanRemove(guildban);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
+
+        return new Promise((resolve, reject) => {
+            let logmodule = new log();
+            let console = new BotConsole();
+            logmodule.init().then(() => {
+                logmodule.guildBanRemove(guildban);
+            }).catch(() => { console.log("Errore nell'inizializzare il modulo log", "red") });
+        })
+
+
     }
 }

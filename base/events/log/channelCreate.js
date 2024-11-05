@@ -4,10 +4,13 @@ module.exports = {
     typeEvent: "channelCreate",
     allowevents: true,
     async execute(channel) {
-        const tag = false;
-        let logmodule = new log();
-        logmodule.init().then(() => {
-            logmodule.addchannel(channel, tag);
-        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+        return new Promise((resolve) => {
+            const tag = false;
+            let logmodule = new log();
+            logmodule.init().then(() => {
+                logmodule.addchannel(channel, tag);
+            }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
+        })
+
     }
 }
