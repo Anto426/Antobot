@@ -73,7 +73,7 @@ module.exports = {
                 let data = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig);
 
                 if (!data[interaction.guild.id].channel.events || !interaction.guild.channels.cache.get(data[interaction.guild.id].channel.events)) {
-                    reject(errorIndex.CHANNEL_NOT_FOUND_ERROR);
+                    reject(errorIndex.REPLY_ERRORS.CHANNEL_NOT_FOUND_ERROR);
                 } else {
                     let channel = interaction.guild.channels.cache.get(data[interaction.guild.id].channel.events);
                     console.log(title, message, thumbnail, image, embedcolor);
@@ -86,7 +86,7 @@ module.exports = {
                 resolve(0);
             } catch (err) {
                 console.error(err);
-                reject(errorIndex.GENERIC_ERROR);
+                reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR);
             }
         });
 

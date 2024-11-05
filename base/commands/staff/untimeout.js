@@ -43,14 +43,14 @@ module.exports = {
                     }).catch((err) => {
                         console.log(err)
                         if (err.code == 50013) {
-                            reject(errorIndex.BOT_NOT_PERMISSION_ERROR)
+                            reject(errorIndex.REPLY_ERRORS.BOT_NOT_PERMISSION_ERROR)
                         } else {
-                            reject(errorIndex.NOT_UNTIMEOUT_ERROR)
+                            reject(errorIndex.REPLY_ERRORS.NOT_UNTIMEOUT_ERROR)
                         }
                     })
                 }).catch((err) => {
                     console.log(err)
-                    reject(errorIndex.GENERIC_ERROR)
+                    reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR)
                 })
 
 
@@ -58,7 +58,7 @@ module.exports = {
                 console.log("utente già untimeoutato")
                 let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                 embedmsg.init().then(() => {
-                    reject(errorIndex.NOT_HAVE_TIMEOUT_ERROR)
+                    reject(errorIndex.REPLY_ERRORS.NOT_HAVE_TIMEOUT_ERROR)
                 }
                 ).catch((err) => {
                     console.error(err);

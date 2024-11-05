@@ -10,7 +10,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let initguild = new InitguildInfo(guild)
             await initguild.reset(guild, process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).catch(() => {
-                reject(errorIndex.GENERIC_ERROR)
+                reject(errorIndex.SYSTEM_ERRORS.GENERIC_ERROR)
             })
             resolve(0);
         })

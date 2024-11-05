@@ -21,11 +21,11 @@ module.exports = {
                     defaultChannel.send({ embeds: [embed.newguild(guild)] }).catch((err) => { console.log(err) });
 
                 } catch (error) {
-                    reject(errorIndex.FETCH_DATA_ERROR);
+                    reject(errorIndex.SYSTEM_ERRORS.FETCH_DATA_ERROR);
                 }
                 resolve(0);
             }).catch(() => {
-                reject(errorIndex.GENERIC_ERROR.internal = true);
+                reject(errorIndex.SYSTEM_ERRORS.GENERIC_ERROR);
             })
 
         })

@@ -43,9 +43,9 @@ module.exports = {
                     });
                 }).catch((err) => {
                     if (err.code == 50035) {
-                        reject(errorIndex.BOT_NOT_PERMISSION_ERROR)
+                        reject(errorIndex.REPLY_ERRORS.BOT_NOT_PERMISSION_ERROR)
                     } else {
-                        reject(errorIndex.GENERIC_ERROR)
+                        reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR)
                     }
                 });
             }).catch((err) => {

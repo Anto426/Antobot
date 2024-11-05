@@ -49,9 +49,9 @@ module.exports = {
                     let embedmsg = new ErrEmbed(interaction.guild, interaction.member)
                     embedmsg.init().then(() => {
                         if (err.code == 50013) {
-                            reject(errorIndex.BOT_NOT_PERMISSION_ERROR)
+                            reject(errorIndex.REPLY_ERRORS.BOT_NOT_PERMISSION_ERROR)
                         } else {
-                            reject(errorIndex.NOT_KICK_ERROR)
+                            reject(errorIndex.REPLY_ERRORS.NOT_KICK_ERROR)
                         }
                         resolve(0)
                     }
@@ -61,7 +61,7 @@ module.exports = {
                 })
             }).catch((err) => {
                 console.log(err)
-                reject(errorIndex.GENERIC_ERROR)
+                reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR)
             })
         })
     }

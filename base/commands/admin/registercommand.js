@@ -42,7 +42,7 @@ module.exports = {
                 resolve(0)
 
             }).catch(() => {
-                reject(errorIndex.GENERIC_ERROR)
+                reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR)
             })
 
 

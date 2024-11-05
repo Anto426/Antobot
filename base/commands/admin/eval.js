@@ -34,7 +34,7 @@ module.exports = {
                 resolve(0)
             }).catch((err) => {
                 console.log(err)
-                reject(errorIndex.EVAL_ERROR)
+                reject(errorIndex.REPLY_ERRORS.EVAL_ERROR)
             })
         });
 

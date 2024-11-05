@@ -47,7 +47,7 @@ module.exports = {
                 resolve(0);
             }).catch((err) => {
                 console.error(err);
-                reject(errorIndex.NOT_REPEAT_ERROR);
+                reject(errorIndex.REPLY_ERRORS.NOT_REPEAT_ERROR);
             })
         })
 

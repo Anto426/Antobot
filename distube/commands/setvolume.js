@@ -38,7 +38,7 @@ module.exports = {
                 resolve(0);
             }).catch((err) => {
                 console.error(err);
-                reject(errorIndex.NOT_VOLUME_ERROR)
+                reject(errorIndex.REPLY_ERRORS.NOT_VOLUME_ERROR)
             })
         })
 

@@ -22,7 +22,7 @@ module.exports = {
         return new Promise(async (resolve, reject) => {
             let queue = distube.getQueue(interaction)
             if (queue.songs.length == 1 && !queue.autoplay) {
-                reject(errorIndex.NOT_TRACK_SKIPABLE_ERROR)
+                reject(errorIndex.REPLY_ERRORS.NOT_TRACK_SKIPABLE_ERROR)
             } else {
                 let currentTrack = queue.songs[0];
                 let nextTrack = await distube.skip(interaction.guild);
@@ -33,7 +33,7 @@ module.exports = {
                     });
                 }).catch((err) => {
                     console.error(err);
-                    reject(errorIndex.NOT_SKIP_ERROR)
+                    reject(errorIndex.REPLY_ERRORS.NOT_SKIP_ERROR)
                 })
 
                 resolve(0);

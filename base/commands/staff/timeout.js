@@ -86,19 +86,19 @@ module.exports = {
                     }).catch((err) => {
                         console.log(err)
                         if (err.code == 50013) {
-                            reject(errorIndex.BOT_NOT_PERMISSION_ERROR)
+                            reject(errorIndex.REPLY_ERRORS.BOT_NOT_PERMISSION_ERROR)
                         } else {
-                            reject(errorIndex.GENERIC_ERROR)
+                            reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR)
                         }
                     })
 
                 }).catch((err) => {
                     console.log(err)
-                    reject(errorIndex.NOT_TIMEOUT_ERROR)
+                    reject(errorIndex.REPLY_ERRORS.NOT_TIMEOUT_ERROR)
                 })
             } else {
                 console.log("utente già timeoutato")
-                reject(errorIndex.IS_JUST_TIMEOUT_ERROR)
+                reject(errorIndex.REPLY_ERRORS.IS_JUST_TIMEOUT_ERROR)
             }
 
         });

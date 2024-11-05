@@ -31,11 +31,11 @@ module.exports = {
                     resolve(0)
                 }).catch((err) => {
                     console.log(err)
-                    reject(errorIndex.GENERIC_ERROR)
+                    reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR)
                 })
             }).catch((err) => {
                 console.log(err)
-                reject(errorIndex.GENERIC_ERROR)
+                reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR)
             })
         });
     }

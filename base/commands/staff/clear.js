@@ -40,12 +40,12 @@ module.exports = {
                     });
                 }).catch((err) => {
                     console.error(err);
-                    reject(errorIndex.BULK_DELETE_ERROR)
+                    reject(errorIndex.REPLY_ERRORS.BULK_DELETE_ERROR)
                 });
                 resolve(0)
             }).catch((err) => {
                 console.error(err);
-                reject(errorIndex.GENERIC_ERROR)
+                reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR)
             });
         });
 

@@ -1,4 +1,5 @@
 const { EventEmbed } = require("../../../embed/base/events");
+const { errorIndex } = require("../../../function/err/errormenager");
 const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json")
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
                         resolve(0);
                     }
                 }).catch((err) => {
-                    reject(err)
+                    reject(errorIndex.REPLY_ERRORS.FETCH_DATA_ERROR)
                 })
             }).catch((err) => {
                 reject(err)

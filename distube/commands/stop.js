@@ -42,10 +42,10 @@ module.exports = {
                     resolve(0);
                 }).catch((err) => {
                     console.error(err);
-                    reject(errorIndex.GENERIC_ERROR);
+                    reject(errorIndex.REPLY_ERRORS.GENERIC_ERROR);
                 })
             }).catch(() => {
-                reject(errorIndex.NOT_STOP_ERROR)
+                reject(errorIndex.REPLY_ERRORS.NOT_STOP_ERROR)
             })
         })
     }
