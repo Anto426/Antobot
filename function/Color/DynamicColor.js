@@ -56,14 +56,7 @@ class DynamicColor {
             if (this.Img.complete) {
                 resolve(ColorThief.getPalette(this.Img, this.numColors));
             } else {
-                this.Img.addEventListener('load', () => {
-                    if (this.Img.naturalWidth > 0 && this.Img.naturalHeight > 0) {
-                        console.log("Image loaded successfully");
-                        resolve(ColorThief.getPalette(this.Img, this.numColors));
-                    } else {
-                        reject("Image not loaded properly.");
-                    }
-                });
+                reject("Image not loaded properly.")
             }
         });
     }
