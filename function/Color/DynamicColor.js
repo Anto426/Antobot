@@ -51,7 +51,7 @@ class DynamicColor {
     }
 
     // Function for extract the palette
-    extractPalette() {
+    ExtractPalet() {
         return new Promise((resolve, reject) => {
             const colorThief = new ColorThief();
             if (this.Img.complete) {
@@ -127,7 +127,7 @@ class DynamicColor {
 
     ReturnPalletandTextColor() {
         return new Promise((resolve, reject) => {
-            this.extractPalette().then((palette) => {
+            this.ExtractPalet().then((palette) => {
                 palette.length >= 3 ? null : this.requiredfilter = false;
                 this.filterPalette(palette).then((newPalette) => {
                     this.updateGradient(newPalette).then(() => {
