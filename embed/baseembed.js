@@ -7,7 +7,7 @@ class BaseEmbed {
         this.member = member
         this.embed = new EmbedBuilder()
         this.color = new DynamicColor()
-        this.image = typeof image === "string" ? image : client.user.displayAvatarURL({ format: "png", size: 512 })
+        this.image = image || client.user.displayAvatarURL({ format: "png", size: 512 })
     }
     init() {
         return new Promise(async (resolve, reject) => {
