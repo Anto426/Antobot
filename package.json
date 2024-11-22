@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
-    "@discordjs/voice": "^0.17.0",
+    "@discordjs/voice": "^0.18.0",
     "@distube/deezer": "^2.0.1",
     "@distube/direct-link": "^1.0.1",
     "@distube/soundcloud": "^2.0.4",
@@ -28,10 +28,10 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "libsodium-wrappers": "^0.7.15",
-    "mysql2": "^3.11.3",
+    "mysql2": "^3.11.4",
     "node-fetch": "^2.7.0",
-    "openai": "^4.69.0",
+    "openai": "^4.73.0",
     "sharp": "^0.33.5",
-    "sodium-native": "^4.2.2"
+    "sodium-native": "^4.3.1"
   }
 }
