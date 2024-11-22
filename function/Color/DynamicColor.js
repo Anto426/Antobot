@@ -53,10 +53,10 @@ class DynamicColor {
     // Function for extract the palette
     ExtractPalet() {
         return new Promise((resolve, reject) => {
-            if (this.Img.complete) {
+            if (this.Img) {
                 resolve(ColorThief.getPalette(this.Img, this.numColors));
             } else {
-                reject("Image not loaded properly.")
+                reject("No image set");
             }
         });
     }
