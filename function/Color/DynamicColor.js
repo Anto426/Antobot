@@ -122,11 +122,7 @@ class DynamicColor {
             this.ExtractPalet().then((palette) => {
                 palette.length >= 3 ? null : this.requiredfilter = false;
                 this.filterPalette(palette).then((newPalette) => {
-                    this.updateGradient(newPalette).then(() => {
-                        resolve();
-                    }).catch(error => {
-                        reject(error);
-                    });
+                    resolve({ palette: newPalette, textColor: this.calculateItem(newPalette) });
                 }).catch(error => {
                     reject(error);
                 });

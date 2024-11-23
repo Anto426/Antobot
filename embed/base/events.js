@@ -35,6 +35,7 @@ class EventEmbed extends BaseEmbed {
                 let PalletandText = await dynamicColor.ReturnPalletandTextColor().catch((err) => { console.log(err); reject(-1) })
                 let canvasGradient = ctx.createLinearGradient(0, canvas.height, canvas.width, canvas.height);
 
+                console.log(PalletandText)
 
                 PalletandText.palette.forEach((color, index) => {
                     position = index * distancecoloror;
@@ -70,11 +71,11 @@ class EventEmbed extends BaseEmbed {
                 ctx.drawImage(img, 150, canvas.height / 2 - 300 / 2, 300, 300);
                 ctx.restore();
                 ctx.lineWidth = 5;
-                ctx.strokeStyle = ColorFunctions.ArrayToRgb(PalletandText.textcolor);
+                ctx.strokeStyle = ColorFunctions.ArrayToRgb(PalletandText.textColor);
                 ctx.beginPath();
                 ctx.arc(150 + 300 / 2, canvas.height / 2, 150, 0, 2 * Math.PI, false); // Disegna il cerchio
                 ctx.stroke();
-                ctx.fillStyle = ColorFunctions.ArrayToRgb(PalletandText.textcolor);
+                ctx.fillStyle = ColorFunctions.ArrayToRgb(PalletandText.textColor);
                 ctx.textBaseline = "middle"
                 ctx.font = "80px asapCondensed"
                 ctx.fillText("Benvenuto", 500, 200)
@@ -88,7 +89,7 @@ class EventEmbed extends BaseEmbed {
                     .setTitle("👋 Benvenuto")
                     .setDescription(`🎉 ${member.user} benvenuto su ${this.guild} sei il ${count}° membro`)
                     .setImage('attachment://welcomecanavas.png')
-                    .setColor(ColorFunctions.rgbToHex(PalletandText.textcolor[0], PalletandText.textcolor[1], PalletandText.textcolor[2]))
+                    .setColor(ColorFunctions.rgbToHex(PalletandText.textColor[0], PalletandText.textColor[1], PalletandText.textColor[2]))
 
                 let send = [this.embed, attachment]
 
