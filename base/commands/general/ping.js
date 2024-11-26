@@ -1,5 +1,4 @@
 const { comandbembed } = require("../../../embed/base/command")
-const { errorIndex } = require("../../../function/err/errormenager")
 const { Time } = require("../../../function/time/time")
 
 module.exports = {

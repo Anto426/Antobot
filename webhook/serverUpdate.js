@@ -1,6 +1,6 @@
 const express = require('express');
 const { BotConsole } = require("../function/log/botConsole");
-const { log } = require('../function/log/log');
+const { Log } = require('../function/log/log');
 const { GitFun } = require('../function/Git/GitFun');
 const { emojiMenager } = require('../function/emoji/emojiMenager');
 
@@ -8,7 +8,7 @@ const { emojiMenager } = require('../function/emoji/emojiMenager');
 class serverUpdate {
 
     constructor() {
-        this.log = new log();
+        this.log = new Log();
         this.botconsole = new BotConsole();
         this.app = new express();
         this.emojiMenager = new emojiMenager();

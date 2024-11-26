@@ -1,7 +1,7 @@
 const { EventEmbed } = require("../../../embed/base/events");
-const { errorIndex } = require("../../../function/err/errormenager");
 const { Cjson } = require("../../../function/file/json");
 const { BotConsole } = require("../../../function/log/botConsole");
+
 const setting = require("../../../setting/settings.json");
 
 
@@ -16,8 +16,6 @@ module.exports = {
             let embedMsg = new EventEmbed(member.guild, null, member.user.displayAvatarURL());
             let botconsole = new BotConsole();
             embedMsg.init().then(async () => {
-
-
                 let json = new Cjson();
                 if (!member.user.bot) {
                     await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then(async (jsonf) => {

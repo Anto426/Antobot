@@ -1,8 +1,8 @@
-const { ChannelType, PermissionsBitField } = require("discord.js");
+const { ChannelType } = require("discord.js");
 const { WriteCommand } = require("../../../function/commands/WriteCommand");
 const { EventEmbed } = require("../../../embed/base/events");
 const { BotConsole } = require("../../../function/log/botConsole");
-const { errorIndex } = require("../../../function/err/errormenager");
+
 
 
 module.exports = {

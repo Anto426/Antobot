@@ -1,4 +1,4 @@
-const { errorIndex } = require("../../../function/err/errormenager");
+
 const { InitguildInfo } = require("../../../function/interaction/button/initguild.js/initguildInfo");
 const setting = require("../../../setting/settings.json");
 

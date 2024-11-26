@@ -3,7 +3,7 @@ const { WriteCommand } = require("../commands/WriteCommand");
 const { Loadothermodules } = require("../loadothermodule/loadothermodule");
 const { LogStartup } = require("../log/bootlog");
 const { BotConsole } = require("../log/botConsole");
-const { log } = require("../log/log");
+const { Log } = require("../log/log");
 const { Time } = require("./../time/time")
 const { ClientInit } = require("./initclient");
 const { LoadEventsAndCommand } = require("./loadmodule");
@@ -18,7 +18,7 @@ class Boot {
         this.WriteCommand = new WriteCommand()
         this.time = new Time('Europe/Rome')
         this.ClientInit = new ClientInit()
-        this.log = new log()
+        this.log = new Log()
 
     }
 

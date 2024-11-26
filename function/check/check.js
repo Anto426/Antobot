@@ -1,6 +1,7 @@
 
-const { BotConsole } = require("../log/botConsole");
 const setting = require("../../setting/settings.json");
+const { BotConsole } = require("../log/botConsole");
+
 
 class Check {
     constructor() {

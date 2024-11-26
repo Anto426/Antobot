@@ -2,7 +2,6 @@
 const { Cjson } = require("../../../../function/file/json");
 const { Security } = require("../../../../function/security/security");
 const setting = require("../../../../setting/settings.json");
-const { errorIndex } = require("../../../../function/err/errormenager");
 
 
 module.exports = {
@@ -21,7 +20,7 @@ module.exports = {
                 let json = new Cjson();
                 let jsonow = await json.jsonDependencyBuffer(setting.configjson.online.url + "/" + setting.configjson.online.name[0], process.env.GITTOKEN).catch((err) => { return console.log(err) })
                 let jsonow0 = await json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).catch((err) => { return console.log(err) })
-                let security = new Security(interaction, command, jsonow.owner, jsonow0?.[interaction.guild.id]?.command?.[command.name] || {})
+                let security = new Security(interaction, command, jsonow.owner, jsonow0?.[interaction.guild.id]?.command?.[command.name] || [])
 
                 security.allowCommand()
                     .then(async (result) => {

@@ -2,7 +2,7 @@ const { comandbembed } = require("../../../embed/base/command");
 const { PermissionsBitField } = require("discord.js");
 const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json");
-const { errorIndex } = require("../../../function/err/errormenager");
+
 module.exports = {
     name: "announce",
     permisions: [PermissionsBitField.Flags.ManageGuild],

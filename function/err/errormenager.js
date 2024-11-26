@@ -43,7 +43,7 @@ class ErrorManager {
     }
 }
 
-const errorIndex = {
+global.errorIndex = {
     REPLY_ERRORS: {
         GENERIC_ERROR: { code: prefix | 0, message: "Si è verificato un errore generico.", handler: errEmbed => errEmbed.getGenericError },
         NOT_PERMISSION_ERROR: { code: prefix | 1, message: "Non hai il permesso per eseguire questa azione.", handler: errEmbed => errEmbed.notPermissionError },

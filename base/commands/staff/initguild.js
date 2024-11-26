@@ -3,7 +3,7 @@ const { ErrEmbed } = require("../../../embed/err/errembed");
 const { comandbembed } = require("../../../embed/base/command");
 const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json");
-const { errorIndex } = require("../../../function/err/errormenager");
+
 module.exports = {
     name: "initguild",
     permisions: [PermissionsBitField.Flags.ManageGuild],

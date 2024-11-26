@@ -1,4 +1,4 @@
-const { errorIndex } = require("../../../function/err/errormenager");
+
 const { helppagebuilder } = require("../../../function/interaction/button/helppagebuilder");
 module.exports = {
     name: "help",

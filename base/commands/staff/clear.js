@@ -1,6 +1,6 @@
 const { comandbembed } = require("../../../embed/base/command");
 const { PermissionsBitField } = require("discord.js");
-const { errorIndex } = require("../../../function/err/errormenager");
+
 module.exports = {
     name: "clear",
     permisions: [PermissionsBitField.Flags.ManageMessages],

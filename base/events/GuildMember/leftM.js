@@ -1,4 +1,4 @@
-const { errorIndex } = require("../../../function/err/errormenager");
+
 const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json")
 
@@ -33,10 +33,10 @@ module.exports = {
                     }
                 };
 
-                json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch(reject(interaction, errorIndex.SYSTEM_ERRORS.CREATE_JSON_ERROR));
+                json.createJSONFile(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers, jsons).catch(reject(errorIndex.SYSTEM_ERRORS.CREATE_JSON_ERROR));
             });
-        
-        resolve(0);
+
+            resolve(0);
 
         })
     }

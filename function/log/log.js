@@ -1,261 +1,252 @@
-const { BotConsole } = require("./botConsole");
 const setting = require("./../../setting/settings.json");
+const { BotConsole } = require("./botConsole");
 const { logembed } = require("../../embed/log/logembed");
 const { Cjson } = require("../file/json");
-class log {
 
+class Log {
     constructor() {
         this.console = new BotConsole();
         this.json = new Cjson();
         this.guildJson = {};
     }
 
-    init() {
-        return new Promise(async (resolve, reject) => {
-            this.guildJson = await this.json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).catch(() => { new BotConsole().log(`Errore nell'inizializzare il guild json`, "red"); return reject(-1) })
-            resolve(0);
-        })
+    async init() {
+        try {
+            this.guildJson = await this.json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig);
+            return 0;
+        } catch {
+            this.console.log(`Errore nell'inizializzare il guild json`, "red");
+            return -1;
+        }
     }
 
+    async sendLog(embed, guild) {
+        if (!guild) {
+            this.console.log("Errore nel trovare il server", "red");
+            return -1;
+        }
 
-    sendlog(embed, guild) {
-        return new Promise((resolve, reject) => {
-            try {
-                if (guild) {
-                    if (this.guildJson[guild.id] && this.guildJson[guild.id].channel.log) {
-                        guild.channels.cache.find(x => x.id === this.guildJson[guild.id].channel.log).send({ embeds: [embed] }).then(() => { resolve(0) }).catch(() => { reject(-1) });
-                        resolve(0);
-                    }
-                    else {
-                        this.console.log("Errore nel trovare il canale di log", "red");
-                        reject(-1);
-                    }
-                } else {
-                    this.console.log("Errore nel trovare il server", "red");
-                    reject(-1);
+        const logChannelId = this.guildJson[guild.id]?.channel?.log;
+        if (!logChannelId) {
+            this.console.log("Errore nel trovare il canale di log", "red");
+            return -1;
+        }
+
+        try {
+            const logChannel = guild.channels.cache.find(x => x.id === logChannelId);
+            await logChannel.send({ embeds: [embed] });
+            return 0;
+        } catch (error) {
+            this.console.log("Errore nell'invio del log", "red");
+            console.error(error);
+            return -1;
+        }
+    }
+
+    async handleEmbedAction(action, ...args) {
+        const guild = args[0]?.guild;
+        if (!guild) return;
+
+        const embedmsg = new logembed(guild);
+        try {
+            await embedmsg.init();
+            const embed = embedmsg[action](...args);
+            await this.sendLog(embed, guild);
+        } catch (err) {
+            this.console.log("Errore nell'inizializzare l'embed", "red");
+            console.error(err);
+        }
+    }
+    channelCreate(channel) {
+        this.handleEmbedAction('addchannel', channel);
+    }
+
+    channelDelete(channel) {
+        this.handleEmbedAction('deletechannel', channel);
+    }
+
+    channelUpdate(newChannel, changedprop) {
+
+        let json = new Cjson();
+        json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.guildconfig).then((data) => {
+
+            let changedprop = [];
+            let keys = [
+                { key: "name", label: "📛 name" },
+                { key: "position", label: "📍 position" },
+                { key: "topic", label: "📝 topic" },
+                { key: "nsfw", label: "🔞 nsfw" },
+                { key: "rateLimitPerUser", label: "⏱️ slowmode" },
+                { key: "parentID", label: "🔗 parentID" },
+                { key: "bit", label: "🔒 permissionOverwrites" },
+                { key: "bitrate", label: "🔊 bitrate" },
+                { key: "userLimit", label: "👥 userLimit" },
+            ];
+
+            keys.forEach(({ key, label }) => {
+                if (oldChannel[key] !== newChannel[key]) {
+                    changedprop.push({ key: label, old: oldChannel[key], new: newChannel[key] });
                 }
-            } catch (error) {
-                console.log(error);
-                this.console.log("Errore nell'invio del log", "red");
-                reject(-1);
-            }
-        })
+            });
+
+            if (changedprop.length > 0 && newChannel.parentId !== data[newChannel.guild.id].channel.hollyday.id)
+                this.updatechannel(newChannel, changedprop, tag);
+
+        }).catch(reject(interaction, errorIndex.SYSTEM_ERRORS.READ_JSON_ERROR));
+
+        this.handleEmbedAction('updatechannel', newChannel, changedprop);
     }
-
-    addchannel(channel) {
-        let embedmsg = new logembed(channel.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.addchannel(channel), channel.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-    deltechannel(channel) {
-        let embedmsg = new logembed(channel.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.deletechannel(channel), channel.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-
-    updatechannel(newChannel, changedprop) {
-        let embedmsg = new logembed(newChannel.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.updatechannel(newChannel, changedprop), newChannel.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
 
     emojiCreate(emoji) {
-        let embedmsg = new logembed(emoji.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.emojiCreate(emoji), emoji.guild).catch(() => { });
-        }).catch(() => { this.console.log("Errore nell'inizializzare l'embed", "red") });
+        this.handleEmbedAction('emojiCreate', emoji);
     }
-
 
     emojiDelete(emoji) {
-        let embedmsg = new logembed(emoji.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.emojiDelete(emoji), emoji.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+        this.handleEmbedAction('emojiDelete', emoji);
     }
 
-
     emojiUpdate(oldEmoji, newEmoji) {
-        let embedmsg = new logembed(newEmoji.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.emojiUpdate(oldEmoji, newEmoji), newEmoji.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+        this.handleEmbedAction('emojiUpdate', oldEmoji, newEmoji);
     }
 
     guildBanAdd(guildban) {
-        let embedmsg = new logembed(guildban.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildBanAdd(guildban), guildban.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+        this.handleEmbedAction('guildBanAdd', guildban);
     }
 
     guildBanRemove(guildban) {
-        let embedmsg = new logembed(guildban.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildBanRemove(guildban.user), guildban.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-
-
-    guildMemberUpdate(member, changedprop) {
-        let embedmsg = new logembed(member.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildMemberUpdate(member, changedprop), member.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-
-    guildUpdate(newGuild, oldGuild) {
-        let embedmsg = new logembed(newGuild.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildUpdate(newGuild, oldGuild), newGuild.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-    inviteCreate(invite) {
-        let embedmsg = new logembed(invite.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.inviteCreate(invite), invite.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-    inviteDelete(invite) {
-        let embedmsg = new logembed(invite.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.inviteDelete(invite), invite.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-
-    ready() {
-
-        client.guilds.cache.forEach(guild => {
-
-            if (this.guildJson[guild.id]) {
-                let embedmsg = new logembed(guild);
-                embedmsg.init().then(() => {
-                    this.sendlog(embedmsg.ready(), guild).catch(() => { });
-                }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-            } else {
-                this.console.log("Non ho il canale per inviare il messagio", "red");
-            }
-
-
-        });
-
-    }
-
-    roleCreate(role) {
-        let embedmsg = new logembed(role.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.roleCreate(role), role.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-
-
-    roleDelete(role) {
-        let embedmsg = new logembed(role.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.roleDelete(role), role.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-
-    roleUpdate(oldRole, changedprop) {
-        let embedmsg = new logembed(oldRole.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.roleUpdate(oldRole, changedprop), oldRole.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-
+        this.handleEmbedAction('guildBanRemove', guildban.user);
     }
 
     guildMemberAdd(member, tag) {
-        let embedmsg = new logembed(member.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildMemberAdd(member), member.guild, tag).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+        let json = new Cjson();
+
+            if (!member.user.bot) {
+
+                json.readJson(process.env.dirdatabase + setting.database.root + "/" + setting.database.listoldmebers).then(async (jsondatabase) => {
+
+                    if (!jsondatabase[member.guild.id]) {
+
+                    } else {
+                        if (!jsondatabase[member.guild.id][member.id]) {
+                            logmodule.guildMemberAdd(member);
+                        } else {
+                            let roles = jsondatabase[member.guild.id][member.id].roles
+                            let rolesname = [];
+                            roles.forEach((role) => {
+                                member.guild.roles.cache.find(r => r.id === role) ? rolesname.push(member.guild.roles.cache.find(r => r.id === role).name) : null;
+                            });
+
+                        }
+                    }
+
+                    
+
+
+                }).catch((err) => { console.log(err) });
+
+            } else {
+                logmodule.guildMemberAddBot(member);
+            }
+
 
     }
-
-    guildMemberAddReturn(member, rolenamelist, tag) {
-        let embedmsg = new logembed(member.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildMemberAddReturn(member, rolenamelist), member.guild, tag).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-    }
-
-
 
     guildMemberRemove(member) {
-        let embedmsg = new logembed(member.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildMemberRemove(member), member.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
 
+        if (!member.user.bot) {
+            logmodule.guildMemberRemove(member);
+        } else {
+            tag = false;
+            logmodule.guildMemberRemoveBot(member);
+        }
     }
 
-    voiceEnter(user, channel) {
-        let embedmsg = new logembed(channel.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.voiceEnter(user, channel), channel.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
+    guildMemberUpdate(member, oldMember) {
+        const tag = false;
 
+        logmodule.init().then(() => {
+            let changedprop = [];
+            const keys = [
+                { key: "name", label: "📛 Name" },
+                { key: "region", label: "🌍 Region" },
+                { key: "verificationLevel", label: "✅ Verification Level" },
+                { key: "afkChannelID", label: "💤 AFK Channel" },
+                { key: "afkTimeout", label: "⏲️ AFK Timeout" },
+                { key: "icon", label: "🖼️ Icon" },
+                { key: "splash", label: "🌊 Splash" },
+                { key: "banner", label: "🎨 Banner" },
+                { key: "systemChannelID", label: "📢 System Channel" },
+                { key: "preferredLocale", label: "🌐 Preferred Locale" }
+            ];
+
+            keys.forEach(({ key, label }) => {
+                if (oldGuild[key] !== newGuild[key]) {
+                    changedprop.push({ key: label, old: oldGuild[key], new: newGuild[key] });
+                }
+            });
+
+            if (changedprop.length > 0)
+                logmodule.guildUpdate(newGuild, changedprop, tag);
+
+        }).catch(() => { console.log("Errore nell'inizializzare il modulo log") });
     }
 
-    voiceExit(user, channel) {
-        let embedmsg = new logembed(channel.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.voiceExit(user, channel), channel.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-
+    guildUpdate(newGuild, oldGuild) {
+        this.handleEmbedAction('guildUpdate', newGuild, oldGuild);
     }
 
-    voiceChange(user, channel) {
-        let embedmsg = new logembed(channel.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.voiceChange(user, channel), channel.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-
+    inviteCreate(invite) {
+        this.handleEmbedAction('inviteCreate', invite);
     }
 
-
-    guildMemberAddBot(member) {
-        let embedmsg = new logembed(member.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildMemberAddBot(member), member.guild).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-
+    inviteDelete(invite) {
+        this.handleEmbedAction('inviteDelete', invite);
     }
 
-    guildMemberRemoveBot(member, tag) {
-        let embedmsg = new logembed(member.guild);
-        embedmsg.init().then(() => {
-            this.sendlog(embedmsg.guildMemberRemoveBot(member), member.guild, tag).catch(() => { });
-        }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-
+    roleCreate(role) {
+        this.handleEmbedAction('roleCreate', role);
     }
 
-    UpdateRecived(commits, authors) {
-        client.guilds.cache.forEach(guild => {
-            if (this.guildJson[guild.id]) {
-                let embedmsg = new logembed(guild);
-                embedmsg.init().then(() => {
-                    this.sendlog(embedmsg.UpdateRecived(commits, authors), guild).catch(() => { });
-                }).catch((err) => { console.log(err); this.console.log("Errore nell'inizializzare l'embed", "red") });
-            } else {
-                this.console.log("Non ho il canale per inviare il messagio", "red");
+    roleDelete(role) {
+        this.handleEmbedAction('roleDelete', role);
+    }
+
+    roleUpdate(oldRole, changedprop) {
+        let changedprop = [];
+        const keys = [
+            { key: "name", label: "📛 Name" },
+            { key: "color", label: "🎨 Color" },
+            { key: "hoist", label: "📌 Hoisted" },
+            { key: "position", label: "📍 Position" },
+            { key: "mentionable", label: "📣 Mentionable" }
+        ];
+
+        keys.forEach(({ key, label }) => {
+            if (oldRole[key] !== newRole[key]) {
+                changedprop.push({ key: label, old: oldRole[key], new: newRole[key] });
             }
         });
+
+        if (changedprop.length > 0)
+            logmodule.roleUpdate(newRole, changedprop, tag);
     }
 
+    voiceStateUpdate(user, channel) {
+        const oldChannel = oldState.channel;
+        const newChannel = newState.channel;
+        const user = newState.member.user;
+        let logmodule = new log();
+
+        logmodule.init().then(() => {
+            if (!oldChannel && newChannel) {
+                logmodule.voiceEnter(user, newChannel, tag);
+            } else if (oldChannel && !newChannel) {
+                logmodule.voiceExit(user, oldChannel, tag);
+            } else if (oldChannel && newChannel && oldChannel.id !== newChannel.id) {
+                logmodule.voiceChange(user, newChannel, tag);
+            }
+        }).catch((err) => { console.log(err); console.log("Errore nell'inizializzare il modulo log") });
+    }
 }
 
-module.exports = { log }
+module.exports = { Log };

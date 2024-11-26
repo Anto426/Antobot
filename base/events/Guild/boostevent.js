@@ -1,5 +1,5 @@
 const { EventEmbed } = require("../../../embed/base/events");
-const { errorIndex } = require("../../../function/err/errormenager");
+
 const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json")
 module.exports = {

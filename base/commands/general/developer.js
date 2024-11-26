@@ -1,5 +1,5 @@
 const { comandbembed } = require("../../../embed/base/command");
-const { errorIndex } = require("../../../function/err/errormenager");
+
 const { Cjson } = require("../../../function/file/json");
 const setting = require("../../../setting/settings.json")
 const package = require("../../../package.json");
