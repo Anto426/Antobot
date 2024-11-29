@@ -24,22 +24,6 @@ class Boot {
 
     loging() {
         client.login(process.env.TOKEN)
-            .then(() => {
-                try {
-                    client.on('ready', async () => {
-                        global.Timeon = this.time.getCurrentTimestamp()
-                        new LogStartup().log()
-                        this.log.init().then(() => {
-                            this.log.ready(true)
-                        }).catch(() => { })
-                        await this.WriteCommand.commandAllguildonstartup().then(() => {
-                            this.loadothermodules.load()
-                        })
-                    })
-                } catch(err) {
-                    console.log(err)
-                }
-            })
             .catch(async (err) => {
                 this.BotConsole.log("Errore il Token non è valido il bot verrà killato", "red")
             })
