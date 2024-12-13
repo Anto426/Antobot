@@ -15,94 +15,94 @@ class SystemCheck {
   async loadConfig() {
     try {
       this.#config = await this.#json.readFromFile(this.#path);
+      this.#validateConfig();
       return this.#config;
     } catch (error) {
       throw ERROR_CODE.core.initialization.system.config;
     }
   }
 
-  getPath(pathType, subType, file = "") {
-    try {
-      const basePath = this.#config.paths?.[pathType]?.[subType];
-      if (!basePath) {
+  #validateConfig() {
+    const requiredPaths = ["paths", "features", "remote"];
+    const missing = requiredPaths.filter((path) => !this.#config[path]);
+    if (missing.length) {
+      throw ERROR_CODE.core.initialization.system.config;
+    }
+  }
+
+  #resolvePath(...pathSegments) {
+    let current = this.#config;
+    for (const segment of pathSegments) {
+      current = current?.[segment];
+      if (current === undefined) {
         throw ERROR_CODE.system.path.resolution;
       }
+    }
+    return current;
+  }
+
+  getPath(pathType, subType, file = "") {
+    try {
+      const basePath = this.#resolvePath("paths", pathType, subType);
       return file ? `${basePath}/${file}` : basePath;
-    } catch (error) {
+    } catch {
       throw ERROR_CODE.system.path.resolution;
     }
   }
 
   getDatabasePath(type, file = "") {
     try {
-      const path = this.getPath("database", "files", type);
-      if (!path && !this.#config.paths?.database?.root) {
-        throw ERROR_CODE.core.initialization.system.database;
-      }
-      return file ? path : this.#config.paths.database.root + (path || "");
-    } catch (error) {
+      const root = this.#resolvePath("paths", "database", "root");
+      const filePath = type
+        ? this.#resolvePath("paths", "database", "files", type)
+        : "";
+      return file ? filePath : `${root}${filePath}`;
+    } catch {
       throw ERROR_CODE.core.initialization.system.database;
     }
   }
 
   getModulePath(module, type) {
     try {
-      const modulePath = this.#config.paths?.modules?.[module];
-      if (!modulePath?.[type]) {
-        throw ERROR_CODE.services.moduleLoader.commands;
-      }
-      return modulePath[type];
-    } catch (error) {
+      return this.#resolvePath("paths", "modules", module, type);
+    } catch {
       throw ERROR_CODE.services.moduleLoader.commands;
     }
   }
 
-  getAssetPath(category, type, filename) {
+  getAssetPath(category, type, filename = "") {
     try {
-      const assetConfig = this.#config.paths?.assets?.[category];
-      if (!assetConfig) {
-        throw ERROR_CODE.system.path.resolution;
+      const typeConfig = this.#resolvePath("paths", "assets", category, type);
+
+      if (filename) {
+        if (!typeConfig.files?.includes(filename)) {
+          throw ERROR_CODE.system.path.resolution;
+        }
+        return `${typeConfig.directory}/${filename}`;
       }
 
-      const typeConfig = assetConfig[type];
-      if (!typeConfig) {
-        throw ERROR_CODE.system.path.resolution;
-      }
-
-      if (filename && !typeConfig.files.includes(filename)) {
-        throw ERROR_CODE.system.path.resolution;
-      }
-      
-      return filename ? `${typeConfig.directory}/${filename}` : typeConfig.directory;
-    } catch (error) {
+      return typeConfig.directory;
+    } catch {
       throw ERROR_CODE.system.path.resolution;
     }
   }
 
   isFeatureEnabled(feature) {
     try {
-      if (feature === 'openai') {
-        return this.#config.features?.openai?.enabled ?? false;
+      if (feature === "openai") {
+        return this.#resolvePath("features", "openai", "enabled");
       }
-      return Boolean(this.#config.features?.[feature]);
-    } catch (error) {
-      throw ERROR_CODE.system.error.handling;
+      return Boolean(this.#resolvePath("features", feature));
+    } catch {
+      return false;
     }
   }
 
   getGithubConfig(key = null) {
     try {
-      const githubConfig = this.#config.remote?.github;
-      if (!githubConfig) {
-        throw ERROR_CODE.system.error.handling;
-      }
-      
-      if (key) {
-        return githubConfig[key] ?? null;
-      }
-      
-      return githubConfig;
-    } catch (error) {
+      const githubConfig = this.#resolvePath("remote", "github");
+      return key ? githubConfig[key] : githubConfig;
+    } catch {
       throw ERROR_CODE.system.error.handling;
     }
   }
