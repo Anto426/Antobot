@@ -1,0 +1,158 @@
+{
+  "core": {
+    "initialization": {
+      "client": {
+        "base": {
+          "id": 1001,
+          "code": "CORE_INIT_CLIENT_BASE_ERROR",
+          "message": "Failed to initialize base client",
+          "severity": "critical"
+        },
+        "ai": {
+          "id": 1002,
+          "code": "CORE_INIT_CLIENT_AI_ERROR",
+          "message": "Failed to initialize AI client",
+          "severity": "critical"
+        },
+        "music": {
+          "id": 1003,
+          "code": "CORE_INIT_CLIENT_MUSIC_ERROR",
+          "message": "Failed to initialize music client",
+          "severity": "major"
+        }
+      },
+      "system": {
+        "config": {
+          "id": 1101,
+          "code": "CORE_INIT_CONFIG_ERROR",
+          "message": "Failed to load system configuration",
+          "severity": "critical"
+        },
+        "token": {
+          "id": 1102,
+          "code": "CORE_INIT_TOKEN_ERROR",
+          "message": "Invalid or missing authentication token",
+          "severity": "critical"
+        },
+        "database": {
+          "id": 1103,
+          "code": "CORE_INIT_DATABASE_ERROR",
+          "message": "Failed to initialize database connection",
+          "severity": "critical"
+        }
+      }
+    }
+  },
+  "services": {
+    "json": {
+      "parse": {
+        "id": 2001,
+        "code": "SERVICE_JSON_PARSE_ERROR",
+        "message": "Failed to parse JSON data",
+        "severity": "major"
+      },
+      "stringify": {
+        "id": 2002,
+        "code": "SERVICE_JSON_STRINGIFY_ERROR",
+        "message": "Failed to stringify JSON data",
+        "severity": "major"
+      },
+      "file": {
+        "read": {
+          "id": 2003,
+          "code": "SERVICE_JSON_FILE_READ_ERROR",
+          "message": "Failed to read JSON file",
+          "severity": "major"
+        },
+        "write": {
+          "id": 2004,
+          "code": "SERVICE_JSON_FILE_WRITE_ERROR",
+          "message": "Failed to write JSON file",
+          "severity": "major"
+        }
+      }
+    },
+    "moduleLoader": {
+      "events": {
+        "id": 2101,
+        "code": "SERVICE_MODULE_EVENTS_ERROR",
+        "message": "Failed to load event modules",
+        "severity": "critical"
+      },
+      "commands": {
+        "id": 2102,
+        "code": "SERVICE_MODULE_COMMANDS_ERROR",
+        "message": "Failed to load command modules",
+        "severity": "critical"
+      },
+      "buttons": {
+        "id": 2103,
+        "code": "SERVICE_MODULE_BUTTONS_ERROR",
+        "message": "Failed to load button modules",
+        "severity": "major"
+      }
+    }
+  },
+  "modules": {
+    "base": {
+      "commands": {
+        "id": 3001,
+        "code": "MODULE_BASE_COMMAND_ERROR",
+        "message": "Error in base command execution",
+        "severity": "minor"
+      },
+      "events": {
+        "id": 3002,
+        "code": "MODULE_BASE_EVENT_ERROR",
+        "message": "Error in base event handling",
+        "severity": "minor"
+      }
+    },
+    "music": {
+      "commands": {
+        "id": 3101,
+        "code": "MODULE_MUSIC_COMMAND_ERROR",
+        "message": "Error in music command execution",
+        "severity": "minor"
+      },
+      "player": {
+        "id": 3102,
+        "code": "MODULE_MUSIC_PLAYER_ERROR",
+        "message": "Error in music player operation",
+        "severity": "major"
+      }
+    }
+  },
+  "system": {
+    "error": {
+      "logging": {
+        "id": 4001,
+        "code": "SYSTEM_ERROR_LOGGING_FAILED",
+        "message": "Failed to log error",
+        "severity": "major"
+      },
+      "handling": {
+        "id": 4002,
+        "code": "SYSTEM_ERROR_HANDLING_FAILED",
+        "message": "Failed to process error handling",
+        "severity": "critical"
+      }
+    },
+    "path": {
+      "resolution": {
+        "id": 4101,
+        "code": "SYSTEM_PATH_RESOLUTION_ERROR",
+        "message": "Failed to resolve system path",
+        "severity": "major"
+      }
+    },
+    "resources": {
+      "memory": {
+        "id": 4201,
+        "code": "SYSTEM_MEMORY_ERROR",
+        "message": "System memory allocation error",
+        "severity": "critical"
+      }
+    }
+  }
+}
