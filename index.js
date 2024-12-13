@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 import ApplicationManager from "./class/client/ApplicationManager.js";
 import BotConsole from "./class/console/BotConsole.js";
 import { errorhandler } from "./class/error/ErrorHandler.js";
-import LoadModules from "./module/LoadModules.js";
-import LoadOtherModules from "./module/LoadOtherModules.js";
+import LoadModules from "./class/Module/LoadModules.js";
+import LoadOtherModules from "./class/Module/LoadOtherModules.js";
 
 dotenv.config();
 
