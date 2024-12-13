@@ -6,12 +6,12 @@ import { DeezerPlugin } from "@distube/deezer";
 import { YouTubePlugin } from "@distube/youtube";
 import OpenAI from "openai";
 
-import BotConsole from "../console/Console.js";
+import BotConsole from "../console/BotConsole.js";
 import { ERROR_CODE } from "../error/ErrorHandler.js";
 import JsonHandler from "../json/JsonHandler.js";
 import systemcheck from "./SystemCheck.js";
+
 class ClientInitializer {
-  // Migliore organizzazione delle costanti
   static MUSIC_FILTERS = Object.freeze({
     bassboost: "bass=g=10",
     "8D": "apulsator=hz=0.08",
@@ -46,7 +46,7 @@ class ClientInitializer {
         process.env.GITTOKEN
       );
     } catch (error) {
-      throw new ERROR_CODE.client.fetch(error);
+      throw ERROR_CODE.core.initialization.system.config;
     }
   }
 
@@ -65,13 +65,13 @@ class ClientInitializer {
       BotConsole.success("Base client initialized successfully");
       return true;
     } catch (error) {
-      throw new ERROR_CODE.client.initialization.base(error);
+      throw ERROR_CODE.core.initialization.client.base;
     }
   }
 
   async initializeClientAI() {
     if (!process.env.OPENAITOKEN) {
-      throw new ERROR_CODE.client.initialization.ai("Missing OPENAI_API_KEY");
+      throw ERROR_CODE.core.initialization.client.ai;
     }
 
     try {
@@ -79,7 +79,7 @@ class ClientInitializer {
       BotConsole.success("AI client initialized successfully");
       return true;
     } catch (error) {
-      throw new ERROR_CODE.client.initialization.ai(error);
+      throw ERROR_CODE.core.initialization.client.ai;
     }
   }
 
@@ -102,7 +102,7 @@ class ClientInitializer {
       BotConsole.success("Music client initialized successfully");
       return true;
     } catch (error) {
-      throw new ERROR_CODE.client.initialization.music(error);
+      throw ERROR_CODE.core.initialization.client.music;
     }
   }
 
@@ -124,7 +124,7 @@ class ClientInitializer {
       BotConsole.log("Client initialization status:", status);
       return status;
     } catch (error) {
-      throw new ERROR_CODE.client.initialization.all(error);
+      throw ERROR_CODE.system.error.handling;
     }
   }
 }

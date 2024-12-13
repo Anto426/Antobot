@@ -1,3 +1,8 @@
+import fs from 'fs';
+import { Collection } from 'discord.js';
+import { ERROR_CODE } from '../class/error/ErrorHandler.js';
+
+
 class CreateCollection {
     constructor() {
         this.collection = new Collection();
@@ -9,7 +14,7 @@ class CreateCollection {
             await Promise.all(files.map(file => this.loadFile(file)));
             return this.collection;
         } catch (error) {
-            throw ERROR_CODE.COLLECTION_CREATION_FAILED;
+            throw ERROR_CODE.modules.base.commands; // Using MODULE_BASE_COMMAND_ERROR
         }
     }
 
@@ -28,7 +33,7 @@ class CreateCollection {
             }
             return files;
         } catch (error) {
-            throw ERROR_CODE.FILE_READ_ERROR;
+            throw ERROR_CODE.services.json.file.read; // Using SERVICE_JSON_FILE_READ_ERROR
         }
     }
 
@@ -39,7 +44,9 @@ class CreateCollection {
                 this.collection.set(file.name, file);
             }
         } catch (error) {
-            throw ERROR_CODE.FILE_IMPORT_ERROR;
+            throw ERROR_CODE.services.moduleLoader.commands; // Using SERVICE_MODULE_COMMANDS_ERROR
         }
     }
 }
+
+export default CreateCollection;

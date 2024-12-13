@@ -1,56 +1,69 @@
 import fs from 'fs/promises';
 import fetch from 'node-fetch';
+import { ERROR_CODE } from '../error/ErrorHandler.js';
 
 class JsonHandler {
+    #data;
 
-    constructor() {
-        this.data = null;
+    constructor(initialData = null) {
+        this.#data = initialData;
     }
 
-    // Parse JSON string to object
+    get data() {
+        return this.#data;
+    }
+
     parse(jsonString) {
+        if (!jsonString) {
+            throw ERROR_CODE.services.json.parse;
+        }
+
         try {
-            this.data = JSON.parse(jsonString);
-            return this.data;
+            this.#data = JSON.parse(jsonString);
+            return this.#data;
         } catch (error) {
-            throw new Error(`Failed to parse JSON: ${error.message}`);
+            throw ERROR_CODE.services.json.parse;
         }
     }
 
-    // Convert object to JSON string
-    stringify(data = this.data, pretty = false) {
+    stringify(data = this.#data, pretty = false) {
+        if (!data) {
+            throw ERROR_CODE.services.json.stringify;
+        }
+
         try {
             return pretty
                 ? JSON.stringify(data, null, 2)
                 : JSON.stringify(data);
         } catch (error) {
-            throw new Error(`Failed to stringify JSON: ${error.message}`);
+            throw ERROR_CODE.services.json.stringify;
         }
     }
 
-    // Get value by key path (e.g., "user.address.city")
     getValue(path) {
-        return path.split('.').reduce((obj, key) => (obj && obj[key] !== undefined ? obj[key] : undefined), this.data);
+        if (!path || !this.#data) return undefined;
+        return path.split('.')
+            .reduce((obj, key) => obj?.[key], this.#data);
     }
 
-    // Set value by key path
     setValue(path, value) {
-        if (!this.data) this.data = {};
-
+        if (!path) throw new Error('Path is required');
+        
+        this.#data ??= {};
         const keys = path.split('.');
         const lastKey = keys.pop();
+        
         const target = keys.reduce((obj, key) => {
-            if (!obj[key] || typeof obj[key] !== 'object') obj[key] = {};
+            obj[key] = obj[key] ?? {};
             return obj[key];
-        }, this.data);
+        }, this.#data);
 
         target[lastKey] = value;
-        return this.data;
+        return this.#data;
     }
 
-    // Clear stored data
     clear() {
-        this.data = null;
+        this.#data = null;
     }
 
     async readFromFile(filePath) {
@@ -58,42 +71,40 @@ class JsonHandler {
             const jsonString = await fs.readFile(filePath, 'utf-8');
             return this.parse(jsonString);
         } catch (error) {
-            throw new Error(`Failed to read file: ${error.message}`);
+            throw ERROR_CODE.services.json.file.read;
         }
     }
 
     async writeToFile(filePath, pretty = false) {
+        if (!this.#data) {
+            throw ERROR_CODE.services.json.file.write;
+        }
+
         try {
-            const jsonString = this.stringify(this.data, pretty);
+            const jsonString = this.stringify(this.#data, pretty);
             await fs.writeFile(filePath, jsonString, 'utf-8');
         } catch (error) {
-            throw new Error(`Failed to write file: ${error.message}`);
+            throw ERROR_CODE.services.json.file.write;
         }
     }
 
     async readFromUrl(url, token = null) {
         try {
-            const options = {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                }
+            const headers = {
+                'Accept': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` })
             };
 
-
-            if (token) {
-                options.headers['Authorization'] = `Bearer ${token}`;
-            }
-
-            const response = await fetch(url, options);
+            const response = await fetch(url, { method: 'GET', headers });
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
             const jsonString = await response.text();
             return this.parse(jsonString);
         } catch (error) {
-            throw new Error(`Failed to read URL: ${error.message}`);
+            throw ERROR_CODE.services.json.parse;
         }
     }
 }

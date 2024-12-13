@@ -17,7 +17,7 @@ class SystemCheck {
       this.#config = await this.#json.readFromFile(this.#path);
       return this.#config;
     } catch (error) {
-      throw ERROR_CODE.system.error.config;  // Using the correct path from error codes
+      throw ERROR_CODE.core.initialization.system.config;
     }
   }
 
@@ -37,11 +37,11 @@ class SystemCheck {
     try {
       const path = this.getPath("database", "files", type);
       if (!path && !this.#config.paths?.database?.root) {
-        throw ERROR_CODE.system.path.resolution;
+        throw ERROR_CODE.core.initialization.system.database;
       }
       return file ? path : this.#config.paths.database.root + (path || "");
     } catch (error) {
-      throw ERROR_CODE.system.path.resolution;
+      throw ERROR_CODE.core.initialization.system.database;
     }
   }
 
@@ -49,11 +49,11 @@ class SystemCheck {
     try {
       const modulePath = this.#config.paths?.modules?.[module];
       if (!modulePath?.[type]) {
-        throw ERROR_CODE.system.path.resolution;
+        throw ERROR_CODE.services.moduleLoader.commands;
       }
       return modulePath[type];
     } catch (error) {
-      throw ERROR_CODE.system.path.resolution;
+      throw ERROR_CODE.services.moduleLoader.commands;
     }
   }
 

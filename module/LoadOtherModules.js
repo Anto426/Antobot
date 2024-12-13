@@ -1,12 +1,9 @@
-import fs from 'fs';
-import { Collection } from 'discord.js';
 import { serverUpdate } from "../../webhook/serverUpdate";
 import { Check } from "../check/check";
 import { Holiday } from "../hollyday/hollyday";
 import { BotConsole } from "../log/botConsole";
 import { Status } from "../status/status";
-import { ERROR_CODE } from '../error/ErrorHandler';
-
+import { ERROR_CODE } from '../class/error/ErrorHandler';
 
 class LoadOtherModules {
     constructor() {
@@ -24,7 +21,7 @@ class LoadOtherModules {
             await this.initializeStatus();
             await this.initializeHoliday();
         } catch (error) {
-            throw ERROR_CODE.OTHER_MODULES_LOAD_ERROR;
+            throw ERROR_CODE.services.moduleLoader.commands; // ID: 2102
         }
     }
 
@@ -34,7 +31,7 @@ class LoadOtherModules {
             this.botConsole.log("Server initialized", "green");
             this.serverUpdate.StartServer();
         } catch (error) {
-            throw ERROR_CODE.SERVER_INITIALIZATION_FAILED;
+            throw ERROR_CODE.core.initialization.system.config; // ID: 1101
         }
     }
 
@@ -46,7 +43,7 @@ class LoadOtherModules {
                 client.statusmodule.updateStatusEveryFiveMinutes();
             }
         } catch (error) {
-            throw ERROR_CODE.STATUS_INITIALIZATION_FAILED;
+            throw ERROR_CODE.modules.base.events; // ID: 3002
         }
     }
 
@@ -58,9 +55,11 @@ class LoadOtherModules {
                 client.holidaymodule.main();
             }
         } catch (error) {
-            throw ERROR_CODE.HOLIDAY_INITIALIZATION_FAILED;
+            throw ERROR_CODE.modules.base.events; // ID: 3002
         }
     }
 }
 
-export { CreateCollection, LoadEventsAndCommand, LoadOtherModules };
+
+const loadothermodules = new LoadOtherModules();
+export { loadothermodules };

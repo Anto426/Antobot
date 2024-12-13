@@ -1,32 +1,49 @@
 import dotenv from "dotenv";
 import ApplicationManager from "./class/client/ApplicationManager.js";
-import console from "./class/console/Console.js";
+import BotConsole from "./class/console/BotConsole.js";
 import { errorhandler } from "./class/error/ErrorHandler.js";
+import LoadModules from "./module/LoadModules.js";
+import LoadOtherModules from "./module/LoadOtherModules.js";
 
-// Load environment variables
 dotenv.config();
 
-// Exit code constants
 const EXIT_CODES = {
   SUCCESS: 0,
   ERROR: 1,
+  UNCAUGHT_ERROR: 2,
 };
 
-errorhandler.loadErrorcode();
+errorhandler.loadErrorCodes();
 
-// Main function
-const main = async () => {
+async function main() {
   const applicationManager = new ApplicationManager();
+
+  // Initialize application
   const argv = applicationManager.configureYargs();
-  const token = await applicationManager.getToken(argv);
+  await applicationManager.getToken(argv);
   await applicationManager.initializeClients();
 
-  console.log("Application initialized successfully");
+  BotConsole.success("Application initialized successfully");
   return EXIT_CODES.SUCCESS;
-};
+}
 
-process.on("uncaughtException", async(err, origin) => {
-  errorhandler.logError(err, origin);
+// Global error handling
+process.on("uncaughtException", async (error, origin) => {
+  console.error("Uncaught Exception:");
+  errorhandler.logError(error, origin);
+  process.exit(EXIT_CODES.UNCAUGHT_ERROR);
 });
 
-main();
+process.on("unhandledRejection", async (reason) => {
+  console.error("Unhandled Rejection:");
+  errorhandler.logError(reason);
+  process.exit(EXIT_CODES.UNCAUGHT_ERROR);
+});
+
+// Run application
+main()
+  .then((exitCode) => process.exit(exitCode))
+  .catch((error) => {
+    console.error("Fatal error:", error);
+    process.exit(EXIT_CODES.ERROR);
+  });

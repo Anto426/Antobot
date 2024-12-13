@@ -1,7 +1,7 @@
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import readline from "readline";
-import consoleInstance from "../console/Console.js";
+import BotConsole from "../console/BotConsole.js";
 import systemcheck from "./SystemCheck.js";
 import clientInitializer from "./ClientInitializer.js";
 import { ERROR_CODE } from "../error/ErrorHandler.js";
@@ -58,19 +58,19 @@ class ApplicationManager {
       const hasAI = systemcheck.isFeatureEnabled("openai");
 
       if (hasMusic && hasAI) {
-        consoleInstance.log(
-          "Initializing all clients for music and AI features"
-        );
+        BotConsole.warning(
+          "Initializing all clients for music and AI features" );
         await clientInitializer.initialize();
         return true;
       } else {
+        BotConsole.warning("Initializing base client");
         await clientInitializer.initializeClientBase();
         if (hasMusic) {
-          consoleInstance.log("Initializing music client");
+          BotConsole.warning("Initializing music client");
           await clientInitializer.initializeClientDistube();
           return true;
         } else if (hasAI) {
-          consoleInstance.log("Initializing AI client");
+          BotConsole.warning("Initializing AI client");
           await clientInitializer.initializeClientAI();
           return true;
         }
