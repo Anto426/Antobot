@@ -31,7 +31,7 @@
         "token": {
           "id": 1102,
           "code": "CORE_INIT_TOKEN_ERROR",
-          "message": "Invalid or missing authentication token",
+          "message": "Failed to initialize token",
           "severity": "critical"
         },
         "database": {
@@ -90,6 +90,12 @@
         "code": "SERVICE_MODULE_BUTTONS_ERROR",
         "message": "Failed to load button modules",
         "severity": "major"
+      },
+      "collection": {
+        "id": 2104,
+        "code": "SERVICE_MODULE_COLLECTION_ERROR",
+        "message": "Failed to create collection",
+        "severity": "critical"
       }
     }
   },
@@ -106,6 +112,12 @@
         "code": "MODULE_BASE_EVENT_ERROR",
         "message": "Error in base event handling",
         "severity": "minor"
+      },
+      "initialization": {
+        "id": 3003,
+        "code": "MODULE_BASE_INIT_ERROR",
+        "message": "Failed to initialize base modules",
+        "severity": "critical"
       }
     },
     "music": {
