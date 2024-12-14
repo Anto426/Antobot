@@ -98,13 +98,16 @@ class JsonHandler {
             const response = await fetch(url, { method: 'GET', headers });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw ERROR_CODE.system.network.request;
             }
             
             const jsonString = await response.text();
             return this.parse(jsonString);
         } catch (error) {
-            throw ERROR_CODE.services.json.parse;
+            if (error.code === ERROR_CODE.services.json.parse.code) {
+                throw error;
+            }
+            throw ERROR_CODE.system.network.request;
         }
     }
 }

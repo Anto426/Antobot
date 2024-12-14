@@ -8,16 +8,16 @@
             }
         },
         "modules": {
-            "root": "/modules",
+            "root": "./module",
             "base": {
                 "commands": "/base/commands",
                 "events": "/base/events",
-                "button": "/base/button"
+                "buttons": "/base/buttons"
             },
             "distube": {
                 "commands": "/distube/commands",
                 "events": "/distube/events",
-                "button": "/distube/button"
+                "buttons": "/distube/buttons"
             }
         },
         "assets": {

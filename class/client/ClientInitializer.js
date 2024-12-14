@@ -121,7 +121,7 @@ class ClientInitializer {
         ai: results[1].status === "fulfilled",
       };
 
-      BotConsole.log("Client initialization status:", status);
+      BotConsole.info("Client initialization status:", status);
       return status;
     } catch (error) {
       throw ERROR_CODE.system.error.handling;

@@ -6,38 +6,61 @@ import CreateCollection from "./CreateCollection.js";
 
 class LoadModules {
   #systemCheck;
-  
+
   constructor() {
     this.#systemCheck = SystemCheck;
   }
 
   async #loadCollection(collectionName, path) {
-    if (!path) {
+    if (!collectionName || typeof collectionName !== "string") {
+      throw ERROR_CODE.system.invalid.parameter;
+    }
+
+    if (!path || typeof path !== "string") {
       throw ERROR_CODE.system.path.resolution;
     }
 
     try {
-      const collection = await new CreateCollection().createCollection(path, ".js");
+      const collection = await new CreateCollection().createCollection(
+        path,
+        ".js"
+      );
+
+      if (!collection || !(collection instanceof Collection)) {
+        throw ERROR_CODE.services.moduleLoader.collection;
+      }
+
       client[collectionName] = collection;
-      
-      BotConsole.log({
-        message: `Loaded ${collection.size} ${collectionName} files`,
-        type: collection.size > 0 ? 'success' : 'error'
-      });
+
+      const size = collection.size;
+      const logStatus = size > 0 ? "success" : "warning";
+      const message = `${collectionName}: Loaded ${size} ${
+        size === 1 ? "file" : "files"
+      } from ${path}`;
+      const logData = {
+        type: logStatus,
+        data: {
+          collectionName,
+          size,
+          path,
+          timestamp: new Date().toISOString(),
+        },
+      };
+
+      BotConsole[logStatus](message, logData);
 
       return collection;
     } catch (error) {
-      throw ERROR_CODE.services.moduleLoader.commands;
+      throw ERROR_CODE.services.moduleLoader.collection;
     }
   }
 
-  async #loadEvents(collection, path, eventEmitter = client, eventType = 'typeEvent') {
+  async #loadEvents(collection, path) {
     try {
       await this.#loadCollection(collection, path);
-      
-      client[collection].forEach(event => {
+      client[collection].forEach((event) => {
         if (event.allowevents) {
-          eventEmitter.on(event[eventType], (...args) => event.execute(...args));
+          client.on(event.eventType, (...args) => event.execute(...args));
         }
       });
     } catch (error) {
@@ -47,30 +70,52 @@ class LoadModules {
 
   async loadBaseModules() {
     try {
-      await Promise.all([
-        this.#loadCollection('basecommands', this.#systemCheck.getModulePath('base', 'commands')),
-        this.#loadEvents('baseevents', this.#systemCheck.getModulePath('base', 'events')),
-        this.#loadCollection('basebutton', this.#systemCheck.getModulePath('base', 'buttons'))
+      let result = await Promise.all([
+        await this.#loadCollection(
+          "basecommands",
+          this.#systemCheck.getModulePath("base", "commands")
+        ),
+        await this.#loadEvents(
+          "baseevents",
+          this.#systemCheck.getModulePath("base", "events")
+        ),
+        await this.#loadCollection(
+          "basebutton",
+          this.#systemCheck.getModulePath("base", "buttons")
+        ),
       ]);
+
+      BotConsole.success("Base modules loaded successfully");
+      return result;
     } catch (error) {
-      BotConsole.error('Failed to load base modules:', error);
-      throw ERROR_CODE.services.moduleLoader.commands;
+      throw ERROR_CODE.services.moduleLoader.base;
     }
   }
 
   async loadMusicModules() {
-    if (!this.#systemCheck.isFeatureEnabled('music')) {
+    if (!this.#systemCheck.isFeatureEnabled("music")) {
       return;
     }
 
     try {
-      await Promise.all([
-        this.#loadCollection('musiccommands', this.#systemCheck.getModulePath('music', 'commands')),
-        this.#loadEvents('musicevents', this.#systemCheck.getModulePath('music', 'events'), distube),
-        this.#loadCollection('musicbutton', this.#systemCheck.getModulePath('music', 'buttons'))
+      let result = await Promise.all([
+        await this.#loadCollection(
+          "musiccommands",
+          this.#systemCheck.getModulePath("distube", "commands")
+        ),
+        await this.#loadEvents(
+          "musicevents",
+          this.#systemCheck.getModulePath("distube", "events"),
+          distube
+        ),
+        await this.#loadCollection(
+          "musicbutton",
+          this.#systemCheck.getModulePath("distube", "buttons")
+        ),
       ]);
+
+      return result;
     } catch (error) {
-      BotConsole.error('Failed to load music modules:', error);
       throw ERROR_CODE.modules.music.player;
     }
   }
@@ -80,34 +125,26 @@ class LoadModules {
       // Create global command collection
       client.commands = new Collection([
         ...client.basecommands,
-        ...(client.musiccommands || [])
+        ...(client.musiccommands || []),
       ]);
 
       // Create global button collection
       client.buttons = new Collection([
         ...client.basebutton,
-        ...(client.musicbutton || [])
+        ...(client.musicbutton || []),
       ]);
 
-      BotConsole.success('Global collections created successfully');
+      BotConsole.success("Global collections created successfully");
     } catch (error) {
-      BotConsole.error('Failed to create global collections:', error);
       throw ERROR_CODE.services.moduleLoader.commands;
     }
   }
 
   async initialize() {
-    try {
-      await this.loadBaseModules();
-      await this.loadMusicModules();
-      await this.createGlobalCollections();
-      
-      BotConsole.success('All modules loaded successfully');
-    } catch (error) {
-      BotConsole.error('Failed to initialize modules:', error);
-      throw ERROR_CODE.core.initialization.system.config;
-    }
+    await this.loadBaseModules();
+    await this.loadMusicModules();
+    await this.createGlobalCollections();
   }
 }
 
-export default LoadModules;
+export default new LoadModules();

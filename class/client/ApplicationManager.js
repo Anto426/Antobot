@@ -2,9 +2,10 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import readline from "readline";
 import BotConsole from "../console/BotConsole.js";
-import systemcheck from "./SystemCheck.js";
 import clientInitializer from "./ClientInitializer.js";
-import { ERROR_CODE } from "../error/ErrorHandler.js";
+import { ERROR_CODE } from "./../error/ErrorHandler.js";
+import SystemCheck from "./SystemCheck.js";
+import loadModules from "./../Module/LoadModules.js";
 
 class ApplicationManager {
   async getToken(argv) {
@@ -29,9 +30,11 @@ class ApplicationManager {
     });
 
     try {
-      return await new Promise((resolve) => {
+      const token = await new Promise((resolve) => {
         rl.question("Enter your token: ", resolve);
       });
+      process.env.TOKEN = token;
+      return token;
     } finally {
       rl.close();
     }
@@ -51,31 +54,29 @@ class ApplicationManager {
       .showHelpOnFail(true);
   }
 
-  async initializeClients() {
+  async initializeAPP() {
     try {
-      await systemcheck.loadConfig();
-      const hasMusic = systemcheck.isFeatureEnabled("music");
-      const hasAI = systemcheck.isFeatureEnabled("openai");
+      await SystemCheck.initialize();
+      const hasMusic = SystemCheck.isFeatureEnabled("music");
+      const hasAI = SystemCheck.isFeatureEnabled("openai");
 
       if (hasMusic && hasAI) {
-        BotConsole.warning(
-          "Initializing all clients for music and AI features" );
+        BotConsole.info("Initializing all clients for music and AI features");
         await clientInitializer.initialize();
-        return true;
       } else {
-        BotConsole.warning("Initializing base client");
         await clientInitializer.initializeClientBase();
         if (hasMusic) {
-          BotConsole.warning("Initializing music client");
           await clientInitializer.initializeClientDistube();
-          return true;
         } else if (hasAI) {
-          BotConsole.warning("Initializing AI client");
           await clientInitializer.initializeClientAI();
-          return true;
         }
       }
-      return false;
+
+      await loadModules.initialize();
+
+      BotConsole.success("All modules loaded successfully");
+
+      client.login(process.env.TOKEN);
     } catch (error) {
       throw error;
     }

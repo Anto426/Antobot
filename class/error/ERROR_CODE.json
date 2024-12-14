@@ -132,6 +132,32 @@
         "code": "MODULE_MUSIC_PLAYER_ERROR",
         "message": "Error in music player operation",
         "severity": "major"
+      },
+      "queue": {
+        "id": 3103,
+        "code": "MODULE_MUSIC_QUEUE_ERROR",
+        "message": "Error in music queue operation",
+        "severity": "minor"
+      },
+      "stream": {
+        "id": 3104,
+        "code": "MODULE_MUSIC_STREAM_ERROR",
+        "message": "Error in music streaming",
+        "severity": "major"
+      }
+    },
+    "ai": {
+      "commands": {
+        "id": 3201,
+        "code": "MODULE_AI_COMMAND_ERROR",
+        "message": "Error in AI command execution",
+        "severity": "minor"
+      },
+      "processing": {
+        "id": 3202,
+        "code": "MODULE_AI_PROCESSING_ERROR",
+        "message": "Error in AI request processing",
+        "severity": "major"
       }
     }
   },
@@ -164,7 +190,47 @@
         "code": "SYSTEM_MEMORY_ERROR",
         "message": "System memory allocation error",
         "severity": "critical"
+      },
+      "cpu": {
+        "id": 4202,
+        "code": "SYSTEM_CPU_ERROR",
+        "message": "System CPU usage error",
+        "severity": "critical"
+      },
+      "disk": {
+        "id": 4203,
+        "code": "SYSTEM_DISK_ERROR",
+        "message": "System disk operation error",
+        "severity": "critical"
       }
+    },
+    "network": {
+      "connection": {
+        "id": 4301,
+        "code": "SYSTEM_NETWORK_CONNECTION_ERROR",
+        "message": "Network connection error",
+        "severity": "major"
+      },
+      "request": {
+        "id": 4302,
+        "code": "SYSTEM_NETWORK_REQUEST_ERROR",
+        "message": "Network request failed",
+        "severity": "major"
+      }
+    }
+  },
+  "applicationManager": {
+    "token": {
+      "id": 5001,
+      "code": "APP_MANAGER_TOKEN_ERROR",
+      "message": "Token validation or acquisition failed",
+      "severity": "critical"
+    },
+    "initialization": {
+      "id": 5002,
+      "code": "APP_MANAGER_INIT_ERROR",
+      "message": "Application initialization failed",
+      "severity": "critical"
     }
   }
 }

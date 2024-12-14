@@ -1,111 +1,160 @@
 import { ERROR_CODE } from "../error/ErrorHandler.js";
 import JsonHandler from "../json/JsonHandler.js";
-
 class SystemCheck {
   #config;
-  #path;
-  #json;
+  #systemInfo;
+  #jsonHandler;
+
+  static #REQUIRED_CONFIG_SECTIONS = ["paths", "features", "remote"];
+  static #CONFIG_PATH = "./config/setting.json";
+  static #SYSTEM_INFO_PATH = "./package.json";
 
   constructor() {
     this.#config = {};
-    this.#path = "./config/setting.json";
-    this.#json = new JsonHandler();
+    this.#systemInfo = {};
+    this.#jsonHandler = new JsonHandler();
   }
 
-  async loadConfig() {
+  async initialize() {
     try {
-      this.#config = await this.#json.readFromFile(this.#path);
+      [this.#config, this.#systemInfo] = await Promise.all([
+        this.#jsonHandler.readFromFile(SystemCheck.#CONFIG_PATH),
+        this.#jsonHandler.readFromFile(SystemCheck.#SYSTEM_INFO_PATH),
+      ]);
+
       this.#validateConfig();
-      return this.#config;
+      return true;
     } catch (error) {
+      console.error('Initialization failed:', error);
       throw ERROR_CODE.core.initialization.system.config;
     }
   }
 
   #validateConfig() {
-    const requiredPaths = ["paths", "features", "remote"];
-    const missing = requiredPaths.filter((path) => !this.#config[path]);
-    if (missing.length) {
+    if (!this.#config || typeof this.#config !== "object" || Array.isArray(this.#config)) {
       throw ERROR_CODE.core.initialization.system.config;
     }
+
+    const missingSections = SystemCheck.#REQUIRED_CONFIG_SECTIONS.filter(
+      (section) => !(section in this.#config)
+    );
+
+    if (missingSections.length) {
+      throw new Error(`Missing required config sections: ${missingSections.join(", ")}`);
+    }
   }
 
-  #resolvePath(...pathSegments) {
-    let current = this.#config;
-    for (const segment of pathSegments) {
-      current = current?.[segment];
-      if (current === undefined) {
+  #resolvePath(path) {
+    if (!Array.isArray(path)) {
+      throw new Error('Path must be an array');
+    }
+
+    return path.reduce((obj, key) => {
+      if (obj === null || obj === undefined || !(key in obj)) {
         throw ERROR_CODE.system.path.resolution;
       }
-    }
-    return current;
+      return obj[key];
+    }, this.#config);
   }
 
-  getPath(pathType, subType, file = "") {
+  getResourcePath(category, subcategory, filename = '') {
+    if (!category || !subcategory) {
+      throw new Error('Category and subcategory are required');
+    }
+
     try {
-      const basePath = this.#resolvePath("paths", pathType, subType);
-      return file ? `${basePath}/${file}` : basePath;
-    } catch {
+      const basePath = this.#resolvePath(["paths", category, subcategory]);
+      return filename ? `${basePath}/${filename}` : basePath;
+    } catch (error) {
+      console.error('Resource path resolution failed:', error);
       throw ERROR_CODE.system.path.resolution;
     }
   }
 
-  getDatabasePath(type, file = "") {
+  getDatabasePath(category, filename = '') {
     try {
-      const root = this.#resolvePath("paths", "database", "root");
-      const filePath = type
-        ? this.#resolvePath("paths", "database", "files", type)
-        : "";
-      return file ? filePath : `${root}${filePath}`;
-    } catch {
+      const rootPath = this.#resolvePath(["paths", "database", "root"]);
+      if (!category) return rootPath;
+
+      const filePath = this.#resolvePath(["paths", "database", "files", category]);
+      return filename ? filePath : `${rootPath}${filePath}`;
+    } catch (error) {
+      console.error('Database path resolution failed:', error);
       throw ERROR_CODE.core.initialization.system.database;
     }
   }
 
-  getModulePath(module, type) {
+  getModulePath(moduleName, type) {
+    if (!moduleName || !type) {
+      throw new Error('Module name and type are required');
+    }
+
     try {
-      return this.#resolvePath("paths", "modules", module, type);
-    } catch {
+      const root = this.#resolvePath(["paths", "modules", "root"]);
+      const modulePath = this.#resolvePath(["paths", "modules", moduleName, type]);
+      return `${root}${modulePath}`;
+    } catch (error) {
+      console.error('Module path resolution failed:', error);
       throw ERROR_CODE.services.moduleLoader.commands;
     }
   }
 
-  getAssetPath(category, type, filename = "") {
+  getAssetPath(category, type, filename = '') {
+    if (!category || !type) {
+      throw new Error('Category and type are required');
+    }
+
     try {
-      const typeConfig = this.#resolvePath("paths", "assets", category, type);
+      const assetConfig = this.#resolvePath(["paths", "assets", category, type]);
 
       if (filename) {
-        if (!typeConfig.files?.includes(filename)) {
+        if (!Array.isArray(assetConfig.files) || !assetConfig.files.includes(filename)) {
           throw ERROR_CODE.system.path.resolution;
         }
-        return `${typeConfig.directory}/${filename}`;
+        return `${assetConfig.directory}/${filename}`;
       }
 
-      return typeConfig.directory;
-    } catch {
+      return assetConfig.directory;
+    } catch (error) {
+      console.error('Asset path resolution failed:', error);
       throw ERROR_CODE.system.path.resolution;
     }
   }
 
-  isFeatureEnabled(feature) {
+  isFeatureEnabled(featureName) {
+    if (!featureName) return false;
+
     try {
-      if (feature === "openai") {
-        return this.#resolvePath("features", "openai", "enabled");
-      }
-      return Boolean(this.#resolvePath("features", feature));
+      return featureName === "openai" 
+        ? this.#resolvePath(["features", "openai", "enabled"])
+        : Boolean(this.#resolvePath(["features", featureName]));
     } catch {
       return false;
     }
   }
 
-  getGithubConfig(key = null) {
+  getGithubConfig(key) {
     try {
-      const githubConfig = this.#resolvePath("remote", "github");
+      const githubConfig = this.#resolvePath(["remote", "github"]);
       return key ? githubConfig[key] : githubConfig;
-    } catch {
+    } catch (error) {
+      console.error('GitHub config resolution failed:', error);
       throw ERROR_CODE.system.error.handling;
     }
   }
+
+  getSystemInfo(key) {
+    if (!this.#systemInfo || typeof this.#systemInfo !== 'object') {
+      throw ERROR_CODE.system.error.handling;
+    }
+    return key ? this.#systemInfo[key] : this.#systemInfo;
+  }
+
+  getVersion = () => this.getSystemInfo("version");
+  getName = () => this.getSystemInfo("name");
+  getAuthor = () => this.getSystemInfo("author");
+  getRepo = () => this.getSystemInfo("repo");
+  getDependencies = () => this.getSystemInfo("dependencies");
 }
 
 export default new SystemCheck();
