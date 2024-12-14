@@ -146,19 +146,44 @@ class LogStartup {
   logFeatures() {
     this.logHeader("Features Status");
     const featuresTable = this.createTable(
-      ["Feature", "Status"],
+      ["Feature", "Status", "Details"],
       TABLE_CHARS.section,
-      { colWidths: [20, 60] }
+      { colWidths: [20, 15, 45] }
     );
 
-    [
-      ["Music Module", this.data.musicEnabled],
-      ["AI Module", this.data.aiEnabled],
-      ["GPT Module", this.data.gptEnabled],
-    ].forEach(([feature, enabled]) => {
+    const features = [
+      [
+        "Status System",
+        SystemCheck.isFeatureEnabled("status"),
+        "Server status monitoring",
+      ],
+      [
+        "Captcha System",
+        SystemCheck.isFeatureEnabled("captcha"),
+        "User verification system",
+      ],
+      [
+        "Holiday System",
+        SystemCheck.isFeatureEnabled("holiday"),
+        "Holiday events and notifications",
+      ],
+      [
+        "Music Module",
+        SystemCheck.isFeatureEnabled("music"),
+        "Music playback and controls",
+      ],
+      [
+        "OpenAI",
+        SystemCheck.isFeatureEnabled("openai"),
+        `Model: ${SystemCheck.getOpenAIModel() || "N/A"}`,
+      ],
+    ];
+
+    features.forEach(([feature, enabled, details]) => {
       featuresTable.push([
         chalk.yellow(feature),
         enabled ? chalk.green("Enabled") : chalk.red("Disabled"),
+        chalk.gray(details),
       ]);
     });
 
@@ -191,9 +216,9 @@ class LogStartup {
     if (client.basecommands?.size > 0) {
       console.log(chalk.bold.white("\nBase Commands:"));
       const commandsTable = this.createTable(
-        ["Command", "Category", "Description"],
+        ["Command", "Category", "Description", "Cooldown", "Permissions"],
         TABLE_CHARS.section,
-        { colWidths: [20, 20, 40] }
+        { colWidths: [15, 15, 30, 10, 20] }
       );
       client.basecommands.forEach((cmd) => {
         commandsTable.push([
@@ -203,6 +228,9 @@ class LogStartup {
         ]);
       });
       console.log(commandsTable.toString());
+      console.log(
+        chalk.gray(`Total Base Command: ${client.basecommands.size}`)
+      );
     }
 
     // Log Base Events
@@ -220,6 +248,7 @@ class LogStartup {
         ]);
       });
       console.log(eventsTable.toString());
+      console.log(chalk.gray(`Total Base Event: ${client.baseevents.size}`));
     }
 
     // Log Base Buttons
@@ -237,6 +266,7 @@ class LogStartup {
         ]);
       });
       console.log(buttonsTable.toString());
+      console.log(chalk.gray(`Total Base Button: ${client.basebutton.size}`));
     }
 
     // Log Music Commands
@@ -254,6 +284,9 @@ class LogStartup {
         ]);
       });
       console.log(musicTable.toString());
+      console.log(
+        chalk.gray(`Total Distube Command: ${client.musiccommands.size}`)
+      );
     }
 
     // Log Music Events
@@ -271,6 +304,9 @@ class LogStartup {
         ]);
       });
       console.log(musicEventsTable.toString());
+      console.log(
+        chalk.gray(`Total Distube Event: ${client.musicevents.size}`)
+      );
     }
 
     // Log Music Buttons
@@ -288,6 +324,9 @@ class LogStartup {
         ]);
       });
       console.log(musicButtonsTable.toString());
+      console.log(
+        chalk.gray(`Total Distube Button: ${client.musicbutton.size}`)
+      );
     }
   }
 
@@ -296,20 +335,38 @@ class LogStartup {
       this.logHeader("Connected Servers");
 
       const guildsTable = this.createTable(
-        ["Server Name", "Members", "ID"],
+        [
+          "Server Name",
+          "Members",
+          "Owner",
+          "Created At",
+          "Region",
+          "Boost Level",
+          "ID",
+        ],
         TABLE_CHARS.section,
-        { colWidths: [40, 10, 30] }
+        { colWidths: [25, 10, 20, 20, 10, 12, 20] }
       );
 
       client.guilds.cache.forEach((guild) => {
+        const owner =
+          guild.members.cache.get(guild.ownerId)?.user.username || "Unknown";
+        const createdAt = new Date(guild.createdTimestamp).toLocaleDateString();
+        const boostLevel = `Level ${guild.premiumTier}`;
+
         guildsTable.push([
           chalk.green(guild.name),
           chalk.blue(guild.memberCount.toString()),
-          chalk.yellow(guild.id),
+          chalk.yellow(owner),
+          chalk.magenta(createdAt),
+          chalk.cyan(guild.preferredLocale),
+          chalk.red(boostLevel),
+          chalk.gray(guild.id),
         ]);
       });
 
       console.log(guildsTable.toString());
+      console.log(chalk.gray(`Total Servers: ${client.guilds.cache.size}`));
     }
   }
 

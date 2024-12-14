@@ -44,7 +44,7 @@
         "holiday": true,
         "music": true,
         "openai": {
-            "enabled": true,
+            "enabled": false,
             "model": "gpt-turbo-3.5"
         }
     },
