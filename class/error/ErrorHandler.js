@@ -21,7 +21,7 @@ class ErrorHandler {
 
     try {
       this.#BotConsole.info('Initializing error codes...');
-      const errorCodes = await this.#json.readFromFile("./class/error/ERROR_CODE.json");
+      const errorCodes = await this.#json.readFromFile("./config/ERROR_CODE.json");
       
       if (!errorCodes || typeof errorCodes !== 'object') {
         throw new Error('Invalid error codes format');

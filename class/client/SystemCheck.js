@@ -1,5 +1,6 @@
 import { ERROR_CODE } from "../error/ErrorHandler.js";
 import JsonHandler from "../json/JsonHandler.js";
+
 class SystemCheck {
   #config;
   #systemInfo;
@@ -25,7 +26,6 @@ class SystemCheck {
       this.#validateConfig();
       return true;
     } catch (error) {
-      console.error("Initialization failed:", error);
       throw ERROR_CODE.core.initialization.system.config;
     }
   }
@@ -44,15 +44,13 @@ class SystemCheck {
     );
 
     if (missingSections.length) {
-      throw new Error(
-        `Missing required config sections: ${missingSections.join(", ")}`
-      );
+      throw ERROR_CODE.core.initialization.system.config;
     }
   }
 
   #resolvePath(path) {
     if (!Array.isArray(path)) {
-      throw new Error("Path must be an array");
+      throw ERROR_CODE.system.path.resolution;
     }
 
     return path.reduce((obj, key) => {
@@ -65,14 +63,13 @@ class SystemCheck {
 
   getResourcePath(category, subcategory, filename = "") {
     if (!category || !subcategory) {
-      throw new Error("Category and subcategory are required");
+      throw ERROR_CODE.system.path.resolution;
     }
 
     try {
       const basePath = this.#resolvePath(["paths", category, subcategory]);
       return filename ? `${basePath}/${filename}` : basePath;
     } catch (error) {
-      console.error("Resource path resolution failed:", error);
       throw ERROR_CODE.system.path.resolution;
     }
   }
@@ -90,14 +87,13 @@ class SystemCheck {
       ]);
       return filename ? filePath : `${rootPath}${filePath}`;
     } catch (error) {
-      console.error("Database path resolution failed:", error);
       throw ERROR_CODE.core.initialization.system.database;
     }
   }
 
   getModulePath(moduleName, type) {
     if (!moduleName || !type) {
-      throw new Error("Module name and type are required");
+      throw ERROR_CODE.services.moduleLoader.moduleLoaderother.generic;
     }
 
     try {
@@ -110,14 +106,13 @@ class SystemCheck {
       ]);
       return `${root}${modulePath}`;
     } catch (error) {
-      console.error("Module path resolution failed:", error);
-      throw ERROR_CODE.services.moduleLoader.commands;
+      throw ERROR_CODE.services.moduleLoader.collection;
     }
   }
 
   getAssetPath(category, type, filename = "") {
     if (!category || !type) {
-      throw new Error("Category and type are required");
+      throw ERROR_CODE.system.path.resolution;
     }
 
     try {
@@ -140,7 +135,6 @@ class SystemCheck {
 
       return assetConfig.directory;
     } catch (error) {
-      console.error("Asset path resolution failed:", error);
       throw ERROR_CODE.system.path.resolution;
     }
   }
@@ -161,7 +155,6 @@ class SystemCheck {
     try {
       return this.#resolvePath(["features", "openai", "model"]);
     } catch (error) {
-      console.error("OpenAI model resolution failed:", error);
       throw ERROR_CODE.system.path.resolution;
     }
   }
@@ -171,7 +164,6 @@ class SystemCheck {
       const githubConfig = this.#resolvePath(["remote", "github"]);
       return key ? githubConfig[key] : githubConfig;
     } catch (error) {
-      console.error("GitHub config resolution failed:", error);
       throw ERROR_CODE.system.error.handling;
     }
   }

@@ -8,19 +8,27 @@ import SystemCheck from "./SystemCheck.js";
 import loadModules from "./../Module/LoadModules.js";
 
 class ApplicationManager {
-  async getToken(argv) {
-    let token = process.env.TOKEN;
+  constructor() {
+    this.argv = this.configureYargs().argv;
+  }
 
-    if (argv.asktoken || !token) {
-      token = await this.getGithubConfig("repo_url");
-      process.env.TOKEN = token;
+  async getToken() {
+    try {
+      let token = process.env.TOKEN;
+
+      if (this.argv.asktoken || !token) {
+        token = await this.promptForToken();
+      }
+
+      if (!token) {
+        throw new Error(ERROR_CODE.applicationManager.token);
+      }
+
+      return token;
+    } catch (error) {
+      BotConsole.error('Failed to get token:', error.message);
+      throw error;
     }
-
-    if (!token) {
-      throw ERROR_CODE.applicationManager.token;
-    }
-
-    return token;
   }
 
   async promptForToken() {
@@ -30,11 +38,26 @@ class ApplicationManager {
     });
 
     try {
-      const token = await new Promise((resolve) => {
-        rl.question("Enter your token: ", resolve);
+      const token = await new Promise((resolve, reject) => {
+        BotConsole.info('Please provide your Discord bot token');
+        rl.question('Token: ', (input) => {
+          const trimmedInput = input.trim();
+          if (!trimmedInput) {
+            reject(new Error(ERROR_CODE.applicationManager.token));
+          } else if (trimmedInput.length < 50) {
+            reject(new Error('Token appears to be invalid (too short)'));
+          } else {
+            resolve(trimmedInput);
+          }
+        });
       });
+
       process.env.TOKEN = token;
+      BotConsole.success('Token successfully stored');
       return token;
+    } catch (error) {
+      BotConsole.error('Token input failed:', error.message);
+      throw error;
     } finally {
       rl.close();
     }
@@ -45,7 +68,7 @@ class ApplicationManager {
       .option("asktoken", {
         alias: "t",
         type: "boolean",
-        description: "Ask for token input",
+        description: "Request token input",
       })
       .help()
       .alias("help", "h")
@@ -56,30 +79,67 @@ class ApplicationManager {
 
   async initializeAPP() {
     try {
-      await SystemCheck.initialize();
-      const hasMusic = SystemCheck.isFeatureEnabled("music");
-      const hasAI = SystemCheck.isFeatureEnabled("openai");
-
-      if (hasMusic && hasAI) {
-        BotConsole.info("Initializing all clients for music and AI features");
-        await clientInitializer.initialize();
-      } else {
-        await clientInitializer.initializeClientBase();
-        if (hasMusic) {
-          await clientInitializer.initializeClientDistube();
-        } else if (hasAI) {
-          await clientInitializer.initializeClientAI();
-        }
+      if (this.argv.asktoken) {
+        await this.getToken();
       }
-
-      await loadModules.initialize();
-
-      BotConsole.success("All modules loaded successfully");
-
-      client.login(process.env.TOKEN);
+      await this.initializeSystem();
+      await this.initializeClients();
+      await this.initializeModules();
+      await this.startBot();
     } catch (error) {
+      BotConsole.error('Application initialization failed:', error.message);
       throw error;
     }
+  }
+
+  /**
+   * Initializes system checks
+   * @private
+   */
+  async initializeSystem() {
+    await SystemCheck.initialize();
+  }
+
+  /**
+   * Initializes appropriate clients based on enabled features
+   * @private
+   */
+  async initializeClients() {
+    const hasMusic = SystemCheck.isFeatureEnabled("music");
+    const hasAI = SystemCheck.isFeatureEnabled("openai");
+
+    if (hasMusic && hasAI) {
+      BotConsole.info("Initializing full client with music and AI features");
+      await clientInitializer.initialize();
+      return;
+    }
+
+    await clientInitializer.initializeClientBase();
+    
+    if (hasMusic) {
+      await clientInitializer.initializeClientDistube();
+    } else if (hasAI) {
+      await clientInitializer.initializeClientAI();
+    }
+  }
+
+  /**
+   * Initializes modules
+   * @private
+   */
+  async initializeModules() {
+    await loadModules.initialize();
+    BotConsole.success("All modules loaded successfully");
+  }
+
+  /**
+   * Starts the bot with the token
+   * @private
+   */
+  async startBot() {
+    const token = await this.getToken();
+    await client.login(token);
+    BotConsole.success("Bot successfully logged in");
   }
 }
 

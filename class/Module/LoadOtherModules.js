@@ -1,77 +1,92 @@
-import { ERROR_CODE } from "../error/ErrorHandler.js";
 import BotConsole from "../console/BotConsole.js";
-
+import SystemCheck from "./../client/SystemCheck.js";
+import { ERROR_CODE } from "./../error/ErrorHandler.js";
 class LoadOtherModules {
-  #console;
-  #check;
-  #serverUpdate;
+  #rootPath;
+  #modules;
 
   constructor() {
-    this.#console = BotConsole;
+    this.#rootPath = "./../othermodule";
+    this.#modules = [
+      {
+        name: "Server",
+        init: async () => {
+          try {
+            const { serverUpdate } = await import(
+              `${this.#rootPath}/serverUpdate.js`
+            );
+            const serverUpdateModule = new serverUpdate();
+            await serverUpdateModule.init();
+            return serverUpdateModule.StartServer();
+          } catch (error) {
+            throw ERROR_CODE.services.moduleLoader.moduleLoaderother.server;
+          }
+        },
+        requiresFeatureCheck: false,
+      },
+      {
+        name: "Status",
+        init: async () => {
+          try {
+
+            const Status = await import(`${this.#rootPath}/status.js`);
+            return Status.default.start();
+          } catch (error) {
+            console.log(error);
+            throw ERROR_CODE.services.moduleLoader.moduleLoaderother.status;
+          }
+        },
+        requiresFeatureCheck: true,
+        feature: "status",
+      },
+      {
+        name: "Holiday",
+        init: async () => {
+          try {
+            const Holiday = await import(`${this.#rootPath}/holiday.js`);
+            return Holiday.default.init();
+          } catch (error) {
+            throw ERROR_CODE.services.moduleLoader.moduleLoaderother.holiday;
+          }
+        },
+        requiresFeatureCheck: true,
+        feature: "holiday",
+      },
+    ];
   }
 
   async load() {
-    this.#console.info("Starting to load modules...");
+    BotConsole.info("Starting to load modules...");
+    const results = [];
 
-    try {
-      await this.#initializeServer();
-    } catch (error) {
-      this.#console.error("Server module failed to initialize:", error);
+    for (const module of this.#modules) {
+      try {
+        if (
+          module.requiresFeatureCheck &&
+          !SystemCheck.isFeatureEnabled(module.feature)
+        ) {
+          BotConsole.info(`${module.name} module is disabled`);
+          continue;
+        }
+
+        await module.init();
+        BotConsole.success(`${module.name} module initialized`);
+        results.push({ name: module.name, status: "success" });
+      } catch (error) {
+        const errorCode =
+          ERROR_CODE.services.moduleLoader.moduleLoaderother.generic;
+        BotConsole.error(`${module.name} module failed to initialize:`, error);
+        results.push({
+          name: module.name,
+          status: "error",
+          error: error.message,
+          code: errorCode.code,
+          id: errorCode.id,
+        });
+      }
     }
 
-    try {
-      await this.#initializeStatus();
-    } catch (error) {
-      this.#console.error("Status module failed to initialize:", error);
-    }
-
-    try {
-      await this.#initializeHoliday();
-    } catch (error) {
-      this.#console.error("Holiday module failed to initialize:", error);
-    }
-  }
-
-  async #initializeServer() {
-    const { serverUpdate } = await import("../../webhook/serverUpdate.js");
-    this.#serverUpdate = new serverUpdate();
-    await this.#serverUpdate.init();
-    await this.#serverUpdate.StartServer();
-    this.#console.success("Server module initialized");
-  }
-
-  async #initializeStatus() {
-    const { Check } = await import("../check/check.js");
-    this.#check = new Check();
-
-    if (!(await this.#check.checkAllowStatus())) {
-      this.#console.info("Status module is disabled");
-      return;
-    }
-
-    const { Status } = await import("../status/status.js");
-    global.client.statusmodule = new Status();
-    global.client.statusmodule.updateStatus();
-    global.client.statusmodule.updateStatusEveryFiveMinutes();
-    this.#console.success("Status module initialized");
-  }
-
-  async #initializeHoliday() {
-    if (!this.#check) {
-      const { Check } = await import("../check/check.js");
-      this.#check = new Check();
-    }
-
-    if (!(await this.#check.checkAllowHoliday())) {
-      this.#console.info("Holiday module is disabled");
-      return;
-    }
-
-    const { Holiday } = await import("../holiday/holiday.js");
-    global.client.holidaymodule = new Holiday();
-    await global.client.holidaymodule.init();
-    global.client.holidaymodule.main();
-    this.#console.success("Holiday module initialized");
+    return results;
   }
 }
 

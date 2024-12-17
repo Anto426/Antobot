@@ -1,6 +1,7 @@
 import SystemCheck from "../client/SystemCheck.js";
 import Table from "cli-table3";
 import chalk from "chalk";
+import gradient from "gradient-string";
 
 const TABLE_CHARS = {
   main: {
@@ -23,8 +24,8 @@ const TABLE_CHARS = {
   section: {
     top: "─",
     "top-mid": "┬",
-    "top-left": "├",
-    "top-right": "┤",
+    "top-left": "┌",
+    "top-right": "┐",
     bottom: "─",
     "bottom-mid": "┴",
     "bottom-left": "└",
@@ -40,20 +41,38 @@ const TABLE_CHARS = {
 };
 
 const TABLE_STYLE = {
-  head: ["cyan"],
+  head: ["cyan", "bold"],
   border: ["white"],
   compact: true,
+  paddingLeft: 1,
+  paddingRight: 1,
+  alignment: "left",
+  wordWrap: true,
 };
 
+const THEME_GRADIENTS = {
+  info: ["#4facfe", "#00f2fe"],
+  success: ["#67B26F", "#4ca2cd"],
+  warning: ["#f6d365", "#fda085"],
+  error: ["#ee0979", "#ff6a00"],
+  debug: ["#764ba2", "#667eea"],
+  trace: ["#74ebd5", "#9face6"],
+  title: ["#800080", "#BA55D3"],
+};
+
+const gradients = Object.fromEntries(
+  Object.entries(THEME_GRADIENTS).map(([key, colors]) => [
+    key,
+    gradient(colors),
+  ])
+);
+
 class LogStartup {
-  constructor() {
-    this.data = {
-      // Basic Info
+  get data() {
+    return {
       clientName: SystemCheck.getName(),
       version: SystemCheck.getVersion(),
       author: SystemCheck.getAuthor(),
-
-      // System Info
       discordJsVersion: SystemCheck.getDependencies()?.["discord.js"] || "N/A",
       nodeJsVersion: process.version,
       platform: process.platform,
@@ -64,78 +83,133 @@ class LogStartup {
       totalRam: `${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(
         2
       )} MB`,
-      uptime: process.uptime(),
-
-      // Security Tokens
+      uptime: `${Math.floor(process.uptime())}s`,
       token: this.maskToken(process.env.TOKEN),
       openAiToken: this.maskToken(process.env.OPENAITOKEN),
       gitToken: this.maskToken(process.env.GITTOKEN),
-
-      // Links
       inviteLink: client.generateInvite({ scopes: ["bot"] }),
       repoLink: SystemCheck.getRepo(),
-
-      // Features
-      musicEnabled: SystemCheck.isFeatureEnabled("music"),
-      aiEnabled: SystemCheck.isFeatureEnabled("ai"),
-      gptEnabled: SystemCheck.isFeatureEnabled("gpt"),
+      features: [
+        {
+          name: "Status System",
+          enabled: SystemCheck.isFeatureEnabled("status"),
+          details: "Server status monitoring",
+        },
+        {
+          name: "Captcha System",
+          enabled: SystemCheck.isFeatureEnabled("captcha"),
+          details: "User verification system",
+        },
+        {
+          name: "Holiday System",
+          enabled: SystemCheck.isFeatureEnabled("holiday"),
+          details: "Holiday events and notifications",
+        },
+        {
+          name: "Music Module",
+          enabled: SystemCheck.isFeatureEnabled("music"),
+          details: "Music playback and controls",
+        },
+        {
+          name: "OpenAI",
+          enabled: SystemCheck.isFeatureEnabled("openai"),
+          details: `Model: ${SystemCheck.getOpenAIModel() || "N/A"}`,
+        },
+      ],
     };
   }
 
   maskToken(token) {
-    return token ? `${token.slice(0, 6)}...${token.slice(-4)}` : "Not Set";
+    if (!token) return gradients.error("Not Set");
+    return token.length > 10
+      ? `${token.slice(0, 6)}•••${token.slice(-4)}`
+      : "•".repeat(token.length);
   }
 
-  createTable(headers, chars = TABLE_CHARS.main, options = {}) {
+  createTable({ headers, chars = TABLE_CHARS.main, colWidths }) {
     return new Table({
-      head: headers.map((h) => chalk.bold.cyan(h)),
+      head: headers.map((h) => chalk.bold(gradients.info(h))),
       chars,
-      style: TABLE_STYLE,
-      ...options,
+      style: { ...TABLE_STYLE, head: ["bold"], border: ["white"] },
+      wordWrap: true,
+      colWidths,
     });
   }
 
   logHeader(text) {
-    console.log(chalk.bold.cyan("\n" + "═".repeat(50)));
-    console.log(chalk.bold.white(` ${text.toUpperCase()} `));
-    console.log(chalk.bold.cyan("═".repeat(50)));
+    const width = 80;
+    const title = ` ${text.toUpperCase()} `;
+    const padding = (width - title.length) / 2;
+
+    console.log("\n" + gradients.title("╔" + "═".repeat(width) + "╗"));
+    console.log(
+      gradients.title("║") +
+        " ".repeat(Math.floor(padding)) +
+        chalk.bold(gradients.title(title)) +
+        " ".repeat(Math.ceil(padding)) +
+        gradients.title("║")
+    );
+    console.log(gradients.title("╠" + "═".repeat(width) + "╣"));
+  }
+
+  logFooter() {
+    const width = 80;
+    console.log(gradients.title("╚" + "═".repeat(width) + "╝"));
+    console.log(
+      chalk.gray(`\nLog generated at: ${new Date().toLocaleString()}`)
+    );
+  }
+
+  logSectionSeparator() {
+    const width = 80;
+    console.log(gradients.title("╠" + "═".repeat(width) + "╣"));
   }
 
   logGeneralInfo() {
+    const {
+      clientName,
+      version,
+      author,
+      discordJsVersion,
+      nodeJsVersion,
+      platform,
+      arch,
+      ramUsage,
+      totalRam,
+      uptime,
+    } = this.data;
+
     this.logHeader("Bot Information");
 
-    const mainTable = this.createTable(
-      ["Client Name", "Version", "Author"],
-      TABLE_CHARS.main,
-      { colWidths: [30, 20, 30] }
-    );
+    const mainTable = this.createTable({
+      headers: ["Client Name", "Version", "Author"],
+      colWidths: [30, 20, 30],
+    });
     mainTable.push([
-      chalk.green(this.data.clientName),
-      chalk.yellow(this.data.version),
-      chalk.blue(this.data.author),
+      gradients.success(clientName),
+      gradients.warning(version),
+      gradients.info(author),
     ]);
 
-    const systemTable = this.createTable(
-      ["Discord.js", "Node.js", "Platform", "Architecture"],
-      TABLE_CHARS.main,
-      { colWidths: [20, 20, 20, 20] }
-    );
+    const systemTable = this.createTable({
+      headers: ["Discord.js", "Node.js", "Platform", "Architecture"],
+      colWidths: [20, 20, 20, 20],
+    });
     systemTable.push([
-      chalk.magenta(this.data.discordJsVersion),
-      chalk.magenta(this.data.nodeJsVersion),
-      chalk.magenta(this.data.platform),
-      chalk.magenta(this.data.arch),
+      gradients.debug(discordJsVersion),
+      gradients.debug(nodeJsVersion),
+      gradients.debug(platform),
+      gradients.debug(arch),
     ]);
 
-    const resourceTable = this.createTable(
-      ["Used RAM", "Total RAM", "Uptime"],
-      TABLE_CHARS.main,
-      { colWidths: [27, 27, 26] }
-    );
+    const resourceTable = this.createTable({
+      headers: ["Used RAM", "Total RAM", "Uptime"],
+      colWidths: [27, 27, 26],
+    });
     resourceTable.push([
-      chalk.red(this.data.ramUsage),
-      chalk.red(this.data.totalRam),
-      chalk.yellow(`${Math.floor(this.data.uptime)}s`),
+      gradients.error(ramUsage),
+      gradients.error(totalRam),
+      gradients.warning(uptime),
     ]);
 
     console.log(mainTable.toString());
@@ -145,44 +219,17 @@ class LogStartup {
 
   logFeatures() {
     this.logHeader("Features Status");
-    const featuresTable = this.createTable(
-      ["Feature", "Status", "Details"],
-      TABLE_CHARS.section,
-      { colWidths: [20, 15, 45] }
-    );
 
-    const features = [
-      [
-        "Status System",
-        SystemCheck.isFeatureEnabled("status"),
-        "Server status monitoring",
-      ],
-      [
-        "Captcha System",
-        SystemCheck.isFeatureEnabled("captcha"),
-        "User verification system",
-      ],
-      [
-        "Holiday System",
-        SystemCheck.isFeatureEnabled("holiday"),
-        "Holiday events and notifications",
-      ],
-      [
-        "Music Module",
-        SystemCheck.isFeatureEnabled("music"),
-        "Music playback and controls",
-      ],
-      [
-        "OpenAI",
-        SystemCheck.isFeatureEnabled("openai"),
-        `Model: ${SystemCheck.getOpenAIModel() || "N/A"}`,
-      ],
-    ];
+    const featuresTable = this.createTable({
+      headers: ["Feature", "Status", "Details"],
+      chars: TABLE_CHARS.section,
+      colWidths: [20, 15, 45],
+    });
 
-    features.forEach(([feature, enabled, details]) => {
+    this.data.features.forEach(({ name, enabled, details }) => {
       featuresTable.push([
-        chalk.yellow(feature),
-        enabled ? chalk.green("Enabled") : chalk.red("Disabled"),
+        gradients.warning(name),
+        enabled ? gradients.success("Enabled") : gradients.error("Disabled"),
         chalk.gray(details),
       ]);
     });
@@ -191,19 +238,22 @@ class LogStartup {
   }
 
   logSecurity() {
+    const { token, openAiToken, gitToken } = this.data;
+
     this.logHeader("Security Information");
-    const securityTable = this.createTable(
-      ["Type", "Value"],
-      TABLE_CHARS.section,
-      { colWidths: [20, 60] }
-    );
+
+    const securityTable = this.createTable({
+      headers: ["Type", "Value"],
+      chars: TABLE_CHARS.section,
+      colWidths: [20, 60],
+    });
 
     [
-      ["Bot Token", this.data.token],
-      ["OpenAI Token", this.data.openAiToken],
-      ["Git Token", this.data.gitToken],
+      ["Bot Token", token],
+      ["OpenAI Token", openAiToken],
+      ["Git Token", gitToken],
     ].forEach(([key, value]) => {
-      securityTable.push([chalk.yellow(key), chalk.gray(value)]);
+      securityTable.push([gradients.warning(key), chalk.gray(value)]);
     });
 
     console.log(securityTable.toString());
@@ -212,130 +262,72 @@ class LogStartup {
   logModules() {
     this.logHeader("Loaded Modules");
 
-    // Log Base Commands
-    if (client.basecommands?.size > 0) {
-      console.log(chalk.bold.white("\nBase Commands:"));
-      const commandsTable = this.createTable(
-        ["Command", "Category", "Description", "Cooldown", "Permissions"],
-        TABLE_CHARS.section,
-        { colWidths: [15, 15, 30, 10, 20] }
-      );
-      client.basecommands.forEach((cmd) => {
-        commandsTable.push([
-          chalk.green(cmd.name),
-          chalk.blue(cmd.category || "N/A"),
-          chalk.white(cmd.data.description),
-        ]);
-      });
-      console.log(commandsTable.toString());
-      console.log(
-        chalk.gray(`Total Base Command: ${client.basecommands.size}`)
-      );
-    }
+    const modules = [
+      {
+        name: "Base Commands",
+        collection: client.basecommands,
+        columns: ["Command", "Category", "Description"],
+        colWidths: [20, 20, 40],
+      },
+      {
+        name: "Base Events",
+        collection: client.baseevents,
+        columns: ["name", "eventType", "allowevents"],
+        colWidths: [40, 40],
+      },
+      {
+        name: "Base Buttons",
+        collection: client.basebutton,
+        columns: ["Button", "Description"],
+        colWidths: [30, 50],
+      },
+      {
+        name: "Music Commands",
+        collection: client.musiccommands,
+        columns: ["Command", "Description"],
+        colWidths: [20, 60],
+      },
+      {
+        name: "Music Events",
+        collection: client.musicevents,
+        columns: ["name", "eventType", "allowevents"],
+        colWidths: [40, 40],
+      },
+      {
+        name: "Music Buttons",
+        collection: client.musicbutton,
+        columns: ["Button", "Description"],
+        colWidths: [30, 50],
+      },
+    ];
 
-    // Log Base Events
-    if (client.baseevents?.size > 0) {
-      console.log(chalk.bold.white("\nBase Events:"));
-      const eventsTable = this.createTable(
-        ["Event", "Type"],
-        TABLE_CHARS.section,
-        { colWidths: [40, 40] }
-      );
-      client.baseevents.forEach((event) => {
-        eventsTable.push([
-          chalk.yellow(event.name),
-          chalk.blue(event.eventType),
-        ]);
-      });
-      console.log(eventsTable.toString());
-      console.log(chalk.gray(`Total Base Event: ${client.baseevents.size}`));
-    }
-
-    // Log Base Buttons
-    if (client.basebutton?.size > 0) {
-      console.log(chalk.bold.white("\nBase Buttons:"));
-      const buttonsTable = this.createTable(
-        ["Button", "Description"],
-        TABLE_CHARS.section,
-        { colWidths: [30, 50] }
-      );
-      client.basebutton.forEach((btn) => {
-        buttonsTable.push([
-          chalk.magenta(btn.customId),
-          chalk.white(btn.description || "N/A"),
-        ]);
-      });
-      console.log(buttonsTable.toString());
-      console.log(chalk.gray(`Total Base Button: ${client.basebutton.size}`));
-    }
-
-    // Log Music Commands
-    if (client.musiccommands?.size > 0) {
-      console.log(chalk.bold.white("\nMusic Commands:"));
-      const musicTable = this.createTable(
-        ["Command", "Description"],
-        TABLE_CHARS.section,
-        { colWidths: [20, 60] }
-      );
-      client.musiccommands.forEach((cmd) => {
-        musicTable.push([
-          chalk.green(cmd.name),
-          chalk.white(cmd.data.description),
-        ]);
-      });
-      console.log(musicTable.toString());
-      console.log(
-        chalk.gray(`Total Distube Command: ${client.musiccommands.size}`)
-      );
-    }
-
-    // Log Music Events
-    if (client.musicevents?.size > 0) {
-      console.log(chalk.bold.white("\nMusic Events:"));
-      const musicEventsTable = this.createTable(
-        ["Event", "Type"],
-        TABLE_CHARS.section,
-        { colWidths: [40, 40] }
-      );
-      client.musicevents.forEach((event) => {
-        musicEventsTable.push([
-          chalk.yellow(event.name),
-          chalk.blue(event.eventType),
-        ]);
-      });
-      console.log(musicEventsTable.toString());
-      console.log(
-        chalk.gray(`Total Distube Event: ${client.musicevents.size}`)
-      );
-    }
-
-    // Log Music Buttons
-    if (client.musicbutton?.size > 0) {
-      console.log(chalk.bold.white("\nMusic Buttons:"));
-      const musicButtonsTable = this.createTable(
-        ["Button", "Description"],
-        TABLE_CHARS.section,
-        { colWidths: [30, 50] }
-      );
-      client.musicbutton.forEach((btn) => {
-        musicButtonsTable.push([
-          chalk.magenta(btn.customId),
-          chalk.white(btn.description || "N/A"),
-        ]);
-      });
-      console.log(musicButtonsTable.toString());
-      console.log(
-        chalk.gray(`Total Distube Button: ${client.musicbutton.size}`)
-      );
-    }
+    modules.forEach(({ name, collection, columns, colWidths }) => {
+      if (collection?.size) {
+        console.log(chalk.bold(gradients.title(`\n${name}:`)));
+        const table = this.createTable({
+          headers: columns,
+          chars: TABLE_CHARS.section,
+          colWidths,
+        });
+        collection.forEach((item) => {
+          const row = columns.map((col) => {
+            const value = item[col.toLowerCase()] || "N/A";
+            return gradients.success(value);
+          });
+          table.push(row);
+        });
+        console.log(table.toString());
+        console.log(chalk.gray(`Total ${name}: ${collection.size}`));
+      }
+    });
   }
 
   logGuilds() {
     if (client.guilds.cache.size > 0) {
       this.logHeader("Connected Servers");
 
-      const guildsTable = this.createTable(
-        [
+      const guildsTable = this.createTable({
+        headers: [
           "Server Name",
           "Members",
           "Owner",
@@ -344,9 +336,9 @@ class LogStartup {
           "Boost Level",
           "ID",
         ],
-        TABLE_CHARS.section,
-        { colWidths: [25, 10, 20, 20, 10, 12, 20] }
-      );
+        chars: TABLE_CHARS.section,
+        colWidths: [25, 10, 20, 20, 10, 12, 20],
+      });
 
       client.guilds.cache.forEach((guild) => {
         const owner =
@@ -355,12 +347,12 @@ class LogStartup {
         const boostLevel = `Level ${guild.premiumTier}`;
 
         guildsTable.push([
-          chalk.green(guild.name),
-          chalk.blue(guild.memberCount.toString()),
-          chalk.yellow(owner),
-          chalk.magenta(createdAt),
-          chalk.cyan(guild.preferredLocale),
-          chalk.red(boostLevel),
+          gradients.success(guild.name),
+          gradients.info(`${guild.memberCount}`),
+          gradients.warning(owner),
+          gradients.debug(createdAt),
+          gradients.trace(guild.preferredLocale),
+          gradients.error(boostLevel),
           chalk.gray(guild.id),
         ]);
       });
@@ -371,27 +363,16 @@ class LogStartup {
   }
 
   log() {
-    try {
-      console.log(chalk.bold.cyan("╔" + "═".repeat(78) + "╗"));
-      console.log(
-        chalk.bold.cyan(
-          "║" +
-            chalk.bold.white(` BOT STARTUP LOG `.padStart(40 + 7).padEnd(78)) +
-            "║"
-        )
-      );
-      console.log(chalk.bold.cyan("╚" + "═".repeat(78) + "╝\n"));
-
-      this.logGeneralInfo();
-      this.logFeatures();
-      this.logSecurity();
-      this.logModules();
-      this.logGuilds();
-
-      console.log(chalk.bold.cyan("\n" + "═".repeat(80)));
-    } catch (error) {
-      console.error(chalk.red("Error in startup logging:", error));
-    }
+    this.logGeneralInfo();
+    this.logSectionSeparator();
+    this.logFeatures();
+    this.logSectionSeparator();
+    this.logSecurity();
+    this.logSectionSeparator();
+    this.logModules();
+    this.logSectionSeparator();
+    this.logGuilds();
+    this.logFooter();
   }
 }
 

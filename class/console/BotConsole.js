@@ -1,5 +1,6 @@
 import moment from "moment";
 import chalk from "chalk";
+import gradient from "gradient-string";
 
 class BotConsole {
   static #instance;
@@ -11,31 +12,41 @@ class BotConsole {
     indentSize: 2,
     theme: {
       symbols: {
-        info: "ℹ",
-        success: "✓",
-        warning: "!",
-        error: "✕",
-        debug: "⚙",
-        trace: "→",
+        info: "💠",
+        success: "✅",
+        warning: "⚠️",
+        error: "❌",
+        debug: "🔧",
+        trace: "📍",
         tree: {
           branch: "├──",
           last: "└──",
           vertical: "│  ",
           space: "   ",
+          arrow: "→",
         },
       },
+      gradients: {
+        info: ["#4facfe", "#00f2fe"], // Light blue
+        success: ["#67B26F", "#4ca2cd"], // Soft green
+        warning: ["#f6d365", "#fda085"], // Warm orange
+        error: ["#ee0979", "#ff6a00"], // Strong red
+        debug: ["#764ba2", "#667eea"], // Gentle purple
+        trace: ["#74ebd5", "#9face6"], // Cool turquoise
+      },
       styles: {
-        info: { color: "blue", symbol: "info" },
-        success: { color: "green", symbol: "success" },
-        warning: { color: "yellow", symbol: "warning" },
-        error: { color: "red", symbol: "error" },
-        debug: { color: "magenta", symbol: "debug" },
-        trace: { color: "cyan", symbol: "trace" },
+        info: { symbol: "info", label: "INFO" },
+        success: { symbol: "success", label: "SUCCESS" },
+        warning: { symbol: "warning", label: "WARNING" },
+        error: { symbol: "error", label: "ERROR" },
+        debug: { symbol: "debug", label: "DEBUG" },
+        trace: { symbol: "trace", label: "TRACE" },
       },
     },
   };
 
   #config;
+  #gradient = gradient;
 
   constructor(config = {}) {
     if (BotConsole.#instance) return BotConsole.#instance;
@@ -44,55 +55,102 @@ class BotConsole {
   }
 
   #formatHeader(text) {
-    const width = 80;
-    const line = "═".repeat(width);
-    const padding = Math.max(0, Math.floor((width - text.length) / 2));
-    const centeredText = " ".repeat(padding) + text;
-    return `\n${chalk.cyan(line)}\n${chalk.bold.white(
-      centeredText
-    )}\n${chalk.cyan(line)}`;
+    const width = process.stdout.columns || 80;
+    const line = "━".repeat(width);
+    const padding = Math.max(0, Math.floor((width - text.length - 2) / 2));
+    const headerGradient = this.#gradient(["#FF69B4", "#4facfe"]);
+    const paddedText = " ".repeat(padding) + text + " ".repeat(padding);
+
+    return [
+      "",
+      headerGradient(`┏${line}┓`),
+      `${headerGradient("┃")}${this.#gradient.cristal(
+        paddedText
+      )}${headerGradient("┃")}`,
+      headerGradient(`┗${line}┛`),
+    ].join("\n");
   }
 
-  #formatMessage(type, message) {
-    const { showTimestamp, timeFormat, theme } = this.#config;
-    const style = theme.styles[type];
-    const timestamp = showTimestamp
-      ? chalk.gray(`[${moment().format(timeFormat)}] `)
-      : "";
-    const symbol = chalk[style.color](` ${theme.symbols[style.symbol]} `);
+  #formatMessage(type, messages) {
+    const {
+      showTimestamp,
+      timeFormat,
+      theme: { styles, gradients, symbols },
+    } = this.#config;
+    const style = styles[type];
+    const messageGradient = this.#gradient(gradients[type]);
 
-    return `${timestamp}${symbol} ${message}`;
+    const parts = [
+      showTimestamp && chalk.gray(`[${moment().format(timeFormat)}]`),
+      messageGradient(`【${style.label}】`),
+      symbols[style.symbol],
+      messageGradient(messages.join(" ")),
+    ].filter(Boolean);
+
+    return parts.join(" ");
   }
 
-  #formatTree(data, level = 0, isLast = true, prefix = "") {
-    const { theme } = this.#config;
-    const { branch, last, vertical, space } = theme.symbols.tree;
-    let result = "";
+  #formatValue(value, type = "info") {
+    const messageGradient = this.#gradient(this.#config.theme.gradients[type]);
 
-    if (typeof data === "object" && data !== null) {
-      const entries = Object.entries(data);
-      entries.forEach(([key, value], index) => {
+    const formatters = {
+      null: () => chalk.gray.italic("✗ null"),
+      undefined: () => chalk.gray.italic("✗ undefined"),
+      string: (v) => messageGradient(`"${v}"`),
+      number: (v) => messageGradient(`❪${v}❫`),
+      boolean: (v) => messageGradient(`⟦${v}⟧`),
+      date: (v) => messageGradient(`📅 ${v.toISOString()}`),
+      array: (v) => messageGradient(`[${v.length}]⚊Array`),
+      function: () => messageGradient("⚡Function"),
+      object: () => messageGradient("⚋Object"),
+    };
+
+    if (value === null) return formatters.null();
+    if (value === undefined) return formatters.undefined();
+    if (value instanceof Date) return formatters.date(value);
+
+    return formatters[typeof value]?.(value) || messageGradient(String(value));
+  }
+
+  #formatTree(data, type = "info", level = 0, isLast = true, prefix = "") {
+    const { tree } = this.#config.theme.symbols;
+    const messageGradient = this.#gradient(this.#config.theme.gradients[type]);
+
+    if (data === null || data === undefined || typeof data !== "object") {
+      return this.#formatValue(data, type) + "\n";
+    }
+
+    return Object.entries(data).reduce(
+      (result, [key, value], index, entries) => {
         const isLastItem = index === entries.length - 1;
-        const symbol = isLastItem ? last : branch;
-        const line = `${prefix}${symbol} ${chalk.yellow(key)}: `;
-        result += line;
+        const symbol = isLastItem ? tree.last : tree.branch;
+        const line = `${prefix}${messageGradient(symbol)} ${messageGradient(
+          key
+        )}: `;
 
         if (typeof value === "object" && value !== null) {
-          result += "\n";
-          const newPrefix = prefix + (isLastItem ? space : vertical);
-          result += this.#formatTree(value, level + 1, isLastItem, newPrefix);
-        } else {
-          result += `${chalk.white(value)}\n`;
+          const newPrefix = prefix + (isLastItem ? tree.space : tree.vertical);
+          return (
+            result +
+            line +
+            "\n" +
+            this.#formatTree(value, type, level + 1, isLastItem, newPrefix)
+          );
         }
-      });
-    }
-    return result;
+
+        return result + line + this.#formatValue(value, type) + "\n";
+      },
+      ""
+    );
   }
 
-  log(message, type = "info", data = null) {
-    console.log(this.#formatMessage(type, message));
+  log(type = "info", ...args) {
+    const messages = args.filter((arg) => typeof arg !== "object");
+    const data = args.find((arg) => typeof arg === "object" && arg !== null);
+
+    console.log(this.#formatMessage(type, messages));
     if (data) {
-      console.log(this.#formatTree(data));
+      console.log(this.#formatTree(data, type));
     }
   }
 
@@ -100,23 +158,23 @@ class BotConsole {
     console.log(this.#formatHeader(title.toUpperCase()));
   }
 
-  success(message, data) {
-    this.log(message, "success", data);
+  success(...args) {
+    this.log("success", ...args);
   }
-  error(message, data) {
-    this.log(message, "error", data);
+  error(...args) {
+    this.log("error", ...args);
   }
-  warning(message, data) {
-    this.log(message, "warning", data);
+  warning(...args) {
+    this.log("warning", ...args);
   }
-  info(message, data) {
-    this.log(message, "info", data);
+  info(...args) {
+    this.log("info", ...args);
   }
-  debug(message, data) {
-    this.log(message, "debug", data);
+  debug(...args) {
+    this.log("debug", ...args);
   }
-  trace(message, data) {
-    this.log(message, "trace", data);
+  trace(...args) {
+    this.log("trace", ...args);
   }
 }
 

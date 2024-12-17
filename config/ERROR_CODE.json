@@ -79,6 +79,32 @@
         "message": "Failed to load event modules",
         "severity": "critical"
       },
+      "moduleLoaderother": {
+        "server": {
+          "id": 2201,
+          "code": "SERVICE_MODULE_SERVER_INIT_ERROR",
+          "message": "Module 'server' failed to initialize: Connection timeout or invalid server configuration",
+          "severity": "critical"
+        },
+        "status": {
+          "id": 2202,
+          "code": "SERVICE_MODULE_STATUS_INIT_ERROR",
+          "message": "Module 'status' failed to initialize: Status service unreachable or configuration invalid",
+          "severity": "major"
+        },
+        "holiday": {
+          "id": 2203,
+          "code": "SERVICE_MODULE_HOLIDAY_INIT_ERROR",
+          "message": "Module 'holiday' failed to initialize: Holiday data file missing or corrupted",
+          "severity": "major"
+        },
+        "generic": {
+          "id": 2204,
+          "code": "SERVICE_MODULE_GENERIC_INIT_ERROR",
+          "message": "Failed to initialize generic module: module configuration missing or invalid",
+          "severity": "major"
+        }
+      },
       "commands": {
         "id": 2102,
         "code": "SERVICE_MODULE_COMMANDS_ERROR",
