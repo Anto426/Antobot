@@ -1,153 +1,156 @@
 import SystemCheck from "../core/SystemCheck.js";
 import JsonHandler from "../json/JsonHandler.js";
-import { ERROR_CODE } from "../error/ErrorHandler.js";
-
-
 
 class Holiday {
-    #jsonHandler;
-    #holidays;
-    #guildConfigs;
-    #activeTimers;
-    #currentYear;
+  #jsonHandler;
+  #holidays;
+  #guildConfigs;
+  #activeTimers;
+  #currentYear;
 
-    constructor() {
-        this.#jsonHandler = new JsonHandler();
-        this.#holidays = [];
-        this.#guildConfigs = {};
-        this.#activeTimers = new Map();
-        this.#currentYear = new Date().getFullYear();
+  constructor() {
+    this.#jsonHandler = new JsonHandler();
+    this.#holidays = [];
+    this.#guildConfigs = {};
+    this.#activeTimers = new Map();
+    this.#currentYear = new Date().getFullYear();
+  }
+
+  async initialize() {
+    try {
+      const [guildConfig, holidayData] = await Promise.all([
+        this.#jsonHandler.readFromFile(
+          SystemCheck.getDatabasePath("guildconfig")
+        ),
+        this.#jsonHandler.readFromUrl(
+          SystemCheck.getGithubConfig("holidayDataUrl"),
+          SystemCheck.getGithubConfig("token")
+        ),
+      ]);
+
+      this.#guildConfigs = guildConfig;
+      this.#holidays = holidayData.holidays;
+      return true;
+    } catch (error) {
+      throw new Error("Failed to initialize holiday module", error);
+    }
+  }
+
+  async findNextHoliday() {
+    if (!this.#holidays.length) {
+      throw new Error("No holidays found");
     }
 
-    async initialize() {
-        try {
-            const [guildConfig, holidayData] = await Promise.all([
-                this.#jsonHandler.readFromFile(
-                    SystemCheck.getDatabasePath("guildconfig")
-                ),
-                this.#jsonHandler.readFromUrl(
-                    SystemCheck.getGithubConfig("holidayDataUrl"),
-                    SystemCheck.getGithubConfig("token")
-                )
-            ]);
+    const now = Date.now();
+    const nextHoliday = this.#holidays.find((holiday) => {
+      const holidayDate = new Date(
+        this.#currentYear,
+        holiday.date.month - 1,
+        holiday.date.day
+      ).getTime();
+      return holidayDate > now;
+    });
 
-            this.#guildConfigs = guildConfig;
-            this.#holidays = holidayData.holidays;
-            return true;
-        } catch (error) {
-            throw ERROR_CODE.services.holiday.initialization;
+    if (nextHoliday) {
+      nextHoliday.timestamp = new Date(
+        this.#currentYear,
+        nextHoliday.date.month - 1,
+        nextHoliday.date.day
+      ).getTime();
+      return nextHoliday;
+    }
+
+    this.#currentYear++;
+    return this.findNextHoliday();
+  }
+
+  #formatTimeRemaining(timestamp) {
+    const diff = timestamp - Date.now();
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    return `${days}d ${hours}h`;
+  }
+
+  #clearTimers(guildId) {
+    const timers = this.#activeTimers.get(guildId);
+    if (timers) {
+      clearInterval(timers.update);
+      clearInterval(timers.check);
+      this.#activeTimers.delete(guildId);
+    }
+  }
+
+  async startHolidayTracking(guild, channels, holiday) {
+    const { nameChannel, timerChannel, congratsChannel } = channels;
+
+    this.#clearTimers(guild.id);
+
+    const timers = {
+      update: setInterval(() => {
+        const remaining = holiday.timestamp - Date.now();
+        if (remaining > 0) {
+          nameChannel
+            .setName(`${holiday.emoji} ${holiday.name}`)
+            .catch(console.error);
+          timerChannel
+            .setName(this.#formatTimeRemaining(holiday.timestamp))
+            .catch(console.error);
         }
-    }
+      }, 300000),
 
-    async findNextHoliday() {
-        if (!this.#holidays.length) {
-            throw ERROR_CODE.services.holiday.noHolidays;
+      check: setInterval(() => {
+        if (Date.now() >= holiday.timestamp) {
+          this.#sendCongratulations(congratsChannel, holiday);
+          this.#clearTimers(guild.id);
         }
+      }, 60000),
+    };
 
-        const now = Date.now();
-        const nextHoliday = this.#holidays.find(holiday => {
-            const holidayDate = new Date(
-                this.#currentYear,
-                holiday.date.month - 1,
-                holiday.date.day
-            ).getTime();
-            return holidayDate > now;
-        });
+    this.#activeTimers.set(guild.id, timers);
+  }
 
-        if (nextHoliday) {
-            nextHoliday.timestamp = new Date(
-                this.#currentYear,
-                nextHoliday.date.month - 1,
-                nextHoliday.date.day
-            ).getTime();
-            return nextHoliday;
-        }
-
-        this.#currentYear++;
-        return this.findNextHoliday();
+  async #sendCongratulations(channel, holiday) {
+    try {
+      await channel.send({
+        content: `@everyone Celebrating ${holiday.name}!`,
+      });
+    } catch (error) {
+      throw new Error("Failed to send congratulations", error);
     }
+  }
 
-    #formatTimeRemaining(timestamp) {
-        const diff = timestamp - Date.now();
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        return `${days}d ${hours}h`;
-    }
+  async start() {
+    try {
+      const nextHoliday = await this.findNextHoliday();
 
-    #clearTimers(guildId) {
-        const timers = this.#activeTimers.get(guildId);
-        if (timers) {
-            clearInterval(timers.update);
-            clearInterval(timers.check);
-            this.#activeTimers.delete(guildId);
-        }
-    }
+      for (const [guildId, config] of Object.entries(this.#guildConfigs)) {
+        if (!config?.channel?.holiday) continue;
 
-    async startHolidayTracking(guild, channels, holiday) {
-        const { nameChannel, timerChannel, congratsChannel } = channels;
-
-        this.#clearTimers(guild.id);
-
-        const timers = {
-            update: setInterval(() => {
-                const remaining = holiday.timestamp - Date.now();
-                if (remaining > 0) {
-                    nameChannel.setName(`${holiday.emoji} ${holiday.name}`).catch(console.error);
-                    timerChannel.setName(this.#formatTimeRemaining(holiday.timestamp)).catch(console.error);
-                }
-            }, 300000),
-
-            check: setInterval(() => {
-                if (Date.now() >= holiday.timestamp) {
-                    this.#sendCongratulations(congratsChannel, holiday);
-                    this.#clearTimers(guild.id);
-                }
-            }, 60000)
+        const guild = await client.guilds.fetch(guildId);
+        const channels = {
+          nameChannel: guild.channels.cache.get(config.channel.holiday.name),
+          timerChannel: guild.channels.cache.get(config.channel.holiday.date),
+          congratsChannel: guild.channels.cache.get(
+            config.channel.holiday.send
+          ),
         };
 
-        this.#activeTimers.set(guild.id, timers);
-    }
-
-    async #sendCongratulations(channel, holiday) {
-        try {
-            await channel.send({
-                content: `@everyone Celebrating ${holiday.name}!`,
-            });
-        } catch (error) {
-            throw ERROR_CODE.services.holiday.messageSend;
+        if (Object.values(channels).every((channel) => channel)) {
+          await this.startHolidayTracking(guild, channels, nextHoliday);
         }
+      }
+    } catch (error) {
+      throw new Error("Failed to start holiday tracking", error);
     }
+  }
 
-    async start() {
-        try {
-            const nextHoliday = await this.findNextHoliday();
-
-            for (const [guildId, config] of Object.entries(this.#guildConfigs)) {
-                if (!config?.channel?.holiday) continue;
-
-                const guild = await client.guilds.fetch(guildId);
-                const channels = {
-                    nameChannel: guild.channels.cache.get(config.channel.holiday.name),
-                    timerChannel: guild.channels.cache.get(config.channel.holiday.date),
-                    congratsChannel: guild.channels.cache.get(config.channel.holiday.send)
-                };
-
-                if (Object.values(channels).every(channel => channel)) {
-                    await this.startHolidayTracking(guild, channels, nextHoliday);
-                }
-            }
-        } catch (error) {
-            throw ERROR_CODE.services.holiday.start;
-        }
+  async restart() {
+    for (const guildId of this.#activeTimers.keys()) {
+      this.#clearTimers(guildId);
     }
-
-    async restart() {
-        for (const guildId of this.#activeTimers.keys()) {
-            this.#clearTimers(guildId);
-        }
-        await this.initialize();
-        await this.start();
-    }
+    await this.initialize();
+    await this.start();
+  }
 }
 
 export default new Holiday();

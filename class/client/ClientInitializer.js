@@ -7,7 +7,6 @@ import { YouTubePlugin } from "@distube/youtube";
 import OpenAI from "openai";
 
 import BotConsole from "../console/BotConsole.js";
-import { ERROR_CODE } from "../error/ErrorHandler.js";
 import JsonHandler from "../json/JsonHandler.js";
 import systemcheck from "./SystemCheck.js";
 
@@ -46,7 +45,7 @@ class ClientInitializer {
         process.env.GITTOKEN
       );
     } catch (error) {
-      throw ERROR_CODE.core.initialization.system.config;
+      throw new Error("Failed to fetch config", error);
     }
   }
 
@@ -65,13 +64,13 @@ class ClientInitializer {
       BotConsole.success("Base client initialized successfully");
       return true;
     } catch (error) {
-      throw ERROR_CODE.core.initialization.client.base;
+      throw new Error("Failed to initialize base client");
     }
   }
 
   async initializeClientAI() {
     if (!process.env.OPENAITOKEN) {
-      throw ERROR_CODE.core.initialization.client.ai;
+      throw new Error("OpenAI token not found");
     }
 
     try {
@@ -79,7 +78,7 @@ class ClientInitializer {
       BotConsole.success("AI client initialized successfully");
       return true;
     } catch (error) {
-      throw ERROR_CODE.core.initialization.client.ai;
+      throw new Error("Failed to initialize AI client");
     }
   }
 
@@ -102,7 +101,7 @@ class ClientInitializer {
       BotConsole.success("Music client initialized successfully");
       return true;
     } catch (error) {
-      throw ERROR_CODE.core.initialization.client.music;
+      throw new Error("Failed to initialize music client");
     }
   }
 
@@ -124,7 +123,7 @@ class ClientInitializer {
       BotConsole.info("Client initialization status:", status);
       return status;
     } catch (error) {
-      throw ERROR_CODE.system.error.handling;
+      throw new Error("Failed to initialize clients", error);
     }
   }
 }

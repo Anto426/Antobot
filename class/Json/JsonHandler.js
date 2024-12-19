@@ -1,7 +1,5 @@
 import fs from "fs/promises";
 import fetch from "node-fetch";
-import { ERROR_CODE } from "../error/ErrorHandler.js";
-
 class JsonHandler {
   #data;
 
@@ -15,27 +13,19 @@ class JsonHandler {
 
   parse(jsonString) {
     if (!jsonString) {
-      throw ERROR_CODE.services.json.parse;
+      throw new Error("JSON string is required");
     }
 
-    try {
-      this.#data = JSON.parse(jsonString);
-      return this.#data;
-    } catch (error) {
-      throw ERROR_CODE.services.json.parse;
-    }
+    this.#data = JSON.parse(jsonString);
+    return this.#data;
   }
 
   stringify(data = this.#data, pretty = false) {
     if (!data) {
-      throw ERROR_CODE.services.json.stringify;
+      throw new Error("Data is required");
     }
 
-    try {
-      return pretty ? JSON.stringify(data, null, 2) : JSON.stringify(data);
-    } catch (error) {
-      throw ERROR_CODE.services.json.stringify;
-    }
+    return pretty ? JSON.stringify(data, null, 2) : JSON.stringify(data);
   }
 
   getValue(path) {
@@ -64,49 +54,33 @@ class JsonHandler {
   }
 
   async readFromFile(filePath) {
-    try {
-      const jsonString = await fs.readFile(filePath, "utf-8");
-      return this.parse(jsonString);
-    } catch (error) {
-      throw ERROR_CODE.services.json.file.read;
-    }
+    const jsonString = await fs.readFile(filePath, "utf-8");
+    return this.parse(jsonString);
   }
 
   async writeToFile(filePath, pretty = false) {
     if (!this.#data) {
-      throw ERROR_CODE.services.json.file.write;
+      throw new Error("Data is required");
     }
 
-    try {
-      const jsonString = this.stringify(this.#data, pretty);
-      await fs.writeFile(filePath, jsonString, "utf-8");
-    } catch (error) {
-      throw ERROR_CODE.services.json.file.write;
-    }
+    const jsonString = this.stringify(this.#data, pretty);
+    await fs.writeFile(filePath, jsonString, "utf-8");
   }
 
   async readFromUrl(url, token = null) {
-    try {
-      const headers = {
-        Accept: "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
-      };
+    const headers = {
+      Accept: "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
 
-      const response = await fetch(url, { method: "GET", headers });
+    const response = await fetch(url, { method: "GET", headers });
 
-
-      if (!response.ok) {
-        throw ERROR_CODE.system.network.request;
-      }
-
-      const jsonString = await response.text();
-      return this.parse(jsonString);
-    } catch (error) {
-      if (error.code === ERROR_CODE.services.json.parse.code) {
-        throw error;
-      }
-      throw ERROR_CODE.system.network.request;
+    if (!response.ok) {
+      throw new Error("Failed to fetch data");
     }
+
+    const jsonString = await response.text();
+    return this.parse(jsonString);
   }
 }
 

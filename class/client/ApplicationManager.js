@@ -3,7 +3,6 @@ import { hideBin } from "yargs/helpers";
 import readline from "readline";
 import BotConsole from "../console/BotConsole.js";
 import clientInitializer from "./ClientInitializer.js";
-import { ERROR_CODE } from "./../error/ErrorHandler.js";
 import SystemCheck from "./SystemCheck.js";
 import loadModules from "./../Module/LoadModules.js";
 
@@ -21,12 +20,12 @@ class ApplicationManager {
       }
 
       if (!token) {
-        throw new Error(ERROR_CODE.applicationManager.token);
+        throw new Error("Token is missing");
       }
 
       return token;
     } catch (error) {
-      BotConsole.error('Failed to get token:', error.message);
+      BotConsole.error("Failed to get token:", error.message);
       throw error;
     }
   }
@@ -39,13 +38,13 @@ class ApplicationManager {
 
     try {
       const token = await new Promise((resolve, reject) => {
-        BotConsole.info('Please provide your Discord bot token');
-        rl.question('Token: ', (input) => {
+        BotConsole.info("Please provide your Discord bot token");
+        rl.question("Token: ", (input) => {
           const trimmedInput = input.trim();
           if (!trimmedInput) {
-            reject(new Error(ERROR_CODE.applicationManager.token));
+            reject(new Error("Token appears to be invalid (empty)"));
           } else if (trimmedInput.length < 50) {
-            reject(new Error('Token appears to be invalid (too short)'));
+            reject(new Error("Token appears to be invalid (too short)"));
           } else {
             resolve(trimmedInput);
           }
@@ -53,11 +52,10 @@ class ApplicationManager {
       });
 
       process.env.TOKEN = token;
-      BotConsole.success('Token successfully stored');
+      BotConsole.success("Token successfully stored");
       return token;
     } catch (error) {
-      BotConsole.error('Token input failed:', error.message);
-      throw error;
+      throw new Error("Failed to get token", error);
     } finally {
       rl.close();
     }
@@ -87,23 +85,14 @@ class ApplicationManager {
       await this.initializeModules();
       await this.startBot();
     } catch (error) {
-      BotConsole.error('Application initialization failed:', error.message);
-      throw error;
+      throw new Error("Failed to initialize application", error);
     }
   }
 
-  /**
-   * Initializes system checks
-   * @private
-   */
   async initializeSystem() {
     await SystemCheck.initialize();
   }
 
-  /**
-   * Initializes appropriate clients based on enabled features
-   * @private
-   */
   async initializeClients() {
     const hasMusic = SystemCheck.isFeatureEnabled("music");
     const hasAI = SystemCheck.isFeatureEnabled("openai");
@@ -115,7 +104,7 @@ class ApplicationManager {
     }
 
     await clientInitializer.initializeClientBase();
-    
+
     if (hasMusic) {
       await clientInitializer.initializeClientDistube();
     } else if (hasAI) {
@@ -123,19 +112,11 @@ class ApplicationManager {
     }
   }
 
-  /**
-   * Initializes modules
-   * @private
-   */
   async initializeModules() {
     await loadModules.initialize();
     BotConsole.success("All modules loaded successfully");
   }
 
-  /**
-   * Starts the bot with the token
-   * @private
-   */
   async startBot() {
     const token = await this.getToken();
     await client.login(token);

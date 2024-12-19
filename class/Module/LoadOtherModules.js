@@ -1,92 +1,91 @@
 import BotConsole from "../console/BotConsole.js";
 import SystemCheck from "./../client/SystemCheck.js";
-import { ERROR_CODE } from "./../error/ErrorHandler.js";
+
 class LoadOtherModules {
   #rootPath;
   #modules;
 
-  constructor() {
-    this.#rootPath = "./../othermodule";
-    this.#modules = [
+  constructor(rootPath = "./../othermodule") {
+    if (typeof rootPath !== "string") {
+      throw new TypeError("rootPath must be a string");
+    }
+
+    this.#rootPath = rootPath;
+    this.#modules = Object.freeze([
       {
         name: "Server",
-        init: async () => {
-          try {
-            const { serverUpdate } = await import(
-              `${this.#rootPath}/serverUpdate.js`
-            );
-            const serverUpdateModule = new serverUpdate();
-            await serverUpdateModule.init();
-            return serverUpdateModule.StartServer();
-          } catch (error) {
-            throw ERROR_CODE.services.moduleLoader.moduleLoaderother.server;
-          }
-        },
+        path: "serverUpdate.js",
+        initMethod: (module) => module.StartServer(),
         requiresFeatureCheck: false,
       },
       {
         name: "Status",
-        init: async () => {
-          try {
-
-            const Status = await import(`${this.#rootPath}/status.js`);
-            return Status.default.start();
-          } catch (error) {
-            console.log(error);
-            throw ERROR_CODE.services.moduleLoader.moduleLoaderother.status;
-          }
-        },
+        path: "status.js",
+        initMethod: (module) => module.default.start(),
         requiresFeatureCheck: true,
         feature: "status",
       },
       {
         name: "Holiday",
-        init: async () => {
-          try {
-            const Holiday = await import(`${this.#rootPath}/holiday.js`);
-            return Holiday.default.init();
-          } catch (error) {
-            throw ERROR_CODE.services.moduleLoader.moduleLoaderother.holiday;
-          }
-        },
+        path: "holiday.js",
+        initMethod: (module) => module.default.init(),
         requiresFeatureCheck: true,
         feature: "holiday",
       },
-    ];
+    ]);
+  }
+
+  async #loadModule({ path, name, initMethod }) {
+    if (!path || !name || !initMethod) {
+      throw new Error("Invalid module configuration");
+    }
+
+    try {
+      const fullPath = `${this.#rootPath}/${path}`;
+      const module = await import(fullPath);
+      const result = await Promise.resolve(initMethod(module));
+      return result;
+    } catch (error) {
+      throw new Error(`${name} module failed to initialize: ${error.message}`);
+    }
   }
 
   async load() {
     BotConsole.info("Starting to load modules...");
-    const results = [];
 
-    for (const module of this.#modules) {
-      try {
-        if (
-          module.requiresFeatureCheck &&
-          !SystemCheck.isFeatureEnabled(module.feature)
-        ) {
-          BotConsole.info(`${module.name} module is disabled`);
-          continue;
-        }
-
-        await module.init();
-        BotConsole.success(`${module.name} module initialized`);
-        results.push({ name: module.name, status: "success" });
-      } catch (error) {
-        const errorCode =
-          ERROR_CODE.services.moduleLoader.moduleLoaderother.generic;
-        BotConsole.error(`${module.name} module failed to initialize:`, error);
-        results.push({
-          name: module.name,
-          status: "error",
-          error: error.message,
-          code: errorCode.code,
-          id: errorCode.id,
-        });
+    const moduleResults = this.#modules.map(async (module) => {
+      if (
+        module.requiresFeatureCheck &&
+        !SystemCheck.isFeatureEnabled(module.feature)
+      ) {
+        BotConsole.info(`${module.name} module is disabled`);
+        return { name: module.name, status: "disabled" };
       }
-    }
 
-    return results;
+      try {
+        await this.#loadModule(module);
+        BotConsole.success(`${module.name} module initialized`);
+        return { name: module.name, status: "success" };
+      } catch (error) {
+        BotConsole.error(`${module.name} module failed to initialize`, error);
+        return {
+          name: module.name,
+          status: "failed",
+          error: error.message,
+        };
+      }
+    });
+
+    const results = await Promise.allSettled(moduleResults);
+    return results.map((result) =>
+      result.status === "fulfilled"
+        ? result.value
+        : {
+            name: "Unknown",
+            status: "failed",
+            error: result.reason?.message || "Unknown error",
+          }
+    );
   }
 }
 

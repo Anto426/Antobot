@@ -1,8 +1,6 @@
 import JsonHandler from "../json/JsonHandler.js";
 import SystemCheck from "../client/SystemCheck.js";
-import { ERROR_CODE } from "../error/ErrorHandler.js";
 import BotConsole from "../console/BotConsole.js";
-
 
 class Status {
   #jsonHandler;
@@ -20,13 +18,16 @@ class Status {
     try {
       const githubConfig = SystemCheck.getGithubConfig("urlrepo");
       if (!githubConfig) {
-        throw ERROR_CODE.services.status.config;
+        throw new Error("Invalid GitHub config");
       }
 
       const statusUrl = `${githubConfig}/status.json`;
-      return await this.#jsonHandler.readFromUrl(statusUrl, process.env.GITTOKEN);
+      return await this.#jsonHandler.readFromUrl(
+        statusUrl,
+        process.env.GITTOKEN
+      );
     } catch (error) {
-      throw ERROR_CODE.services.status.fetch;
+      throw new Error("Failed to fetch status data", error);
     }
   }
 
@@ -43,41 +44,42 @@ class Status {
       const statusData = await this.#fetchStatusData();
 
       if (!this.#validateStatusData(statusData)) {
-        throw ERROR_CODE.services.status.validation;
+        throw new Error("Invalid status data");
       }
 
       const randomStatus = this.#getRandomStatus(statusData.status);
-      
+
       await this.#client.user.setPresence({
-        activities: [{
-          name: randomStatus.description,
-          type: randomStatus.type
-        }],
-        status: 'online'
+        activities: [
+          {
+            name: randomStatus.description,
+            type: randomStatus.type,
+          },
+        ],
+        status: "online",
       });
 
       BotConsole.warning(`Status updated: ${randomStatus.description}`);
       return true;
     } catch (error) {
-      BotConsole.error('Failed to update status');
-      throw ERROR_CODE.services.status.update;
+      throw new Error("Failed to update status", error);
     }
   }
 
   setUpdateInterval(milliseconds) {
-    if (typeof milliseconds === 'number' && milliseconds > 0) {
+    if (typeof milliseconds === "number" && milliseconds > 0) {
       this.#statusUpdateInterval = milliseconds;
     }
   }
 
   start() {
-    this.updateStatus().catch(error => 
-      BotConsole.error('Initial status update failed')
+    this.updateStatus().catch((error) =>
+      BotConsole.error("Initial status update failed")
     );
-    
+
     return setInterval(() => {
-      this.updateStatus().catch(error => 
-        BotConsole.error('Status update failed')
+      this.updateStatus().catch((error) =>
+        BotConsole.error("Status update failed")
       );
     }, this.#statusUpdateInterval);
   }
@@ -91,4 +93,4 @@ class Status {
   }
 }
 
-export default new Status;
+export default new Status();

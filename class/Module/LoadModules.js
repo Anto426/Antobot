@@ -1,4 +1,3 @@
-import { ERROR_CODE } from "../error/ErrorHandler.js";
 import BotConsole from "./../console/BotConsole.js";
 import SystemCheck from "./../client/SystemCheck.js";
 import { Collection } from "discord.js";
@@ -13,11 +12,11 @@ class LoadModules {
 
   async #loadCollection(collectionName, path) {
     if (!collectionName || typeof collectionName !== "string") {
-      throw ERROR_CODE.system.invalid.parameter;
+      throw new Error("Invalid collection name provided");
     }
 
     if (!path || typeof path !== "string") {
-      throw ERROR_CODE.system.path.resolution;
+      throw new Error("Invalid path provided");
     }
 
     try {
@@ -27,16 +26,15 @@ class LoadModules {
       );
 
       if (!collection || !(collection instanceof Collection)) {
-        throw ERROR_CODE.services.moduleLoader.collection;
+        throw new Error("Failed to load collection");
       }
 
       client[collectionName] = collection;
 
       const size = collection.size;
       const logStatus = size > 0 ? "success" : "warning";
-      const message = `${collectionName}: Loaded ${size} ${
-        size === 1 ? "file" : "files"
-      } from ${path}`;
+      const message = `${collectionName}: Loaded ${size} ${size === 1 ? "file" : "files"
+        } from ${path}`;
       const logData = {
         type: logStatus,
         data: {
@@ -51,25 +49,20 @@ class LoadModules {
 
       return collection;
     } catch (error) {
-      throw ERROR_CODE.services.moduleLoader.collection;
+      throw new Error(`Failed to load ${collectionName}`, error);
     }
   }
 
   async #loadEvents(collection, path) {
-    try {
-      await this.#loadCollection(collection, path);
-      client[collection].forEach((event) => {
-        if (event.allowevents) {
-          client.on(event.eventType, (...args) => event.execute(...args));
-        }
-      });
-    } catch (error) {
-      throw ERROR_CODE.services.moduleLoader.events;
-    }
+    await this.#loadCollection(collection, path);
+    client[collection].forEach((event) => {
+      if (event.allowevents) {
+        client.on(event.eventType, (...args) => event.execute(...args));
+      }
+    });
   }
 
   async loadBaseModules() {
-    try {
       let result = await Promise.all([
         await this.#loadCollection(
           "basecommands",
@@ -87,9 +80,6 @@ class LoadModules {
 
       BotConsole.success("Base modules loaded successfully");
       return result;
-    } catch (error) {
-      throw ERROR_CODE.services.moduleLoader.base;
-    }
   }
 
   async loadMusicModules() {
@@ -97,38 +87,33 @@ class LoadModules {
       return;
     }
 
-    try {
-      let result = await Promise.all([
-        await this.#loadCollection(
-          "musiccommands",
-          this.#systemCheck.getModulePath("distube", "commands")
-        ),
-        await this.#loadEvents(
-          "musicevents",
-          this.#systemCheck.getModulePath("distube", "events"),
-          distube
-        ),
-        await this.#loadCollection(
-          "musicbutton",
-          this.#systemCheck.getModulePath("distube", "buttons")
-        ),
-      ]);
+    let result = await Promise.all([
+      await this.#loadCollection(
+        "musiccommands",
+        this.#systemCheck.getModulePath("distube", "commands")
+      ),
+      await this.#loadEvents(
+        "musicevents",
+        this.#systemCheck.getModulePath("distube", "events"),
+        distube
+      ),
+      await this.#loadCollection(
+        "musicbutton",
+        this.#systemCheck.getModulePath("distube", "buttons")
+      ),
+    ]);
 
-      return result;
-    } catch (error) {
-      throw ERROR_CODE.modules.music.player;
-    }
+    return result;
+
   }
 
   async createGlobalCollections() {
     try {
-      // Create global command collection
       client.commands = new Collection([
         ...client.basecommands,
         ...(client.musiccommands || []),
       ]);
 
-      // Create global button collection
       client.buttons = new Collection([
         ...client.basebutton,
         ...(client.musicbutton || []),

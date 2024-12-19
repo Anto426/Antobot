@@ -1,6 +1,5 @@
 import fs from "fs";
 import { Collection } from "discord.js";
-import { ERROR_CODE } from "../error/ErrorHandler.js";
 import BotConsole from "../console/BotConsole.js";
 class CreateCollection {
   #collection;
@@ -11,57 +10,44 @@ class CreateCollection {
 
   async createCollection(root, extension) {
     if (!root || !extension) {
-      throw ERROR_CODE.system.error.handling;
+      throw new Error("Invalid root or extension provided");
     }
 
-    try {
-      const normalizedRoot = this.#normalizePath(root);
-      if (!fs.existsSync(normalizedRoot)) {
-        throw ERROR_CODE.system.path.resolution;
-      }
-
-      const files = this.getFilesRecursively(normalizedRoot, extension);
-      const loadResults = await Promise.allSettled(
-        files.map((file) => this.loadFile(file))
-      );
-
-      const failures = loadResults.filter(
-        (result) => result.status === "rejected"
-      );
-      if (failures.length > 0) {
-        failures.forEach((result, index) => {
-          BotConsole.error(
-            `Failed to load file ${files[index]}:`,
-            result.reason
-          );
-        });
-      }
-
-      return this.#collection;
-    } catch (error) {
-      BotConsole.error("Failed to create collection:", error);
-      throw ERROR_CODE.modules.base.commands;
+    const normalizedRoot = this.#normalizePath(root);
+    if (!fs.existsSync(normalizedRoot)) {
+      throw new Error(`Directory ${normalizedRoot} does not exist`);
     }
+
+    const files = this.getFilesRecursively(normalizedRoot, extension);
+    const loadResults = await Promise.allSettled(
+      files.map((file) => this.loadFile(file))
+    );
+
+    const failures = loadResults.filter(
+      (result) => result.status === "rejected"
+    );
+    if (failures.length > 0) {
+      failures.forEach((result, index) => {
+        BotConsole.error(`Failed to load file ${files[index]}:`, result.reason);
+      });
+    }
+
+    return this.#collection;
   }
 
   getFilesRecursively(dir, extension) {
-    try {
-      return fs
-        .readdirSync(dir, { withFileTypes: true })
-        .reduce((files, item) => {
-          const path = this.#normalizePath(`${dir}/${item.name}`);
-          if (item.isDirectory()) {
-            return [...files, ...this.getFilesRecursively(path, extension)];
-          }
-          return item.isFile() &&
-            item.name.toLowerCase().endsWith(extension.toLowerCase())
-            ? [...files, path]
-            : files;
-        }, []);
-    } catch (error) {
-      BotConsole.error(`Error reading directory ${dir}:`, error);
-      throw ERROR_CODE.services.json.file.read;
-    }
+    return fs
+      .readdirSync(dir, { withFileTypes: true })
+      .reduce((files, item) => {
+        const path = this.#normalizePath(`${dir}/${item.name}`);
+        if (item.isDirectory()) {
+          return [...files, ...this.getFilesRecursively(path, extension)];
+        }
+        return item.isFile() &&
+          item.name.toLowerCase().endsWith(extension.toLowerCase())
+          ? [...files, path]
+          : files;
+      }, []);
   }
 
   async loadFile(filePath) {
@@ -78,7 +64,6 @@ class CreateCollection {
 
       this.#collection.set(file.default.name, file.default);
     } catch (err) {
-      console.log(err);
       BotConsole.error(`Failed to load file ${filePath}:`);
     }
   }

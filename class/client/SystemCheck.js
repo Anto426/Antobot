@@ -1,4 +1,3 @@
-import { ERROR_CODE } from "../error/ErrorHandler.js";
 import JsonHandler from "../json/JsonHandler.js";
 
 class SystemCheck {
@@ -26,7 +25,7 @@ class SystemCheck {
       this.#validateConfig();
       return true;
     } catch (error) {
-      throw ERROR_CODE.core.initialization.system.config;
+      throw new Error("Failed to initialize system check", error);
     }
   }
 
@@ -36,7 +35,7 @@ class SystemCheck {
       typeof this.#config !== "object" ||
       Array.isArray(this.#config)
     ) {
-      throw ERROR_CODE.core.initialization.system.config;
+      throw new Error("Invalid config object");
     }
 
     const missingSections = SystemCheck.#REQUIRED_CONFIG_SECTIONS.filter(
@@ -44,18 +43,18 @@ class SystemCheck {
     );
 
     if (missingSections.length) {
-      throw ERROR_CODE.core.initialization.system.config;
+      throw new Error(`Missing config sections: ${missingSections.join(", ")}`);
     }
   }
 
   #resolvePath(path) {
     if (!Array.isArray(path)) {
-      throw ERROR_CODE.system.path.resolution;
+      throw new Error("Invalid path array");
     }
 
     return path.reduce((obj, key) => {
       if (obj === null || obj === undefined || !(key in obj)) {
-        throw ERROR_CODE.system.path.resolution;
+        throw new Error("Invalid path resolution");
       }
       return obj[key];
     }, this.#config);
@@ -63,14 +62,14 @@ class SystemCheck {
 
   getResourcePath(category, subcategory, filename = "") {
     if (!category || !subcategory) {
-      throw ERROR_CODE.system.path.resolution;
+      throw new Error("Invalid category or subcategory");
     }
 
     try {
       const basePath = this.#resolvePath(["paths", category, subcategory]);
       return filename ? `${basePath}/${filename}` : basePath;
     } catch (error) {
-      throw ERROR_CODE.system.path.resolution;
+      throw new Error("Failed to resolve resource path", error);
     }
   }
 
@@ -87,13 +86,13 @@ class SystemCheck {
       ]);
       return filename ? filePath : `${rootPath}${filePath}`;
     } catch (error) {
-      throw ERROR_CODE.core.initialization.system.database;
+      throw new Error("Failed to resolve database path", error);
     }
   }
 
   getModulePath(moduleName, type) {
     if (!moduleName || !type) {
-      throw ERROR_CODE.services.moduleLoader.moduleLoaderother.generic;
+      throw new Error("Invalid module name or type");
     }
 
     try {
@@ -106,37 +105,28 @@ class SystemCheck {
       ]);
       return `${root}${modulePath}`;
     } catch (error) {
-      throw ERROR_CODE.services.moduleLoader.collection;
+      throw new Error("Failed to resolve module path", error);
     }
   }
 
   getAssetPath(category, type, filename = "") {
     if (!category || !type) {
-      throw ERROR_CODE.system.path.resolution;
+      throw new Error("Invalid category or type");
     }
 
-    try {
-      const assetConfig = this.#resolvePath([
-        "paths",
-        "assets",
-        category,
-        type,
-      ]);
+    const assetConfig = this.#resolvePath(["paths", "assets", category, type]);
 
-      if (filename) {
-        if (
-          !Array.isArray(assetConfig.files) ||
-          !assetConfig.files.includes(filename)
-        ) {
-          throw ERROR_CODE.system.path.resolution;
-        }
-        return `${assetConfig.directory}/${filename}`;
+    if (filename) {
+      if (
+        !Array.isArray(assetConfig.files) ||
+        !assetConfig.files.includes(filename)
+      ) {
+        throw new Error("Invalid asset filename");
       }
-
-      return assetConfig.directory;
-    } catch (error) {
-      throw ERROR_CODE.system.path.resolution;
+      return `${assetConfig.directory}/${filename}`;
     }
+
+    return assetConfig.directory;
   }
 
   isFeatureEnabled(featureName) {
@@ -152,25 +142,17 @@ class SystemCheck {
   }
 
   getOpenAIModel() {
-    try {
-      return this.#resolvePath(["features", "openai", "model"]);
-    } catch (error) {
-      throw ERROR_CODE.system.path.resolution;
-    }
+    return this.#resolvePath(["features", "openai", "model"]);
   }
 
   getGithubConfig(key) {
-    try {
-      const githubConfig = this.#resolvePath(["remote", "github"]);
-      return key ? githubConfig[key] : githubConfig;
-    } catch (error) {
-      throw ERROR_CODE.system.error.handling;
-    }
+    const githubConfig = this.#resolvePath(["remote", "github"]);
+    return key ? githubConfig[key] : githubConfig;
   }
 
   getSystemInfo(key) {
     if (!this.#systemInfo || typeof this.#systemInfo !== "object") {
-      throw ERROR_CODE.system.error.handling;
+      throw new Error("Invalid system info object");
     }
     return key ? this.#systemInfo[key] : this.#systemInfo;
   }
