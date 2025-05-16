@@ -1,8 +1,8 @@
-import JsonHandler from "../json/JsonHandler.js";
-import SystemCheck from "../client/SystemCheck.js";
-import BotConsole from "../console/BotConsole.js";
+import JsonHandler from "../../class/json/JsonHandler.js";
+import SystemCheck from "../../class/client/SystemCheck.js";
+import BotConsole from "../../class/console/BotConsole.js";
 
-class Status {
+export default class Status {
   #jsonHandler;
   #statusUpdateInterval;
   #client;
@@ -93,4 +93,4 @@ class Status {
   }
 }
 
-export default new Status();
+

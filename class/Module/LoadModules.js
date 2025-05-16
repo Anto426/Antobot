@@ -33,8 +33,9 @@ class LoadModules {
 
       const size = collection.size;
       const logStatus = size > 0 ? "success" : "warning";
-      const message = `${collectionName}: Loaded ${size} ${size === 1 ? "file" : "files"
-        } from ${path}`;
+      const message = `${collectionName}: Loaded ${size} ${
+        size === 1 ? "file" : "files"
+      } from ${path}`;
       const logData = {
         type: logStatus,
         data: {
@@ -63,23 +64,23 @@ class LoadModules {
   }
 
   async loadBaseModules() {
-      let result = await Promise.all([
-        await this.#loadCollection(
-          "basecommands",
-          this.#systemCheck.getModulePath("base", "commands")
-        ),
-        await this.#loadEvents(
-          "baseevents",
-          this.#systemCheck.getModulePath("base", "events")
-        ),
-        await this.#loadCollection(
-          "basebutton",
-          this.#systemCheck.getModulePath("base", "buttons")
-        ),
-      ]);
+    let result = await Promise.all([
+      await this.#loadCollection(
+        "basecommands",
+        this.#systemCheck.getModulePath("base", "commands")
+      ),
+      await this.#loadEvents(
+        "baseevents",
+        this.#systemCheck.getModulePath("base", "events")
+      ),
+      await this.#loadCollection(
+        "basebutton",
+        this.#systemCheck.getModulePath("base", "buttons")
+      ),
+    ]);
 
-      BotConsole.success("Base modules loaded successfully");
-      return result;
+    BotConsole.success("Base modules loaded successfully");
+    return result;
   }
 
   async loadMusicModules() {
@@ -104,7 +105,16 @@ class LoadModules {
     ]);
 
     return result;
+  }
 
+  async loadOtherModules() {
+    let result = await this.#loadCollection(
+      "other",
+      this.#systemCheck.getModulePath("other", "root")
+    );
+
+    BotConsole.success("Base modules loaded successfully");
+    return result;
   }
 
   async createGlobalCollections() {
@@ -129,6 +139,7 @@ class LoadModules {
     await this.loadBaseModules();
     await this.loadMusicModules();
     await this.createGlobalCollections();
+    await this.loadOtherModules();
   }
 }
 

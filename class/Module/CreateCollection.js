@@ -1,6 +1,7 @@
 import fs from "fs";
 import { Collection } from "discord.js";
 import BotConsole from "../console/BotConsole.js";
+import { pathToFileURL } from "url";
 class CreateCollection {
   #collection;
 
@@ -64,27 +65,34 @@ class CreateCollection {
       }, []);
   }
 
-  async loadFile(filePath) {
-    try {
-      const fileUrl = new URL("./../../" + filePath, import.meta.url).href;
-      const file = await import(fileUrl);
+async loadFile(filePath) {
+  try {
+    const fileUrl = pathToFileURL(filePath).href;
+    const { default: FileExport } = await import(fileUrl);
 
-      if (!this.#validateFile(file.default)) {
-        BotConsole.warning(
-          `Skipping invalid file ${filePath}: Missing or invalid name property`
-        );
-        return;
-      }
-
-      this.#collection.set(file.default.name, file.default);
-    } catch (err) {
-      throw new Error(err.message);
+    if (!this.#validateFile(FileExport)) {
+      BotConsole.warning(
+        `Skipping invalid file ${filePath}: Export is not a valid class with a name`
+      );
+      return;
     }
-  }
 
-  #validateFile(file) {
-    return file?.name && typeof file.name === "string";
+    const instance = new FileExport();
+    this.#collection.set(FileExport.name, instance);
+  } catch (err) {
+    BotConsole.error(`Failed to import ${filePath}:`, err);
+    throw err;
   }
+}
+
+#validateFile(file) {
+  return (
+    typeof file === "function" &&
+    /^class\s/.test(Function.prototype.toString.call(file)) &&
+    typeof file.name === "string" &&
+    file.name.trim().length > 0
+  );
+}
 
   #normalizePath(path) {
     return path.replace(/\\/g, "/");

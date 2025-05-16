@@ -1,7 +1,7 @@
-import SystemCheck from "../core/SystemCheck.js";
-import JsonHandler from "../json/JsonHandler.js";
+import SystemCheck from "../../class/client/SystemCheck.js";
+import JsonHandler from "../../class/json/JsonHandler.js";
 
-class Holiday {
+export default class Holiday {
   #jsonHandler;
   #holidays;
   #guildConfigs;
@@ -152,5 +152,3 @@ class Holiday {
     await this.start();
   }
 }
-
-export default new Holiday();
