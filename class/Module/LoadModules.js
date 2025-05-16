@@ -49,7 +49,7 @@ class LoadModules {
 
       return collection;
     } catch (error) {
-      throw new Error(`Failed to load ${collectionName}`, error);
+      throw new Error(`Failed to load ${collectionName}` + error);
     }
   }
 

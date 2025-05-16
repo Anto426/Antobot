@@ -10,15 +10,28 @@ class CreateCollection {
 
   async createCollection(root, extension) {
     if (!root || !extension) {
-      throw new Error("Invalid root or extension provided");
+      BotConsole.warning(
+        "Invalid root or extension provided. Returning empty collection."
+      );
+      return this.#collection;
     }
 
     const normalizedRoot = this.#normalizePath(root);
     if (!fs.existsSync(normalizedRoot)) {
-      throw new Error(`Directory ${normalizedRoot} does not exist`);
+      BotConsole.info(
+        `Directory "${normalizedRoot}" does not exist. Returning empty collection.`
+      );
+      return this.#collection;
     }
 
     const files = this.getFilesRecursively(normalizedRoot, extension);
+    if (files.length === 0) {
+      BotConsole.info(
+        `No "${extension}" files found in "${normalizedRoot}". Returning empty collection.`
+      );
+      return this.#collection;
+    }
+
     const loadResults = await Promise.allSettled(
       files.map((file) => this.loadFile(file))
     );
@@ -27,11 +40,12 @@ class CreateCollection {
       (result) => result.status === "rejected"
     );
     if (failures.length > 0) {
-      failures.forEach((result, index) => {
-        BotConsole.error(`Failed to load file ${files[index]}:`, result.reason);
+      failures.forEach((result, i) => {
+        BotConsole.error(`Failed to load file ${files[i]}:`, result.reason);
       });
     }
 
+    BotConsole.info(`Collection loaded with ${this.#collection.size} item(s).`);
     return this.#collection;
   }
 
