@@ -72,7 +72,7 @@ export default class Status {
     }
   }
 
-  start() {
+  run() {
     this.updateStatus().catch((error) =>
       BotConsole.error("Initial status update failed")
     );

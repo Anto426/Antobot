@@ -1,20 +1,13 @@
 import SystemCheck from "../../class/client/SystemCheck.js";
 import JsonHandler from "../../class/json/JsonHandler.js";
+import BotConsole from "../../class/console/BotConsole.js";
 
 export default class Holiday {
-  #jsonHandler;
-  #holidays;
-  #guildConfigs;
-  #activeTimers;
-  #currentYear;
-
-  constructor() {
-    this.#jsonHandler = new JsonHandler();
-    this.#holidays = [];
-    this.#guildConfigs = {};
-    this.#activeTimers = new Map();
-    this.#currentYear = new Date().getFullYear();
-  }
+  #jsonHandler = new JsonHandler();
+  #holidays = [];
+  #guildConfigs = {};
+  #activeTimers = new Map();
+  #currentYear = new Date().getFullYear();
 
   async initialize() {
     try {
@@ -28,11 +21,19 @@ export default class Holiday {
         ),
       ]);
 
-      this.#guildConfigs = guildConfig;
+      if (!holidayData || !Array.isArray(holidayData.holidays)) {
+        throw new Error("Holiday data is missing or invalid");
+      }
+
+      this.#guildConfigs = guildConfig || {};
       this.#holidays = holidayData.holidays;
       return true;
     } catch (error) {
-      throw new Error("Failed to initialize holiday module", error);
+      BotConsole.error(
+        "Holiday.initialize(): Failed to load holiday data",
+        error
+      );
+      throw error;
     }
   }
 
@@ -43,12 +44,12 @@ export default class Holiday {
 
     const now = Date.now();
     const nextHoliday = this.#holidays.find((holiday) => {
-      const holidayDate = new Date(
+      const date = new Date(
         this.#currentYear,
         holiday.date.month - 1,
         holiday.date.day
-      ).getTime();
-      return holidayDate > now;
+      );
+      return date.getTime() > now;
     });
 
     if (nextHoliday) {
@@ -61,7 +62,7 @@ export default class Holiday {
     }
 
     this.#currentYear++;
-    return this.findNextHoliday();
+    return this.findNextHoliday(); // ricorsione controllata
   }
 
   #formatTimeRemaining(timestamp) {
@@ -81,74 +82,94 @@ export default class Holiday {
   }
 
   async startHolidayTracking(guild, channels, holiday) {
-    const { nameChannel, timerChannel, congratsChannel } = channels;
+    try {
+      const { nameChannel, timerChannel, congratsChannel } = channels;
 
-    this.#clearTimers(guild.id);
+      this.#clearTimers(guild.id);
 
-    const timers = {
-      update: setInterval(() => {
-        const remaining = holiday.timestamp - Date.now();
-        if (remaining > 0) {
-          nameChannel
-            .setName(`${holiday.emoji} ${holiday.name}`)
-            .catch(console.error);
-          timerChannel
-            .setName(this.#formatTimeRemaining(holiday.timestamp))
-            .catch(console.error);
-        }
-      }, 300000),
+      const timers = {
+        update: setInterval(() => {
+          const remaining = holiday.timestamp - Date.now();
+          if (remaining > 0) {
+            nameChannel
+              ?.setName(`${holiday.emoji} ${holiday.name}`)
+              .catch(console.error);
+            timerChannel
+              ?.setName(this.#formatTimeRemaining(holiday.timestamp))
+              .catch(console.error);
+          }
+        }, 300000),
 
-      check: setInterval(() => {
-        if (Date.now() >= holiday.timestamp) {
-          this.#sendCongratulations(congratsChannel, holiday);
-          this.#clearTimers(guild.id);
-        }
-      }, 60000),
-    };
+        check: setInterval(() => {
+          if (Date.now() >= holiday.timestamp) {
+            this.#sendCongratulations(congratsChannel, holiday).catch(
+              console.error
+            );
+            this.#clearTimers(guild.id);
+          }
+        }, 60000),
+      };
 
-    this.#activeTimers.set(guild.id, timers);
+      this.#activeTimers.set(guild.id, timers);
+    } catch (err) {
+      BotConsole.error(
+        `startHolidayTracking(): Error for guild ${guild.id}`,
+        err
+      );
+    }
   }
 
   async #sendCongratulations(channel, holiday) {
     try {
-      await channel.send({
-        content: `@everyone Celebrating ${holiday.name}!`,
-      });
+      await channel.send({ content: `@everyone Celebrating ${holiday.name}!` });
     } catch (error) {
-      throw new Error("Failed to send congratulations", error);
+      BotConsole.error(
+        `sendCongratulations(): Failed to send message for ${holiday.name}`,
+        error
+      );
     }
   }
 
-  async start() {
+  async run() {
     try {
       const nextHoliday = await this.findNextHoliday();
 
       for (const [guildId, config] of Object.entries(this.#guildConfigs)) {
         if (!config?.channel?.holiday) continue;
 
-        const guild = await client.guilds.fetch(guildId);
-        const channels = {
-          nameChannel: guild.channels.cache.get(config.channel.holiday.name),
-          timerChannel: guild.channels.cache.get(config.channel.holiday.date),
-          congratsChannel: guild.channels.cache.get(
-            config.channel.holiday.send
-          ),
-        };
+        try {
+          const guild = await client.guilds.fetch(guildId);
+          const channels = {
+            nameChannel: guild.channels.cache.get(config.channel.holiday.name),
+            timerChannel: guild.channels.cache.get(config.channel.holiday.date),
+            congratsChannel: guild.channels.cache.get(
+              config.channel.holiday.send
+            ),
+          };
 
-        if (Object.values(channels).every((channel) => channel)) {
-          await this.startHolidayTracking(guild, channels, nextHoliday);
+          if (Object.values(channels).every(Boolean)) {
+            await this.startHolidayTracking(guild, channels, nextHoliday);
+          } else {
+            BotConsole.warning(`run(): Missing channels in guild ${guildId}`);
+          }
+        } catch (guildError) {
+          BotConsole.error(`run(): Failed guild setup: ${guildId}`, guildError);
         }
       }
     } catch (error) {
-      throw new Error("Failed to start holiday tracking", error);
+      BotConsole.error("run(): Could not start holiday tracking", error);
     }
   }
 
   async restart() {
-    for (const guildId of this.#activeTimers.keys()) {
-      this.#clearTimers(guildId);
+    try {
+      for (const guildId of this.#activeTimers.keys()) {
+        this.#clearTimers(guildId);
+      }
+      await this.initialize();
+      await this.run();
+    } catch (err) {
+      BotConsole.error("restart(): Failed to restart holiday tracking", err);
     }
-    await this.initialize();
-    await this.start();
   }
 }

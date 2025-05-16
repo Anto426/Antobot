@@ -1,6 +1,7 @@
 import LogStartup from "../../../class/console/LogStartup.js";
-import LoadOtherModules from "../../../class/Module/LoadOtherModules.js";
 import BotConsole from "../../../class/console/BotConsole.js";
+import IntitialOtherModules from "../../../class/Loader/IntitialOtherModules.js";
+
 
 export default {
   name: "OnStartUp",
@@ -8,8 +9,8 @@ export default {
   allowevents: true,
   async execute() {
     BotConsole.success("Bot is ready to go!");
+    await IntitialOtherModules.Intit();
+    LogStartup.run();
 
-    await LoadOtherModules.load();
-    new LogStartup().log();
   },
 };
