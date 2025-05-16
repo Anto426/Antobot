@@ -121,13 +121,12 @@ class ApplicationManager {
 
   async initializeModules() {
     await loadModules.initialize();
-    BotConsole.success("All modules loaded successfully");
   }
 
   async startBot() {
     const token = await this.getToken();
     await client.login(token);
-    BotConsole.success("Bot successfully logged in");
+    BotConsole.success("Bot successfully logged in " + client.user.tag);
   }
 }
 
