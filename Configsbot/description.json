@@ -1,0 +1,34 @@
+{
+    "command": {
+        "ping": {
+            "description": "🏓 Il comando 'ping' restituisce il tempo di risposta tra il bot e il server Discord, permettendoti di verificare la reattività del bot e comunicare altre informazioni utili! 🕒",
+            "emoji": "🏓",
+            "image": ""
+        },
+        "other": {
+            "description": "",
+            "emoji": "",
+            "image": ""
+        },
+        "other2": {
+            "description": "",
+            "emoji": "",
+            "image": ""
+        },
+        "other3": {
+            "description": "",
+            "emoji": "",
+            "image": ""
+        },
+        "other4": {
+            "description": "",
+            "emoji": "",
+            "image": ""
+        },
+        "other5": {
+            "description": "",
+            "emoji": "",
+            "image": ""
+        }
+    }
+}
