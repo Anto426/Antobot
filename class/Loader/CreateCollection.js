@@ -42,7 +42,7 @@ class CreateCollection {
     );
     if (failures.length > 0) {
       failures.forEach((result, i) => {
-        BotConsole.error(`Failed to load file ${files[i]}:`, result.reason);
+        BotConsole.error(`Failed to load file ${files[i]}:` + result.reason);
       });
     }
 
@@ -96,7 +96,7 @@ class CreateCollection {
         `Loaded file ${filePath} using fallback name "${fallbackName}"`
       );
     } catch (err) {
-      BotConsole.error(`Failed to load file ${filePath}:`, err);
+      throw new Error(err);
     }
   }
 
