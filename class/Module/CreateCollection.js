@@ -78,10 +78,8 @@ class CreateCollection {
         return;
       }
 
-      // Se è una classe con nome valido, istanziala
       if (this.#isValidClass(FileExport)) {
-        const instance = new FileExport();
-        this.#collection.set(FileExport.name, instance);
+        this.#collection.set(FileExport.name, FileExport);
         return;
       }
 
