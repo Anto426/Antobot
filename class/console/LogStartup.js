@@ -275,37 +275,37 @@ class LogStartup {
       {
         name: "Base Commands",
         collection: client.basecommands,
-        columns: ["Command", "Category", "Description"],
+        columns: ["Name", "Category", "Description"],
         colWidths: [20, 20, 40],
       },
       {
         name: "Base Events",
         collection: client.baseevents,
-        columns: ["Name", "EventType", "AllowEvents"],
+        columns: ["Name", "eventType", "AllowEvents"],
         colWidths: [40, 40, 20],
       },
       {
         name: "Base Buttons",
         collection: client.basebutton,
-        columns: ["Button", "Description"],
+        columns: ["Name", "Description"],
         colWidths: [30, 50],
       },
       {
         name: "Music Commands",
         collection: client.musiccommands,
-        columns: ["Command", "Description"],
+        columns: ["Name", "Description"],
         colWidths: [20, 60],
       },
       {
         name: "Music Events",
         collection: client.musicevents,
-        columns: ["Name", "EventType", "AllowEvents"],
+        columns: ["Name", "eventType", "AllowEvents"],
         colWidths: [40, 40, 20],
       },
       {
         name: "Music Buttons",
         collection: client.musicbutton,
-        columns: ["Button", "Description"],
+        columns: ["Name", "Description"],
         colWidths: [30, 50],
       },
     ];
