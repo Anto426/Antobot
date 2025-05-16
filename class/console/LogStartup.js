@@ -61,10 +61,7 @@ const THEME_GRADIENTS = {
 };
 
 const gradients = Object.fromEntries(
-  Object.entries(THEME_GRADIENTS).map(([key, colors]) => [
-    key,
-    gradient(colors),
-  ])
+  Object.entries(THEME_GRADIENTS).map(([key, colors]) => [key, gradient(colors)])
 );
 
 class LogStartup {
@@ -77,12 +74,8 @@ class LogStartup {
       nodeJsVersion: process.version,
       platform: process.platform,
       arch: process.arch,
-      ramUsage: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(
-        2
-      )} MB`,
-      totalRam: `${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(
-        2
-      )} MB`,
+      ramUsage: `${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB`,
+      totalRam: `${(process.memoryUsage().heapTotal / 1024 / 1024).toFixed(2)} MB`,
       uptime: `${Math.floor(process.uptime())}s`,
       token: this.maskToken(process.env.TOKEN),
       openAiToken: this.maskToken(process.env.OPENAITOKEN),
@@ -155,14 +148,42 @@ class LogStartup {
   logFooter() {
     const width = 80;
     console.log(gradients.title("╚" + "═".repeat(width) + "╝"));
-    console.log(
-      chalk.gray(`\nLog generated at: ${new Date().toLocaleString()}`)
-    );
+    console.log(chalk.gray(`\nLog generated at: ${new Date().toLocaleString()}`));
   }
 
   logSectionSeparator() {
     const width = 80;
     console.log(gradients.title("╠" + "═".repeat(width) + "╣"));
+  }
+
+  // Metodo dinamico per loggare qualsiasi tabella dati
+  logTableSection({ title, dataRows, headers, colWidths, chars = TABLE_CHARS.section, colorizer }) {
+    if (!dataRows || dataRows.length === 0) return;
+
+    this.logHeader(title);
+
+    const table = this.createTable({ headers, chars, colWidths });
+
+    dataRows.forEach((row) => {
+      const formattedRow = headers.map((header, i) => {
+        const key = typeof header === "string" ? header : header.key || `col${i}`;
+        let val = row[key];
+
+        if (colorizer) {
+          const colored = colorizer(key, val);
+          if (colored !== undefined) return colored;
+        }
+
+        if (val === undefined || val === null) return chalk.gray("N/A");
+        if (typeof val === "number") return chalk.green(val.toString());
+        if (typeof val === "string") return chalk.cyan(val);
+        return String(val);
+      });
+
+      table.push(formattedRow);
+    });
+
+    console.log(table.toString());
   }
 
   logGeneralInfo() {
@@ -218,50 +239,38 @@ class LogStartup {
   }
 
   logFeatures() {
-    this.logHeader("Features Status");
-
-    const featuresTable = this.createTable({
+    this.logTableSection({
+      title: "Features Status",
       headers: ["Feature", "Status", "Details"],
-      chars: TABLE_CHARS.section,
       colWidths: [20, 15, 45],
+      dataRows: this.data.features.map(({ name, enabled, details }) => ({
+        Feature: gradients.warning(name),
+        Status: enabled ? gradients.success("Enabled") : gradients.error("Disabled"),
+        Details: chalk.gray(details),
+      })),
+      colorizer: null,
     });
-
-    this.data.features.forEach(({ name, enabled, details }) => {
-      featuresTable.push([
-        gradients.warning(name),
-        enabled ? gradients.success("Enabled") : gradients.error("Disabled"),
-        chalk.gray(details),
-      ]);
-    });
-
-    console.log(featuresTable.toString());
   }
 
   logSecurity() {
-    const { token, openAiToken, gitToken } = this.data;
-
-    this.logHeader("Security Information");
-
-    const securityTable = this.createTable({
+    this.logTableSection({
+      title: "Security Information",
       headers: ["Type", "Value"],
-      chars: TABLE_CHARS.section,
       colWidths: [20, 60],
+      dataRows: [
+        { Type: "Bot Token", Value: this.data.token },
+        { Type: "OpenAI Token", Value: this.data.openAiToken },
+        { Type: "Git Token", Value: this.data.gitToken },
+      ].map(({ Type, Value }) => ({
+        Type: gradients.warning(Type),
+        Value: chalk.gray(Value),
+      })),
     });
-
-    [
-      ["Bot Token", token],
-      ["OpenAI Token", openAiToken],
-      ["Git Token", gitToken],
-    ].forEach(([key, value]) => {
-      securityTable.push([gradients.warning(key), chalk.gray(value)]);
-    });
-
-    console.log(securityTable.toString());
   }
 
   logModules() {
-    this.logHeader("Loaded Modules");
-
+    // definisci i moduli dinamicamente, ogni entry ha:
+    // name, collection, columns, colWidths
     const modules = [
       {
         name: "Base Commands",
@@ -272,8 +281,8 @@ class LogStartup {
       {
         name: "Base Events",
         collection: client.baseevents,
-        columns: ["name", "eventType", "allowevents"],
-        colWidths: [40, 40],
+        columns: ["Name", "EventType", "AllowEvents"],
+        colWidths: [40, 40, 20],
       },
       {
         name: "Base Buttons",
@@ -290,8 +299,8 @@ class LogStartup {
       {
         name: "Music Events",
         collection: client.musicevents,
-        columns: ["name", "eventType", "allowevents"],
-        colWidths: [40, 40],
+        columns: ["Name", "EventType", "AllowEvents"],
+        colWidths: [40, 40, 20],
       },
       {
         name: "Music Buttons",
@@ -303,77 +312,95 @@ class LogStartup {
 
     modules.forEach(({ name, collection, columns, colWidths }) => {
       if (collection?.size) {
-        console.log(chalk.bold(gradients.title(`\n${name}:`)));
-        const table = this.createTable({
-          headers: columns,
-          chars: TABLE_CHARS.section,
-          colWidths,
-        });
+        const dataRows = [];
+
         collection.forEach((item) => {
-          const row = columns.map((col) => {
-            const value = item[col.toLowerCase()] || "N/A";
-            return gradients.success(value);
+          const row = {};
+          columns.forEach((col) => {
+            // Prova a recuperare sia da proprietà normale, camelCase o minuscolo
+            const key = col.toLowerCase();
+            row[col] =
+              item[key] !== undefined
+                ? item[key]
+                : item[col] !== undefined
+                ? item[col]
+                : "N/A";
           });
-          table.push(row);
+          dataRows.push(row);
         });
-        console.log(table.toString());
-        console.log(chalk.gray(`Total ${name}: ${collection.size}`));
+
+        this.logTableSection({
+          title: name,
+          headers: columns,
+          colWidths,
+          dataRows,
+          colorizer: (key, val) => {
+            if (key === "Status" && val === "Enabled") return gradients.success(val);
+            if (key === "Status" && val === "Disabled") return gradients.error(val);
+            if (typeof val === "string") return gradients.success(val);
+            return val;
+          },
+        });
+
+        console.log(chalk.gray(`Total ${name}: ${collection.size}\n`));
       }
     });
   }
 
   logGuilds() {
     if (client.guilds.cache.size > 0) {
-      this.logHeader("Connected Servers");
-
-      const guildsTable = this.createTable({
-        headers: [
-          "Server Name",
-          "Members",
-          "Owner",
-          "Created At",
-          "Region",
-          "Boost Level",
-          "ID",
-        ],
-        chars: TABLE_CHARS.section,
-        colWidths: [25, 10, 20, 20, 10, 12, 20],
-      });
-
+      const guildsData = [];
       client.guilds.cache.forEach((guild) => {
         const owner =
           guild.members.cache.get(guild.ownerId)?.user.username || "Unknown";
         const createdAt = new Date(guild.createdTimestamp).toLocaleDateString();
         const boostLevel = `Level ${guild.premiumTier}`;
 
-        guildsTable.push([
-          gradients.success(guild.name),
-          gradients.info(`${guild.memberCount}`),
-          gradients.warning(owner),
-          gradients.debug(createdAt),
-          gradients.trace(guild.preferredLocale),
-          gradients.error(boostLevel),
-          chalk.gray(guild.id),
-        ]);
+        guildsData.push({
+          "Server Name": gradients.success(guild.name),
+          Members: gradients.info(`${guild.memberCount}`),
+          Owner: gradients.warning(owner),
+          "Created At": gradients.debug(createdAt),
+          Region: gradients.trace(guild.preferredLocale || "N/A"),
+          Boost: gradients.success(boostLevel),
+        });
       });
 
-      console.log(guildsTable.toString());
-      console.log(chalk.gray(`Total Servers: ${client.guilds.cache.size}`));
+      this.logTableSection({
+        title: "Guilds Info",
+        headers: [
+          "Server Name",
+          "Members",
+          "Owner",
+          "Created At",
+          "Region",
+          "Boost",
+        ],
+        colWidths: [25, 10, 20, 15, 15, 10],
+        dataRows: guildsData,
+      });
     }
   }
 
-  log() {
+  async run() {
+    this.logHeader("STARTUP LOG");
+
     this.logGeneralInfo();
     this.logSectionSeparator();
+
     this.logFeatures();
     this.logSectionSeparator();
+
     this.logSecurity();
     this.logSectionSeparator();
+
     this.logModules();
     this.logSectionSeparator();
+
     this.logGuilds();
+
     this.logFooter();
   }
 }
 
-export default LogStartup;
+export default new LogStartup();
