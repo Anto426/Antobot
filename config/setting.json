@@ -1,0 +1,60 @@
+{
+    "paths": {
+        "database": {
+            "root": "/Database",
+            "files": {
+                "oldMembers": "oldmember.json",
+                "guildConfig": "guildconfig.json"
+            }
+        },
+        "modules": {
+            "root": "./module",
+            "base": {
+                "commands": "/base/commands",
+                "events": "/base/events",
+                "buttons": "/base/buttons"
+            },
+            "distube": {
+                "commands": "/distube/commands",
+                "events": "/distube/events",
+                "buttons": "/distube/buttons"
+            },
+            "other": {
+                "root": "/other"
+            }
+        },
+        "assets": {
+            "canvas": {
+                "fonts": {
+                    "directory": "/canavas/font",
+                    "files": [
+                        "asapCondensed.ttf",
+                        "NotoSansJP-Bold.ttf"
+                    ]
+                },
+                "images": {
+                    "directory": "/canavas/image",
+                    "files": [
+                        "background.jpg"
+                    ]
+                }
+            }
+        }
+    },
+    "features": {
+        "status": true,
+        "captcha": false,
+        "holiday": true,
+        "music": true,
+        "openai": {
+            "enabled": false,
+            "model": "gpt-turbo-3.5"
+        }
+    },
+    "remote": {
+        "github": {
+            "urlrepo": "https://raw.githubusercontent.com/Anto426/Configsbot/refs/heads/main",
+            "apiBase": "https://api.github.com/users/"
+        }
+    }
+}
