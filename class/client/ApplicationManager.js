@@ -83,9 +83,8 @@ class ApplicationManager {
       await this.initializeSystem();
       await this.initializeClients();
       await this.initializeModules();
-      await this.startBot();
     } catch (error) {
-      throw new Error("Failed to initialize application", error);
+      throw new Error(error);
     }
   }
 
@@ -94,22 +93,30 @@ class ApplicationManager {
   }
 
   async initializeClients() {
-    const hasMusic = SystemCheck.isFeatureEnabled("music");
-    const hasAI = SystemCheck.isFeatureEnabled("openai");
+    const features = {
+      music: SystemCheck.isFeatureEnabled("music"),
+      ai: SystemCheck.isFeatureEnabled("openai"),
+    };
+    const activeFeatures = Object.entries(features)
+      .filter(([, enabled]) => enabled)
+      .map(([name]) => name);
 
-    if (hasMusic && hasAI) {
-      BotConsole.info("Initializing full client with music and AI features");
+    BotConsole.info(
+      activeFeatures.length
+        ? `Initializing client with ${activeFeatures.join(" and ")} feature${
+            activeFeatures.length > 1 ? "s" : ""
+          }`
+        : "Initializing base client without additional features"
+    );
+
+    if (features.music && features.ai) {
       await clientInitializer.initialize();
       return;
     }
 
     await clientInitializer.initializeClientBase();
-
-    if (hasMusic) {
-      await clientInitializer.initializeClientDistube();
-    } else if (hasAI) {
-      await clientInitializer.initializeClientAI();
-    }
+    if (features.music) await clientInitializer.initializeClientDistube();
+    if (features.ai) await clientInitializer.initializeClientAI();
   }
 
   async initializeModules() {
