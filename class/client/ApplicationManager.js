@@ -4,7 +4,7 @@ import readline from "readline";
 import BotConsole from "../console/BotConsole.js";
 import clientInitializer from "./ClientInitializer.js";
 import SystemCheck from "./SystemCheck.js";
-import loadModules from "./../Module/LoadModules.js";
+import loadModules from "./../Loader/LoadModules.js";
 
 class ApplicationManager {
   constructor() {

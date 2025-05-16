@@ -1,5 +1,5 @@
-import BotConsole from "./../console/BotConsole.js";
-import SystemCheck from "./../client/SystemCheck.js";
+import BotConsole from "../console/BotConsole.js";
+import SystemCheck from "../client/SystemCheck.js";
 import { Collection } from "discord.js";
 import CreateCollection from "./CreateCollection.js";
 
