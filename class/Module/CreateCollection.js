@@ -78,7 +78,7 @@ class CreateCollection {
 
       this.#collection.set(file.default.name, file.default);
     } catch (err) {
-      BotConsole.error(`Failed to load file ${filePath}:`);
+      throw new Error(err.message);
     }
   }
 
