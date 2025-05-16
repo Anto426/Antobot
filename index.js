@@ -17,6 +17,9 @@ class ApplicationBootstrap {
     try {
       await this.applicationManager.initializeAPP();
       BotConsole.success("Application successfully initialized");
+      await this.applicationManager.startBot();
+      BotConsole.success("Bot started successfully");
+      
     } catch (error) {
       BotConsole.error("Failed to initialize application:", error.message);
       await this.shutdown(1);
