@@ -18,6 +18,9 @@
                 "commands": "/distube/commands",
                 "events": "/distube/events",
                 "buttons": "/distube/buttons"
+            },
+            "other": {
+                "root": "/other"
             }
         },
         "assets": {
