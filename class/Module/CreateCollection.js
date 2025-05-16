@@ -65,35 +65,62 @@ class CreateCollection {
       }, []);
   }
 
-async loadFile(filePath) {
-  try {
-    const fileUrl = pathToFileURL(filePath).href;
-    const { default: FileExport } = await import(fileUrl);
+  async loadFile(filePath) {
+    try {
+      const fileUrl = pathToFileURL(filePath).href;
+      const file = await import(fileUrl);
+      const FileExport = file.default;
 
-    if (!this.#validateFile(FileExport)) {
+      if (!FileExport) {
+        BotConsole.warning(
+          `Skipping file ${filePath}: No default export found.`
+        );
+        return;
+      }
+
+      // Se è una classe con nome valido, istanziala
+      if (this.#isValidClass(FileExport)) {
+        const instance = new FileExport();
+        this.#collection.set(FileExport.name, instance);
+        return;
+      }
+
+      // Se è un oggetto/funzione con .name
+      if (this.#hasValidName(FileExport)) {
+        this.#collection.set(FileExport.name, FileExport);
+        return;
+      }
+
+      // Altrimenti, usare il nome del file come chiave
+      const fallbackName = this.#getFileNameFromPath(filePath);
+      this.#collection.set(fallbackName, FileExport);
       BotConsole.warning(
-        `Skipping invalid file ${filePath}: Export is not a valid class with a name`
+        `Loaded file ${filePath} using fallback name "${fallbackName}"`
       );
-      return;
+    } catch (err) {
+      BotConsole.error(`Failed to load file ${filePath}:`, err);
     }
-
-    const instance = new FileExport();
-    this.#collection.set(FileExport.name, instance);
-  } catch (err) {
-    BotConsole.error(`Failed to import ${filePath}:`, err);
-    throw err;
   }
-}
 
-#validateFile(file) {
-  return (
-    typeof file === "function" &&
-    /^class\s/.test(Function.prototype.toString.call(file)) &&
-    typeof file.name === "string" &&
-    file.name.trim().length > 0
-  );
-}
+  #isValidClass(thing) {
+    return (
+      typeof thing === "function" &&
+      /^class\s/.test(Function.prototype.toString.call(thing)) &&
+      typeof thing.name === "string" &&
+      thing.name.trim().length > 0
+    );
+  }
 
+  #hasValidName(thing) {
+    return thing?.name && typeof thing.name === "string";
+  }
+
+  #getFileNameFromPath(filePath) {
+    return filePath
+      .split("/")
+      .pop()
+      .replace(/\.[^/.]+$/, "");
+  }
   #normalizePath(path) {
     return path.replace(/\\/g, "/");
   }
