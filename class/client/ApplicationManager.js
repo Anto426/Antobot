@@ -1,8 +1,6 @@
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import readline from "readline";
-import dotenv from "dotenv";
-
 import BotConsole from "../console/BotConsole.js";
 import ClientInitializer from "./ClientInitializer.js";
 import ModuleLoader from "../Loader/LoadModules.js";
@@ -10,8 +8,8 @@ import ConfigManager from "../ConfigManager/ConfigManager.js";
 import StartupLogger from "../console/LogStartup.js";
 import CommandGuildUpdate from "../Guild/CommandGuildUpdate.js";
 import SystemCheck from "./SystemCheck.js";
-
-// Carica le variabili d'ambiente da .env (se esiste)
+import dotenv from "dotenv";
+import IntitialOtherModules from "../Loader/IntitialOtherModules.js";
 dotenv.config();
 
 class BotApplication {
@@ -27,10 +25,9 @@ class BotApplication {
       .strict().argv;
 
     this.promptToken = promptToken;
-    this.configManager = new ConfigManager();
+    this.configManager = ConfigManager;
     this.clientInitializer = new ClientInitializer();
 
-    // Se viene richiesto il prompt, ignora le variabili d'ambiente
     this._token = this.promptToken ? null : process.env.TOKEN || null;
     this.botClient = null;
   }
@@ -81,7 +78,6 @@ class BotApplication {
     this.botClient = await this.clientInitializer.initialize(
       this.configManager.getAllConfig()
     );
-
     await ModuleLoader.initialize();
   }
 
@@ -95,7 +91,8 @@ class BotApplication {
     BotConsole.success("Bot pronto all’uso!");
     (await ModuleLoader.initAll?.()) || Promise.resolve();
     StartupLogger.run();
-    CommandGuildUpdate.updateGuildsOnStartup();
+    await CommandGuildUpdate.updateGuildsOnStartup();
+    await IntitialOtherModules.Intit();
   }
 
   async run() {
@@ -103,6 +100,7 @@ class BotApplication {
       BotConsole.info("Avvio del bot...");
       await this.bootstrap();
       await this.authenticate();
+      this.configManager.startAutoReload(3600_000);
     } catch (err) {
       BotConsole.error("Errore durante l’avvio:", err.message);
       process.exit(1);

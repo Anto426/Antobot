@@ -1,14 +1,11 @@
-import dotenv from "dotenv";
 import ApplicationManager from "./class/client/ApplicationManager.js";
 import BotConsole from "./class/console/BotConsole.js";
 import { errorhandler } from "./class/error/ErrorHandler.js";
 
 process.stdout.write("\x1Bc");
-dotenv.config();
 process.removeAllListeners("warning");
 
 class ApplicationBootstrap {
-
   async initialize() {
     errorhandler.initializeGlobalErrorHandlers();
     try {

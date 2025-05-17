@@ -103,4 +103,4 @@ class ConfigManager extends EventEmitter {
   }
 }
 
-export default ConfigManager;
+export default new ConfigManager();
