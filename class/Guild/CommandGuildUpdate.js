@@ -11,10 +11,10 @@ class CommandGuildUpdate {
     }
 
     const results = await Promise.allSettled(
-      existing.map(cmd => cmd.delete())
+      existing.map((cmd) => cmd.delete())
     );
 
-    const successCount = results.filter(r => r.status === "fulfilled").length;
+    const successCount = results.filter((r) => r.status === "fulfilled").length;
     const failedCount = existing.size - successCount;
 
     if (failedCount === 0) {
@@ -38,20 +38,22 @@ class CommandGuildUpdate {
     const commands = Array.from(client.commands.values());
 
     const results = await Promise.allSettled(
-      commands.map(cmd => {
+      commands.map((cmd) => {
         if (!cmd.data) {
           BotConsole.error(`Comando senza struttura: ${cmd.name}`);
           return Promise.resolve(null);
         }
 
-        return guild.commands.create(cmd.data).catch(err => {
-          BotConsole.error(`Errore nella registrazione di ${cmd.name} in ${guild.name}`);
+        return guild.commands.create(cmd.data).catch((err) => {
+          BotConsole.error(
+            `Errore nella registrazione di ${cmd.name} in ${guild.name}`
+          );
           console.error(err);
         });
       })
     );
 
-    const successCount = results.filter(r => r.status === "fulfilled").length;
+    const successCount = results.filter((r) => r.status === "fulfilled").length;
     const failedCount = commands.length - successCount;
 
     if (failedCount === 0) {
@@ -70,10 +72,12 @@ class CommandGuildUpdate {
     const guilds = Array.from(client.guilds.cache.values());
 
     const results = await Promise.allSettled(
-      guilds.map(guild => this.registerCommandsToGuild(guild))
+      guilds.map((guild) => this.registerCommandsToGuild(guild))
     );
 
-    const successCount = results.filter(r => r.status === "fulfilled" && r.value === 0).length;
+    const successCount = results.filter(
+      (r) => r.status === "fulfilled" && r.value === 0
+    ).length;
     const failedCount = guilds.length - successCount;
 
     if (failedCount === 0) {
@@ -99,15 +103,11 @@ class CommandGuildUpdate {
     for (const guild of client.guilds.cache.values()) {
       const existing = await guild.commands.fetch();
 
-      let needsUpdate = existing.size !== client.commands.size;
+      let needsUpdate = existing.size !== client.commands.size ? true : false;
 
-      if (!needsUpdate) {
+      if (needsUpdate) {
         for (const cmd of client.commands.values()) {
-          const match = existing.find(
-            rc =>
-              rc.name === cmd.data.name &&
-              JSON.stringify(rc.toJSON()) === JSON.stringify(cmd.data)
-          );
+          const match = existing.find((rc) => rc.name === cmd.data.name);
 
           if (!match) {
             needsUpdate = true;
@@ -129,12 +129,16 @@ class CommandGuildUpdate {
     }
 
     const results = await Promise.allSettled(tasks);
-    const successCount = results.filter(r => r.status === "fulfilled" && r.value === 0).length;
+    const successCount = results.filter(
+      (r) => r.status === "fulfilled" && r.value === 0
+    ).length;
 
     if (successCount === tasks.length) {
       BotConsole.success("Avvio: comandi aggiornati in tutte le gilde");
     } else {
-      BotConsole.warning(`Avvio: ${tasks.length - successCount} gilde non aggiornate`);
+      BotConsole.warning(
+        `Avvio: ${tasks.length - successCount} gilde non aggiornate`
+      );
     }
 
     return 0;
