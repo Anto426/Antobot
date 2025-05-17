@@ -54,6 +54,15 @@
     "remote": {
         "github": {
             "urlrepo": "https://raw.githubusercontent.com/Anto426/Configsbot/refs/heads/main",
+            "files": [
+                "cookies.json",
+                "description.json",
+                "embed.json",
+                "hollyday.json",
+                "hollyday.json",
+                "owner.json",
+                "status.json"
+            ],
             "apiBase": "https://api.github.com/users/"
         }
     }
