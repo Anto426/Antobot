@@ -52,17 +52,11 @@ class ColorFunctions {
     ];
   }
 
-  istance(color1, color2) {
+  colorDistance(color1, color2) {
     const diff = this.diffColor(color1, color2);
     return Math.sqrt(diff.reduce((acc, val) => acc + Math.pow(val, 2), 0));
   }
 
-  /**
-   * Calculate the difference between two colors
-   * @param {number[]} color1 - First RGB color
-   * @param {number[]} color2 - Second RGB color
-   * @returns {number[]} - Difference in RGB values
-   */
   diffColor(color1, color2) {
     return color1.map((val, index) => val - color2[index]);
   }
@@ -102,13 +96,18 @@ class ColorFunctions {
 
   averageBrightness(palet) {
     const total = palet.reduce((sum, color) => {
-      // Using the luminance formula: 0.299R + 0.587G + 0.114B
       return sum + (0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]);
     }, 0);
 
     return total / palet.length;
   }
+
+  rgbToHex(r, g, b) {
+    return (
+      "#" +
+      ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()
+    );
+  }
 }
 
-
-export default new ColorFunctions;
+export default new ColorFunctions();
