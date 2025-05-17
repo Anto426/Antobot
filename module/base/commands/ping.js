@@ -41,10 +41,7 @@ export default {
       .addFieldInline("💾 Memory Used", `\`${memoryMb} MB\``)
       .addFieldInline("📦 Node.js", `\`${nodeVersion}\``)
       .addFieldInline("🤖 Discord.js", `\`${discordJsVersion}\``)
-      .setFooter({
-        text: `Richiesto da ${interaction.user.tag}`,
-        iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
-      });
+      .setFooterFromMember()
 
     await interaction.editReply({ embeds: [embed] });
   },
