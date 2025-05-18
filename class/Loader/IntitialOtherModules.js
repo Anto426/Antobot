@@ -4,6 +4,7 @@ import BotConsole from "../console/BotConsole.js";
 class IntitialOtherModules {
   async Intit() {
     try {
+      BotConsole.info("Initializing other modules...");
       client.other.forEach((module, key, map) => {
         if (SystemCheck.isFeatureEnabled(module.name.toLowerCase())) {
           if (typeof module === "function") {

@@ -14,11 +14,9 @@ class ErrorHandler {
   initializeGlobalErrorHandlers() {
     process.on("uncaughtException", (error) => {
       this.logError(error, "uncaughtException");
-      process.exit(1);
     });
     process.on("unhandledRejection", (reason) => {
       this.logError(reason, "unhandledRejection");
-      process.exit(1);
     });
     process.on("SIGTERM", () => {
       this.logError("Received SIGTERM signal", "Process");

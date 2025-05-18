@@ -1,4 +1,4 @@
-import ApplicationManager from "../../../class/client/ApplicationManager.js";
+import ApplicationManager from "./class/client/ApplicationManager.js";
 
 export default {
   name: "OnStartUp",

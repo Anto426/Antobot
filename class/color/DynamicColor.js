@@ -1,129 +1,107 @@
 import ColorFunctions from "./ColorFunctions.js";
+import ColorThief from "colorthief";
+import BotConsole from "../console/BotConsole.js";
+
 class DynamicColor {
-  constructor(options = {}) {
+  constructor({ numColors = 4, threshold = 50 } = {}) {
     this.img = null;
-    this.threshold = options.threshold || 7;
-    this.numColors = options.numColors || 5;
-    this.requiredFilter = options.requiredFilter ?? true;
-    this.colorFunctions = ColorFunctions;
+    this.numColors = numColors;
+    this.threshold = threshold;
+    this.requiredFilter = true;
   }
 
-  setConfig({ img, threshold, numColors } = {}) {
-    if (img) this.img = img;
-    if (threshold) this.threshold = threshold;
-    if (numColors) this.numColors = numColors;
+  setImg(buffer) {
+    this.img = buffer;
+    BotConsole.info("Image buffer manually set");
+  }
+
+  async setImgUrl(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+      const arrayBuffer = await res.arrayBuffer();
+      this.img = Buffer.from(arrayBuffer);
+      BotConsole.success("Image loaded into buffer");
+    } catch (err) {
+      BotConsole.error("Failed to fetch image", err);
+      throw err;
+    }
+  }
+
+  setThreshold(value) {
+    this.threshold = value;
+    BotConsole.debug(`Threshold set to ${value}`);
+  }
+
+  setNumColors(n) {
+    this.numColors = n;
+    BotConsole.debug(`Number of colors to extract set to ${n}`);
   }
 
   async extractPalette() {
     if (!this.img) {
-      throw new Error("No image has been set");
+      const msg = "No image set for color extraction";
+      BotConsole.error(msg);
+      throw new Error(msg);
     }
-
-    const colorThief = new ColorThief();
-
-    if (this.img.complete) {
-      return colorThief.getPalette(this.img, this.numColors);
-    }
-
-    return new Promise((resolve, reject) => {
-      this.img.addEventListener("load", () => {
-        if (this.img.naturalWidth > 0 && this.img.naturalHeight > 0) {
-          resolve(colorThief.getPalette(this.img, this.numColors));
-        } else {
-          reject(new Error("Image failed to load properly"));
-        }
-      });
-
-      this.img.addEventListener("error", () => {
-        reject(new Error("Error loading image"));
-      });
-    });
+    return ColorThief.getPalette(this.img, this.numColors);
   }
 
-  async filterPalette(palette) {
-    if (!Array.isArray(palette) || palette.length === 0) {
-      throw new Error("Invalid palette provided");
-    }
+  sortPalette(palette) {
+    const sorted = [...palette].sort(
+      (a, b) =>
+        ColorFunctions.colorDistance([0, 0, 0], a) -
+        ColorFunctions.colorDistance([0, 0, 0], b)
+    );
+    return sorted;
+  }
 
-    const sortedPalette = this.sortPalette(palette);
+  filterPalette(palette) {
+    const sorted = this.sortPalette(palette);
+    if (!this.requiredFilter) return sorted;
 
-    if (!this.requiredFilter) {
-      return sortedPalette;
-    }
-
-    const filtered = sortedPalette.reduce((acc, color, index, arr) => {
-      if (
-        index === 0 ||
-        this.colorFunctions.colorDistance(arr[index - 1], color) >
-          this.threshold
-      ) {
-        acc.push(color);
-      }
-      return acc;
-    }, []);
+    const filtered = sorted.filter((color, idx, arr) => {
+      if (idx === 0) return true;
+      const prev = arr[idx - 1];
+      return ColorFunctions.colorDistance(prev, color) > this.threshold;
+    });
 
     if (filtered.length === 0) {
-      throw new Error("No colors left after filtering");
+      const msg = "All colors filtered out";
+      BotConsole.warning(msg);
+      throw new Error(msg);
     }
 
     return filtered;
   }
 
-  sortPalette(palette) {
-    return [...palette].sort(
-      (a, b) =>
-        this.colorFunctions.colorDistance([0, 0, 0], a) -
-        this.colorFunctions.colorDistance([0, 0, 0], b)
-    );
-  }
-
   calculateTextColor(palette) {
-    if (!Array.isArray(palette)) {
-      throw new TypeError("Palette must be an array");
-    }
-    if (palette.length === 0) {
-      throw new Error("Palette cannot be empty");
-    }
-    if (!palette.every((color) => Array.isArray(color) && color.length === 3)) {
-      throw new TypeError(
-        "Each color in palette must be an RGB array of 3 values"
-      );
-    }
+    const avg = ColorFunctions.averageColor(palette);
+    let text = ColorFunctions.getOppositeColor(avg);
+    let [h, s, l] = ColorFunctions.rgbToHsl(...text);
 
-    try {
-      const avgBrightness = this.colorFunctions.averageBrightness(palette);
-      if (avgBrightness > 128) {
-        return [0, 0, 0];
-      } else {
-        return [255, 255, 255];
-      }
-    } catch (error) {
-      console.error("Error calculating text color:", error);
-      return this.colorFunctions.averageBrightness(palette) > 128
-        ? [0, 0, 0]
-        : [255, 255, 255];
-    }
+    if (l > 0.7) l = Math.max(0, l - 0.3);
+    else if (l < 0.3) l = Math.min(1, l + 0.3);
+    else if (l > 0.5) l -= 0.2;
+    else l += 0.2;
+
+    text = ColorFunctions.hslToRgb(h, s, l);
+    return text.map((c) => Math.round(Math.max(0, Math.min(255, c))));
   }
 
-  adjustLightness(l) {
-    if (l > 0.7) return Math.max(0, l - 0.3);
-    if (l < 0.3) return Math.min(1, l + 0.3);
-    return l > 0.5 ? Math.max(0, l - 0.2) : Math.min(1, l + 0.2);
-  }
-
-  async applyTheme() {
+  async getPaletteAndTextColor() {
     try {
-      const palette = await this.extractPalette();
-      this.requiredFilter = palette.length >= 3;
-
-      const filteredPalette = await this.filterPalette(palette);
-      const textColor = this.calculateTextColor(filteredPalette);
-      return { filteredPalette, textColor };
-    } catch (error) {
-      console.error("Error applying theme:", error);
-      throw error;
+      let palette = await this.extractPalette();
+      if (palette.length < 3) this.requiredFilter = false;
+      const finalPalette = this.filterPalette(palette);
+      const textColor = this.calculateTextColor(finalPalette);
+      BotConsole.success("Palette and text color generated");
+      return { palette: finalPalette, textColor };
+    } catch (err) {
+      BotConsole.error("Error in getPaletteAndTextColor", err);
+      throw err;
     }
   }
 }
 
-export default new DynamicColor();
+export default DynamicColor;

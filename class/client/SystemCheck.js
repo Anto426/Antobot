@@ -145,6 +145,19 @@ class SystemCheck {
     return this.#resolvePath(["features", "openai", "model"]);
   }
 
+  getFeatures() {
+    const features = this.#resolvePath(["features"]);
+    return Object.entries(features).map(([key, value]) => {
+      if (typeof value === "boolean") {
+        return { name: key, enabled: value, details: "" };
+      }
+      return {
+        name: key,
+        enabled: Boolean(value.enabled),
+      };
+    });
+  }
+
   getGithubConfig(key) {
     const githubConfig = this.#resolvePath(["remote", "github"]);
     return key ? githubConfig[key] : githubConfig;

@@ -2,132 +2,111 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import readline from "readline";
 import BotConsole from "../console/BotConsole.js";
-import clientInitializer from "./ClientInitializer.js";
+import ClientInitializer from "./ClientInitializer.js";
+import ModuleLoader from "../Loader/ModuleLoader.js";
+import ConfigManager from "../ConfigManager/ConfigManager.js";
+import StartupLogger from "../console/LogStartup.js";
+import CommandGuildUpdate from "../Guild/CommandGuildUpdate.js";
 import SystemCheck from "./SystemCheck.js";
-import loadModules from "./../Loader/LoadModules.js";
+import dotenv from "dotenv";
+import IntitialOtherModules from "../Loader/IntitialOtherModules.js";
+dotenv.config();
 
-class ApplicationManager {
+class BotApplication {
   constructor() {
-    this.argv = this.configureYargs().argv;
+    this.ModuleLoader = new ModuleLoader();
+
+    const { promptToken } = yargs(hideBin(process.argv))
+      .option("promptToken", {
+        alias: "t",
+        type: "boolean",
+        description: "Richiedi il token all’avvio",
+      })
+      .help("h")
+      .version("v")
+      .strict().argv;
+
+    this.promptToken = promptToken;
+    this.configManager = ConfigManager;
+    this.clientInitializer = new ClientInitializer();
+
+    this._token = this.promptToken ? null : process.env.TOKEN || null;
+    this.botClient = null;
   }
 
-  async getToken() {
-    try {
-      let token = process.env.TOKEN;
-
-      if (this.argv.asktoken || !token) {
-        token = await this.promptForToken();
-      }
-
-      if (!token) {
-        throw new Error("Token is missing");
-      }
-
-      return token;
-    } catch (error) {
-      BotConsole.error("Failed to get token:", error.message);
-      throw error;
-    }
-  }
-
-  async promptForToken() {
+  async _askToken() {
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
 
-    try {
-      const token = await new Promise((resolve, reject) => {
-        BotConsole.info("Please provide your Discord bot token");
-        rl.question("Token: ", (input) => {
-          const trimmedInput = input.trim();
-          if (!trimmedInput) {
-            reject(new Error("Token appears to be invalid (empty)"));
-          } else if (trimmedInput.length < 50) {
-            reject(new Error("Token appears to be invalid (too short)"));
-          } else {
-            resolve(trimmedInput);
-          }
-        });
-      });
-
-      process.env.TOKEN = token;
-      BotConsole.success("Token successfully stored");
-      return token;
-    } catch (error) {
-      throw new Error("Failed to get token", error);
-    } finally {
-      rl.close();
-    }
-  }
-
-  configureYargs() {
-    return yargs(hideBin(process.argv))
-      .option("asktoken", {
-        alias: "t",
-        type: "boolean",
-        description: "Request token input",
+    BotConsole.info("Inserisci il token del bot Discord:");
+    const token = await new Promise((resolve, reject) =>
+      rl.question("Token: ", (input) => {
+        const trimmed = input.trim();
+        rl.close();
+        if (!trimmed) return reject(new Error("Token vuoto"));
+        if (trimmed.length < 50) return reject(new Error("Token troppo corto"));
+        resolve(trimmed);
       })
-      .help()
-      .alias("help", "h")
-      .version()
-      .alias("version", "v")
-      .showHelpOnFail(true);
-  }
-
-  async initializeAPP() {
-    try {
-      if (this.argv.asktoken) {
-        await this.getToken();
-      }
-      await this.initializeSystem();
-      await this.initializeClients();
-      await this.initializeModules();
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-
-  async initializeSystem() {
-    await SystemCheck.initialize();
-  }
-
-  async initializeClients() {
-    const features = {
-      music: SystemCheck.isFeatureEnabled("music"),
-      ai: SystemCheck.isFeatureEnabled("openai"),
-    };
-    const activeFeatures = Object.entries(features)
-      .filter(([, enabled]) => enabled)
-      .map(([name]) => name);
-
-    BotConsole.info(
-      activeFeatures.length
-        ? `Initializing client with ${activeFeatures.join(" and ")} feature${
-            activeFeatures.length > 1 ? "s" : ""
-          }`
-        : "Initializing base client without additional features"
     );
 
-    if (features.music && features.ai) {
-      await clientInitializer.initialize();
-      return;
+    return token;
+  }
+
+  async fetchToken() {
+    if (!this._token) {
+      try {
+        this._token = await this._askToken();
+        BotConsole.success("Token memorizzato");
+        process.env.TOKEN = this._token;
+      } catch (err) {
+        BotConsole.error("Errore nel token:", err.message);
+        throw err;
+      }
     }
 
-    await clientInitializer.initializeClientBase();
-    if (features.music) await clientInitializer.initializeClientDistube();
-    if (features.ai) await clientInitializer.initializeClientAI();
+    return this._token;
   }
 
-  async initializeModules() {
-    await loadModules.initialize();
+  async bootstrap() {
+    await SystemCheck.initialize();
+    await this.configManager.startAutoReload();
+
+    this.clientInitializer.setCookies(
+      this.configManager.getConfig("cookies").youtube
+    );
+
+    this.botClient = await this.clientInitializer.initialize(
+      this.configManager.getAllConfig()
+    );
+    await this.ModuleLoader.initialize();
   }
 
-  async startBot() {
-    const token = await this.getToken();
+  async authenticate() {
+    const token = await this.fetchToken();
     await client.login(token);
-    BotConsole.success("Bot successfully logged in " + client.user.tag);
+    BotConsole.success(`Connesso come ${client.user.tag}`);
+  }
+
+  async launch() {
+    BotConsole.success("Bot pronto all’uso!");
+    (await ModuleLoader.initAll?.()) || Promise.resolve();
+    StartupLogger.run();
+    await CommandGuildUpdate.updateGuildsOnStartup();
+    await IntitialOtherModules.Intit();
+  }
+
+  async run() {
+    try {
+      BotConsole.info("Avvio del bot...");
+      await this.bootstrap();
+      await this.authenticate();
+    } catch (err) {
+      BotConsole.error("Errore durante l’avvio:", err.message);
+      process.exit(1);
+    }
   }
 }
 
-export default ApplicationManager;
+export default new BotApplication();

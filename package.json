@@ -8,7 +8,7 @@
     "start": "node index.js",
     "dev": "clear || cls && nodemon index.js"
   },
-  "author": "Anto426,
+  "author": "Anto426",
   "repo": "https://github.com/Anto426/Antobot",
   "license": "ISC",
   "dependencies": {
