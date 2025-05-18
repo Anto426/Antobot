@@ -3,7 +3,7 @@ import { hideBin } from "yargs/helpers";
 import readline from "readline";
 import BotConsole from "../console/BotConsole.js";
 import ClientInitializer from "./ClientInitializer.js";
-import ModuleLoader from "../Loader/LoadModules.js";
+import ModuleLoader from "../Loader/ModuleLoader.js";
 import ConfigManager from "../ConfigManager/ConfigManager.js";
 import StartupLogger from "../console/LogStartup.js";
 import CommandGuildUpdate from "../Guild/CommandGuildUpdate.js";
@@ -14,6 +14,8 @@ dotenv.config();
 
 class BotApplication {
   constructor() {
+    this.ModuleLoader = new ModuleLoader();
+
     const { promptToken } = yargs(hideBin(process.argv))
       .option("promptToken", {
         alias: "t",
@@ -78,7 +80,7 @@ class BotApplication {
     this.botClient = await this.clientInitializer.initialize(
       this.configManager.getAllConfig()
     );
-    await ModuleLoader.initialize();
+    await this.ModuleLoader.initialize();
   }
 
   async authenticate() {
