@@ -9,97 +9,101 @@ export default class PresetEmbed extends EmbedBuilder {
   #guild;
   #member;
   #image;
-  #colorizer;
+  #colorizer = new DynamicColor();
 
   constructor({ guild = null, member = null, image = null } = {}) {
     super();
     this.#guild = guild;
     this.#member = member;
     this.#image = image;
-    this.#colorizer = new DynamicColor();
-
-    this.setTimestamp();
-
-    this.setColorFromImage().catch(() =>
-      this.setColor(PresetEmbed.DEFAULT_COLOR)
-    );
-    this.setAuthorFromGuild().catch(() => {});
-    this.setFooterFromMember();
   }
 
-  async init() {
-    await this.setAuthorFromGuild().catch(() => {});
-    this.setFooterFromMember();
+  async init(useDynamicColor = true) {
+    this.setTimestamp();
+
+    if (useDynamicColor) {
+      try {
+        await this._applyColorFromImage();
+      } catch {
+        this.setColor(PresetEmbed.DEFAULT_COLOR);
+      }
+    } else {
+      this.setColor(PresetEmbed.DEFAULT_COLOR);
+    }
+
+    if (this.#guild) {
+      try {
+        const owner = await this.#guild.fetchOwner();
+        this.setAuthor({
+          name: owner.user.username,
+          iconURL: owner.user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS),
+        });
+      } catch {
+        this.setAuthor({ name: this.#guild.name });
+      }
+    }
+
+    if (this.#member) {
+      const u = this.#member.user;
+      this.setFooter({
+        text: `📢 Richiesta di ${u.username}`,
+        iconURL: u.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS),
+      });
+    }
+
     return this;
   }
 
-  async setAuthorFromGuild() {
-    if (!this.#guild) return this;
-    try {
-      const owner = await this.#guild.fetchOwner();
-      const user = owner.user;
+  async _applyColorFromImage() {
+    const url =
+      this.#image ??
+      this.data.thumbnail?.url ??
+      this.#guild?.client?.user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS);
+
+    if (!url) {
+      this.setColor(PresetEmbed.DEFAULT_COLOR);
+      return;
+    }
+
+    await this.#colorizer.setImgUrl(url);
+    const { palette } = await this.#colorizer.getPaletteAndTextColor();
+    if (!palette?.length) throw new Error("Palette vuota");
+
+    const hex = ColorFunctions.rgbToHex(...palette[0]);
+    this.setColor(hex);
+  }
+
+  setAuthorFromUser(userOrMember) {
+    const user = userOrMember?.user ?? userOrMember;
+    if (user) {
       this.setAuthor({
         name: user.username,
         iconURL: user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS),
       });
-    } catch (err) {
-      console.warn("Impossibile recuperare owner guild:", err);
-      this.setAuthor({ name: this.#guild.name });
     }
-    return this;
-  }
-
-  setAuthorFromUser(userOrMember) {
-    if (!userOrMember) return this;
-    const user = userOrMember.user ?? userOrMember; // GuildMember or User
-    this.setAuthor({
-      name: user.username,
-      iconURL: user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS),
-    });
-    return this;
-  }
-
-  setFooterFromMember() {
-    if (!this.#member) return this;
-    const user = this.#member.user;
-    this.setFooter({
-      text: `📢 Richiesta di ${user.username}`,
-      iconURL: user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS),
-    });
     return this;
   }
 
   setFooterFromText(text, iconURL) {
-    this.setFooter({ text, iconURL });
-    return this;
+    return this.setFooter({ text, iconURL });
   }
 
-  async setColorFromImage() {
-    let url = this.#image || this.data.thumbnail?.url;
+  setImageUrl(url) {
+    this.#image = url;
+    return this.setImage(url);
+  }
 
-    if (!url) {
-      const client = this.#guild?.client;
-      if (client?.user) {
-        url = client.user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS);
-      } else {
-        this.setColor(PresetEmbed.DEFAULT_COLOR);
-        return this;
-      }
-    }
+  setThumbnailUrl(url) {
+    return this.setThumbnail(url);
+  }
 
-    try {
-      await this.#colorizer.setImgUrl(url);
-      const { palette } = await this.#colorizer.getPaletteAndTextColor();
-      if (!palette || palette.length === 0) throw new Error("Palette vuota");
-      const [r, g, b] = palette[0];
-      const hex = ColorFunctions.rgbToHex(r, g, b);
-      this.setColor(hex);
-    } catch (err) {
-      console.error("Errore nel calcolo colore da immagine:", err);
-      this.setColor(PresetEmbed.DEFAULT_COLOR);
-    }
+  setGuildThumbnail() {
+    const icon = this.#guild?.iconURL?.(PresetEmbed.AVATAR_OPTIONS);
+    return icon ? this.setThumbnail(icon) : this;
+  }
 
-    return this;
+  setLink(url) {
+    return this.setURL(url);
   }
 
   setMainContent(title, description) {
@@ -115,61 +119,33 @@ export default class PresetEmbed extends EmbedBuilder {
   }
 
   addInlineFields(fields = []) {
-    fields.forEach(({ name, value }) => this.addFieldInline(name, value));
+    fields.forEach((f) => this.addFieldInline(f.name, f.value));
     return this;
   }
 
   addBlockFields(fields = []) {
-    fields.forEach(({ name, value }) => this.addFieldBlock(name, value));
+    fields.forEach((f) => this.addFieldBlock(f.name, f.value));
     return this;
-  }
-
-  setImageUrl(url) {
-    this.#image = url;
-    return this.setImage(url);
-  }
-
-  setThumbnailUrl(url) {
-    return this.setThumbnail(url);
   }
 
   clearAllFields() {
     return this.setFields([]);
   }
 
-  setLink(url) {
-    return this.setURL(url);
-  }
-
-  setGuildThumbnail() {
-    if (!this.#guild) return this;
-    const iconURL = this.#guild.iconURL?.(PresetEmbed.AVATAR_OPTIONS);
-    if (iconURL) this.setThumbnail(iconURL);
-    return this;
-  }
-
   setRandomColor() {
-    const r = 180 + Math.floor(Math.random() * 75);
-    const g = 180 + Math.floor(Math.random() * 75);
-    const b = 180 + Math.floor(Math.random() * 75);
-    this.setColor(ColorFunctions.rgbToHex(r, g, b));
-    return this;
+    const rand = () => 180 + Math.floor(Math.random() * 75);
+    return this.setColor(ColorFunctions.rgbToHex(rand(), rand(), rand()));
   }
 
   brightenColor(amount = 20) {
-    let hexColor;
+    const hexCurrent =
+      typeof this.data.color === "number"
+        ? `#${this.data.color.toString(16).padStart(6, "0")}`
+        : this.data.color ?? PresetEmbed.DEFAULT_COLOR;
 
-    if (typeof this.data.color === "number") {
-      hexColor = `#${this.data.color.toString(16).padStart(6, "0")}`;
-    } else if (typeof this.data.color === "string") {
-      hexColor = this.data.color;
-    } else {
-      hexColor = PresetEmbed.DEFAULT_COLOR;
-    }
-
-    const [r, g, b] = ColorFunctions.hexToRgb(hexColor);
+    const [r, g, b] = ColorFunctions.hexToRgb(hexCurrent);
     const [nr, ng, nb] = [r, g, b].map((v) => Math.min(255, v + amount));
-    this.setColor(ColorFunctions.rgbToHex(nr, ng, nb));
-    return this;
+
+    return this.setColor(ColorFunctions.rgbToHex(nr, ng, nb));
   }
 }

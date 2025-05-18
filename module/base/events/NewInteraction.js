@@ -15,7 +15,7 @@ export default {
           guild: interaction.guild,
           member: interaction.member,
         });
-        await embed.init();
+        await embed.init(!ephemeral);
         embed.setMainContent(title, description);
 
         const payload = { embeds: [embed], ephemeral };
