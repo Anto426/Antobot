@@ -9,6 +9,10 @@ export default {
   position: false,
   test: false,
   see: true,
+  disTube: {
+    checkchannel: true,
+    checklisttrack: true,
+  },
   data: {
     name: "skip",
     description: "Salta la traccia corrente",
