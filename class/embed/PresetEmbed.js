@@ -3,7 +3,7 @@ import DynamicColor from "../color/DynamicColor.js";
 import ColorFunctions from "../color/ColorFunctions.js";
 
 export default class PresetEmbed extends EmbedBuilder {
-  static DEFAULT_COLOR = "#0099ff";
+  static DEFAULT_COLOR = "#8A0303";
   static AVATAR_OPTIONS = { dynamic: true, format: "png", size: 512 };
 
   #guild;
