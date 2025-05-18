@@ -37,9 +37,7 @@ export default {
         "🧑‍🎤 Artista",
         currentSong.uploader?.name || "Sconosciuto",
         true
-      )
-      .setFooterFromMember()
-      .setTimestamp();
+      );
 
     await interaction.editReply({ embeds: [embed] });
   },

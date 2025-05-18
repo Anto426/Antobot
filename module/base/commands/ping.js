@@ -40,9 +40,7 @@ export default {
       .addFieldInline("⏱️ Uptime", `\`${uptime}\``)
       .addFieldInline("💾 Memory Used", `\`${memoryMb} MB\``)
       .addFieldInline("📦 Node.js", `\`${nodeVersion}\``)
-      .addFieldInline("🤖 Discord.js", `\`${discordJsVersion}\``)
-      .setFooterFromMember()
-
+      .addFieldInline("🤖 Discord.js", `\`${discordJsVersion}\``);
     await interaction.editReply({ embeds: [embed] });
   },
 };

@@ -30,9 +30,7 @@ export default {
       .addFieldInline("📅 Creato", `<t:${Math.floor(guild.createdTimestamp / 1000)}:R>`)
       .addFieldInline("👥 Membri", `\`${guild.memberCount}\``)
       .addFieldInline("📁 Canali", `\`${guild.channels.cache.size}\``)
-      .addFieldInline("🌍 Regione", `\`${guild.preferredLocale}\``)
-      .setFooterFromMember();
-
+      .addFieldInline("🌍 Regione", `\`${guild.preferredLocale}\``);
     await interaction.editReply({ embeds: [embed] });
   },
 };

@@ -85,8 +85,6 @@ export default {
 
     embed.addFieldInline("👤 Creatore", author, true);
 
-    embed.setFooterFromMember().setTimestamp();
-
     await interaction.editReply({ embeds: [embed] });
   },
 };

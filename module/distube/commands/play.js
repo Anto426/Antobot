@@ -53,14 +53,17 @@ export default {
       .addFieldInline("⏱️ Durata", song.formattedDuration ?? "N/A", true)
       .addFieldInline("🧑‍🎤 Autore", song.uploader?.name ?? "Sconosciuto", true)
       .addFieldInline("📎 Link", `[Vai alla traccia](${song.url})`, true)
-      .addFieldInline("🔢 Posizione in coda", `${queue.songs.length}`, true)
+      .addFieldInline(
+        "📀 Posizione in coda",
+        `${queue.songs.indexOf(song) + 1}/${queue.songs.length}`,
+        true
+      )
+      .addFieldInline("🔊 Volume", `${queue.volume}%`, true)
       .addFieldInline(
         "🔊 Canale vocale",
         interaction.member.voice.channel?.name ?? "N/A",
         true
-      )
-      .setFooterFromMember()
-      .setTimestamp();
+      );
 
     await interaction.editReply({
       embeds: [embed],

@@ -38,8 +38,7 @@ export default {
       .addFieldInline("📛 Username", `\`${user.tag}\``)
       .addFieldInline("🕒 Account Creato", `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`)
       .addFieldInline("🗓️ Entrato nel server", member ? `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>` : "`Non disponibile`")
-      .addFieldInline("🎭 Ruoli", member ? `${member.roles.cache.map(r => r).join(" ")}` : "`Nessun ruolo`")
-      .setFooterFromMember();
+      .addFieldInline("🎭 Ruoli", member ? `${member.roles.cache.map(r => r).join(" ")}` : "`Nessun ruolo`");
 
     await interaction.editReply({ embeds: [embed] });
   },
