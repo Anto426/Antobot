@@ -71,10 +71,10 @@ class BotApplication {
 
   async bootstrap() {
     await SystemCheck.initialize();
-    await this.configManager.loadConfig();
+    await this.configManager.startAutoReload();
 
     this.clientInitializer.setCookies(
-      this.configManager.getAllConfig().cookies
+      this.configManager.getConfig("cookies").youtube
     );
 
     this.botClient = await this.clientInitializer.initialize(
@@ -102,7 +102,6 @@ class BotApplication {
       BotConsole.info("Avvio del bot...");
       await this.bootstrap();
       await this.authenticate();
-      this.configManager.startAutoReload(3600_000);
     } catch (err) {
       BotConsole.error("Errore durante l’avvio:", err.message);
       process.exit(1);
