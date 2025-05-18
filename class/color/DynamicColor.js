@@ -17,7 +17,6 @@ class DynamicColor {
 
   async setImgUrl(url) {
     try {
-      BotConsole.info(`Fetching image from URL: ${url}`);
       const res = await fetch(url);
       if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
       const arrayBuffer = await res.arrayBuffer();
@@ -45,7 +44,6 @@ class DynamicColor {
       BotConsole.error(msg);
       throw new Error(msg);
     }
-    BotConsole.debug(`Extracting ${this.numColors} colors`);
     return ColorThief.getPalette(this.img, this.numColors);
   }
 
@@ -55,8 +53,6 @@ class DynamicColor {
         ColorFunctions.colorDistance([0, 0, 0], a) -
         ColorFunctions.colorDistance([0, 0, 0], b)
     );
-    BotConsole.debug("Original palette:", palette);
-    BotConsole.debug("Sorted palette:", sorted);
     return sorted;
   }
 
@@ -76,7 +72,6 @@ class DynamicColor {
       throw new Error(msg);
     }
 
-    BotConsole.debug("Filtered palette:", filtered);
     return filtered;
   }
 
