@@ -99,7 +99,7 @@ class ClientInitializer {
   }
 
   setCookies(cookies) {
-    this.cookies = cookies.youtube;
+    this.cookies = cookies;
   }
 
   async initialize() {

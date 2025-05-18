@@ -1,8 +1,8 @@
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 
 export default {
-  name: "playSong",
-  typeEvent: "playSong",
+  name: "PlaySong",
+  eventType: "playSong",
   allowevents: true,
   async execute(queue, song) {
     try {

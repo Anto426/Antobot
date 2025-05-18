@@ -1,4 +1,3 @@
-
 import SystemCheck from "../client/SystemCheck.js";
 import BotConsole from "../console/BotConsole.js";
 import JsonHandler from "../json/JsonHandler.js";
@@ -17,19 +16,14 @@ class ConfigManager extends EventEmitter {
     const files = Array.isArray(SystemCheck.getGithubConfig("files"))
       ? SystemCheck.getGithubConfig("files")
       : [];
-
     const repoUrl = SystemCheck.getGithubConfig("urlrepo") || this.baseURL;
-    if (!repoUrl) {
-      throw new Error("GitHub repo URL not configured");
-    }
+    if (!repoUrl) throw new Error("GitHub repo URL non configurato");
 
     BotConsole.info("Loading config from GitHub repo:", repoUrl);
     BotConsole.info("Files to load:", files);
 
     const jsonFiles = files.filter((f) => f.toLowerCase().endsWith(".json"));
-    if (!jsonFiles.length) {
-      throw new Error("No JSON config files to load");
-    }
+    if (!jsonFiles.length) throw new Error("Nessun file JSON da caricare");
 
     const newStore = {};
     for (const file of jsonFiles) {
@@ -38,7 +32,7 @@ class ConfigManager extends EventEmitter {
           `${repoUrl}/${file.toLowerCase()}`,
           process.env.GITTOKEN
         );
-        newStore[file.replace(".json", "")] = data;
+        newStore[file.replace(/\.json$/i, "")] = data;
         BotConsole.success(`Loaded '${file}' successfully`);
       } catch (err) {
         BotConsole.error(`Error loading '${file}': ${err.message}`);
@@ -48,26 +42,29 @@ class ConfigManager extends EventEmitter {
 
     this.store = newStore;
     this.emit("reload", { timestamp: new Date(), store: this.store });
-
     return this.store;
   }
 
-  startAutoReload(intervalMs = 3600_000) {
+  async startAutoReload(intervalMs = 3600_000) {
     BotConsole.info("Starting auto-reload");
     if (this._reloadTimer) clearInterval(this._reloadTimer);
 
-    const reload = async () => {
+    const doReload = async () => {
       try {
-        await this.loadConfig();
+        const store = await this.loadConfig();
         BotConsole.info(`Config reloaded at ${new Date().toISOString()}`);
+        return store;
       } catch (err) {
         BotConsole.error(`Auto-reload error: ${err.message}`);
       }
     };
 
-    reload();
-    this._reloadTimer = setInterval(reload, intervalMs);
+    const initialStore = await doReload();
+
+    this._reloadTimer = setInterval(doReload, intervalMs);
     BotConsole.info("Auto-reload started");
+
+    return initialStore;
   }
 
   stopAutoReload() {
@@ -83,23 +80,17 @@ class ConfigManager extends EventEmitter {
     if (!path) throw new Error("Config path required");
     const [file, ...keys] = path.split(".");
     let result = this.store[file];
-    if (result === undefined) {
-      throw new Error(`Config file not found: ${file}`);
-    }
+    if (result === undefined) throw new Error(`Config file not found: ${file}`);
     for (const key of keys) {
-      if (result && key in result) {
-        result = result[key];
-      } else {
-        throw new Error(`Key '${key}' not found in ${file}`);
-      }
+      if (result && key in result) result = result[key];
+      else throw new Error(`Key '${key}' not found in ${file}`);
     }
     return result;
   }
 
   getAllConfig() {
-    if (!Object.keys(this.store).length) {
+    if (!Object.keys(this.store).length)
       throw new Error("No config files loaded");
-    }
     return { ...this.store };
   }
 }

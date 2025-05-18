@@ -47,10 +47,9 @@ export default {
     embed
       .setMainContent(
         "🎶 Traccia Aggiunta",
-        `**${song.name}** è stata aggiunta alla coda da **${interaction.user.tag}**.`
+        `**${song.name}** è stata aggiunta alla coda!`
       )
       .setThumbnail(song.thumbnail)
-      .addFieldInline("🎵 Titolo", song.name, true)
       .addFieldInline("⏱️ Durata", song.formattedDuration ?? "N/A", true)
       .addFieldInline("🧑‍🎤 Autore", song.uploader?.name ?? "Sconosciuto", true)
       .addFieldInline("📎 Link", `[Vai alla traccia](${song.url})`, true)
