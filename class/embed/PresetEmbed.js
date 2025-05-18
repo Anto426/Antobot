@@ -48,16 +48,22 @@ export default class PresetEmbed extends EmbedBuilder {
   }
 
   async setColorFromImage() {
-    const url = this.#image || this.data.thumbnail?.url;
+    let url = this.#image || this.data.thumbnail?.url;
     if (!url) {
-      this.setColor(PresetEmbed.DEFAULT_COLOR);
-      return this;
+      const client = this.#guild?.client;
+      if (client?.user) {
+        url = client.user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS);
+      } else {
+        this.setColor(PresetEmbed.DEFAULT_COLOR);
+        return this;
+      }
     }
 
     try {
       await this.#colorizer.setImgUrl(url);
-      const { palette, textColor } = await this.#colorizer.getPaletteAndTextColor();
-      const [r, g, b] = palette[0] || [0, 153, 255]; // fallback colore
+      const { palette, textColor } =
+        await this.#colorizer.getPaletteAndTextColor();
+      const [r, g, b] = palette[0] || [0, 153, 255];
       const hex = ColorFunctions.rgbToHex(r, g, b);
       this.setColor(hex);
     } catch (err) {
