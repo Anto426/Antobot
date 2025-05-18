@@ -13,8 +13,6 @@ export default {
         client.commands.get(interaction.commandName) ||
         client.buttons.get(interaction.commandName);
 
-      console.log(command);
-
       if (!command) {
         if (!interaction.replied && !interaction.deferred) {
           const embed = new PresetEmbed({
@@ -52,7 +50,7 @@ export default {
 
       try {
         await interaction.deferReply();
-        await command.execute(interaction);
+        await command.execute(interaction,);
       } catch (cmdError) {
         BotConsole.error(`NewInteraction.execute(): ${cmdError.message}`);
 
