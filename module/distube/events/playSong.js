@@ -19,7 +19,11 @@ export default {
         )
         .addFieldInline("🎵 Titolo", song.name, true)
         .addFieldInline("⏱️ Durata", song.formattedDuration || "N/A", true)
-        .addFieldInline("🧑‍🎤 Artista", song.uploader?.name || "Sconosciuto", true)
+        .addFieldInline(
+          "🧑‍🎤 Artista",
+          song.uploader?.name || "Sconosciuto",
+          true
+        )
         .addFieldInline("📎 Link", `[Vai alla traccia](${song.url})`, true)
         .setFooter("Enjoy your music!")
         .setTimestamp();

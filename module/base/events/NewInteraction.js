@@ -50,7 +50,7 @@ export default {
 
       try {
         await interaction.deferReply();
-        await command.execute(interaction,);
+        await command.execute(interaction);
       } catch (cmdError) {
         BotConsole.error(`NewInteraction.execute(): ${cmdError.message}`);
 

@@ -153,7 +153,7 @@ class SystemCheck {
       }
       return {
         name: key,
-        enabled: Boolean(value.enabled)
+        enabled: Boolean(value.enabled),
       };
     });
   }
