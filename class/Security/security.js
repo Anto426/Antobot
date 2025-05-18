@@ -69,8 +69,11 @@ class Security {
       }
     }
 
-    if (SystemCheck.isFeatureEnabled("music") && this.command.distube) {
-      return this._checkDistube();
+    if (
+      SystemCheck.isFeatureEnabled("music") &&
+      this.command.moduleTag === "musiccommands"
+    ) {
+      return await this._checkDistube();
     }
 
     if (this.interaction.isButton?.()) {
@@ -95,22 +98,37 @@ class Security {
   }
 
   async _checkDistube() {
-    const { checkchannel, checklisttrack } = this.command.disTube || {};
-    const { voiceChannel, botVoiceChannel, interaction } = this;
+    const { member, guild, client } = this.interaction;
+    const userChannel = member.voice.channel;
+    const botChannel = guild.channels.cache.find(
+      (c) => c.type === ChannelType.GuildVoice && c.members.has(client.user.id)
+    );
 
-    if (checkchannel) {
-      if (!voiceChannel) throw new Error("Devi essere in un canale vocale.");
-      if (botVoiceChannel && botVoiceChannel.id !== voiceChannel.id) {
-        throw new Error("La musica è già in riproduzione in un altro canale.");
+    if (this.command.disTube.checkchannel) {
+      if (!userChannel) {
+        throw new Error(
+          "Devi essere in un canale vocale per usare questo comando."
+        );
+      }
+      if (botChannel && userChannel.id !== botChannel.id) {
+        throw new Error("Devi essere nello stesso canale vocale del bot.");
       }
     }
 
-    if (checklisttrack) {
-      const queue = interaction.client.distube.getQueue(interaction);
-      if (!queue) throw new Error("Nessuna traccia in riproduzione.");
+    if (this.command.disTube.checklisttrack) {
+      const queue = client.distube.getQueue(this.interaction);
+      if (!queue) {
+        throw new Error("Non ci sono tracce in coda.");
+      }
     }
 
-    return [voiceChannel, botVoiceChannel];
+    if (!userChannel && !botChannel) {
+      throw new Error(
+        "Devi essere in un canale vocale per usare questo comando."
+      );
+    }
+
+    return [userChannel, botChannel];
   }
 }
 
