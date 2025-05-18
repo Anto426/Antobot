@@ -54,8 +54,10 @@ export default {
         ConfigManager.getConfig("owner").owner
       );
 
+      let securityResult;
+
       try {
-        await securityCheck.allow(interaction, command);
+        securityResult = await securityCheck.allow(interaction, command);
       } catch (securityError) {
         BotConsole.error(
           `Permesso negato: ${securityError.stack || securityError.message}`
@@ -69,7 +71,8 @@ export default {
           await interaction.deferReply();
         }
 
-        await command.execute(interaction);
+        const arg = typeof securityResult !== "boolean" ? securityResult : null;
+        await command.execute(interaction, arg);
 
         BotConsole.success(
           `Comando eseguito: ${command.name} | Utente: ${
