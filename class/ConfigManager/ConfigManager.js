@@ -1,3 +1,4 @@
+
 import SystemCheck from "../client/SystemCheck.js";
 import BotConsole from "../console/BotConsole.js";
 import JsonHandler from "../json/JsonHandler.js";

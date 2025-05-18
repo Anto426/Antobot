@@ -1,6 +1,7 @@
 import Security from "../../../class/security/security.js";
 import BotConsole from "../../../class/console/BotConsole.js";
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import ConfigManager from "../../../class/ConfigManager/ConfigManager.js";
 
 export default {
   name: "NewInteraction",
@@ -8,7 +9,7 @@ export default {
   allowevents: true,
 
   async execute(interaction) {
-    async function sendEmbed(title, description) {
+    async function sendEmbed(title, description, ephemeral = false) {
       try {
         const embed = new PresetEmbed({
           guild: interaction.guild,
@@ -17,12 +18,14 @@ export default {
         await embed.init();
         embed.setMainContent(title, description);
 
+        const payload = { embeds: [embed], ephemeral };
+
         if (!interaction.replied && !interaction.deferred) {
-          await interaction.reply({ embeds: [embed], ephemeral: true });
+          await interaction.reply(payload);
         } else if (interaction.deferred && !interaction.replied) {
-          await interaction.editReply({ embeds: [embed], ephemeral: true });
+          await interaction.editReply(payload);
         } else {
-          await interaction.followUp({ embeds: [embed], ephemeral: true });
+          await interaction.followUp(payload);
         }
       } catch (sendErr) {
         BotConsole.error(
@@ -37,11 +40,19 @@ export default {
         client.buttons.get(interaction.commandName);
 
       if (!command) {
-        await sendEmbed("Comando non trovato", "Questo comando non esiste!");
+        await sendEmbed(
+          "Comando non trovato",
+          "Questo comando non esiste!",
+          true
+        );
         return;
       }
 
-      const securityCheck = new Security(interaction, command);
+      const securityCheck = new Security(
+        interaction,
+        command,
+        ConfigManager.getConfig("owner").owner
+      );
 
       try {
         await securityCheck.allow(interaction, command);
@@ -49,13 +60,13 @@ export default {
         BotConsole.error(
           `Permesso negato: ${securityError.stack || securityError.message}`
         );
-        await sendEmbed("Permesso negato", securityError.message);
+        await sendEmbed("Permesso negato", securityError.message, true);
         return;
       }
 
       try {
         if (!interaction.deferred && !interaction.replied) {
-          await interaction.deferReply({ ephemeral: true });
+          await interaction.deferReply();
         }
 
         await command.execute(interaction);
@@ -71,7 +82,7 @@ export default {
         BotConsole.error(
           `Errore esecuzione comando: ${cmdError.stack || cmdError.message}`
         );
-        await sendEmbed("Errore durante l'esecuzione", cmdError.message);
+        await sendEmbed("Errore durante l'esecuzione", cmdError.message, true);
       }
     } catch (error) {
       BotConsole.error(
@@ -79,7 +90,8 @@ export default {
       );
       await sendEmbed(
         "Errore generale",
-        "Si è verificato un errore durante l'esecuzione dell'interazione!"
+        "Si è verificato un errore durante l'esecuzione dell'interazione!",
+        true
       );
     }
   },

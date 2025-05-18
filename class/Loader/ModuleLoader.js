@@ -38,8 +38,7 @@ class LoadModules {
 
       return col;
     } catch (err) {
-      BotConsole.error(`Failed to load ${name}: ${err.message}`);
-      throw new Error(`✖ Failed to load ${name}: ${err.message}`);
+      throw new Error(`Failed to load ${name}: ${err.message}`);
     }
   }
 
