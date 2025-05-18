@@ -1,5 +1,6 @@
 import { ChannelType } from "discord.js";
 import SystemCheck from "../client/SystemCheck.js";
+import BotConsole from "../console/BotConsole.js";
 
 class Security {
   constructor(interaction, command, owners = [], allowedChannels = []) {
@@ -38,7 +39,7 @@ class Security {
             c.type === ChannelType.GuildVoice && c.members.has(client.user.id)
         ) || null;
     } catch (err) {
-      console.error("[Security]._gatherFlags error:", err);
+      BotConsole.error("[Security]._gatherFlags error:", err);
       throw new Error(
         "Errore durante il recupero delle informazioni di sicurezza."
       );
@@ -61,7 +62,7 @@ class Security {
       }
       return true;
     } catch (err) {
-      console.error("[Security]._checkStaff error:", err);
+      BotConsole.error("[Security]._checkStaff error:", err);
       return false;
     }
   }
@@ -99,7 +100,7 @@ class Security {
 
       return true;
     } catch (err) {
-      console.error("[Security].allow error:", err);
+      BotConsole.error("[Security].allow error:", err);
       throw err;
     }
   }
@@ -117,7 +118,7 @@ class Security {
         throw new Error("Non sei autorizzato a usare questo bottone.");
       }
     } catch (err) {
-      console.error("[Security]._checkButtonUserId error:", err);
+      BotConsole.error("[Security]._checkButtonUserId error:", err);
       throw err;
     }
   }
@@ -167,7 +168,7 @@ class Security {
 
       return [userChannel, botChannel];
     } catch (error) {
-      console.error("[Security]._checkDistube error:", error);
+      BotConsole.error("[Security]._checkDistube error:", error);
       throw new Error("Errore durante il controllo della riproduzione vocale.");
     }
   }
