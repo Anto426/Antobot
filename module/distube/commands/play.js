@@ -26,12 +26,10 @@ export default {
     ],
   },
 
-  async execute(interaction) {
+  async execute(interaction, channels) {
     const songQuery = interaction.options.getString("song");
 
-    const channels = interaction.member.voice.channel;
-
-    await global.distube.play(channels, songQuery, {
+    await global.distube.play(channels[0] || channels[1], songQuery, {
       member: interaction.member,
       textChannel: interaction.channel,
       message: null,
