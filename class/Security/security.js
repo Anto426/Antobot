@@ -4,12 +4,8 @@ import BotConsole from "../console/BotConsole.js";
 
 class Security {
   constructor(interaction, command, owners = [], allowedChannels = []) {
-    if (!interaction) {
-      throw new Error("Parametro 'interaction' mancante.");
-    }
-    if (!command) {
-      throw new Error("Parametro 'command' mancante.");
-    }
+    if (!interaction) throw new Error("Parametro 'interaction' mancante.");
+    if (!command) throw new Error("Parametro 'command' mancante.");
 
     this.interaction = interaction;
     this.command = command;
@@ -26,7 +22,6 @@ class Security {
       this.isServerOwner = guild.ownerId === member.id;
       this.isBotUser = member.user.bot;
       this.isSelf = target?.id === member.id;
-
       this.isStaff = this._checkStaff(member, target);
 
       this.inAllowedChannel =
@@ -60,6 +55,7 @@ class Security {
           member.roles.highest.rawPosition > target.roles.highest.rawPosition
         );
       }
+
       return true;
     } catch (err) {
       return false;
@@ -68,21 +64,45 @@ class Security {
 
   async allow() {
     try {
+      BotConsole.info(
+        `[Security] Verifica permessi per il comando: ${this.command.name}`
+      );
       await this._gatherFlags();
 
-      if (this.isBotUser)
+      if (this.isBotUser && !this.command.isBotAllowed) {
         throw new Error("Il bot non può eseguire questo comando.");
-      if (this.isSelf)
-        throw new Error("Non puoi eseguire il comando su te stesso.");
-      if (!this.inAllowedChannel)
-        throw new Error("Comando non permesso in questo canale.");
+      }
 
-      if (this.command.OnlyOwner) {
-        if (!this.isOwner)
+      if (this.isSelf) {
+        throw new Error("Non puoi eseguire il comando su te stesso.");
+      }
+
+      if (!this.inAllowedChannel) {
+        throw new Error("Comando non permesso in questo canale.");
+      }
+
+      if (this.command.isOwnerOnly) {
+        if (!this.isOwner) {
           throw new Error("Solo il proprietario può usare questo comando.");
+        }
       } else {
         if (!this.isOwner && !this.isServerOwner && !this.isStaff) {
           throw new Error("Non hai i permessi per usare questo comando.");
+        }
+      }
+
+      if (this.command.requiresPositionArgument) {
+        const posArg = this.interaction.options.getInteger("position");
+        if (posArg === null || posArg === undefined) {
+          throw new Error(
+            "È necessario fornire un argomento di posizione valido."
+          );
+        }
+      }
+
+      if (this.command.isTestCommand) {
+        if (!this.isOwner) {
+          throw new Error("Questo comando è riservato ai test.");
         }
       }
 
@@ -124,36 +144,102 @@ class Security {
     try {
       const { member, guild, client } = this.interaction;
       const userChannel = member.voice.channel;
-      const botChannel = guild.channels.cache.find(
-        (c) =>
-          c.type === ChannelType.GuildVoice && c.members.has(client.user.id)
-      );
+      let botChannel =
+        guild.channels.cache.find(
+          (c) =>
+            c.type === ChannelType.GuildVoice && c.members.has(client.user.id)
+        ) || null;
 
       if (!this.command.disTube) {
         throw new Error("Configurazione di DisTube mancante.");
       }
-      const { checkchannel, checklisttrack } = this.command.disTube;
 
-      if (checkchannel) {
-        if (!userChannel) {
-          throw new Error(
-            "Devi essere in un canale vocale per usare questo comando."
-          );
-        }
-        if (botChannel && userChannel.id !== botChannel.id) {
-          throw new Error("Devi essere nello stesso canale vocale del bot.");
+      // Se il bot è da solo nel canale vocale
+      if (botChannel) {
+        if (
+          botChannel.members.size === 1 &&
+          botChannel.members.has(client.user.id)
+        ) {
+          // Se l'utente è in un canale diverso, sposta il bot in quel canale
+          if (userChannel && userChannel.id !== botChannel.id) {
+            await guild.members.me.voice.setChannel(userChannel.id);
+            botChannel = userChannel; // Aggiorna lo stato
+          } else {
+            // Altrimenti disconnetti il bot se nessun canale valido per muoversi
+            await guild.members.me.voice.disconnect();
+            botChannel = null;
+          }
         }
       }
 
-      if (checklisttrack) {
-        let queue;
+      const {
+        requireUserInVoiceChannel,
+        requireSameVoiceChannel,
+        requireBotInVoiceChannel,
+        requireTrackInQueue,
+        requireAdditionalTracks,
+        disallowIfPaused,
+        disallowIfPlaying,
+        requireSeekable,
+      } = this.command.disTube;
+
+      if (requireUserInVoiceChannel && !userChannel) {
+        throw new Error(
+          "Devi essere in un canale vocale per usare questo comando."
+        );
+      }
+
+      if (requireBotInVoiceChannel && !botChannel) {
+        throw new Error(
+          "Il bot deve essere in un canale vocale per usare questo comando."
+        );
+      }
+
+      if (
+        requireSameVoiceChannel &&
+        botChannel &&
+        (!userChannel || userChannel.id !== botChannel.id)
+      ) {
+        throw new Error("Devi essere nello stesso canale vocale del bot.");
+      }
+
+      let queue = null;
+      if (
+        requireTrackInQueue ||
+        requireAdditionalTracks ||
+        disallowIfPaused ||
+        disallowIfPlaying ||
+        requireSeekable
+      ) {
         try {
           queue = global.distube.getQueue(this.interaction.guild);
         } catch (e) {
           throw new Error("Impossibile recuperare la coda di riproduzione.");
         }
-        if (!queue) {
-          throw new Error("Non ci sono tracce in coda.");
+      }
+
+      if (requireTrackInQueue && !queue) {
+        throw new Error("Non ci sono tracce in coda.");
+      }
+
+      if (requireAdditionalTracks && (!queue || queue.songs.length < 2)) {
+        throw new Error("È necessario avere almeno altre tracce in coda.");
+      }
+
+      if (disallowIfPaused && queue?.paused) {
+        throw new Error(
+          "Comando non permesso quando la riproduzione è in pausa."
+        );
+      }
+
+      if (disallowIfPlaying && queue && !queue.paused) {
+        throw new Error("Comando non permesso durante la riproduzione.");
+      }
+
+      if (requireSeekable) {
+        const currentSong = queue?.songs?.[0];
+        if (!currentSong || !currentSong.isSeekable) {
+          throw new Error("La traccia corrente non è seekable.");
         }
       }
 
@@ -165,7 +251,7 @@ class Security {
 
       return [userChannel, botChannel];
     } catch (error) {
-      throw new Error(error);
+      throw new Error(error.message || error);
     }
   }
 }

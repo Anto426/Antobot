@@ -4,7 +4,6 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 export default {
   name: "setvolume",
   permissions: [],
-  isChannelRestricted: true,
   isBotAllowed: true,
   isOwnerOnly: false,
   requiresPositionArgument: false,
@@ -12,8 +11,13 @@ export default {
   isVisibleInHelp: true,
   disTube: {
     requireUserInVoiceChannel: true,
-    requireTrackInQueue: false,
-    allowOnlyLocalTracks: false,
+    requireSameVoiceChannel: true,
+    requireBotInVoiceChannel: false,
+    requireTrackInQueue: true,
+    requireAdditionalTracks: false,
+    disallowIfPaused: false,
+    disallowIfPlaying: false,
+    requireSeekable: false,
   },
   data: {
     name: "setvolume",
@@ -32,7 +36,6 @@ export default {
 
   async execute(interaction) {
     const volume = interaction.options.getInteger("volume");
-    // setVolume restituisce la queue aggiornata
     const queue = await global.distube.setVolume(interaction.guildId, volume);
 
     const embed = await new PresetEmbed({

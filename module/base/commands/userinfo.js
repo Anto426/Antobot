@@ -3,7 +3,6 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 export default {
   name: "userinfo",
   permissions: [],
-  isChannelRestricted: true,
   isBotAllowed: true,
   isOwnerOnly: false,
   requiresPositionArgument: false,

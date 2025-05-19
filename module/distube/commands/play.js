@@ -3,7 +3,6 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 export default {
   name: "play",
   permissions: [],
-  isChannelRestricted: true,
   isBotAllowed: true,
   isOwnerOnly: false,
   requiresPositionArgument: false,
@@ -11,8 +10,13 @@ export default {
   isVisibleInHelp: true,
   disTube: {
     requireUserInVoiceChannel: true,
+    requireSameVoiceChannel: true,
+    requireBotInVoiceChannel: false,
     requireTrackInQueue: false,
-    allowOnlyLocalTracks: false,
+    requireAdditionalTracks: false,
+    disallowIfPaused: false,
+    disallowIfPlaying: false,
+    requireSeekable: false,
   },
   data: {
     name: "play",
