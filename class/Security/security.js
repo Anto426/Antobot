@@ -62,7 +62,6 @@ class Security {
       }
       return true;
     } catch (err) {
-      BotConsole.error("[Security]._checkStaff error:", err);
       return false;
     }
   }
@@ -100,7 +99,6 @@ class Security {
 
       return true;
     } catch (err) {
-      BotConsole.error("[Security].allow error:", err);
       throw err;
     }
   }
@@ -118,7 +116,6 @@ class Security {
         throw new Error("Non sei autorizzato a usare questo bottone.");
       }
     } catch (err) {
-      BotConsole.error("[Security]._checkButtonUserId error:", err);
       throw err;
     }
   }
@@ -151,7 +148,7 @@ class Security {
       if (checklisttrack) {
         let queue;
         try {
-          queue = client.distube.getQueue(this.interaction);
+          queue = global.distube.getQueue(this.interaction.guild);
         } catch (e) {
           throw new Error("Impossibile recuperare la coda di riproduzione.");
         }
@@ -168,8 +165,7 @@ class Security {
 
       return [userChannel, botChannel];
     } catch (error) {
-      BotConsole.error("[Security]._checkDistube error:", error);
-      throw new Error("Errore durante il controllo della riproduzione vocale.");
+      throw new Error(error);
     }
   }
 }
