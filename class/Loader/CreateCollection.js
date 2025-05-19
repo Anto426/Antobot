@@ -83,13 +83,11 @@ class CreateCollection {
         return;
       }
 
-      // Se è un oggetto/funzione con .name
       if (this.#hasValidName(FileExport)) {
         this.#collection.set(FileExport.name, FileExport);
         return;
       }
 
-      // Altrimenti, usare il nome del file come chiave
       const fallbackName = this.#getFileNameFromPath(filePath);
       this.#collection.set(fallbackName, FileExport);
       BotConsole.warning(
