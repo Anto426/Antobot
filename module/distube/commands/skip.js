@@ -3,21 +3,21 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 export default {
   name: "skip",
   permissions: [],
-  allowedChannels: true,
-  allowedBot: true,
-  onlyOwner: false,
-  position: false,
-  test: false,
-  see: true,
+  isChannelRestricted: true,
+  isBotAllowed: true,
+  isOwnerOnly: false,
+  requiresPositionArgument: false,
+  isTestCommand: false,
+  isVisibleInHelp: true,
   disTube: {
-    checkchannel: true,
-    checklisttrack: true,
+    requireUserInVoiceChannel: true,
+    requireTrackInQueue: false,
+    allowOnlyLocalTracks: false,
   },
   data: {
     name: "skip",
     description: "Salta la traccia corrente",
   },
-
   async execute(interaction) {
     const queue = global.distube.getQueue(interaction.guildId);
     await global.distube.skip(interaction.guildId);

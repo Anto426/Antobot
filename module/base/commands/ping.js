@@ -5,12 +5,12 @@ import { version as nodeVersion } from "process";
 export default {
   name: "ping",
   permissions: [],
-  allowedChannels: true,
-  allowedBot: true,
-  onlyOwner: false,
-  position: false,
-  test: false,
-  see: true,
+  isChannelRestricted: true,
+  isBotAllowed: true,
+  isOwnerOnly: false,
+  requiresPositionArgument: false,
+  isTestCommand: false,
+  isVisibleInHelp: true,
   data: {
     name: "ping",
     description: "Test latenza con embed avanzato",
@@ -29,12 +29,20 @@ export default {
     const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
-      image: interaction.client.user.displayAvatarURL({ format: "png", size: 512 }),
+      image: interaction.client.user.displayAvatarURL({
+        format: "png",
+        size: 512,
+      }),
     }).init();
 
     embed
-      .setMainContent("🏓 Pong!", "Ecco tutti i dettagli sulla latenza e lo stato del bot:")
-      .setThumbnailUrl(interaction.client.user.displayAvatarURL({ dynamic: true }))
+      .setMainContent(
+        "🏓 Pong!",
+        "Ecco tutti i dettagli sulla latenza e lo stato del bot:"
+      )
+      .setThumbnailUrl(
+        interaction.client.user.displayAvatarURL({ dynamic: true })
+      )
       .addFieldInline("🖥️ Client Latency", `\`${clientLatency} ms\``)
       .addFieldInline("🌐 API Latency", `\`${apiLatency} ms\``)
       .addFieldInline("⏱️ Uptime", `\`${uptime}\``)
