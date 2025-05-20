@@ -1,25 +1,30 @@
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 
 export default {
-  name: "PlaySong",
-  eventType: "playSong",
+  name: "FinishSong",
+  eventType: "finishSong",
   isActive: true,
   async execute(queue, song) {
     const embed = await new PresetEmbed({
       guild: queue.textChannel.guild,
-      member: null,
+      member: song.user?.tag,
       image: song.thumbnail,
     }).init();
 
     embed
       .setAuthor({
-        name: "🎶 Ora in riproduzione",
-        iconURL: queue.textChannel.guild.iconURL() || undefined,
+        name: "🎶  Traccia Terminata",
+        iconURL: queue.textChannel.guild.iconURL() ?? undefined,
       })
+      .setColor("#F1C40F")
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
-      .setDescription(`**Artista:** ${song.uploader?.name || "Sconosciuto"}`)
+      .setDescription(
+        `**Artista:** [${song.uploader?.name || "Sconosciuto"}](${
+          song.uploader?.url || song.url
+        })`
+      )
       .addFields(
         {
           name: "⏱️ Durata",
@@ -38,6 +43,6 @@ export default {
         }
       );
 
-    await queue.textChannel.send({ embeds: [embed] });
+    queue.textChannel.send({ embeds: [embed] });
   },
 };

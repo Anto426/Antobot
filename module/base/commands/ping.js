@@ -5,6 +5,7 @@ import { version as nodeVersion } from "process";
 export default {
   name: "ping",
   permissions: [],
+  isActive: true,
   isBotAllowed: true,
   isOwnerOnly: false,
   requiresPositionArgument: false,

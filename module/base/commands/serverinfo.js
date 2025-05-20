@@ -3,6 +3,7 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 export default {
   name: "serverinfo",
   permissions: [],
+  isActive: true,
   isBotAllowed: true,
   isOwnerOnly: false,
   requiresPositionArgument: false,

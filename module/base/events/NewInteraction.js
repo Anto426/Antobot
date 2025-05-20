@@ -6,7 +6,7 @@ import ConfigManager from "../../../class/ConfigManager/ConfigManager.js";
 export default {
   name: "NewInteraction",
   eventType: "interactionCreate",
-  allowevents: true,
+  isActive: true,
 
   async execute(interaction) {
     async function sendEmbed(title, description, isEphemeral = false) {

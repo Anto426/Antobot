@@ -4,6 +4,7 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 export default {
   name: "setvolume",
   permissions: [],
+  isActive: true,
   isBotAllowed: true,
   isOwnerOnly: false,
   requiresPositionArgument: false,

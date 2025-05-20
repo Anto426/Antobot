@@ -7,6 +7,7 @@ import Time from "../../../class/Time/time.js";
 export default {
   name: "info",
   permissions: [],
+  isActive: true,
   isBotAllowed: true,
   isOwnerOnly: false,
   requiresPositionArgument: false,

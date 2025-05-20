@@ -3,6 +3,7 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 export default {
   name: "play",
   permissions: [],
+  isActive: true,
   isBotAllowed: true,
   isOwnerOnly: false,
   requiresPositionArgument: false,
