@@ -37,8 +37,8 @@ const DEFAULT_CONFIG = {
     },
   },
   boxenOptions: {
-    padding: 0,           
-    margin: 0,          
+    padding: 0,
+    margin: 0,
     borderStyle: "round",
     borderColor: "cyan",
     dimBorder: false,
@@ -68,8 +68,7 @@ class BotConsole {
 
   _getGradient(type) {
     return gradient(
-      this.config.theme.gradients[type] ||
-      DEFAULT_CONFIG.theme.gradients[type]
+      this.config.theme.gradients[type] || DEFAULT_CONFIG.theme.gradients[type]
     );
   }
 
@@ -84,9 +83,7 @@ class BotConsole {
   }
 
   _getStyle(type) {
-    return (
-      this.config.theme.styles[type] || DEFAULT_CONFIG.theme.styles[type]
-    );
+    return this.config.theme.styles[type] || DEFAULT_CONFIG.theme.styles[type];
   }
 
   _getSymbol(type) {
@@ -121,28 +118,29 @@ class BotConsole {
     ].join("\n");
   }
 
-formatMessage(type, parts) {
-  const gradColors =
-    this.config.theme.gradients[type] || DEFAULT_CONFIG.theme.gradients[type];
-  const grad = gradient(gradColors);
-  const style = this._getStyle(type);
-  const ts = this._timestamp();
-  const label = chalk.bold(grad(` ${this._getSymbol(type)}  ${style.label} `));
+  formatMessage(type, parts) {
+    const gradColors =
+      this.config.theme.gradients[type] || DEFAULT_CONFIG.theme.gradients[type];
+    const grad = gradient(gradColors);
+    const style = this._getStyle(type);
+    const ts = this._timestamp();
+    const label = chalk.bold(
+      grad(` ${this._getSymbol(type)}  ${style.label} `)
+    );
 
-  const contentRaw = parts.join(" ");
-  const contentColored = grad(contentRaw);
+    const contentRaw = parts.join(" ");
+    const contentColored = grad(contentRaw);
 
-  const box = boxen(contentColored, {
-    ...this.config.boxenOptions,
-    borderColor: gradColors[0], 
-    width: 70,                  
-    padding: 0,         
-    margin: 0,               
-  });
+    const box = boxen(contentColored, {
+      ...this.config.boxenOptions,
+      borderColor: gradColors[0],
+      width: 115,
+      padding: 0,
+      margin: 0,
+    });
 
-
-  return `${ts} ${label}\n${box}`;
-}
+    return `${ts} ${label}\n${box}`;
+  }
 
   formatValue(value, type) {
     const grad = this._getGradient(type);
