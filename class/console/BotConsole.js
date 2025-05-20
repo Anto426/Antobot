@@ -37,8 +37,8 @@ const DEFAULT_CONFIG = {
     },
   },
   boxenOptions: {
-    padding: 0,            // meno spazio interno
-    margin: 0,             // niente margine esterno
+    padding: 0,           
+    margin: 0,          
     borderStyle: "round",
     borderColor: "cyan",
     dimBorder: false,
