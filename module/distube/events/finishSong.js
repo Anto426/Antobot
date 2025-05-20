@@ -7,7 +7,7 @@ export default {
   async execute(queue, song) {
     const embed = await new PresetEmbed({
       guild: queue.textChannel.guild,
-      member: song.user?.tag,
+      member: song.member,
       image: song.thumbnail,
     }).init();
 
@@ -16,7 +16,6 @@ export default {
         name: "🎶  Traccia Terminata",
         iconURL: queue.textChannel.guild.iconURL() ?? undefined,
       })
-      .setColor("#F1C40F")
       .setTitle(song.name)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
