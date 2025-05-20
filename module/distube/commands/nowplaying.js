@@ -31,23 +31,26 @@ export default {
     }).init();
 
     embed
-      .setMainContent("🎧 In Riproduzione", `**${song.name}**`)
+      .setMainContent("🎧 In Riproduzione", `**[${song.name}](${song.url})**`)
       .setThumbnailUrl(song.thumbnail)
       .addInlineFields([
-        { name: "🧑‍🎤 Autore", value: song.uploader?.name ?? "Sconosciuto" },
-        { name: "⏱️ Durata", value: song.formattedDuration ?? "N/A" },
-        { name: "📎 Link", value: `[Vai alla traccia](${song.url})` },
-        { name: "🔊 Volume", value: `${queue.volume}%` },
-        {
-          name: "🔁 Modalità Loop",
-          value:
-            queue.repeatMode === 2
-              ? "Coda"
-              : queue.repeatMode === 1
-              ? "Traccia"
-              : "Off",
-        },
-      ]);
+      { name: "🧑‍🎤 Autore", value: song.uploader?.name ?? "Sconosciuto", inline: true },
+      { name: "⏱️ Durata", value: song.formattedDuration ?? "N/A", inline: true },
+      { name: "👤 Richiesto da", value: song.user?.toString() ?? "N/A", inline: true },
+      { name: "🔊 Volume", value: `${queue.volume}%`, inline: true },
+      {
+        name: "🔁 Modalità Loop",
+        value:
+        queue.repeatMode === 2
+          ? "Coda"
+          : queue.repeatMode === 1
+          ? "Traccia"
+          : "Off",
+        inline: true,
+      },
+      { name: "📎 Link", value: `[Vai alla traccia](${song.url})`, inline: true },
+      ])
+      .setFooter({ text: `Posizione in coda: 1/${queue.songs.length}` });
 
     await interaction.editReply({ embeds: [embed], content: "" });
   },

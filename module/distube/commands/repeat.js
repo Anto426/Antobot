@@ -45,12 +45,11 @@ export default {
       member: interaction.member,
     }).init();
 
-    const modeText = {
-      0: "🔁 Ripetizione disattivata",
-      1: "🔂 Ripetizione della traccia attivata",
-      2: "🔁 Ripetizione della coda attivata",
-    };
-
+    const modeText = [
+      "🔁 Ripetizione disattivata",
+      "🔂 Ripetizione della traccia attivata",
+      "🔁 Ripetizione della coda attivata",
+    ];
     embed.setMainContent("⚙️ Modalità Repeat", modeText[repeatMap[mode]]);
 
     await interaction.editReply({ embeds: [embed], content: "" });
