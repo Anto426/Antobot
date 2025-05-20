@@ -28,9 +28,10 @@ export default {
       member: interaction.member,
     }).init();
 
-    embed
-      .setMainContent("🔁 Modalità Autoplay", `Autoplay ${newAutoplayState ? "✅ Attivato" : "❌ Disattivato"}`)
-      .setFooter({ text: `Impostazione aggiornata per questa coda.` });
+    embed.setMainContent(
+      "🔁 Modalità Autoplay",
+      `Autoplay ${newAutoplayState ? "✅ Attivato" : "❌ Disattivato"}`
+    );
 
     await interaction.editReply({ embeds: [embed], content: "" });
   },
