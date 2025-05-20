@@ -6,19 +6,20 @@ import ConfigManager from "../../../class/ConfigManager/ConfigManager.js";
 export default {
   name: "NewInteraction",
   eventType: "interactionCreate",
-  allowevents: true,
+  isActive: true,
 
   async execute(interaction) {
-    async function sendEmbed(title, description, ephemeral = false) {
+    async function sendEmbed(title, description, isEphemeral = false) {
       try {
         const embed = new PresetEmbed({
           guild: interaction.guild,
           member: interaction.member,
         });
-        await embed.init(!ephemeral);
+
+        await embed.init(!isEphemeral);
         embed.setMainContent(title, description);
 
-        const payload = { embeds: [embed], ephemeral };
+        const payload = { embeds: [embed], ephemeral: isEphemeral };
 
         if (!interaction.replied && !interaction.deferred) {
           await interaction.reply(payload);
@@ -27,10 +28,8 @@ export default {
         } else {
           await interaction.followUp(payload);
         }
-      } catch (sendErr) {
-        BotConsole.error(
-          `sendEmbed failed: ${sendErr.stack || sendErr.message}`
-        );
+      } catch (err) {
+        BotConsole.error(`sendEmbed failed: ${err.stack || err.message}`);
       }
     }
 
@@ -48,6 +47,7 @@ export default {
         return;
       }
 
+      // Sicurezza e autorizzazioni
       const securityCheck = new Security(
         interaction,
         command,
@@ -55,24 +55,29 @@ export default {
       );
 
       let securityResult;
+      let shouldBeEphemeral = false;
 
       try {
         securityResult = await securityCheck.allow(interaction, command);
       } catch (securityError) {
+        shouldBeEphemeral = true;
         BotConsole.error(
           `Permesso negato: ${securityError.stack || securityError.message}`
         );
-        await sendEmbed("Permesso negato", securityError.message, true);
+        await sendEmbed(
+          "Permesso negato",
+          securityError.message,
+          shouldBeEphemeral
+        );
         return;
       }
 
       try {
-        if (!interaction.deferred && !interaction.replied) {
-          await interaction.deferReply();
-        }
+        await interaction.deferReply({ ephemeral: shouldBeEphemeral });
 
-        const arg = typeof securityResult !== "boolean" ? securityResult : null;
-        await command.execute(interaction, arg);
+        const args =
+          typeof securityResult !== "boolean" ? securityResult : null;
+        await command.execute(interaction, args);
 
         BotConsole.success(
           `Comando eseguito: ${command.name} | Utente: ${
@@ -82,18 +87,23 @@ export default {
           }`
         );
       } catch (cmdError) {
+        shouldBeEphemeral = true;
         BotConsole.error(
-          `Errore esecuzione comando: ${cmdError.stack || cmdError.message}`
+          `Errore comando: ${cmdError.stack || cmdError.message}`
         );
-        await sendEmbed("Errore durante l'esecuzione", cmdError.message, true);
+        await sendEmbed(
+          "Errore durante l'esecuzione",
+          cmdError.message,
+          shouldBeEphemeral
+        );
       }
-    } catch (error) {
+    } catch (fatalError) {
       BotConsole.error(
-        `Errore generale in NewInteraction: ${error.stack || error.message}`
+        `Errore generale: ${fatalError.stack || fatalError.message}`
       );
       await sendEmbed(
         "Errore generale",
-        "Si è verificato un errore durante l'esecuzione dell'interazione!",
+        "Si è verificato un errore durante l'esecuzione dell'interazione.",
         true
       );
     }

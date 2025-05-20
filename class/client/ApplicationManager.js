@@ -92,9 +92,9 @@ class BotApplication {
   async launch() {
     BotConsole.success("Bot pronto all’uso!");
     (await ModuleLoader.initAll?.()) || Promise.resolve();
-    StartupLogger.run();
     await CommandGuildUpdate.updateGuildsOnStartup();
     await IntitialOtherModules.Intit();
+    await StartupLogger.run();
   }
 
   async run() {

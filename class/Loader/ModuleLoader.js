@@ -1,9 +1,17 @@
-import BotConsole from "../console/BotConsole.js";
 import SystemCheck from "../client/SystemCheck.js";
-import { Collection } from "discord.js";
 import CreateCollection from "./CreateCollection.js";
+import BotConsole from "../console/BotConsole.js";
+import { Collection } from "discord.js";
 
 class LoadModules {
+  #baseCommands = new Collection();
+  #musicCommands = new Collection();
+  #baseButtons = new Collection();
+  #musicButtons = new Collection();
+  #baseEvents = new Collection();
+  #musicEvents = new Collection();
+  #otherModules = new Collection();
+
   async #loadCollection(name, dir) {
     if (typeof name !== "string" || !name) {
       throw new TypeError("Invalid collection name");
@@ -24,18 +32,6 @@ class LoadModules {
         }
       }
 
-      client[name] = col;
-
-      const size = col.size;
-      const status = size ? "success" : "warning";
-      BotConsole[status](
-        `${name}: loaded ${size} ${size === 1 ? "file" : "files"} from ${dir}`,
-        {
-          type: status,
-          data: { name, size, dir, timestamp: new Date().toISOString() },
-        }
-      );
-
       return col;
     } catch (err) {
       throw new Error(`Failed to load ${name}: ${err.message}`);
@@ -45,7 +41,7 @@ class LoadModules {
   async #loadEvents(name, dir, emitter) {
     const col = await this.#loadCollection(name, dir);
     for (const evt of col.values()) {
-      if (evt.allowevents) {
+      if (evt.isActive) {
         emitter.on(evt.eventType, (...args) => evt.execute(...args));
       }
     }
@@ -66,64 +62,71 @@ class LoadModules {
   }
 
   async initialize() {
-    await this.#batchLoad("Base", [
-      {
-        type: "commands",
-        name: "basecommands",
-        group: "base",
-        emitter: client,
-      },
-      {
-        type: "events",
-        name: "baseevents",
-        group: "base",
-        emitter: client,
-      },
-      {
-        type: "buttons",
-        name: "basebutton",
-        group: "base",
-        emitter: client,
-      },
-    ]);
-
-    if (SystemCheck.isFeatureEnabled("music")) {
-      await this.#batchLoad("Music", [
+    [this.#baseCommands, this.#baseEvents, this.#baseButtons] =
+      await this.#batchLoad("Base", [
         {
           type: "commands",
-          name: "musiccommands",
-          group: "distube",
+          name: "baseCommands",
+          group: "base",
           emitter: client,
         },
         {
           type: "events",
-          name: "musicevents",
-          group: "distube",
-          emitter: global.distube,
+          name: "baseEvents",
+          group: "base",
+          emitter: client,
         },
         {
           type: "buttons",
-          name: "musicbutton",
-          group: "distube",
+          name: "baseButtons",
+          group: "base",
           emitter: client,
         },
       ]);
+
+    if (SystemCheck.isFeatureEnabled("music")) {
+      [this.#musicCommands, this.#musicEvents, this.#musicButtons] =
+        await this.#batchLoad("Music", [
+          {
+            type: "commands",
+            name: "musicCommands",
+            group: "distube",
+            emitter: client,
+          },
+          {
+            type: "events",
+            name: "musicEvents",
+            group: "distube",
+            emitter: global.distube,
+          },
+          {
+            type: "buttons",
+            name: "musicButtons",
+            group: "distube",
+            emitter: client,
+          },
+        ]);
     }
 
-    await this.#loadCollection(
-      "other",
+    this.#otherModules = await this.#loadCollection(
+      "otherModules",
       SystemCheck.getModulePath("other", "root")
     );
     BotConsole.success("Other modules loaded");
 
     client.commands = new Collection([
-      ...client.basecommands,
-      ...(client.musiccommands || []),
+      ...this.#baseCommands,
+      ...(this.#musicCommands || []),
     ]);
     client.buttons = new Collection([
-      ...client.basebutton,
-      ...(client.musicbutton || []),
+      ...this.#baseButtons,
+      ...(this.#musicButtons || []),
     ]);
+    client.events = new Collection([
+      ...this.#baseEvents,
+      ...(this.#musicEvents || []),
+    ]);
+    client.other = new Collection([...this.#otherModules]);
 
     BotConsole.debug(
       `Commands: ${client.commands.size} | Buttons: ${client.buttons.size}`,
@@ -138,17 +141,9 @@ class LoadModules {
     );
 
     BotConsole.success("All modules loaded successfully");
-    BotConsole.info("Clear unused collections");
-    for (const key of Object.keys(client)) {
-      if (
-        ["basecommands", "musiccommands", "basebutton", "musicbutton"].includes(
-          key
-        )
-      ) {
-        delete client[key];
-      }
-    }
-    BotConsole.success("Unused collections cleared");
+    BotConsole.info(
+      "Temporary collections are kept private and not attached to client"
+    );
   }
 }
 

@@ -2,17 +2,17 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 import { version as discordJsVersion } from "discord.js";
 import { version as nodeVersion } from "process";
 import SystemCheck from "../../../class/client/SystemCheck.js";
-import Time from "../../../class/time/time.js";
+import Time from "../../../class/Time/time.js";
 
 export default {
   name: "info",
   permissions: [],
-  allowedChannels: true,
-  allowedBot: true,
-  onlyOwner: false,
-  position: false,
-  test: false,
-  see: true,
+  isActive: true,
+  isBotAllowed: true,
+  isOwnerOnly: false,
+  requiresPositionArgument: false,
+  isTestCommand: false,
+  isVisibleInHelp: true,
   data: {
     name: "info",
     description: "Mostra informazioni generali sul bot",

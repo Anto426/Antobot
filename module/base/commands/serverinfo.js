@@ -3,12 +3,12 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 export default {
   name: "serverinfo",
   permissions: [],
-  allowedChannels: true,
-  allowedBot: true,
-  onlyOwner: false,
-  position: false,
-  test: false,
-  see: true,
+  isActive: true,
+  isBotAllowed: true,
+  isOwnerOnly: false,
+  requiresPositionArgument: false,
+  isTestCommand: false,
+  isVisibleInHelp: true,
   data: {
     name: "serverinfo",
     description: "Mostra informazioni sul server",
@@ -23,11 +23,17 @@ export default {
     }).init();
 
     embed
-      .setMainContent("🏠 Informazioni Server", `Ecco i dettagli su **${guild.name}**:`)
+      .setMainContent(
+        "🏠 Informazioni Server",
+        `Ecco i dettagli su **${guild.name}**:`
+      )
       .setThumbnailUrl(guild.iconURL({ dynamic: true }))
       .addFieldInline("🆔 ID", `\`${guild.id}\``)
       .addFieldInline("👑 Owner", `<@${guild.ownerId}>`)
-      .addFieldInline("📅 Creato", `<t:${Math.floor(guild.createdTimestamp / 1000)}:R>`)
+      .addFieldInline(
+        "📅 Creato",
+        `<t:${Math.floor(guild.createdTimestamp / 1000)}:R>`
+      )
       .addFieldInline("👥 Membri", `\`${guild.memberCount}\``)
       .addFieldInline("📁 Canali", `\`${guild.channels.cache.size}\``)
       .addFieldInline("🌍 Regione", `\`${guild.preferredLocale}\``);

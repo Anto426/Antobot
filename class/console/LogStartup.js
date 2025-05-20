@@ -1,39 +1,29 @@
+import os from "os";
 import Table from "cli-table3";
 import chalk from "chalk";
 import gradient from "gradient-string";
 import SystemCheck from "../client/SystemCheck.js";
 
 const THEME = {
-  info: gradient(["#4facfe", "#00f2fe"]),
-  success: gradient(["#67B26F", "#4ca2cd"]),
-  warning: gradient(["#f6d365", "#fda085"]),
-  error: gradient(["#ee0979", "#ff6a00"]),
-  debug: gradient(["#764ba2", "#667eea"]),
-  trace: gradient(["#74ebd5", "#9face6"]),
-  title: gradient(["#800080", "#BA55D3"]),
+  info: gradient(["#00c6ff", "#0072ff"]),
+  title: gradient(["#7928ca", "#ff0080"]),
 };
 
-const TABLE_OPTIONS = {
-  style: {
-    border: ["gray"],
-    compact: false,
-    "padding-left": 1,
-    "padding-right": 1,
-    head: [],
-  },
+const TABLE_OPTS = {
+  style: { border: ["gray"], "padding-left": 1, "padding-right": 1 },
   chars: {
-    top: "═",
-    "top-mid": "╤",
-    "top-left": "╔",
-    "top-right": "╗",
-    bottom: "═",
-    "bottom-mid": "╧",
-    "bottom-left": "╚",
-    "bottom-right": "╝",
-    left: "║",
-    "left-mid": "╟",
-    right: "║",
-    "right-mid": "╢",
+    top: "─",
+    "top-mid": "┬",
+    "top-left": "╭",
+    "top-right": "╮",
+    bottom: "─",
+    "bottom-mid": "┴",
+    "bottom-left": "╰",
+    "bottom-right": "╯",
+    left: "│",
+    "left-mid": "├",
+    right: "│",
+    "right-mid": "┤",
     mid: "─",
     "mid-mid": "┼",
     middle: "│",
@@ -41,149 +31,221 @@ const TABLE_OPTIONS = {
 };
 
 class LogStartup {
-  maskToken(token) {
-    return token
-      ? `${token.slice(0, 6)}…${token.slice(-4)}`
-      : chalk.red("Not Set");
+  constructor() {
+    this.termWidth = process.stdout.columns || 80;
+    this.maxWidth = Math.min(this.termWidth - 2, 120);
   }
 
-  async gatherData() {
-    const sys = SystemCheck;
+  mask(token = "") {
+    if (!token) return chalk.red("Not Set");
+    if (token.length <= 10) return token;
+    return chalk.hex("#FFA500")(`${token.slice(0, 6)}…${token.slice(-4)}`);
+  }
+
+  gatherData() {
     const mem = process.memoryUsage();
-    let invite = "N/A";
-    if (client.generateInvite) {
-      try {
-        invite = await client.generateInvite({ scopes: ["bot"] });
-      } catch {
-        invite = "N/A";
-      }
-    }
+    const cpus = os.cpus();
 
     return {
-      clientName: sys.getName(),
-      version: sys.getVersion(),
-      author: sys.getAuthor(),
-      discordJs: sys.getDependencies()?.["discord.js"] ?? "N/A",
-      node: process.version,
-      platform: process.platform,
-      arch: process.arch,
-      ramUsed: `${(mem.heapUsed / 1024 / 1024).toFixed(2)} MB`,
-      ramTotal: `${(mem.heapTotal / 1024 / 1024).toFixed(2)} MB`,
-      uptime: `${Math.floor(process.uptime())}s`,
-      tokens: {
-        bot: this.maskToken(process.env.TOKEN),
-        openai: this.maskToken(process.env.OPENAITOKEN),
-        git: this.maskToken(process.env.GITTOKEN),
+      bot: {
+        Name: chalk.bold(SystemCheck.getName()),
+        Version: SystemCheck.getVersion(),
+        Author: SystemCheck.getAuthor(),
       },
-      invite,
-      repo: sys.getRepo(),
-      features: sys.getFeatures(),
+      system: {
+        Platform: os.platform(),
+        Architecture: os.arch(),
+        Release: os.release(),
+        CPUs: `${cpus.length} × ${cpus[0].model}`,
+      },
+      resources: {
+        "Heap Used": `${(mem.heapUsed / 1024 / 1024).toFixed(2)} MB`,
+        "Heap Total": `${(mem.heapTotal / 1024 / 1024).toFixed(2)} MB`,
+        Uptime: `${Math.floor(process.uptime())}s`,
+      },
+      process: {
+        PID: process.pid,
+        Node: process.version,
+        "Exec Path": process.execPath,
+      },
+      tokens: {
+        BOT: this.mask(process.env.TOKEN),
+        OPENAI: this.mask(process.env.OPENAITOKEN),
+        GIT: this.mask(process.env.GITTOKEN),
+      },
     };
   }
 
-  printHeader(title) {
-    const width = 80;
-    const line = "═".repeat(width);
-    const label = ` ${title.toUpperCase()} `;
-    const pad = Math.floor((width - label.length) / 2);
-    console.log("\n" + THEME.title(`╔${line}╗`));
-    console.log(
-      THEME.title("║") +
-        " ".repeat(pad) +
-        chalk.bold(label) +
-        " ".repeat(pad) +
-        THEME.title("║")
-    );
-    console.log(THEME.title(`╠${line}╣`));
+  centerText(text, width) {
+    const len = stripAnsi(text).length;
+    if (len >= width) return text;
+    const left = Math.floor((width - len) / 2);
+    const right = width - len - left;
+    return " ".repeat(left) + text + " ".repeat(right);
   }
 
-  printFooter() {
-    const line = "═".repeat(80);
-    console.log(THEME.title(`╚${line}╝`));
-    console.log(chalk.gray(`Log generated at: ${new Date().toLocaleString()}`));
-  }
+  createTableWithTitle(title, data) {
+    const keys = Object.keys(data);
+    const values = Object.values(data).map(String);
 
-  printTable(title, rows, colWidths = []) {
-    if (!rows.length) return;
-    this.printHeader(title);
+    const colKeyWidth = Math.floor(this.maxWidth * 0.3);
+    const colValWidth = this.maxWidth - colKeyWidth - 3;
 
-    const headers = Object.keys(rows[0]);
     const table = new Table({
-      head: headers.map((h) => chalk.bgCyan.black.bold(` ${h} `)),
-      colWidths,
-      ...TABLE_OPTIONS,
+      colWidths: [colKeyWidth, colValWidth],
+      wordWrap: true,
+      ...TABLE_OPTS,
     });
 
-    for (const row of rows) {
-      table.push(headers.map((h) => row[h] ?? "N/A"));
+    const totalWidth = colKeyWidth + colValWidth + 3;
+    const paddedTitle = this.centerText(title.toUpperCase(), totalWidth - 2);
+    table.push([
+      {
+        colSpan: 2,
+        content: THEME.title(paddedTitle),
+        hAlign: "center",
+      },
+    ]);
+
+    for (const [key, value] of Object.entries(data)) {
+      table.push([
+        THEME.info(key),
+        chalk.whiteBright(value),
+      ]);
     }
 
-    console.log(table.toString());
+    return table.toString();
+  }
+
+  printModules(title, modules, headers, color, mapRow) {
+    if (!modules?.size) return;
+
+    // Per ogni moduloTag crea una tabella con titolo
+    const items = Array.from(modules.entries()).map(([k, m]) => ({ k, m }));
+
+    // Raggruppa per moduleTag (o "Other")
+    const grouped = {};
+    for (const item of items) {
+      const tag = item.m.moduleTag ?? item.m?.constructor?.moduleTag ?? "Other";
+      if (!grouped[tag]) grouped[tag] = [];
+      grouped[tag].push(item);
+    }
+
+    // Per ogni gruppo crea una tabella completa
+    for (const [tag, group] of Object.entries(grouped)) {
+      const colCount = headers.length;
+      const colWidth = Math.floor((this.maxWidth - (colCount + 1)) / colCount);
+
+      const table = new Table({
+        head: headers.map((h) => color.bgBlack.bold(` ${h} `)),
+        colWidths: Array(colCount).fill(colWidth),
+        wordWrap: true,
+        ...TABLE_OPTS,
+      });
+
+      // Riga titolo (moduleTag + count)
+      const titleText = `${title} - Module Tag: ${tag} (${group.length})`;
+      table.unshift([
+        {
+          colSpan: colCount,
+          content: color.bold(this.centerText(titleText, this.maxWidth - 2)),
+          hAlign: "center",
+        },
+      ]);
+
+      for (const { k, m } of group) {
+        const row = mapRow
+          ? mapRow({ k, m })
+          : headers.map((h) => {
+              const lower = h.toLowerCase();
+
+              if (lower === "name") return m.name ?? k;
+
+              if (lower === "enabled") {
+                const featureKey = (m.name ?? k).toLowerCase();
+                const isEnabled = m.isActive ?? false;
+                return isEnabled ? "✅ Yes" : "❌ No";
+              }
+
+              if (m[h] != null) return String(m[h]);
+
+              if (m[lower] != null) return String(m[lower]);
+
+              return "N/A";
+            });
+
+        table.push(row);
+      }
+
+      console.log(table.toString());
+    }
+
+    console.log(
+      color.bold(
+        this.centerText(`Total ${title}: ${modules.size}`, this.maxWidth)
+      )
+    );
+    console.log();
   }
 
   async run() {
-    const d = await this.gatherData();
+    const data = this.gatherData();
 
-    this.printTable(
-      "Bot Info",
-      [
-        {
-          Client: THEME.success(d.clientName),
-          Version: THEME.warning(d.version),
-          Author: THEME.info(d.author),
-        },
-      ],
-      [30, 20, 30]
+    console.log(this.createTableWithTitle("Bot Info", data.bot));
+    console.log(this.createTableWithTitle("System Info", data.system));
+    console.log(this.createTableWithTitle("Resources", data.resources));
+    console.log(this.createTableWithTitle("Process Info", data.process));
+    console.log(this.createTableWithTitle("Security Tokens", data.tokens));
+
+    this.printModules(
+      "Commands Loaded",
+      client.commands,
+      ["Name", "Enabled"],
+      chalk.magenta
     );
 
-    this.printTable(
-      "System",
-      [
-        {
-          "Discord.js": THEME.debug(d.discordJs),
-          "Node.js": THEME.debug(d.node),
-          Platform: THEME.debug(d.platform),
-          Arch: THEME.debug(d.arch),
-        },
-      ],
-      [20, 20, 20, 20]
+    this.printModules(
+      "Buttons Loaded",
+      client.buttons,
+      ["Name", "Enabled"],
+      chalk.cyan
     );
 
-    this.printTable(
-      "Resources",
-      [
-        {
-          "RAM Used": THEME.error(d.ramUsed),
-          "RAM Total": THEME.error(d.ramTotal),
-          Uptime: THEME.warning(d.uptime),
-        },
-      ],
-      [25, 25, 30]
+    this.printModules(
+      "Events Loaded",
+      client.events,
+      ["Name", "Enabled"],
+      chalk.yellow
     );
 
-    this.printTable(
-      "Features",
-      d.features.map((f) => ({
-        Feature: f.name,
-        Status: f.enabled
-          ? chalk.green("✅ Enabled")
-          : chalk.red("❌ Disabled"),
-      })),
-      [40, 40]
+    this.printModules(
+      "Other Modules",
+      client.other,
+      ["Name", "Enabled", "Initialized"],
+      chalk.blue,
+      ({ k, m }) => {
+        const name = m?.name ?? m?.constructor?.name ?? k;
+        const key = name.toLowerCase();
+        const enabled = SystemCheck.isFeatureEnabled(key);
+        const initialized = !!(m?.instance ?? (typeof m === "object" && m));
+
+        return [
+          name,
+          enabled ? "✅ Enabled" : "❌ Disabled",
+          initialized ? "✅ Yes" : "❌ No",
+        ];
+      }
     );
 
-    this.printTable(
-      "Security",
-      [
-        { Type: "Bot Token", Value: chalk.gray(d.tokens.bot) },
-        { Type: "OpenAI Token", Value: chalk.gray(d.tokens.openai) },
-        { Type: "Git Token", Value: chalk.gray(d.tokens.git) },
-      ],
-      [20, 60]
-    );
-
-    this.printFooter();
+    console.log(chalk.gray(`Log generated at: ${new Date().toLocaleString()}`));
   }
+}
+
+function stripAnsi(str) {
+  return str.replace(
+    /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
+    ""
+  );
 }
 
 export default new LogStartup();
