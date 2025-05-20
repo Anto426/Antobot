@@ -37,8 +37,8 @@ const DEFAULT_CONFIG = {
     },
   },
   boxenOptions: {
-    padding: 1,
-    margin: 0,
+    padding: 0,            // meno spazio interno
+    margin: 0,             // niente margine esterno
     borderStyle: "round",
     borderColor: "cyan",
     dimBorder: false,
@@ -95,7 +95,7 @@ class BotConsole {
   }
 
   _centerText(text) {
-    const width = process.stdout.columns || 80;
+    const width = 60; // width for header centering (più compatto)
     const len = stripAnsi(text).length;
     if (len >= width) return text;
     const left = Math.floor((width - len) / 2);
@@ -103,7 +103,7 @@ class BotConsole {
   }
 
   formatHeader(text) {
-    const width = process.stdout.columns || 80;
+    const width = 60; // più stretto
     const gradBorder = gradient(["#6a11cb", "#2575fc"]);
     const gradText = gradient(["#f7971e", "#ffd200"]);
 
@@ -134,11 +134,16 @@ formatMessage(type, parts) {
 
   const box = boxen(contentColored, {
     ...this.config.boxenOptions,
-    borderColor: gradColors[0], // usa il primo colore della gradiente
+    borderColor: gradColors[0], 
+    width: 70,                  
+    padding: 0,         
+    margin: 0,               
   });
 
-  return [ts, label, "\n" + box].filter(Boolean).join(" ");
+
+  return `${ts} ${label}\n${box}`;
 }
+
   formatValue(value, type) {
     const grad = this._getGradient(type);
     if (value == null) return chalk.gray.italic(`✗ ${value}`);
