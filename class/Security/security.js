@@ -67,6 +67,11 @@ class Security {
       BotConsole.info(
         `[Security] Verifica permessi per il comando: ${this.command.name}`
       );
+
+      if (this.command.isActive === false) {
+        throw new Error("Questo comando non è attualmente attivo.");
+      }
+
       await this._gatherFlags();
 
       if (this.isBotUser && !this.command.isBotAllowed) {
@@ -142,6 +147,10 @@ class Security {
 
   async _checkDistube() {
     try {
+      if (!SystemCheck.isFeatureEnabled("music")) {
+        throw new Error("Funzionalità musicale non abilitata.");
+      }
+
       const { member, guild, client } = this.interaction;
       const userChannel = member.voice.channel;
       let botChannel =
@@ -154,7 +163,6 @@ class Security {
         throw new Error("Configurazione di DisTube mancante.");
       }
 
-      // Se il bot è da solo nel canale vocale
       if (botChannel) {
         if (
           botChannel.members.size === 1 &&
