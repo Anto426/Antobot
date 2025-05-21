@@ -128,27 +128,11 @@ class Security {
   }
 
   _checkButtonPermissions() {
-    const buttonConfig = this.command.buttonConfig || {};
     const customId = this.interaction.customId;
-    if (!customId) return;
-
-    if (buttonConfig.ownerOnly && !this.isOwner) {
-      throw new Error("Solo il proprietario può usare questo bottone.");
-    }
-
-    if (buttonConfig.allowedUsers && Array.isArray(buttonConfig.allowedUsers)) {
-      if (!buttonConfig.allowedUsers.includes(this.interaction.user.id)) {
-        throw new Error("Non sei autorizzato a usare questo bottone.");
-      }
-    }
-
-    if (buttonConfig.checkUserIdInCustomId) {
-      const parts = customId.split("_");
-      if (parts.length < 2) return;
-      const userIdFromButton = parts[1];
-      if (userIdFromButton !== this.interaction.user.id) {
-        throw new Error("Non sei autorizzato a usare questo bottone.");
-      }
+    const parts = customId.split("-");
+    const userIdFromButton = parts[1];
+    if (userIdFromButton !== this.interaction.user.id) {
+      throw new Error("Non sei autorizzato a usare questo bottone.");
     }
   }
 
