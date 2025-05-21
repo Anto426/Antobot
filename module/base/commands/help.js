@@ -15,12 +15,11 @@ export default {
   },
   execute: async (interaction) => {
     const helpBuilder = new HelpMenuBuilder();
-    const { embed, selectMenu } = helpBuilder.buildMainMenu(interaction);
+    const { embed, components } = await helpBuilder.buildMainMenu(interaction);
 
     await interaction.editReply({
       embeds: [embed],
-      components: [selectMenu],
+      components: components,
     });
-    return;
   },
 };
