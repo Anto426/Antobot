@@ -1,5 +1,5 @@
 import { PermissionsBitField } from "discord.js";
-import PresetEmbed from "../../../class/embed/PresetEmbed";
+import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 
 export default {
   name: "kick",

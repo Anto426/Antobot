@@ -16,7 +16,7 @@ class Security {
   async _gatherFlags() {
     try {
       const { member, guild, channel, options, client } = this.interaction;
-      const target = options.getMember?.("user");
+      const target = options?.getMember?.("user");
 
       this.isOwner = this.owners.has(member.id);
       this.isServerOwner = guild.ownerId === member.id;
@@ -27,14 +27,13 @@ class Security {
       this.inAllowedChannel =
         this.allowedChans.size === 0 || this.allowedChans.has(channel.id);
 
-      this.voiceChannel = member.voice.channel || null;
+      this.voiceChannel = member.voice?.channel || null;
       this.botVoiceChannel =
         guild.channels.cache.find(
           (c) =>
             c.type === ChannelType.GuildVoice && c.members.has(client.user.id)
         ) || null;
     } catch (err) {
-      BotConsole.error("[Security]._gatherFlags error:", err);
       throw new Error(
         "Errore durante il recupero delle informazioni di sicurezza."
       );
@@ -118,8 +117,8 @@ class Security {
         return await this._checkDistube();
       }
 
-      if (this.interaction.isButton?.()) {
-        this._checkButtonUserId();
+      if (this.interaction.customId) {
+        this._checkButtonPermissions();
       }
 
       return true;
@@ -128,20 +127,12 @@ class Security {
     }
   }
 
-  _checkButtonUserId() {
-    try {
-      const customId = this.interaction.customId;
-      if (!customId) return;
-
-      const parts = customId.split("_");
-      if (parts.length < 2) return;
-
-      const userIdFromButton = parts[1];
-      if (userIdFromButton !== this.interaction.user.id) {
-        throw new Error("Non sei autorizzato a usare questo bottone.");
-      }
-    } catch (err) {
-      throw err;
+  _checkButtonPermissions() {
+    const customId = this.interaction.customId;
+    const parts = customId.split("-");
+    const userIdFromButton = parts[1];
+    if (userIdFromButton !== this.interaction.user.id) {
+      throw new Error("Non sei autorizzato a usare questo bottone.");
     }
   }
 
@@ -168,12 +159,10 @@ class Security {
           botChannel.members.size === 1 &&
           botChannel.members.has(client.user.id)
         ) {
-          // Se l'utente è in un canale diverso, sposta il bot in quel canale
           if (userChannel && userChannel.id !== botChannel.id) {
             await guild.members.me.voice.setChannel(userChannel.id);
-            botChannel = userChannel; // Aggiorna lo stato
+            botChannel = userChannel;
           } else {
-            // Altrimenti disconnetti il bot se nessun canale valido per muoversi
             await guild.members.me.voice.disconnect();
             botChannel = null;
           }
