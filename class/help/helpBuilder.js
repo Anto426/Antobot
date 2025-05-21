@@ -1,19 +1,34 @@
 import {
   StringSelectMenuBuilder,
-  StringSelectMenuOptionBuilder
+  StringSelectMenuOptionBuilder,
 } from "discord.js";
 import PresetEmbed from "../embed/PresetEmbed.js";
 import ConfigManager from "../ConfigManager/ConfigManager.js";
 import Menu from "../row/menu.js";
 
+const FIELD_SEPARATOR = "━━━━━━━━━━━━━━━━━━━━";
+
 class HelpMenuBuilder {
   async buildMainMenu(interaction) {
     const config = ConfigManager.getConfig("description").command;
-    const commands = client.commands.filter(
-      (cmd) => cmd.isActive && cmd.isVisibleInHelp
+    const commands = client.commands;
+
+    // Filtri e conteggi
+    const totalCommands = commands.size;
+    const activeCommands = commands.filter((cmd) => cmd.isActive);
+    const inactiveCommands = commands.filter((cmd) => !cmd.isActive);
+    const ownerOnlyCommands = commands.filter((cmd) => cmd.isOwnerOnly);
+    const commandsWithOptions = commands.filter(
+      (cmd) => Array.isArray(cmd.data?.options) && cmd.data.options.length > 0
+    );
+    const commandsWithoutOptions = commands.filter(
+      (cmd) =>
+        !Array.isArray(cmd.data?.options) || cmd.data.options.length === 0
     );
 
+    // Opzioni menu a tendina
     const commandOptions = commands
+      .filter((cmd) => cmd.isActive && cmd.isVisibleInHelp)
       .sort((a, b) => a.data.name.localeCompare(b.data.name))
       .map((cmd) => {
         const cmdConfig = config[cmd.name] || {};
@@ -23,7 +38,6 @@ class HelpMenuBuilder {
           cmd.data.description || "Nessuna descrizione disponibile";
         if (description.length > 100)
           description = description.slice(0, 97) + "...";
-
         return {
           label: `${emoji} ${name}`.slice(0, 100),
           description,
@@ -63,40 +77,128 @@ class HelpMenuBuilder {
       member: interaction.member,
     }).init();
 
-    embed.setMainContent(
-      "📜 Lista dei Comandi",
-      "Seleziona un comando dal menu a tendina per visualizzarne i dettagli."
-    );
+    embed
+      .setTitle("📜 Lista dei Comandi")
+      .setDescription(
+        [
+          `**Totale comandi:** \`${totalCommands}\``,
+          `✅ **Attivi:** \`${activeCommands.size}\` | ❌ **Disattivi:** \`${inactiveCommands.size}\``,
+          `🔒 **Solo Owner:** \`${ownerOnlyCommands.size}\``,
+          `⚙️ **Con attributi:** \`${commandsWithOptions.size}\` | 🚫 **Senza attributi:** \`${commandsWithoutOptions.size}\``,
+          "",
+          FIELD_SEPARATOR,
+          "Seleziona un comando dal menu a tendina per visualizzarne i dettagli.",
+          "",
+          "**Legenda:**",
+          "✅ Attivo | 🔒 Solo Owner | ⚙️ Con attributi",
+        ].join("\n")
+      )
+      .setThumbnail(interaction.client.user.displayAvatarURL())
+      .setFooter({
+        text: `Richiesto da ${interaction.user.tag}`,
+        iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
+      });
 
     return {
-      embed: embed,
-      components: components.map((c) => (c.toJSON ? c.toJSON() : c)),
+      embed,
+      components: components.map((c) =>
+        typeof c.toJSON === "function" ? c.toJSON() : c
+      ),
     };
   }
 
-  async buildCommandMenu(interaction, command) {
+  async buildCommandMenu(interaction, commandName) {
+    const command = client.commands.get(commandName);
+    if (!command) {
+      const embed = await new PresetEmbed({
+        guild: interaction.guild,
+        member: interaction.member,
+      }).init();
+      embed
+        .setTitle("❌ Comando non trovato")
+        .setDescription("Il comando richiesto non esiste.")
+        .setFooter({
+          text: `Richiesto da ${interaction.user.tag}`,
+          iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
+        });
+      return { embed };
+    }
+
     const config = ConfigManager.getConfig("description").command;
-    const cmdConfig = config[command] || {};
-    const emoji = cmdConfig.emoji || "❓";
-    const name = String(command || "Sconosciuto");
-    const description = cmdConfig.description || command;
-    const thumbnail = cmdConfig.image;
+    const cmdConfig = config[commandName] || {};
+    const emoji = cmdConfig.emoji || "🔹";
+    const description =
+      cmdConfig.description ||
+      command.data?.description ||
+      "Nessuna descrizione disponibile.";
+    const name = String(commandName || "Sconosciuto");
 
     const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
     }).init();
 
-    embed
-      .setMainContent(
-        `${emoji} ${name}`,
-        `Descrizione: ${description}\n\nUtilizza il comando con \`/${name}\``
-      )
-      .setThumbnailUrl(thumbnail);
+    // Attributi / opzioni
+    let optionsText = "Nessun attributo richiesto.";
+    if (Array.isArray(command.data?.options) && command.data.options.length) {
+      optionsText = command.data.options
+        .map((opt) => {
+          const isRequired = opt.required
+            ? "🔴 Obbligatorio"
+            : "🟢 Facoltativo";
+          const type =
+            typeof opt.type === "number"
+              ? `Tipo: \`${opt.type}\``
+              : "Tipo sconosciuto";
+          return `• \`${opt.name}\` - ${
+            opt.description || "Nessuna descrizione"
+          }\n   ↳ ${isRequired}, ${type}`;
+        })
+        .join("\n\n");
+    }
 
-    return {
-      embed: embed,
-    };
+    embed
+      .setTitle(`${emoji} Comando \`/${name}\``)
+      .setDescription(
+        [
+          `**📄 Descrizione:** ${description}`,
+          "",
+          `🔧 Usa con: \`/${name}\``,
+          "",
+          FIELD_SEPARATOR,
+        ].join("\n")
+      )
+      .setThumbnail(interaction.client.user.displayAvatarURL())
+      .addFields(
+        {
+          name: "⚙️ Dettagli",
+          value: [
+            `**Attivo:** ${command.isActive ? "✅ Sì" : "❌ No"}`,
+            `**Solo Owner:** ${command.isOwnerOnly ? "🔒 Sì" : "🌐 No"}`,
+            `**Test:** ${command.isTestCommand ? "🧪 Sì" : "❌ No"}`,
+          ].join("\n"),
+          inline: false,
+        },
+        {
+          name: "🔐 Permessi Richiesti",
+          value:
+            Array.isArray(command.permissions) && command.permissions.length
+              ? command.permissions.map((p) => `• \`${p}\``).join("\n")
+              : "Nessun permesso richiesto.",
+          inline: true,
+        },
+        {
+          name: "📝 Attributi Richiesti",
+          value: optionsText,
+          inline: false,
+        }
+      )
+      .setFooter({
+        text: `Comando: /${name} • Utente: ${interaction.user.tag}`,
+        iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
+      });
+
+    return { embed };
   }
 }
 
