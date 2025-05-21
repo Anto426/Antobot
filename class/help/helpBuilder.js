@@ -8,24 +8,10 @@ import Menu from "../row/menu.js";
 
 const FIELD_SEPARATOR = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";
 
-const optionTypeMap = {
-  1: "Subcomando",
-  2: "Subcomando Gruppo",
-  3: "Stringa",
-  4: "Intero",
-  5: "Booleano",
-  6: "Utente",
-  7: "Canale",
-  8: "Ruolo",
-  9: "Mentionable",
-  10: "Numero",
-  11: "Attacco Utente",
-};
-
 class HelpMenuBuilder {
   async buildMainMenu(interaction) {
     const config = ConfigManager.getConfig("description").command;
-    const commands = interaction.client.commands;
+    const commands = client.commands;
 
     const commandsByModule = {};
     commands.forEach((cmd) => {
@@ -59,8 +45,7 @@ class HelpMenuBuilder {
             const name = String(cmd.data.name || "Sconosciuto");
             let description =
               cmd.data.description || "Nessuna descrizione disponibile";
-            if (description.length > 90)
-              description = description.slice(0, 87) + "...";
+            if (description.length > 90) description = description.slice(0, 87) + "...";
             return {
               label: `${emoji} ${name}`.slice(0, 100),
               description,
@@ -69,6 +54,7 @@ class HelpMenuBuilder {
             };
           });
         if (group.length) {
+          // Separatore visivo per il gruppo
           commandOptions.push({
             label: `📁 ${tag.toUpperCase()}`,
             description: "──────────────",
@@ -89,10 +75,12 @@ class HelpMenuBuilder {
       });
     }
 
+    // Costruisci il menu a tendina
     const selectMenu = new StringSelectMenuBuilder()
       .setCustomId(`help-${interaction.member.id}-main`)
       .setPlaceholder("📂 Seleziona un comando");
 
+    // Solo le opzioni reali (no separatori) vengono aggiunte come opzioni selezionabili
     const menu = new Menu();
     const components = menu.createMenu(
       commandOptions
@@ -119,13 +107,11 @@ class HelpMenuBuilder {
       .setTitle("✨ **Lista dei Comandi**")
       .setDescription(
         [
-          `🧮 Totale: \`${totalCommands}\`   ✅ Attivi: \`${activeCommands.size}\``,
-          `❌ Disattivi: \`${inactiveCommands.size}\`   🔒 Solo Owner: \`${ownerOnlyCommands.size}\``,
-          `⚙️ Con attributi: \`${commandsWithOptions.size}\`   🚫 Senza attributi: \`${commandsWithoutOptions.size}\``,
-          "",
-          `**${FIELD_SEPARATOR}**`,
-          "",
-          "⬇️ **Seleziona un comando dal menu a tendina per vedere i dettagli.**",
+          `🧮 Totale: ${totalCommands}    ✅ Attivi: ${activeCommands.size}`,
+          `───────────────────────────────`,
+          `❌ Disattivi: ${inactiveCommands.size}    🔒 Solo Owner: ${ownerOnlyCommands.size}`,
+          `───────────────────────────────`,
+          `⚙️ Con attributi: ${commandsWithOptions.size}    🚫 Senza attributi: ${commandsWithoutOptions.size}`,
           "",
           "**Legenda:**",
           "`✅` Attivo   `🔒` Solo Owner   `⚙️` Con attributi",
@@ -135,9 +121,7 @@ class HelpMenuBuilder {
       )
       .setThumbnail(interaction.client.user.displayAvatarURL({ size: 256 }))
       .setFooter({
-        text: `Richiesto da ${
-          interaction.user.tag
-        } • ${new Date().toLocaleDateString("it-IT")}`,
+        text: `Richiesto da ${interaction.user.tag} • ${new Date().toLocaleDateString("it-IT")}`,
         iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
       });
 
@@ -150,7 +134,7 @@ class HelpMenuBuilder {
   }
 
   async buildCommandMenu(interaction, commandName) {
-    const command = interaction.client.commands.get(commandName);
+    const command = client.commands.get(commandName);
     if (!command) {
       const embed = await new PresetEmbed({
         guild: interaction.guild,
@@ -176,7 +160,11 @@ class HelpMenuBuilder {
     const name = String(commandName || "Sconosciuto");
     const moduleTag = command.moduleTag || "Altro";
 
-    // Costruisco testo attributi con tipi leggibili e stile richiesto
+    const embed = await new PresetEmbed({
+      guild: interaction.guild,
+      member: interaction.member,
+    }).init();
+
     let optionsText = "Nessun attributo richiesto.";
     if (Array.isArray(command.data?.options) && command.data.options.length) {
       optionsText = command.data.options
@@ -184,25 +172,26 @@ class HelpMenuBuilder {
           const isRequired = opt.required
             ? "`🔴 Obbligatorio`"
             : "`🟢 Facoltativo`";
+
+          // Mappa il tipo numerico a stringa più leggibile
+          const typeMap = {
+            1: "Testo",
+            2: "Numero Intero",
+            3: "Testo",
+            4: "Utente",
+            5: "Ruolo",
+            6: "Canale",
+            7: "Mentionable",
+            8: "Numero Decimale",
+            9: "Booleano",
+          };
           const typeName =
-            optionTypeMap[opt.type] || `Tipo sconosciuto (${opt.type})`;
-          return `• \`${opt.name}\` — ${
-            opt.description || "Nessuna descrizione"
-          }\n  ↳ ${isRequired}, Tipo: ${typeName}`;
+            typeof opt.type === "number" ? typeMap[opt.type] || `Tipo: ${opt.type}` : "Tipo sconosciuto";
+
+          return `• \`${opt.name}\` — ${opt.description || "Nessuna descrizione"}\n   ↳ ${isRequired}, Tipo: \`${typeName}\``;
         })
         .join("\n\n");
     }
-
-    // Permessi come elenco
-    let permissionsText =
-      Array.isArray(command.permissions) && command.permissions.length
-        ? command.permissions.map((p) => `• \`${p}\``).join("\n")
-        : "Nessun permesso richiesto.";
-
-    const embed = await new PresetEmbed({
-      guild: interaction.guild,
-      member: interaction.member,
-    }).init();
 
     embed
       .setTitle(`${emoji} **Comando \`/${name}\`** 〔${moduleTag}〕`)
@@ -220,16 +209,19 @@ class HelpMenuBuilder {
         {
           name: "⚙️ **Dettagli**",
           value: [
-            `Modulo: \`${moduleTag}\``,
-            `Attivo: ${command.isActive ? "✅ Sì" : "❌ No"}`,
-            `Solo Owner: ${command.isOwnerOnly ? "🔒 Sì" : "🌐 No"}`,
-            `Test: ${command.isTestCommand ? "🧪 Sì" : "❌ No"}`,
+            `• **Modulo:** \`${moduleTag}\``,
+            `• **Attivo:** ${command.isActive ? "✅ Sì" : "❌ No"}`,
+            `• **Solo Owner:** ${command.isOwnerOnly ? "🔒 Sì" : "🌐 No"}`,
+            `• **Test:** ${command.isTestCommand ? "🧪 Sì" : "❌ No"}`,
           ].join("\n"),
           inline: false,
         },
         {
           name: "🔐 **Permessi Richiesti**",
-          value: permissionsText,
+          value:
+            Array.isArray(command.permissions) && command.permissions.length
+              ? command.permissions.map((p) => `• \`${p}\``).join("\n")
+              : "Nessun permesso richiesto.",
           inline: true,
         },
         {
