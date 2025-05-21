@@ -34,11 +34,6 @@ export default {
       interaction.options.getString("motivo") || "Nessun motivo fornito";
     const member = interaction.guild.members.cache.get(target.id);
 
-    if (!member)
-      return interaction.editReply("❌ Utente non trovato nel server.");
-    if (!member.bannable)
-      return interaction.editReply("❌ Non posso bannare questo utente.");
-
     await member.ban({ reason });
 
     const embed = await new PresetEmbed({
