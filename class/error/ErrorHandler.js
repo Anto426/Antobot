@@ -3,11 +3,12 @@ import JsonHandler from "../json/JsonHandler.js";
 
 class ErrorHandler {
   #json;
-  #BotConsole;
+  #exitHandled = false;
+  #logFile;
 
-  constructor() {
+  constructor(logFile) {
     this.#json = new JsonHandler();
-    this.#BotConsole = BotConsole;
+    this.#logFile = logFile;
     this.initializeGlobalErrorHandlers();
   }
 
@@ -19,13 +20,18 @@ class ErrorHandler {
       this.logError(reason, "unhandledRejection");
     });
     process.on("SIGTERM", () => {
-      this.logError("Received SIGTERM signal", "Process");
-      process.exit(0);
+      this.handleExit("SIGTERM");
     });
     process.on("SIGINT", () => {
-      this.logError("Received SIGINT signal", "Process");
-      process.exit(0);
+      this.handleExit("SIGINT");
     });
+  }
+
+  handleExit(signal) {
+    if (this.#exitHandled) return;
+    this.#exitHandled = true;
+    this.logError(`Received ${signal} signal`, "Process");
+    process.exit(0);
   }
 
   logError(error, name = "System") {
@@ -33,7 +39,7 @@ class ErrorHandler {
     const metadata = { timestamp, source: name };
 
     if (!error) {
-      this.#BotConsole.error(`[${name}] No error object provided`, metadata);
+      BotConsole.error(`[${name}] No error object provided`, metadata);
       return;
     }
 
@@ -41,22 +47,19 @@ class ErrorHandler {
       ...metadata,
       type: error.name || typeof error,
       message: error.message || String(error),
+      stack: error.stack || undefined,
+      options: error.options || undefined,
     };
 
-    if (error.stack) {
-      errorData.stack = error.stack;
-    }
-
-    if (error.options) {
-      errorData.options = error.options;
-    }
-
-    this.#BotConsole.error(
+    BotConsole.error(
       `[${name}] ${errorData.type}: ${errorData.message}`,
       errorData
     );
+
+    if (this.#logFile) {
+      this.#json.append(this.#logFile, errorData);
+    }
   }
 }
 
-const errorhandler = new ErrorHandler();
-export { errorhandler };
+export default new ErrorHandler();
