@@ -21,7 +21,7 @@ export default {
     const client = interaction.client;
 
     const time = new Time();
-    const uptimeMs = process.uptime() * 1000; // uptime in millisecondi
+    const uptimeMs = process.uptime() * 1000;
     const uptimeFormatted = time.formatDuration(uptimeMs);
 
     const servers = client.guilds.cache.size;
