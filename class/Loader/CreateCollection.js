@@ -46,7 +46,10 @@ class CreateCollection {
       });
     }
 
-    BotConsole.info(`Collection loaded with ${this.#collection.size} item(s).`);
+    BotConsole.success(
+      `  Collection loaded with ${this.#collection.size} item(s).`
+    );
+
     return this.#collection;
   }
 
