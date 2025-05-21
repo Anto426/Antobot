@@ -54,7 +54,6 @@ class HelpMenuBuilder {
             };
           });
         if (group.length) {
-          // Separatore visivo per il gruppo
           commandOptions.push({
             label: `📁 ${tag.toUpperCase()}`,
             description: "──────────────",
@@ -75,12 +74,10 @@ class HelpMenuBuilder {
       });
     }
 
-    // Costruisci il menu a tendina
     const selectMenu = new StringSelectMenuBuilder()
       .setCustomId(`help-${interaction.member.id}-main`)
       .setPlaceholder("📂 Seleziona un comando");
 
-    // Solo le opzioni reali (no separatori) vengono aggiunte come opzioni selezionabili
     const menu = new Menu();
     const components = menu.createMenu(
       commandOptions
@@ -173,7 +170,6 @@ class HelpMenuBuilder {
             ? "`🔴 Obbligatorio`"
             : "`🟢 Facoltativo`";
 
-          // Mappa il tipo numerico a stringa più leggibile
           const typeMap = {
             1: "Testo",
             2: "Numero Intero",
