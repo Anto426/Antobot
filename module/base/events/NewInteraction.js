@@ -53,14 +53,12 @@ export default {
 
         const payload = { embeds: [embed], ephemeral: isEphemeral };
 
-        if (!interaction.isButton() && interaction.response) {
-          if (!interaction.replied && !interaction.deferred) {
-            await interaction.reply(payload);
-          } else if (interaction.deferred && !interaction.replied) {
-            await interaction.editReply(payload);
-          } else {
-            await interaction.followUp(payload);
-          }
+        if (!interaction.replied && !interaction.deferred) {
+          await interaction.reply(payload);
+        } else if (interaction.deferred && !interaction.replied) {
+          await interaction.editReply(payload);
+        } else {
+          await interaction.followUp(payload);
         }
       } catch (err) {
         BotConsole.error(`sendEmbed failed: ${err.stack || err.message}`);
