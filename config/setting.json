@@ -60,7 +60,8 @@
                 "embed.json",
                 "hollyday.json",
                 "owner.json",
-                "status.json"
+                "status.json",
+                "sql.json"
             ],
             "apiBase": "https://api.github.com/users/"
         }

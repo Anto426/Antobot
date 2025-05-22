@@ -10,6 +10,7 @@ import CommandGuildUpdate from "../Guild/CommandGuildUpdate.js";
 import SystemCheck from "./SystemCheck.js";
 import dotenv from "dotenv";
 import IntitialOtherModules from "../Loader/IntitialOtherModules.js";
+import DataUpdater from "../Sql/UpdateDB.js";
 dotenv.config();
 
 class BotApplication {
@@ -72,14 +73,10 @@ class BotApplication {
   async bootstrap() {
     await SystemCheck.initialize();
     await this.configManager.startAutoReload();
-
     this.clientInitializer.setCookies(
       this.configManager.getConfig("cookies").youtube
     );
-
-    this.botClient = await this.clientInitializer.initialize(
-      this.configManager.getAllConfig()
-    );
+    this.botClient = await this.clientInitializer.initialize();
     await this.ModuleLoader.initialize();
   }
 
@@ -93,6 +90,7 @@ class BotApplication {
     BotConsole.success("Bot pronto all’uso!");
     (await ModuleLoader.initAll?.()) || Promise.resolve();
     await CommandGuildUpdate.updateGuildsOnStartup();
+    await DataUpdater.updateAll();
     await IntitialOtherModules.Intit();
     await StartupLogger.run();
   }
