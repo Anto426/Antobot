@@ -1,12 +1,8 @@
-import ConfigManager from "../ConfigManager/ConfigManager.js";
-import BotConsole from "../console/BotConsole.js";
-import SqlManager from "./SqlManager.js";
+import ConfigManager from "../ConfigManager/ConfigManager.js"; // Assicurati che il percorso sia corretto
+import BotConsole from "../console/BotConsole.js"; // Assicurati che il percorso sia corretto
+import SqlManager from "./SqlManager.js"; // SqlManager è un'istanza singleton
 
 class DataUpdater {
-  constructor() {
-    BotConsole.info("Istanza di DataUpdater creata.");
-  }
-
   async _ensureDbConnection() {
     if (!SqlManager.pool) {
       BotConsole.info(
@@ -17,12 +13,15 @@ class DataUpdater {
         BotConsole.error("Configurazione SQL non trovata per DataUpdater.");
         throw new Error("Configurazione SQL mancante.");
       }
-      await SqlManager.connect(sqlConfig); // Connect gestisce già il caso di pool esistente
+      // connect gestisce già il caso di pool esistente, quindi non c'è rischio di crearne multiple
+      await SqlManager.connect(sqlConfig);
       BotConsole.success(
         "Connessione a SqlManager (ri)verificata da DataUpdater."
       );
     } else {
-      BotConsole.info("SqlManager già connesso (DataUpdater).");
+      BotConsole.info(
+        "SqlManager già connesso (DataUpdater), utilizzo della pool esistente."
+      );
     }
   }
 
@@ -39,7 +38,7 @@ class DataUpdater {
       "================================================================"
     );
     BotConsole.info(
-      `INIZIO PROCESSO DI AGGIORNAMENTO DATI (DataUpdater) - ${new Date().toISOString()}`
+      `INIZIO PROCESSO DI AGGIORNAMENTO COMPLETO DATI - ${new Date().toISOString()}`
     );
     BotConsole.info(
       "================================================================"
@@ -55,6 +54,7 @@ class DataUpdater {
       const dbGuilds = await SqlManager.getAllGuilds();
       for (const dbGuild of dbGuilds) {
         if (!allClientGuildIds.has(dbGuild.ID)) {
+          // Confronto VARCHAR con VARCHAR
           BotConsole.warning(
             `Gilda ${dbGuild.NOME} (${dbGuild.ID}) presente nel DB ma non nel client. Rimozione...`
           );
@@ -75,9 +75,8 @@ class DataUpdater {
         );
         BotConsole.info(`${guildLogPrefix} Inizio sincronizzazione`);
 
-        // 2. Sincronizza Gilda
+        // 2. Sincronizza Gilda (solo nome, gli ID FK verranno gestiti dal comando /setguild)
         await SqlManager.synchronizeGuild({ id: guild.id, name: guild.name });
-        // Il log di successo/aggiornamento/esistenza è in SqlManager.synchronizeGuild
 
         // 3. Sincronizza Ruoli della Gilda
         BotConsole.info(`${guildLogPrefix} Sincronizzazione Ruoli...`);
@@ -95,12 +94,12 @@ class DataUpdater {
           }
         }
         for (const role of guild.roles.cache.values()) {
-          if (role.id === guild.id) continue;
+          if (role.id === guild.id) continue; // Salta @everyone
           await SqlManager.synchronizeRole({
-            id: role.id,
+            id: role.id, // VARCHAR
             name: role.name,
             color: role.color,
-            guildId: guild.id,
+            guildId: guild.id, // VARCHAR
           });
         }
         BotConsole.info(`${guildLogPrefix} Sincronizzazione Ruoli COMPLETATA.`);
@@ -111,7 +110,7 @@ class DataUpdater {
         );
         let fetchedMembers;
         try {
-          fetchedMembers = await guild.members.fetch();
+          fetchedMembers = await guild.members.fetch(); // Recupera tutti i membri
         } catch (fetchError) {
           BotConsole.error(
             `${guildLogPrefix} Errore fatale recupero membri. Salto membri per questa gilda.`,
@@ -127,6 +126,7 @@ class DataUpdater {
 
         for (const dbMember of dbGuildMemberObjects) {
           if (!clientMemberIdsInGuild.has(dbMember.ID)) {
+            // Confronto VARCHAR con VARCHAR
             BotConsole.warning(
               `${guildLogPrefix} Membro ${dbMember.NOME} (${dbMember.ID}) non più in gilda (client). Rimozione GUILD_MEMBER...`
             );
@@ -136,14 +136,22 @@ class DataUpdater {
 
         let memberCounter = 0;
         for (const member of fetchedMembers.values()) {
+          if (member.user.bot) {
+            BotConsole.debug(
+              `${guildLogPrefix} Saltato membro bot: ${member.user.tag} (${member.id})`
+            );
+            continue;
+          }
           memberCounter++;
           const memberLogPrefix = `${guildLogPrefix} [Membro ${memberCounter}/${fetchedMembers.size}: ${member.user.tag} (${member.id})]`;
-          BotConsole.debug(`${memberLogPrefix} Elaborazione...`);
 
           const memberGlobalName =
             member.user.globalName ||
             member.user.displayName ||
             member.user.username;
+          BotConsole.debug(
+            `${memberLogPrefix} Elaborazione (Nome Globale: "${memberGlobalName}")...`
+          );
 
           await SqlManager.synchronizeGlobalMember({
             id: member.id,
@@ -154,7 +162,7 @@ class DataUpdater {
           const discordMemberRoleIdsSet = new Set(
             member.roles.cache
               .filter((role) => role.id !== guild.id)
-              .map((role) => role.id)
+              .map((role) => role.id) // Tutti VARCHAR
           );
           await SqlManager.synchronizeMemberRolesForGuild(
             member.id,
@@ -171,30 +179,26 @@ class DataUpdater {
       }
 
       const endTime = Date.now();
-      const duration = (endTime - startTime) / 1000; // secondi
-      BotConsole.success(
-        "================================================================"
-      );
+      const duration = (endTime - startTime) / 1000;
       BotConsole.success(
         `PROCESSO DI AGGIORNAMENTO COMPLETO DATI TERMINATO IN ${duration.toFixed(
           2
         )} secondi.`
       );
-      BotConsole.success(
-        "================================================================"
-      );
     } catch (error) {
+      // Questo è il catch principale di updateAll
       const endTime = Date.now();
       const duration = (endTime - startTime) / 1000;
       BotConsole.error(
         `ERRORE CRITICO NON GESTITO durante l'aggiornamento completo dei dati (dopo ${duration.toFixed(
           2
-        )}s):`,
-        error
+        )}s):`
       );
+      console.error(error); // Stampa l'errore completo, inclusa la traccia dello stack
     } finally {
-      BotConsole.info("Processo DataUpdater.updateAll formalmente terminato.");
-      // Non chiudere la pool qui; SqlManager.closePool() va chiamato all'uscita dell'applicazione.
+      BotConsole.info(
+        "Processo DataUpdater.updateAll formalmente terminato (con o senza errori)."
+      );
     }
   }
 }
