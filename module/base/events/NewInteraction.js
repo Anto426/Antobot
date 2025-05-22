@@ -20,7 +20,7 @@ async function respondToInteraction(
       await interaction.editReply(payload);
     } else {
 
-      BotConsole.warn(
+      BotConsole.warning(
         `[NewInteraction] Tentativo di followUp per interazione non deferred/replied: ${interaction.id}`
       );
       await interaction.followUp(payload);
@@ -57,7 +57,7 @@ export default {
       client.selectMenus.get(commandName); // Aggiungi selectMenus se li usi
 
     if (!command) {
-      BotConsole.warn(
+      BotConsole.warning(
         `[NewInteraction] Comando/Componente non trovato per: ${commandName} (ID: ${interaction.id})`
       );
       if (interaction.isRepliable()) {
