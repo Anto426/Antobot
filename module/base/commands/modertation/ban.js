@@ -1,9 +1,9 @@
 import { PermissionsBitField } from "discord.js";
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
 
 export default {
-  name: "kick",
-  permissions: [PermissionsBitField.Flags.KickMembers],
+  name: "ban",
+  permissions: [PermissionsBitField.Flags.BanMembers],
   isActive: true,
   isBotAllowed: false,
   isOwnerOnly: false,
@@ -11,18 +11,18 @@ export default {
   isTestCommand: false,
   isVisibleInHelp: true,
   data: {
-    name: "kick",
-    description: "Espelle un utente dal server",
+    name: "ban",
+    description: "Banna un utente dal server",
     options: [
       {
         name: "utente",
-        description: "L'utente da espellere",
+        description: "L'utente da bannare",
         type: 6,
         required: true,
       },
       {
         name: "motivo",
-        description: "Motivo del kick",
+        description: "Motivo del ban",
         type: 3,
         required: false,
       },
@@ -34,12 +34,7 @@ export default {
       interaction.options.getString("motivo") || "Nessun motivo fornito";
     const member = interaction.guild.members.cache.get(target.id);
 
-    if (!member)
-      return interaction.editReply("❌ Utente non trovato nel server.");
-    if (!member.kickable)
-      return interaction.editReply("❌ Non posso espellere questo utente.");
-
-    await member.kick(reason);
+    await member.ban({ reason });
 
     const embed = await new PresetEmbed({
       guild: interaction.guild,
@@ -47,7 +42,7 @@ export default {
     }).init();
 
     embed
-      .setMainContent("👢 Utente Espulso", `**${target.tag}** è stato espulso.`)
+      .setMainContent("🔨 Utente Bannato", `**${target.tag}** è stato bannato.`)
       .addField("Motivo", reason, false)
       .addField("Moderatore", interaction.user.tag, false)
       .setThumbnailUrl(target.displayAvatarURL({ dynamic: true }));

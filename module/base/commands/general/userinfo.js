@@ -1,4 +1,5 @@
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import { ApplicationCommandOptionType } from "discord.js";
+import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
 
 export default {
   name: "userinfo",
@@ -16,7 +17,7 @@ export default {
       {
         name: "utente",
         description: "L'utente di cui vuoi vedere le informazioni",
-        type: 6,
+        type: ApplicationCommandOptionType.User,
         required: false,
       },
     ],

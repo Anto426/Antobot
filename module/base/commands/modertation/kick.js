@@ -1,9 +1,9 @@
-import { PermissionsBitField } from "discord.js";
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import { PermissionsBitField, ApplicationCommandOptionType } from "discord.js";
+import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
 
 export default {
-  name: "ban",
-  permissions: [PermissionsBitField.Flags.BanMembers],
+  name: "kick",
+  permissions: [PermissionsBitField.Flags.KickMembers],
   isActive: true,
   isBotAllowed: false,
   isOwnerOnly: false,
@@ -11,19 +11,19 @@ export default {
   isTestCommand: false,
   isVisibleInHelp: true,
   data: {
-    name: "ban",
-    description: "Banna un utente dal server",
+    name: "kick",
+    description: "Espelle un utente dal server",
     options: [
       {
         name: "utente",
-        description: "L'utente da bannare",
-        type: 6,
+        description: "L'utente da espellere",
+        type: ApplicationCommandOptionType.User,
         required: true,
       },
       {
         name: "motivo",
-        description: "Motivo del ban",
-        type: 3,
+        description: "Motivo del kick",
+        type: ApplicationCommandOptionType.String,
         required: false,
       },
     ],
@@ -34,7 +34,12 @@ export default {
       interaction.options.getString("motivo") || "Nessun motivo fornito";
     const member = interaction.guild.members.cache.get(target.id);
 
-    await member.ban({ reason });
+    if (!member)
+      return interaction.editReply("❌ Utente non trovato nel server.");
+    if (!member.kickable)
+      return interaction.editReply("❌ Non posso espellere questo utente.");
+
+    await member.kick(reason);
 
     const embed = await new PresetEmbed({
       guild: interaction.guild,
@@ -42,7 +47,7 @@ export default {
     }).init();
 
     embed
-      .setMainContent("🔨 Utente Bannato", `**${target.tag}** è stato bannato.`)
+      .setMainContent("👢 Utente Espulso", `**${target.tag}** è stato espulso.`)
       .addField("Motivo", reason, false)
       .addField("Moderatore", interaction.user.tag, false)
       .setThumbnailUrl(target.displayAvatarURL({ dynamic: true }));
