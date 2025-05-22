@@ -32,7 +32,7 @@ class UpdateDB {
       const dbGuilds = await SqlManager.getAllGuilds();
       for (const dbGuild of dbGuilds) {
         if (!allClientGuildIds.has(dbGuild.ID)) {
-          BotConsole.warn(
+          BotConsole.warning(
             `[DataUpdater] Gilda ${dbGuild.NOME} (${dbGuild.ID}) (DB) non nel client. Rimozione...`
           );
           await SqlManager.deleteGuild(dbGuild.ID);
@@ -56,7 +56,7 @@ class UpdateDB {
         const dbRolesInThisGuild = await SqlManager.getRolesByGuild(guild.id);
         for (const dbRole of dbRolesInThisGuild) {
           if (!clientGuildRoleIds.has(dbRole.ID)) {
-            BotConsole.warn(
+            BotConsole.warning(
               `${guildLogPrefix} Ruolo ${dbRole.NOME} (${dbRole.ID}) (DB) non più nel client. Rimozione...`
             );
             await SqlManager.deleteRole(dbRole.ID);
@@ -91,7 +91,7 @@ class UpdateDB {
         );
         for (const dbMember of dbGuildMemberObjects) {
           if (!clientMemberIdsInGuild.has(dbMember.ID)) {
-            BotConsole.warn(
+            BotConsole.warning(
               `${guildLogPrefix} Membro ${dbMember.NOME} (${dbMember.ID}) non più in gilda. Rimozione GUILD_MEMBER...`
             );
             await SqlManager.removeMemberFromGuild(guild.id, dbMember.ID);

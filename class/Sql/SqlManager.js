@@ -9,7 +9,7 @@ class SqlManager {
 
   async connect(config) {
     if (this.pool) {
-      BotConsole.warn(
+      BotConsole.warning(
         "SqlManager.connect: Pool MySQL già esistente. Verifica..."
       );
       try {
@@ -114,7 +114,7 @@ class SqlManager {
         const uniqueValues = uniqueKeyFields
           .map((k) => data[k] ?? "N/A")
           .join("-");
-        BotConsole.warn(
+        BotConsole.warning(
           `[${table}] Entità chiave ~${uniqueValues} già esistente (ER_DUP_ENTRY).`
         );
         return {
@@ -542,7 +542,7 @@ class SqlManager {
     }
     try {
       await c.rollback();
-      BotConsole.warn(`TXN Rollback (Conn ${c.threadId})`);
+      BotConsole.warning(`TXN Rollback (Conn ${c.threadId})`);
     } catch (e) {
       BotConsole.error(`TXN Rollback Err (Conn ${c.threadId})`, e);
     } finally {
@@ -559,7 +559,7 @@ class SqlManager {
       } catch (err) {
         BotConsole.error("MySQL Pool close error:", err);
       }
-    } else BotConsole.warn("MySQL Pool close attempt on uninit pool.");
+    } else BotConsole.warning("MySQL Pool close attempt on uninit pool.");
   }
 }
 

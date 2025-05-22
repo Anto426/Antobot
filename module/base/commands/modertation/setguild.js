@@ -210,7 +210,7 @@ export default {
               try {
                 (await guild.channels.fetch(id).catch(() => null))?.delete();
               } catch (e) {
-                BotConsole.warn(`Del TempCh ${id} err: ${e.message}`);
+                BotConsole.warning(`Del TempCh ${id} err: ${e.message}`);
               }
             }
             await SqlManager.deleteTempChannel(guildId);
@@ -277,7 +277,7 @@ export default {
               try {
                 (await guild.channels.fetch(id).catch(() => null))?.delete();
               } catch (e) {
-                BotConsole.warn(`Del HollyCh ${id} err: ${e.message}`);
+                BotConsole.warning(`Del HollyCh ${id} err: ${e.message}`);
               }
             }
             await SqlManager.deleteHollyday(guildId);
