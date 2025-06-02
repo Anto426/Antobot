@@ -244,8 +244,9 @@ export default {
             });
             const tc = await guild.channels.create({
               name: "📢 annunci-evento",
-              type: ChannelType.GuildText,
+              type: ChannelType.GuildVoice,
               parent: cat.id,
+              permissionOverwrites: lockedPerms,
               reason,
             });
             const vc = await guild.channels.create({
@@ -425,7 +426,6 @@ export default {
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       BotConsole.error(`[SetGuild - ${guildId}] Errore critico:`, error);
-      console.error(`[SetGuild - ${guildId}] DETTAGLIO ERRORE CRITICO:`, error);
 
       const errorReplyEmbed = new PresetEmbed({ guild: interaction.guild });
       if (error.code === 50013) {
