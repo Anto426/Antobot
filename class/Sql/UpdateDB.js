@@ -139,7 +139,7 @@ class UpdateDB {
           (endTime - startTime) / 1000
         }s):`
       );
-      console.error(error);
+      BotConsole.error(error);
     } finally {
       BotConsole.info("[DataUpdater] Processo updateAll terminato.");
     }
