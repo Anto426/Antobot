@@ -93,6 +93,20 @@ class SqlManager {
     return rows;
   }
 
+  async _exists(table, whereConditions) {
+    const fields = Object.keys(whereConditions);
+    if (fields.length === 0) return false;
+
+    const whereClause = fields.map((field) => `\`${field}\` = ?`).join(" AND ");
+    const params = fields.map((field) => whereConditions[field]);
+
+    const query = `SELECT 1 FROM \`${table}\` WHERE ${whereClause} LIMIT 1`;
+
+    const row = await this._getOne(query, params);
+
+    return !!row; // Restituisce true se la riga esiste, false altrimenti
+  }
+
   async _genericInsert(table, data, uniqueKeyFields = ["ID"]) {
     const keys = Object.keys(data).filter((k) => data[k] !== undefined);
     const values = keys.map((k) => data[k]);
@@ -254,26 +268,39 @@ class SqlManager {
     return { operation: "no_change", data: existingRole, id: id };
   }
 
-  async synchronizeGlobalMember(memberDataInput) {
-    /* ... come ultima versione ... */
-    const { id, globalName } = memberDataInput;
+  async synchronizeGlobalMember({ id, globalName }) {
     const existingMember = await this.getMemberById(id);
     const memberDataForDb = { ID: id, NOME: globalName };
 
     if (!existingMember) {
-      return this.addMember(memberDataForDb);
+      return this._genericInsert("MEMBER", memberDataForDb);
     }
+
     if (existingMember.NOME !== globalName) {
       return this.updateMember(id, { NOME: globalName });
     }
+
     return { operation: "no_change", data: existingMember, id: id };
   }
 
   async ensureGuildMemberAssociation(guildId, memberId) {
-    /* ... come ultima versione ... */
-    return this.addGuildMember({ GUILD_ID: guildId, MEMBER_ID: memberId });
-  }
+    const alreadyExists = await this._exists("GUILD_MEMBER", {
+      GUILD_ID: guildId,
+      MEMBER_ID: memberId,
+    });
 
+    if (alreadyExists) {
+      return {
+        operation: "exists",
+        message: "Associazione gilda-membro già presente.",
+      };
+    }
+
+    return this._genericInsert("GUILD_MEMBER", {
+      GUILD_ID: guildId,
+      MEMBER_ID: memberId,
+    });
+  }
   async synchronizeMemberRolesForGuild(
     memberId,
     guildId,
