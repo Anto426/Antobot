@@ -91,7 +91,7 @@ class BotApplication {
     (await ModuleLoader.initAll?.()) || Promise.resolve();
     await CommandGuildUpdate.updateGuildsOnStartup();
     await SynchronizationManager.synchronizeAll();
-    await IntitialOtherModules.Intit();
+    await IntitialOtherModules.Init();
     await StartupLogger.run();
   }
 
