@@ -166,7 +166,7 @@ export default {
     const welcomeTitle = isReturningMember
       ? `Bentornato/a, ${member.displayName}!`
       : `Benvenuto/a, ${member.displayName}!`;
-    const description = `🎉 **${user.tag}** si è unito/a a **${guild.name}**!\nOra siamo in **${guild.memberCount}** membri!`;
+    const description = `🎉 ${member} si è unito/a a **${guild.name}**!\nOra siamo in **${guild.memberCount}** membri!`;
     welcomeEmbed.setMainContent(welcomeTitle, description);
 
     await welcomeImageService.init();
