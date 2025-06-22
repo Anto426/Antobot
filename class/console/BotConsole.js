@@ -18,7 +18,7 @@ const DEFAULT_CONFIG = {
         branch: "╠═▶",
         last: "╚═▶",
         vertical: "║   ", // Spazio leggermente aumentato per un possibile miglior allineamento
-        space: "    ",   // Spazio leggermente aumentato
+        space: "    ", // Spazio leggermente aumentato
       },
     },
     gradients: {
@@ -60,14 +60,15 @@ class BotConsole {
       theme: {
         ...DEFAULT_CONFIG.theme,
         ...(config.theme || {}), // Assicura che config.theme esista
-        symbols: { // Unisci symbols specificamente se necessario
-            ...DEFAULT_CONFIG.theme.symbols,
-            ...(config.theme?.symbols || {}),
-            tree: {
-                ...DEFAULT_CONFIG.theme.symbols.tree,
-                ...(config.theme?.symbols?.tree || {})
-            }
-        }
+        symbols: {
+          // Unisci symbols specificamente se necessario
+          ...DEFAULT_CONFIG.theme.symbols,
+          ...(config.theme?.symbols || {}),
+          tree: {
+            ...DEFAULT_CONFIG.theme.symbols.tree,
+            ...(config.theme?.symbols?.tree || {}),
+          },
+        },
       },
       boxenOptions: {
         ...DEFAULT_CONFIG.boxenOptions,
@@ -99,10 +100,14 @@ class BotConsole {
 
   _getSymbol(type) {
     const style = this._getStyle(type);
-    return this.config.theme.symbols[style.symbol] || DEFAULT_CONFIG.theme.symbols.info;
+    return (
+      this.config.theme.symbols[style.symbol] ||
+      DEFAULT_CONFIG.theme.symbols.info
+    );
   }
 
-  _centerText(text) { // La tua implementazione originale
+  _centerText(text) {
+    // La tua implementazione originale
     const width = 60;
     const len = stripAnsi(text).length;
     if (len >= width) return text;
@@ -110,7 +115,8 @@ class BotConsole {
     return " ".repeat(left) + text;
   }
 
-  formatHeader(text) { // La tua implementazione originale
+  formatHeader(text) {
+    // La tua implementazione originale
     const width = 60;
     const gradBorder = gradient(["#6a11cb", "#2575fc"]);
     const gradText = gradient(["#f7971e", "#ffd200"]);
@@ -150,7 +156,7 @@ class BotConsole {
       borderColor: gradColors[0], // Usa il primo colore del gradiente del tipo di messaggio
       width: 115, // Manteniamo la larghezza fissa originale
       padding: this.config.boxenOptions.padding, // Usa il padding dalla config (originale era 0)
-      margin: this.config.boxenOptions.margin,   // Usa il margin dalla config (originale era 0)
+      margin: this.config.boxenOptions.margin, // Usa il margin dalla config (originale era 0)
     };
 
     const box = boxen(contentForBox, boxOptions);
@@ -163,16 +169,19 @@ class BotConsole {
     const grad = this._getGradient(type);
     if (value == null) return chalk.gray.italic(`✗ ${value}`); // Gestisce sia null che undefined qui
     if (Array.isArray(value)) {
-      const preview = value.slice(0, 3).map(v => this.formatValue(v, type)).join(grad(", ")); // Formatta anche i valori interni
+      const preview = value
+        .slice(0, 3)
+        .map((v) => this.formatValue(v, type))
+        .join(grad(", ")); // Formatta anche i valori interni
       return grad(
         `[${value.length}]⟦${preview}${value.length > 3 ? grad("…") : ""}⟧`
       );
     }
     if (value instanceof Date) return grad(`📅 ${value.toISOString()}`);
     if (value instanceof Error) {
-        // Mostra lo stack se l'errore lo ha e la profondità lo permette (concetto non implementato qui)
-        // Per ora, solo il messaggio.
-        return grad(`🔥 Error: ${value.message}`);
+      // Mostra lo stack se l'errore lo ha e la profondità lo permette (concetto non implementato qui)
+      // Per ora, solo il messaggio.
+      return grad(`🔥 Error: ${value.message}`);
     }
 
     switch (typeof value) {
@@ -184,12 +193,13 @@ class BotConsole {
         return grad(`⟦${value}⟧`);
       case "function":
         return grad(`⚡ fn:${value.name || "anon"}`);
-      case "object": { // Per oggetti semplici passati a formatValue (es. foglie di formatTree)
+      case "object": {
+        // Per oggetti semplici passati a formatValue (es. foglie di formatTree)
         const keys = Object.keys(value);
         if (keys.length === 0) return grad("{}");
         const preview = keys
           .slice(0, 2) // Leggermente meno verboso per le foglie
-          .map((k) => `${grad(k)}:${this.formatValue(value[k],type)}`)
+          .map((k) => `${grad(k)}:${this.formatValue(value[k], type)}`)
           .join(grad(", "));
         return grad(
           `{${keys.length}}⚋{${preview}${keys.length > 2 ? grad("…") : ""}}`
@@ -206,17 +216,22 @@ class BotConsole {
     const grad = this._getGradient(type);
 
     // Se obj è un errore, formatValue lo gestisce bene come stringa singola (o con stack)
-    if (obj instanceof Error || obj instanceof Date || !obj || typeof obj !== "object" || Array.isArray(obj)) {
-        // Se è un array, formatValue lo gestirà con anteprima.
-        // Se vogliamo un albero per array, dobbiamo modificare qui.
-        // Per ora, usiamo formatValue per non-oggetti o tipi speciali.
-        return prefix + this.formatValue(obj, type);
+    if (
+      obj instanceof Error ||
+      obj instanceof Date ||
+      !obj ||
+      typeof obj !== "object" ||
+      Array.isArray(obj)
+    ) {
+      // Se è un array, formatValue lo gestirà con anteprima.
+      // Se vogliamo un albero per array, dobbiamo modificare qui.
+      // Per ora, usiamo formatValue per non-oggetti o tipi speciali.
+      return prefix + this.formatValue(obj, type);
     }
-
 
     const entries = Object.entries(obj);
     if (entries.length === 0) {
-        return prefix + grad( (Array.isArray(obj) ? "[]" : "{}") );
+      return prefix + grad(Array.isArray(obj) ? "[]" : "{}");
     }
 
     return entries
@@ -227,14 +242,18 @@ class BotConsole {
         const nextPrefix = prefix + (isLast ? space : vertical);
 
         // Se val è un oggetto (e non null, né Date, né Error) O un array, continua la ricorsione
-        if (val && typeof val === "object" && !(val instanceof Date) && !(val instanceof Error)) {
+        if (
+          val &&
+          typeof val === "object" &&
+          !(val instanceof Date) &&
+          !(val instanceof Error)
+        ) {
           return `${line}\n${this.formatTree(val, type, nextPrefix)}`;
         }
         return line + this.formatValue(val, type);
       })
       .join("\n");
   }
-
 
   /**
    * Metodo write modificato per gestire "n parametri".
@@ -246,8 +265,16 @@ class BotConsole {
     const complexArgsToTree = [];
 
     for (const arg of args) {
-      if (typeof arg === 'string' || typeof arg === 'number' || typeof arg === 'boolean' || arg === null || arg === undefined) {
-        mainMessageParts.push(arg === null ? 'null' : arg === undefined ? 'undefined' : String(arg));
+      if (
+        typeof arg === "string" ||
+        typeof arg === "number" ||
+        typeof arg === "boolean" ||
+        arg === null ||
+        arg === undefined
+      ) {
+        mainMessageParts.push(
+          arg === null ? "null" : arg === undefined ? "undefined" : String(arg)
+        );
       } else {
         // Oggetti, Array, Errori, Date verranno gestiti da formatTree
         complexArgsToTree.push(arg);
@@ -261,19 +288,18 @@ class BotConsole {
     if (complexArgsToTree.length > 0) {
       complexArgsToTree.forEach((obj) => {
         // Non aggiungo un'intestazione extra qui, lascio che formatTree produca la sua struttura
-        console.log(this.formatTree(obj, type, this.config.theme.symbols.tree.space)); // Inizia l'albero con un indent
+        console.log(
+          this.formatTree(obj, type, this.config.theme.symbols.tree.space)
+        ); // Inizia l'albero con un indent
       });
     }
     console.log(); // Riga vuota finale per spaziatura
   }
-
-  section(title) {
-    console.log(this.formatHeader(title));
-  }
 }
 
-function stripAnsi(str) { // La tua funzione originale
-  if (typeof str !== 'string') return ''; // Aggiunto controllo per robustezza
+function stripAnsi(str) {
+  // La tua funzione originale
+  if (typeof str !== "string") return ""; // Aggiunto controllo per robustezza
   return str.replace(
     // eslint-disable-next-line no-control-regex
     /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,

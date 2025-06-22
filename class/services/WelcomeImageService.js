@@ -15,7 +15,6 @@ class WelcomeImageService {
     if (this.#isReady) return;
     this.#isReady = true; // Preveniamo tentativi multipli
 
-    BotConsole.section("INIZIALIZZAZIONE SISTEMA IMMAGINI");
 
     try {
       this.#config = SystemCheck.getConfigProperty("paths", "assets", "canvas");

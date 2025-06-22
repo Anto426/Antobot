@@ -17,7 +17,6 @@ export default class Holiday {
     if (this.#isInitialized) return;
     this.#isInitialized = true;
 
-    BotConsole.section("INIZIALIZZAZIONE SISTEMA FESTIVITÀ");
     try {
       const holidayList = ConfigManager.getConfig("hollyday")?.holidays;
       if (

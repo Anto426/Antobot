@@ -5,7 +5,6 @@ import ConfigManager from "../ConfigManager/ConfigManager.js";
 class SynchronizationManager {
   async synchronizeAll() {
     const startTime = Date.now();
-    BotConsole.section("INIZIO SINCRONIZZAZIONE GLOBALE");
 
     try {
       await this.#ensureDbConnection();
