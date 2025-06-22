@@ -12,7 +12,6 @@ class ApplicationBootstrap {
     errorhandler.initializeGlobalErrorHandlers();
     try {
       await ApplicationManager.run();
-      BotConsole.info("Application started successfully.");
     } catch (error) {
       BotConsole.error(
         "Failed to initialize application:",

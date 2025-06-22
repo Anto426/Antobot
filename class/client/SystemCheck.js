@@ -29,6 +29,16 @@ class SystemCheck {
     }
   }
 
+  getConfigProperty(...path) {
+    try {
+      // Questo metodo riutilizza il tuo robusto helper privato #resolvePath
+      return this.#resolvePath(path);
+    } catch (error) {
+      // In caso di errore (percorso non trovato), ritorna null invece di crashare.
+      return null;
+    }
+  }
+
   #validateConfig() {
     if (
       !this.#config ||

@@ -1,9 +1,20 @@
+// In ../../../../class/embed/PresetEmbed.js
+
 import { EmbedBuilder } from "discord.js";
-import DynamicColor from "../color/DynamicColor.js";
-import ColorFunctions from "../color/ColorFunctions.js";
+import DynamicColor from "../color/DynamicColor.js"; // Assicurati che il percorso sia corretto
+import ColorFunctions from "../color/ColorFunctions.js"; // Assicurati che il percorso sia corretto
+
+// Definisci i tuoi colori di stato
+const STATUS_COLORS = {
+  SUCCESS: "#57F287", // Verde Discord
+  WARNING: "#FEE75C", // Giallo Discord
+  DANGER: "#ED4245", // Rosso Discord
+  INFO: "#5865F2", // Blu Discord / Blurple
+  DEFAULT: "#8A0303", // Il tuo colore di default
+};
 
 export default class PresetEmbed extends EmbedBuilder {
-  static DEFAULT_COLOR = "#8A0303";
+  static DEFAULT_COLOR = STATUS_COLORS.DEFAULT; // Usa la costante definita sopra
   static AVATAR_OPTIONS = { dynamic: true, format: "png", size: 512 };
 
   #guild;
@@ -16,6 +27,8 @@ export default class PresetEmbed extends EmbedBuilder {
     this.#guild = guild;
     this.#member = member;
     this.#image = image;
+    // this.setColor(PresetEmbed.DEFAULT_COLOR); // Imposta il colore nel costruttore o in init()
+    // this.setTimestamp(); // Può essere chiamato qui o in init()
   }
 
   async init(useDynamicColor = true) {
@@ -24,7 +37,11 @@ export default class PresetEmbed extends EmbedBuilder {
     if (useDynamicColor) {
       try {
         await this._applyColorFromImage();
-      } catch {
+      } catch (err) {
+        BotConsole.debug(
+          "PresetEmbed: Fallito _applyColorFromImage, uso colore default.",
+          err.message
+        );
         this.setColor(PresetEmbed.DEFAULT_COLOR);
       }
     } else {
@@ -46,11 +63,10 @@ export default class PresetEmbed extends EmbedBuilder {
     if (this.#member) {
       const u = this.#member.user;
       this.setFooter({
-        text: `📢 Richiesta di ${u.username}`,
+        text: `📢 Richiesta da ${u.username}`,
         iconURL: u.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS),
       });
     }
-
     return this;
   }
 
@@ -61,13 +77,23 @@ export default class PresetEmbed extends EmbedBuilder {
       this.#guild?.client?.user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS);
 
     if (!url) {
+      BotConsole.debug(
+        "PresetEmbed: Nessuna URL immagine per _applyColorFromImage, uso colore default."
+      );
       this.setColor(PresetEmbed.DEFAULT_COLOR);
       return;
     }
 
     await this.#colorizer.setImgUrl(url);
     const { palette } = await this.#colorizer.getPaletteAndTextColor();
-    if (!palette?.length) throw new Error("Palette vuota");
+    if (!palette?.length) {
+      BotConsole.debug(
+        "PresetEmbed: Palette vuota da _applyColorFromImage, uso colore default."
+      );
+      this.setColor(PresetEmbed.DEFAULT_COLOR);
+      // throw new Error("Palette vuota"); // Forse non lanciare un errore, ma usa un default
+      return;
+    }
 
     const hex = ColorFunctions.rgbToHex(...palette[0]);
     this.setColor(hex);
@@ -89,7 +115,7 @@ export default class PresetEmbed extends EmbedBuilder {
   }
 
   setImageUrl(url) {
-    this.#image = url;
+    this.#image = url; // Potrebbe servire per _applyColorFromImage se chiamato dopo
     return this.setImage(url);
   }
 
@@ -107,7 +133,9 @@ export default class PresetEmbed extends EmbedBuilder {
   }
 
   setMainContent(title, description) {
-    return this.setTitle(title).setDescription(description);
+    if (title) this.setTitle(title); // Controlla se title è fornito
+    if (description) this.setDescription(description); // Controlla se description è fornita
+    return this;
   }
 
   addFieldInline(name, value) {
@@ -147,5 +175,58 @@ export default class PresetEmbed extends EmbedBuilder {
     const [nr, ng, nb] = [r, g, b].map((v) => Math.min(255, v + amount));
 
     return this.setColor(ColorFunctions.rgbToHex(nr, ng, nb));
+  }
+
+  // --- METODI DI STATO K (KDanger, KSuccess, etc.) ---
+  /**
+   * Imposta l'embed per uno stato di successo.
+   * @param {string} [title] Il titolo dell'embed.
+   * @param {string} [description] La descrizione dell'embed.
+   * @returns {this} L'istanza dell'embed per concatenazione.
+   */
+  KSuccess(title, description) {
+    this.setColor(STATUS_COLORS.SUCCESS);
+    if (title) this.setTitle(title);
+    if (description) this.setDescription(description);
+    return this;
+  }
+
+  /**
+   * Imposta l'embed per uno stato di avvertimento.
+   * @param {string} [title] Il titolo dell'embed.
+   * @param {string} [description] La descrizione dell'embed.
+   * @returns {this} L'istanza dell'embed per concatenazione.
+   */
+  KWarning(title, description) {
+    this.setColor(STATUS_COLORS.WARNING);
+    if (title) this.setTitle(title);
+    if (description) this.setDescription(description);
+    return this;
+  }
+
+  /**
+   * Imposta l'embed per uno stato di pericolo/errore.
+   * @param {string} [title] Il titolo dell'embed.
+   * @param {string} [description] La descrizione dell'embed.
+   * @returns {this} L'istanza dell'embed per concatenazione.
+   */
+  KDanger(title, description) {
+    this.setColor(STATUS_COLORS.DANGER);
+    if (title) this.setTitle(title);
+    if (description) this.setDescription(description);
+    return this;
+  }
+
+  /**
+   * Imposta l'embed per uno stato informativo.
+   * @param {string} [title] Il titolo dell'embed.
+   * @param {string} [description] La descrizione dell'embed.
+   * @returns {this} L'istanza dell'embed per concatenazione.
+   */
+  KInfo(title, description) {
+    this.setColor(STATUS_COLORS.INFO);
+    if (title) this.setTitle(title);
+    if (description) this.setDescription(description);
+    return this;
   }
 }

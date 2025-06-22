@@ -48,7 +48,7 @@ class CommandGuildUpdate {
           BotConsole.error(
             `Errore nella registrazione di ${cmd.name} in ${guild.name}`
           );
-          console.error(err);
+          BotConsole.error(err);
         });
       })
     );

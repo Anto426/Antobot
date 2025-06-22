@@ -1,4 +1,4 @@
-import HelpMenuBuilder from "../../../class/help/helpBuilder.js";
+import HelpMenuBuilder from "../../../../class/help/helpBuilder.js";
 
 export default {
   name: "help",

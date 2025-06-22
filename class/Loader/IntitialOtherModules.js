@@ -2,35 +2,47 @@ import SystemCheck from "../client/SystemCheck.js";
 import BotConsole from "../console/BotConsole.js";
 
 class IntitialOtherModules {
-  async Intit() {
-    try {
-      BotConsole.info("Initializing other modules...");
-      client.other.forEach((module, key, map) => {
-        if (SystemCheck.isFeatureEnabled(module.name.toLowerCase())) {
-          if (typeof module === "function") {
-            const instance = new module();
 
-            try {
-              instance.run();
-              BotConsole.success(
-                `Module ${module.name} initialized successfully`
-              );
-              map.set(key, instance);
-            } catch (error) {
-              BotConsole.error(
-                `Failed to initialize module ${module.name}: ${error.message}`
-              );
-            }
-          } else {
-            BotConsole.success(`Module ${module.name} already initialized`);
-          }
-        } else {
-          BotConsole.warning(`Module ${module.name} is disabled`);
+  async Init() {
+    BotConsole.section("INIZIALIZZAZIONE MODULI SECONDARI (IN-PLACE)");
+
+    for (const [key, moduleToLoad] of client.other.entries()) {
+      if (typeof moduleToLoad === "function") {
+        const moduleName = moduleToLoad.name;
+
+        if (!SystemCheck.isFeatureEnabled(moduleName.toLowerCase())) {
+          BotConsole.warning(`Modulo "${moduleName}" è disabilitato.`);
+          client.other.delete(key);
+          continue;
         }
-      });
-    } catch (error) {
-      BotConsole.error("Failed to initialize other modules", error);
+
+        try {
+          BotConsole.info(
+            `Inizializzazione e sovrascrittura modulo: ${moduleName}...`
+          );
+
+          const instance = new moduleToLoad();
+
+          if (typeof instance.init === "function") {
+            await instance.init();
+          } else if (typeof instance.run === "function") {
+            await instance.run();
+          } 
+          client.other.set(key, instance);
+
+          BotConsole.success(
+            `Modulo ${moduleName} (${key}) inizializzato e sovrascritto.`
+          );
+        } catch (error) {
+          BotConsole.error(
+            `Fallita inizializzazione del modulo ${moduleName}. Verrà rimosso.`,
+            error
+          );
+          client.other.delete(key);
+        }
+      }
     }
+    BotConsole.info("Processo di sovrascrittura dei moduli completato.");
   }
 }
 
