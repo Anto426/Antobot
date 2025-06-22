@@ -3,36 +3,70 @@ import BotConsole from "../../../class/console/BotConsole.js";
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 import ConfigManager from "../../../class/ConfigManager/ConfigManager.js";
 
-async function respondToInteraction(
-  interaction,
-  payload,
-  isInitialResponseAttempt = false
-) {
-  try {
-    if (isInitialResponseAttempt) {
-      if (!interaction.replied && !interaction.deferred) {
-        await interaction.reply(payload);
-        return;
-      }
-    }
+const EMBED_STYLES = {
+  error: {
+    color: "#e74c3c",
+    thumbnail: "https://cdn-icons-png.flaticon.com/512/463/463612.png",
+    emoji: "❌",
+  },
+  success: {
+    color: "#2ecc71",
+    thumbnail: "https://cdn-icons-png.flaticon.com/512/845/845646.png",
+    emoji: "✅",
+  },
+  warning: {
+    color: "#f1c40f",
+    thumbnail: "https://cdn-icons-png.flaticon.com/512/595/595067.png",
+    emoji: "⚠️",
+  },
+  info: {
+    color: "#3498db",
+    thumbnail: "https://cdn-icons-png.flaticon.com/512/565/565547.png",
+    emoji: "ℹ️",
+  },
+};
 
-    if (interaction.deferred || interaction.replied) {
+async function sendEmbed({
+  interaction,
+  title,
+  description,
+  type = "info",
+  isEphemeral = false,
+  footer,
+}) {
+  try {
+    const style = EMBED_STYLES[type] || EMBED_STYLES.info;
+    const embed = new PresetEmbed({
+      guild: interaction.guild,
+      member: interaction.member,
+    });
+
+    await embed.init(!isEphemeral);
+
+    embed.setColor(style.color);
+    embed.setThumbnail(style.thumbnail);
+
+    // Enhanced title with emoji
+    embed.setMainContent(`${style.emoji} **${title}**`, description);
+
+    // Add timestamp and optional footer
+    embed.setTimestamp();
+    embed.setFooter({
+      text: footer || `Antobot • ${interaction.user.username}`,
+      iconURL: interaction.user.displayAvatarURL?.() || null,
+    });
+
+    const payload = { embeds: [embed], ephemeral: isEphemeral };
+
+    if (!interaction.replied && !interaction.deferred) {
+      await interaction.reply(payload);
+    } else if (interaction.deferred && !interaction.replied) {
       await interaction.editReply(payload);
     } else {
-
-      BotConsole.warning(
-        `[NewInteraction] Tentativo di followUp per interazione non deferred/replied: ${interaction.id}`
-      );
       await interaction.followUp(payload);
     }
   } catch (err) {
-    BotConsole.error(
-      `[NewInteraction] respondToInteraction fallito (ID: ${
-        interaction.id
-      }, Comando: ${interaction.commandName || interaction.customId}):`,
-      err
-    );
-    // Non si può fare molto se anche la risposta di errore fallisce
+    BotConsole.error(`sendEmbed failed: ${err.stack || err.message}`);
   }
 }
 
@@ -42,143 +76,93 @@ export default {
   isActive: true,
 
   async execute(interaction) {
-    // Passa client se non è globale
-    const commandName = interaction.isCommand()
-      ? interaction.commandName
-      : interaction.isButton()
-      ? interaction.customId.split("-")[0]
-      : interaction.isStringSelectMenu()
-      ? interaction.customId.split("-")[0]
-      : "unknown_interaction_type";
-
-    const command =
-      client.commands.get(commandName) ||
-      client.buttons.get(commandName) ||
-      client.selectMenus.get(commandName); // Aggiungi selectMenus se li usi
-
-    if (!command) {
-      BotConsole.warning(
-        `[NewInteraction] Comando/Componente non trovato per: ${commandName} (ID: ${interaction.id})`
-      );
-      if (interaction.isRepliable()) {
-        // Controlla se si può rispondere
-        const embed = new PresetEmbed({
-          guild: interaction.guild,
-          member: interaction.member,
-        });
-        await embed.init(false); // No dynamic color per un errore veloce
-        embed.KDanger(
-          "Comando Non Trovato",
-          "Il comando o l'azione richiesta non è stata trovata."
-        );
-        await respondToInteraction(
-          interaction,
-          { embeds: [embed], ephemeral: true },
-          true
-        );
-      }
-      return;
-    }
-
-    // Determina se la risposta del comando dovrebbe essere effimera di default
-    // Puoi basarti su una proprietà del comando, es. command.isEphemeral
-    const isCommandEphemeral =
-      command.isEphemeral !== undefined ? command.isEphemeral : true; // Default a true se non specificato
-
-    // --- DEFER REPLY ---
-    // Deve essere fatto il prima possibile, PRIMA di controlli di sicurezza lunghi o esecuzione del comando
-    let deferredSuccessfully = false;
-    if (interaction.isRepliable()) {
-      // Non tutti i tipi di interazione (es. autocomplete) necessitano/supportano deferReply per messaggi visibili
-      if (
-        interaction.isCommand() ||
-        interaction.isButton() ||
-        interaction.isStringSelectMenu() ||
-        interaction.isModalSubmit()
-      ) {
-        try {
-          BotConsole.debug(
-            `[NewInteraction] Tentativo di deferReply per ${command.name} (ID: ${interaction.id}) Ephemeral: ${isCommandEphemeral}`
-          );
-          await interaction.deferReply({ ephemeral: isCommandEphemeral });
-          deferredSuccessfully = true;
-          BotConsole.debug(
-            `[NewInteraction] DeferReply per ${command.name} (ID: ${interaction.id}) riuscito.`
-          );
-        } catch (deferError) {
-          BotConsole.error(
-            `[NewInteraction] Fallito deferReply per ${command.name} (ID: ${interaction.id}). Errore:`,
-            deferError
-          );
-          // Se deferReply fallisce (es. "Unknown Interaction" perché troppo tardi),
-          // non possiamo più rispondere in modo affidabile. Logga e esci.
-          return;
-        }
-      }
-    } else {
-      BotConsole.debug(
-        `[NewInteraction] Interazione ${command.name} (ID: ${interaction.id}, Tipo: ${interaction.type}) non è repliable o non necessita di defer.`
-      );
-      // Per Autocomplete, non si fa deferReply per messaggi.
-      // Per altri tipi, potresti doverli gestire diversamente.
-    }
-
-    // --- ESECUZIONE COMANDO ---
     try {
-      // Controlli di Sicurezza
-      // Se securityCheck è asincrono e lungo, il deferReply *deve* avvenire prima!
+      const command =
+        client.commands.get(interaction.commandName) ||
+        client.buttons.get(interaction.customId?.split("-")[0]);
+
+      if (!command) {
+        await sendEmbed({
+          interaction,
+          title: "Comando non trovato",
+          description: "Questo comando non esiste!",
+          type: "error",
+          isEphemeral: true,
+        });
+        return;
+      }
+
       const securityCheck = new Security(
         interaction,
         command,
-        ConfigManager.getConfig("owner")?.owner // Aggiunto optional chaining
+        ConfigManager.getConfig("owner").owner
       );
 
-      // Il metodo allow dovrebbe lanciare un errore se non permesso
-      // o restituire argomenti elaborati se necessario
-      const processedArgs = await securityCheck.allow(); // Rimosso interaction e command, dato che sono nel costruttore
+      let securityResult;
+      let shouldBeEphemeral = false;
 
-      BotConsole.debug(
-        `[NewInteraction] Controlli di sicurezza per ${command.name} (ID: ${interaction.id}) superati.`
-      );
-
-      // Esegui il comando
-      await command.execute(interaction, processedArgs, client); // Passa client se il comando ne ha bisogno
-
-      // Il comando stesso ora è responsabile di chiamare interaction.editReply() se è stato fatto defer.
-      // Se il comando gestisce le proprie risposte, non facciamo nulla qui.
-      // Questo log di successo è più per tracciare che il comando è stato invocato.
-      BotConsole.success(
-        `Comando ${command.name} (ID: ${
-          interaction.id
-        }) invocato con successo | Utente: ${interaction.user.tag} | Gilda: ${
-          interaction.guild?.name || "DM"
-        }`
-      );
-    } catch (executionError) {
-      BotConsole.error(
-        `[NewInteraction] Errore durante l'esecuzione o i controlli di sicurezza per ${command.name} (ID: ${interaction.id}):`,
-        executionError // Logga l'errore completo con stack trace
-      );
-
-      if (interaction.isRepliable()) {
-        // Controlla di nuovo se si può rispondere
-        const embed = new PresetEmbed({
-          guild: interaction.guild,
-          member: interaction.member,
+      try {
+        securityResult = await securityCheck.allow(interaction, command);
+      } catch (securityError) {
+        shouldBeEphemeral = true;
+        BotConsole.error(
+          `Permesso negato: ${securityError.stack || securityError.message}`
+        );
+        await sendEmbed({
+          interaction,
+          title: "Permesso negato",
+          description:
+            securityError.message ||
+            "Non hai i permessi necessari per eseguire questo comando.",
+          type: "warning",
+          isEphemeral: shouldBeEphemeral,
         });
-        await embed.init(false); // No dynamic color
+        return;
+      }
 
-        const errorMessageContent = executionError.isUserFacingError
-          ? executionError.message
-          : "Si è verificato un errore interno durante l'elaborazione del tuo comando.";
-        embed.KDanger("Errore Comando", errorMessageContent);
+      try {
+        if (typeof command.response !== "boolean" || command.response) {
+          await interaction.deferReply({ ephemeral: shouldBeEphemeral });
+        }
 
-        await respondToInteraction(interaction, {
-          embeds: [embed],
-          ephemeral: isCommandEphemeral,
-          components: [],
+        const args =
+          typeof securityResult !== "boolean" ? securityResult : null;
+        await command.execute(interaction, args);
+
+        BotConsole.success(
+          `Comando eseguito: ${command.name} | Utente: ${
+            interaction.user.tag
+          } (${interaction.user.id}) | Guild: ${
+            interaction.guild?.name || "DM"
+          }`
+        );
+      } catch (cmdError) {
+        shouldBeEphemeral = true;
+        BotConsole.error(
+          `Errore comando: ${cmdError.stack || cmdError.message}`
+        );
+        await sendEmbed({
+          interaction,
+          title: "Errore durante l'esecuzione",
+          description:
+            cmdError.message ||
+            "Si è verificato un errore durante l'esecuzione del comando.",
+          type: "error",
+          isEphemeral: shouldBeEphemeral,
         });
       }
+    } catch (fatalError) {
+      BotConsole.error(
+        `Errore generale: ${fatalError.stack || fatalError.message}`
+      );
+      await sendEmbed({
+        interaction,
+        title: "Errore generale",
+        description:
+          "Si è verificato un errore durante l'esecuzione dell'interazione.",
+        type: "error",
+        isEphemeral: true,
+      });
     }
   },
 };
