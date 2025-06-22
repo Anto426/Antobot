@@ -10,7 +10,7 @@ import CommandGuildUpdate from "../Guild/CommandGuildUpdate.js";
 import SystemCheck from "./SystemCheck.js";
 import dotenv from "dotenv";
 import IntitialOtherModules from "../Loader/IntitialOtherModules.js";
-import DataUpdater from "../Sql/UpdateDB.js";
+import SynchronizationManager from "../Sql/SynchronizationManager.js";
 dotenv.config();
 
 class BotApplication {
@@ -90,7 +90,7 @@ class BotApplication {
     BotConsole.success("Bot pronto all’uso!");
     (await ModuleLoader.initAll?.()) || Promise.resolve();
     await CommandGuildUpdate.updateGuildsOnStartup();
-    await DataUpdater.updateAll();
+    await SynchronizationManager.synchronizeAll();
     await IntitialOtherModules.Intit();
     await StartupLogger.run();
   }
