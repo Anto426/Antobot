@@ -16,7 +16,7 @@ export default {
         `Interruzione dei processi in memoria per la gilda: ${guild.name}`
       );
 
-      const holidayModule = guild.client.modules?.get("Holiday");
+      const holidayModule = guild.client.other?.get("Holiday");
 
       if (holidayModule) {
         holidayModule.stopGuildTracking(guild.id);

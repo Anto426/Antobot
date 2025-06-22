@@ -2,7 +2,7 @@ import SystemCheck from "../client/SystemCheck.js";
 import BotConsole from "../console/BotConsole.js";
 
 class IntitialOtherModules {
-  
+
   async Init() {
     BotConsole.section("INIZIALIZZAZIONE MODULI SECONDARI (IN-PLACE)");
 
@@ -27,8 +27,7 @@ class IntitialOtherModules {
             await instance.init();
           } else if (typeof instance.run === "function") {
             await instance.run();
-          }
-
+          } 
           client.other.set(key, instance);
 
           BotConsole.success(

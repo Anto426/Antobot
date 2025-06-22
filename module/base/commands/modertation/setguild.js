@@ -228,10 +228,7 @@ export default {
         const lockedPerms = [
           {
             id: guild.roles.everyone.id,
-            deny: [
-              PermissionsBitField.Flags.Connect,
-              PermissionsBitField.Flags.ViewChannel,
-            ],
+            deny: [PermissionsBitField.Flags.Connect],
           },
         ];
         if (manageHollydayChannelsFlag) {
@@ -421,6 +418,19 @@ export default {
               ? `✅ <@&${finalGuildData.ROLEBOTDEFAULT_ID}>`
               : "❌ Non impostato"
           );
+
+        const holidayModule = guild.client.other?.get("Holiday");
+
+        if (holidayModule) {
+          holidayModule.restart();
+          BotConsole.info(
+            `[SetGuild - ${guildId}] Processamento Holiday avviato per la gilda.`
+          );
+        } else {
+          BotConsole.warning(
+            `[SetGuild - ${guildId}] Modulo Holiday non trovato, non avviato il processo di configurazione eventi.`
+          );
+        }
       }
 
       await interaction.editReply({ embeds: [embed] });
