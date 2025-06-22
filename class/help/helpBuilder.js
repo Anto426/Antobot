@@ -3,7 +3,7 @@ import {
   StringSelectMenuOptionBuilder,
 } from "discord.js";
 import PresetEmbed from "../embed/PresetEmbed.js";
-import ConfigManager from "../ConfigManager/ConfigManager.js";
+import ConfigManager from "../services/ConfigManager.js";
 import Menu from "../row/menu.js";
 
 const FIELD_SEPARATOR = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━";

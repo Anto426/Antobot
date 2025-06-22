@@ -1,5 +1,5 @@
 import BotConsole from "../../../class/console/BotConsole.js";
-import SqlManager from "../../../class/Sql/SqlManager.js";
+import SqlManager from "../../../class/services/SqlManager.js";
 
 export default {
   name: "BotRemovedFromGuild",

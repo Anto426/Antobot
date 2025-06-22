@@ -1,6 +1,6 @@
 import BotConsole from "../console/BotConsole.js";
-import SqlManager from "../Sql/SqlManager.js";
-import ConfigManager from "../ConfigManager/ConfigManager.js";
+import SqlManager from "../services/SqlManager.js";
+import ConfigManager from "../services/ConfigManager.js";
 
 class SynchronizationManager {
   async synchronizeAll() {

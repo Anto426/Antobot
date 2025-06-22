@@ -1,7 +1,7 @@
 import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
-import SqlManager from "../../../../class/Sql/SqlManager.js";
+import SqlManager from "../../../../class/services/SqlManager.js";
 import BotConsole from "../../../../class/console/BotConsole.js";
-import ConfigManager from "../../../../class/ConfigManager/ConfigManager.js";
+import ConfigManager from "../../../../class/services/ConfigManager.js";
 import {
   ApplicationCommandOptionType,
   ChannelType,

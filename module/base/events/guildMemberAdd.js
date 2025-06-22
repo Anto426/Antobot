@@ -1,5 +1,5 @@
 import BotConsole from "../../../class/console/BotConsole.js";
-import SqlManager from "../../../class/Sql/SqlManager.js";
+import SqlManager from "../../../class/services/SqlManager.js";
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 import welcomeImageService from "../../../class/services/WelcomeImageService.js";
 import { Events, PermissionsBitField, time } from "discord.js";

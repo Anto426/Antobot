@@ -306,7 +306,6 @@ class SqlManager {
     guildId,
     discordMemberRoleIdsSet
   ) {
-    /* ... come ultima versione ... */
     const allDbRolesForMemberGlobally = await this.getRolesOfMember(memberId);
     const dbMemberRoleIdsInThisGuild = new Set(
       allDbRolesForMemberGlobally
