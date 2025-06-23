@@ -1,6 +1,6 @@
 import BotConsole from "../../class/console/BotConsole.js";
-import SqlManager from "../../class/Sql/SqlManager.js";
-import ConfigManager from "../../class/ConfigManager/ConfigManager.js";
+import SqlManager from "../../class/services/SqlManager.js";
+import ConfigManager from "../../class/services/ConfigManager.js";
 import PresetEmbed from "../../class/embed/PresetEmbed.js";
 
 const HEARTBEAT_INTERVAL_MS = 5 * 60 * 1000; // 5 minuti
@@ -17,7 +17,6 @@ export default class Holiday {
     if (this.#isInitialized) return;
     this.#isInitialized = true;
 
-    BotConsole.section("INIZIALIZZAZIONE SISTEMA FESTIVITÀ");
     try {
       const holidayList = ConfigManager.getConfig("hollyday")?.holidays;
       if (

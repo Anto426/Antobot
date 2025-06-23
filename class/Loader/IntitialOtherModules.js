@@ -4,7 +4,6 @@ import BotConsole from "../console/BotConsole.js";
 class IntitialOtherModules {
 
   async Init() {
-    BotConsole.section("INIZIALIZZAZIONE MODULI SECONDARI (IN-PLACE)");
 
     for (const [key, moduleToLoad] of client.other.entries()) {
       if (typeof moduleToLoad === "function") {

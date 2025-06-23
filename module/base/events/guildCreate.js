@@ -1,5 +1,5 @@
 import BotConsole from "../../../class/console/BotConsole.js";
-import SynchronizationManager from "../../../class/Sql/SynchronizationManager.js";
+import SynchronizationManager from "../../../class/services/SynchronizationManager.js";
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 import { PermissionsBitField } from "discord.js";
 import CommandGuildUpdate from "../../../class/Guild/CommandGuildUpdate.js";

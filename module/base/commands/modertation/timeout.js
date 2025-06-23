@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, PermissionsBitField } from "discord.js";
 import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
-import Time from "../../../../class/Time/time.js";
+import Time from "../../../../class/services/time.js";
 
 export default {
   name: "timeout",

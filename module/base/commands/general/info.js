@@ -2,7 +2,7 @@ import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
 import { version as discordJsVersion } from "discord.js";
 import { version as nodeVersion } from "process";
 import SystemCheck from "../../../../class/client/SystemCheck.js";
-import Time from "../../../../class/Time/time.js";
+import Time from "../../../../class/services/time.js";
 
 export default {
   name: "info",

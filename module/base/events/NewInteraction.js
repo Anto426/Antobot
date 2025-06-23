@@ -1,7 +1,7 @@
 import Security from "../../../class/security/security.js";
 import BotConsole from "../../../class/console/BotConsole.js";
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
-import ConfigManager from "../../../class/ConfigManager/ConfigManager.js";
+import ConfigManager from "../../../class/services/ConfigManager.js";
 
 const EMBED_STYLES = {
   error: {

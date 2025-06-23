@@ -1,5 +1,5 @@
 import BotConsole from "../../../class/console/BotConsole.js";
-import SqlManager from "../../../class/Sql/SqlManager.js";
+import SqlManager from "../../../class/services/SqlManager.js";
 import { Events } from "discord.js";
 
 export default {
@@ -8,39 +8,55 @@ export default {
   isActive: true,
 
   async execute(member) {
-    const { guild, user, client } = member;
+    const { guild, user } = member;
     const logPrefix = `[MemberLeave - ${guild.name}][${user.tag}]`;
     BotConsole.info(`${logPrefix} Ha lasciato il server.`);
 
     try {
-      const hadImportantRoles = !member.partial && member.roles.cache.size > 1;
-
-      if (hadImportantRoles) {
-        BotConsole.info(
-          `${logPrefix} L'utente aveva ruoli, sincronizzo lo stato finale prima di rimuoverlo.`
+      if (member.partial) {
+        BotConsole.warning(
+          `${logPrefix} Oggetto membro parziale. Non è possibile salvare la cronologia dei ruoli.`
         );
-        const syncManager = client.syncManager;
-        if (syncManager) {
-          await syncManager.synchronizeGuildMember(member);
-        }
       } else {
-        BotConsole.info(
-          `${logPrefix} L'utente non aveva ruoli specifici, non c'è cronologia da salvare.`
+        const rolesToSave = member.roles.cache.filter(
+          (role) => role.id !== guild.id
         );
 
-        const result = await SqlManager.removeMemberFromGuild(
-          guild.id,
-          member.id
-        );
+        if (rolesToSave.size > 0) {
+          BotConsole.info(
+            `${logPrefix} L'utente aveva ${rolesToSave.size} ruoli specifici. Salvataggio in corso...`
+          );
 
-        if (result.affectedRows > 0) {
+          for (const role of rolesToSave.values()) {
+            try {
+              await SqlManager.addMemberRole({
+                MEMBER_ID: member.id,
+                ROLE_ID: role.id,
+              });
+            } catch (error) {}
+          }
           BotConsole.success(
-            `${logPrefix} Associazione gilda-membro rimossa correttamente.`
+            `${logPrefix} Stato finale dei ruoli memorizzato.`
           );
         } else {
-          BotConsole.warning(
-            `${logPrefix} Associazione gilda-membro non trovata (potrebbe essere già stata rimossa).`
+          BotConsole.info(
+            `${logPrefix} L'utente non aveva ruoli specifici da salvare.`
           );
+
+          const result = await SqlManager.removeMemberFromGuild(
+            guild.id,
+            member.id
+          );
+
+          if (result.affectedRows > 0) {
+            BotConsole.success(
+              `${logPrefix} Associazione gilda-membro rimossa correttamente.`
+            );
+          } else {
+            BotConsole.warning(
+              `${logPrefix} Associazione gilda-membro non trovata (potrebbe essere già stata rimossa).`
+            );
+          }
         }
       }
     } catch (error) {

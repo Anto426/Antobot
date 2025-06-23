@@ -108,10 +108,7 @@ class LogStartup {
     ]);
 
     for (const [key, value] of Object.entries(data)) {
-      table.push([
-        THEME.info(key),
-        chalk.whiteBright(value),
-      ]);
+      table.push([THEME.info(key), chalk.whiteBright(value)]);
     }
 
     return table.toString();
