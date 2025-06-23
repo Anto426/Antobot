@@ -112,6 +112,8 @@ class LoadModules {
       "otherModules",
       SystemCheck.getModulePath("other", "root")
     );
+
+    
     BotConsole.success("Other modules loaded");
 
     client.commands = new Collection([
