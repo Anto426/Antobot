@@ -26,19 +26,23 @@
         "assets": {
             "canvas": {
                 "welcome_image": {
-                    "width": 1600,
-                    "height": 600,
-                    "avatarSize": 250,
+                    "width": 2560,
+                    "height": 900,
+                    "avatarSize": 500,
                     "avatarBorderSize": 10,
-                    "num_colors": 5,
-                    "welcomeTextSize": "100px",
-                    "nameTextSize": "90px",
-                    "countTextSize": "60px"
+                    "num_colors": 3,
+                    "welcomeTextSize": "150px",
+                    "nameTextSize": "100px",
+                    "countTextSize": "70px"
                 },
                 "fonts": {
                     "directory": "assets/canvas/fonts",
                     "files": [
-                        "Roboto.ttf"
+                        "Roboto.ttf",
+                        "Huninn-Regular.ttf",
+                        "NotoColorEmoji-Regular.ttf",
+                        "NotoSansJP-VariableFont_wght.ttf",
+                        "NotoSansJP-VariableFont_wght.ttf"
                     ]
                 }
             }
