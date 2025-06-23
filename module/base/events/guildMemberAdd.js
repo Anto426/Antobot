@@ -70,11 +70,14 @@ export default {
       const dmEmbed = new PresetEmbed({ guild: member.guild });
       await dmEmbed.init();
       dmEmbed
-        .setTitle("Ruoli Ripristinati")
+        .setTitle("🎭 Ruoli Ripristinati")
         .setDescription(
           `Bentornato/a su **${member.guild.name}**! I tuoi ruoli precedenti sono stati ripristinati:\n${roleNames}`
         )
-        .setThumbnail(member.guild.iconURL({ dynamic: true, size: 256 }));
+        .setThumbnail(member.guild.iconURL({ dynamic: true, size: 256 }))
+        .setFooter({
+          text: `ID Utente: ${member.id}`,
+        });
       await member.send({ embeds: [dmEmbed] }).catch(() => {});
       return true;
     }
@@ -151,11 +154,8 @@ export default {
     return true;
   },
 
-  /**
-   * Invia il messaggio di benvenuto con logica unificata e sofisticata.
-   */
   async sendWelcomeMessage(member, isReturningMember, logPrefix) {
-    const { guild, user, client } = member;
+    const { guild, user } = member;
 
     const channel = await this._getWelcomeChannel(guild, logPrefix);
     if (!channel) return;
@@ -164,15 +164,25 @@ export default {
     await welcomeEmbed.init(false);
 
     const welcomeTitle = isReturningMember
-      ? `Bentornato/a, ${member.displayName}!`
-      : `Benvenuto/a, ${member.displayName}!`;
-    const description = `🎉 ${member} si è unito/a a **${guild.name}**!\nOra siamo in **${guild.memberCount}** membri!`;
-    welcomeEmbed.setMainContent(welcomeTitle, description);
+      ? `🎉 Bentornato/a, ${member.displayName}!`
+      : `🎉 Benvenuto/a, ${member.displayName}!`;
+    const description = `🎊 ${member} si è unito/a a **${guild.name}**!\nOra siamo in **${guild.memberCount}** membri!`;
+    const accountCreationDate = time(user.createdAt, "R");
+
+    welcomeEmbed
+      .setTitle(welcomeTitle)
+      .setDescription(description)
+      .addFields(
+        { name: "📅 Account Creato", value: accountCreationDate, inline: true },
+        { name: "🆔 ID Utente", value: user.id, inline: true },
+        { name: "👥 Membri Totali", value: `${guild.memberCount}`, inline: true }
+      )
+      .setColor("#00ADEF");
 
     await welcomeImageService.init();
 
     const imageResult = welcomeImageService
-      ? await welcomeImageService.generate(member, guild.memberCount)
+      ? await welcomeImageService.generate(member, guild)
       : null;
 
     const messagePayload = { embeds: [welcomeEmbed] };
@@ -188,19 +198,15 @@ export default {
           `${logPrefix} Generazione immagine fallita, invio embed di fallback sofisticato.`
         );
 
-      welcomeEmbed
-        .setThumbnailUrl(user.displayAvatarURL({ dynamic: true, size: 256 }))
-        ._applyColorFromImage();
+      welcomeEmbed.setThumbnailUrl(
+        user.displayAvatarURL({ dynamic: true, size: 256 })
+      );
     }
 
-    // 5. Invia il messaggio.
     await channel.send(messagePayload);
     BotConsole.success(`${logPrefix} Messaggio di benvenuto inviato.`);
   },
 
-  /**
-   * Helper per recuperare e validare il canale di benvenuto.
-   */
   async _getWelcomeChannel(guild, logPrefix) {
     const guildConfig = await SqlManager.getGuildById(guild.id);
     if (!guildConfig?.WELCOME_ID) {
