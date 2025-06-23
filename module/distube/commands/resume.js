@@ -30,7 +30,7 @@ export default {
       guild: interaction.guild,
       member: interaction.member,
       image: song.thumbnail,
-    }).init();
+    }).init(false);
 
     embed
       .setMainContent(
@@ -44,7 +44,8 @@ export default {
         { name: "🎵 Posizione", value: `1/${queue.songs.length}` },
       ])
       .addFieldInline("📎 Link", `[Apri traccia](${song.url})`)
-      .addFieldInline("🔊 Volume", `${queue.volume}%`);
+      .addFieldInline("🔊 Volume", `${queue.volume}%`)
+      ._applyColorFromImage();
 
     await interaction.editReply({ embeds: [embed], content: "" });
   },

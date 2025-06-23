@@ -48,7 +48,7 @@ export default {
       guild: interaction.guild,
       member: interaction.member,
       image: song.thumbnail,
-    }).init();
+    }).init(false);
 
     embed
       .setMainContent(
@@ -69,7 +69,8 @@ export default {
         "🔊 Canale vocale",
         interaction.member.voice.channel?.name ?? "N/A",
         true
-      );
+      )
+      ._applyColorFromImage();
 
     await interaction.editReply({
       embeds: [embed],

@@ -33,7 +33,7 @@ export default {
       guild: interaction.guild,
       member: interaction.member,
       image: currentSong.thumbnail,
-    }).init();
+    }).init(false);
 
     embed
       .setMainContent(
@@ -46,7 +46,8 @@ export default {
         "🧑‍🎤 Artista",
         currentSong.uploader?.name || "Sconosciuto",
         true
-      );
+      )
+      ._applyColorFromImage();
 
     await interaction.editReply({ embeds: [embed] });
   },
