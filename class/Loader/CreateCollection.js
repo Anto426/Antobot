@@ -1,7 +1,9 @@
-import fs from "fs";
+import fs from "fs/promises";
+import path from "path";
 import { Collection } from "discord.js";
 import BotConsole from "../console/BotConsole.js";
 import { pathToFileURL } from "url";
+
 class CreateCollection {
   #collection;
 
@@ -12,26 +14,35 @@ class CreateCollection {
   async createCollection(root, extension) {
     if (!root || !extension) {
       BotConsole.warning(
-        "Invalid root or extension provided. Returning empty collection."
+        "Invalid root or extension. Returning empty collection."
       );
-      return this.#collection;
+      return new Collection();
     }
 
     const normalizedRoot = this.#normalizePath(root);
-    if (!fs.existsSync(normalizedRoot)) {
+
+    try {
+      await fs.access(normalizedRoot);
+    } catch {
       BotConsole.info(
-        `Directory "${normalizedRoot}" does not exist. Returning empty collection.`
+        `Directory "${normalizedRoot}" non esiste. Restituita collezione vuota.`
+      );
+      return new Collection();
+    }
+
+    const files = await this.#getFilesRecursivelyAsync(
+      normalizedRoot,
+      extension
+    );
+
+    if (files.length === 0) {
+      BotConsole.info(
+        `Nessun file "${extension}" trovato in "${normalizedRoot}".`
       );
       return this.#collection;
     }
 
-    const files = this.getFilesRecursively(normalizedRoot, extension);
-    if (files.length === 0) {
-      BotConsole.info(
-        `No "${extension}" files found in "${normalizedRoot}". Returning empty collection.`
-      );
-      return this.#collection;
-    }
+    this.#collection = new Collection();
 
     const loadResults = await Promise.allSettled(
       files.map((file) => this.loadFile(file))
@@ -40,32 +51,39 @@ class CreateCollection {
     const failures = loadResults.filter(
       (result) => result.status === "rejected"
     );
+
     if (failures.length > 0) {
-      failures.forEach((result, i) => {
-        BotConsole.error(`Failed to load file ${files[i]}:` + result.reason);
+      failures.forEach((result) => {
+        BotConsole.error(`Fallito caricamento di un file:`, result.reason);
       });
     }
 
     BotConsole.success(
-      `  Collection loaded with ${this.#collection.size} item(s).`
+      `   Collezione caricata con ${this.#collection.size} item(s).`
     );
-
     return this.#collection;
   }
 
-  getFilesRecursively(dir, extension) {
-    return fs
-      .readdirSync(dir, { withFileTypes: true })
-      .reduce((files, item) => {
-        const path = this.#normalizePath(`${dir}/${item.name}`);
-        if (item.isDirectory()) {
-          return [...files, ...this.getFilesRecursively(path, extension)];
-        }
-        return item.isFile() &&
-          item.name.toLowerCase().endsWith(extension.toLowerCase())
-          ? [...files, path]
-          : files;
-      }, []);
+  async #getFilesRecursivelyAsync(dir, extension) {
+    try {
+      const dirents = await fs.readdir(dir, { withFileTypes: true });
+      const files = await Promise.all(
+        dirents.map(async (dirent) => {
+          const res = path.resolve(dir, dirent.name);
+          const normalizedRes = this.#normalizePath(res);
+          if (dirent.isDirectory()) {
+            return this.#getFilesRecursivelyAsync(normalizedRes, extension);
+          }
+          return normalizedRes.toLowerCase().endsWith(extension.toLowerCase())
+            ? normalizedRes
+            : null;
+        })
+      );
+      return Array.prototype.concat(...files).filter(Boolean);
+    } catch (error) {
+      BotConsole.error(`Errore leggendo la directory ${dir}`, error);
+      return [];
+    }
   }
 
   async loadFile(filePath) {
@@ -81,23 +99,17 @@ class CreateCollection {
         return;
       }
 
-      if (this.#isValidClass(FileExport)) {
+      if (this.#isValidClass(FileExport) || this.#hasValidName(FileExport)) {
         this.#collection.set(FileExport.name, FileExport);
-        return;
+      } else {
+        const fallbackName = this.#getFileNameFromPath(filePath);
+        this.#collection.set(fallbackName, FileExport);
+        BotConsole.warning(
+          `Loaded file ${filePath} using fallback name "${fallbackName}"`
+        );
       }
-
-      if (this.#hasValidName(FileExport)) {
-        this.#collection.set(FileExport.name, FileExport);
-        return;
-      }
-
-      const fallbackName = this.#getFileNameFromPath(filePath);
-      this.#collection.set(fallbackName, FileExport);
-      BotConsole.warning(
-        `Loaded file ${filePath} using fallback name "${fallbackName}"`
-      );
     } catch (err) {
-      throw new Error(err);
+      throw new Error(`Errore importando ${filePath}: ${err.message}`);
     }
   }
 
@@ -115,13 +127,11 @@ class CreateCollection {
   }
 
   #getFileNameFromPath(filePath) {
-    return filePath
-      .split("/")
-      .pop()
-      .replace(/\.[^/.]+$/, "");
+    return path.basename(filePath, path.extname(filePath));
   }
-  #normalizePath(path) {
-    return path.replace(/\\/g, "/");
+
+  #normalizePath(filePath) {
+    return filePath.replace(/\\/g, "/");
   }
 
   getCollection() {
