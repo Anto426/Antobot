@@ -28,7 +28,6 @@ export default {
     },
 
     async execute(interaction) {
-        await interaction.deferReply({ ephemeral: true });
 
         const amount = interaction.options.getInteger("quantità");
         const targetUser = interaction.options.getUser("utente");
