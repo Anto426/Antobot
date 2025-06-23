@@ -13,17 +13,14 @@ class WelcomeImageService {
 
   async init() {
     if (this.#isReady) return;
-    this.#isReady = true; // Preveniamo tentativi multipli
-
 
     try {
       this.#config = SystemCheck.getConfigProperty("paths", "assets", "canvas");
-
-      if (!this.#config || !this.#config.fonts) {
+      if (!this.#config || !this.#config.welcome_image || !this.#config.fonts) {
         BotConsole.warning(
-          "[WelcomeImg] Config 'paths.assets.canvas' (fonts) non trovata in SystemCheck. Funzionalità disabilitata."
+          "[WelcomeImg] Config 'paths.assets.canvas' non trovata. Funzionalità disabilitata."
         );
-        this.#isReady = false; // Il servizio non è pronto se manca la config
+        this.#isReady = false;
         return;
       }
 
@@ -31,17 +28,13 @@ class WelcomeImageService {
       if (customFonts && customFonts.length > 0) {
         const baseDir = process.env.DIRBOT || process.cwd();
         const fontDir = this.#config.fonts.directory;
-
         customFonts.forEach((fontFile) => {
           const fontPath = path.join(baseDir, fontDir, fontFile);
           const fontFamily = fontFile.split(".")[0];
           registerFont(fontPath, { family: fontFamily });
-          BotConsole.info(`[WelcomeImg] Font registrato: ${fontFamily}`);
         });
-      } else {
-        BotConsole.info("[WelcomeImg] Nessun font personalizzato configurato.");
       }
-
+      this.#isReady = true; // Impostato solo alla fine di un'inizializzazione riuscita
       BotConsole.success(
         "[WelcomeImg] Sistema immagini inizializzato con successo."
       );
@@ -50,11 +43,16 @@ class WelcomeImageService {
         "[WelcomeImg] Fallita inizializzazione del servizio.",
         error
       );
-      this.#isReady = false; // Segna come non pronto in caso di errore
+      this.#isReady = false;
     }
   }
 
-  async generate(member, guildMemberCount) {
+  /**
+   * Genera l'immagine di benvenuto con una grafica migliorata.
+   * @param {import("discord.js").GuildMember} member
+   * @param {import("discord.js").Guild} guild
+   */
+  async generate(member, guild) {
     if (!this.#isReady) {
       BotConsole.warning(
         "[WelcomeImg] Servizio non pronto, impossibile generare immagine."
@@ -69,18 +67,37 @@ class WelcomeImageService {
 
     try {
       const dynamicColor = new DynamicColor();
-      await dynamicColor.setImgUrl(
-        member.user.displayAvatarURL({ extension: "png", size: 256 })
-      );
+      const avatarUrl = member.user.displayAvatarURL({
+        extension: "png",
+        size: 512,
+      });
+      await dynamicColor.setImgUrl(avatarUrl);
       const colorData = await dynamicColor.getPaletteAndTextColor();
+
       const palette = colorData?.palette || [
-        [45, 52, 54],
-        [99, 110, 114],
-        [223, 230, 233],
+        [28, 28, 32],
+        [42, 42, 48],
+        [56, 56, 64],
       ];
-      const textColor = colorData?.textColor || [255, 255, 255];
+      const textColor = colorData?.textColor || [240, 240, 240];
       const textColorRgb = `rgb(${textColor.join(",")})`;
 
+      const layout = {
+        padding: 70,
+        cardRadius: 90, // Increased card radius for more rounded corners
+        avatarSize: welcomeSettings.avatarSize,
+        get avatarX() {
+          return this.padding + 80;
+        },
+        get avatarY() {
+          return (canvas.height - this.avatarSize) / 2;
+        },
+        get textStartX() {
+          return this.avatarX + this.avatarSize + 70;
+        },
+      };
+
+      // --- BACKGROUND WITH GRADIENT ---
       const gradient = ctx.createLinearGradient(
         0,
         0,
@@ -98,47 +115,69 @@ class WelcomeImageService {
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = "rgba(0, 0, 0, 0.45)";
+      // --- CARD WITH BLUR AND SHADOW ---
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+      ctx.shadowBlur = 30;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 10;
+      ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
       ctx.beginPath();
-      ctx.roundRect(70, 70, canvas.width - 140, canvas.height - 140, 60);
+      ctx.roundRect(
+        layout.padding,
+        layout.padding,
+        canvas.width - layout.padding * 2,
+        canvas.height - layout.padding * 2,
+        layout.cardRadius
+      );
       ctx.fill();
+      ctx.restore();
 
-      const avatarSize = welcomeSettings.avatarSize;
-      const avatarX = 70 + 80;
-      const avatarY = canvas.height / 2 - avatarSize / 2;
-
+      // --- AVATAR WITH BORDER AND GLOW ---
       ctx.save();
       ctx.beginPath();
       ctx.arc(
-        avatarX + avatarSize / 2,
-        avatarY + avatarSize / 2,
-        avatarSize / 2,
+        layout.avatarX + layout.avatarSize / 2,
+        layout.avatarY + layout.avatarSize / 2,
+        layout.avatarSize / 2,
         0,
         Math.PI * 2
       );
       ctx.clip();
-      const avatarImg = await loadImage(
-        member.user.displayAvatarURL({ extension: "png", size: 512 })
+      const avatarImg = await loadImage(avatarUrl);
+      ctx.drawImage(
+        avatarImg,
+        layout.avatarX,
+        layout.avatarY,
+        layout.avatarSize,
+        layout.avatarSize
       );
-      ctx.drawImage(avatarImg, avatarX, avatarY, avatarSize, avatarSize);
       ctx.restore();
 
+      ctx.save();
+      ctx.shadowColor = textColorRgb;
+      ctx.shadowBlur = 15;
       ctx.strokeStyle = textColorRgb;
       ctx.lineWidth = welcomeSettings.avatarBorderSize;
       ctx.beginPath();
       ctx.arc(
-        avatarX + avatarSize / 2,
-        avatarY + avatarSize / 2,
-        avatarSize / 2,
+        layout.avatarX + layout.avatarSize / 2,
+        layout.avatarY + layout.avatarSize / 2,
+        layout.avatarSize / 2 + ctx.lineWidth / 2,
         0,
         Math.PI * 2
       );
       ctx.stroke();
+      ctx.restore();
 
+      // --- TEXT WITH MODERN TYPOGRAPHY ---
       ctx.fillStyle = textColorRgb;
       ctx.textAlign = "left";
       ctx.textBaseline = "middle";
-      const textStartX = avatarX + avatarSize + 70;
+      ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
 
       const useCustomFonts =
         fontSettings?.files && fontSettings.files.length > 0;
@@ -149,31 +188,53 @@ class WelcomeImageService {
         ? fontSettings.files[1]?.split(".")[0] || fontFamily1
         : "Impact";
 
-      ctx.font = `${welcomeSettings.welcomeTextSize} "${fontFamily1}"`;
-      ctx.fillText("Benvenuto", textStartX, canvas.height * 0.3);
+      ctx.font = `bold ${welcomeSettings.welcomeTextSize} "${fontFamily1}"`;
+      ctx.fillText("Benvenuto", layout.textStartX, canvas.height * 0.3);
 
       const memberName = (member.user.globalName || member.displayName).slice(
         0,
         25
       );
-      ctx.font = `${welcomeSettings.nameTextSize} "${fontFamily2}"`;
-      ctx.fillText(memberName, textStartX, canvas.height / 2);
+      ctx.font = `bold ${welcomeSettings.nameTextSize} "${fontFamily2}"`;
+      ctx.fillText(memberName, layout.textStartX, canvas.height / 2);
 
       ctx.font = `${welcomeSettings.countTextSize} "${fontFamily1}"`;
       ctx.fillText(
-        `${guildMemberCount}° membro del server!`,
-        textStartX,
+        `${guild.memberCount}° membro del server!`,
+        layout.textStartX,
         canvas.height * 0.7
       );
 
+      ctx.save();
+      ctx.globalAlpha = 0.3; // Slightly more visible watermark
+      const iconSize = 140; // Increased icon size for better visibility
+      const guildIconImg = await loadImage(
+        guild.iconURL({ extension: "png", size: 128 })
+      );
+      ctx.beginPath();
+      ctx.arc(
+        canvas.width - iconSize / 2 - 50,
+        canvas.height - iconSize / 2 - 50,
+        iconSize / 2,
+        0,
+        Math.PI * 2
+      );
+      ctx.clip();
+      ctx.drawImage(
+        guildIconImg,
+        canvas.width - iconSize - 50,
+        canvas.height - iconSize - 50,
+        iconSize,
+        iconSize
+      );
+      ctx.restore();
+
+      // --- OUTPUT ---
       const attachment = new AttachmentBuilder(canvas.toBuffer("image/png"), {
         name: `welcome-${member.id}.png`,
       });
-      const embedColorHex = `#${textColor
-        .map((c) => c.toString(16).padStart(2, "0"))
-        .join("")}`;
 
-      return { attachment, embedColorHex };
+      return { attachment, embedColorHex: colorData.textColor };
     } catch (error) {
       BotConsole.error(
         "[WelcomeImg] Errore fatale durante la generazione dell'immagine.",
