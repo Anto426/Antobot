@@ -167,47 +167,46 @@ class BotConsole {
   // La tua formatValue originale
   formatValue(value, type) {
     const grad = this._getGradient(type);
-    if (value == null) return chalk.gray.italic(`✗ ${value}`); // Gestisce sia null che undefined qui
+
+    if (value == null) return chalk.gray.italic(`✗ ${value}`);
+    if (typeof value === "string") return grad(`"${value}"`);
+    if (typeof value === "number") return grad(`❪${value}❫`);
+    if (typeof value === "boolean") return grad(`⟦${value}⟧`);
+    if (typeof value === "function")
+      return grad(`⚡ fn:${value.name || "anon"}`);
+    if (typeof value === "symbol") return grad(`☯ ${value.toString()}`);
+    if (typeof value === "bigint") return grad(`💠 ${value}n`);
+    if (value instanceof Date) return grad(`📅 ${value.toISOString()}`);
+    if (value instanceof RegExp) return grad(`🌀 ${value.toString()}`);
+    if (value instanceof Error) return grad(`🔥 Error: ${value.message}`);
+
     if (Array.isArray(value)) {
       const preview = value
         .slice(0, 3)
         .map((v) => this.formatValue(v, type))
-        .join(grad(", ")); // Formatta anche i valori interni
+        .join(grad(", "));
       return grad(
         `[${value.length}]⟦${preview}${value.length > 3 ? grad("…") : ""}⟧`
       );
     }
-    if (value instanceof Date) return grad(`📅 ${value.toISOString()}`);
-    if (value instanceof Error) {
-      // Mostra lo stack se l'errore lo ha e la profondità lo permette (concetto non implementato qui)
-      // Per ora, solo il messaggio.
-      return grad(`🔥 Error: ${value.message}`);
+
+    if (value instanceof Map) {
+      return grad(`Map{${value.size}}`);
     }
 
-    switch (typeof value) {
-      case "string":
-        return grad(`"${value}"`);
-      case "number":
-        return grad(`❪${value}❫`);
-      case "boolean":
-        return grad(`⟦${value}⟧`);
-      case "function":
-        return grad(`⚡ fn:${value.name || "anon"}`);
-      case "object": {
-        // Per oggetti semplici passati a formatValue (es. foglie di formatTree)
-        const keys = Object.keys(value);
-        if (keys.length === 0) return grad("{}");
-        const preview = keys
-          .slice(0, 2) // Leggermente meno verboso per le foglie
-          .map((k) => `${grad(k)}:${this.formatValue(value[k], type)}`)
-          .join(grad(", "));
-        return grad(
-          `{${keys.length}}⚋{${preview}${keys.length > 2 ? grad("…") : ""}}`
-        );
-      }
-      default:
-        return grad(String(value));
+    if (value instanceof Set) {
+      return grad(`Set{${value.size}}`);
     }
+
+    const keys = Object.keys(value);
+    if (keys.length === 0) return grad("{}");
+    const preview = keys
+      .slice(0, 2)
+      .map((k) => `${grad(k)}: ${this.formatValue(value[k], type)}`)
+      .join(grad(", "));
+    return grad(
+      `{${keys.length}}⚋{${preview}${keys.length > 2 ? grad("…") : ""}}`
+    );
   }
 
   // La tua formatTree originale
@@ -215,42 +214,85 @@ class BotConsole {
     const { branch, last, vertical, space } = this.config.theme.symbols.tree;
     const grad = this._getGradient(type);
 
-    // Se obj è un errore, formatValue lo gestisce bene come stringa singola (o con stack)
-    if (
-      obj instanceof Error ||
-      obj instanceof Date ||
-      !obj ||
-      typeof obj !== "object" ||
-      Array.isArray(obj)
-    ) {
-      // Se è un array, formatValue lo gestirà con anteprima.
-      // Se vogliamo un albero per array, dobbiamo modificare qui.
-      // Per ora, usiamo formatValue per non-oggetti o tipi speciali.
+    const isPrimitive = (val) =>
+      val === null ||
+      val === undefined ||
+      typeof val === "string" ||
+      typeof val === "number" ||
+      typeof val === "boolean" ||
+      typeof val === "bigint" ||
+      typeof val === "symbol";
+
+    const formatKey = (key) =>
+      /^[a-zA-Z0-9_$]+$/.test(key) ? key : `"${key}"`;
+
+    if (isPrimitive(obj) || obj instanceof Date || obj instanceof Error) {
       return prefix + this.formatValue(obj, type);
     }
 
-    const entries = Object.entries(obj);
-    if (entries.length === 0) {
-      return prefix + grad(Array.isArray(obj) ? "[]" : "{}");
+    if (Array.isArray(obj)) {
+      if (obj.length === 0) return prefix + grad("[]");
+      return obj
+        .map((val, i) => {
+          const isLast = i === obj.length - 1;
+          const symbol = isLast ? last : branch;
+          const nextPrefix = prefix + (isLast ? space : vertical);
+          return `${prefix}${grad(`${symbol} [${i}]`)}\n${this.formatTree(
+            val,
+            type,
+            nextPrefix
+          )}`;
+        })
+        .join("\n");
     }
 
+    if (obj instanceof Map) {
+      const entries = Array.from(obj.entries());
+      if (entries.length === 0) return prefix + grad("Map{}");
+      return entries
+        .map(([k, v], idx) => {
+          const isLast = idx === entries.length - 1;
+          const symbol = isLast ? last : branch;
+          const nextPrefix = prefix + (isLast ? space : vertical);
+          return `${prefix}${grad(
+            `${symbol} (key: ${this.formatValue(k, type)})`
+          )}\n${this.formatTree(v, type, nextPrefix)}`;
+        })
+        .join("\n");
+    }
+
+    if (obj instanceof Set) {
+      const values = Array.from(obj);
+      if (values.length === 0) return prefix + grad("Set{}");
+      return values
+        .map((v, idx) => {
+          const isLast = idx === values.length - 1;
+          const symbol = isLast ? last : branch;
+          const nextPrefix = prefix + (isLast ? space : vertical);
+          return `${prefix}${grad(`${symbol} value`)}\n${this.formatTree(
+            v,
+            type,
+            nextPrefix
+          )}`;
+        })
+        .join("\n");
+    }
+
+    const entries = Object.entries(obj);
+    if (entries.length === 0) return prefix + grad("{}");
+
     return entries
-      .map(([key, val], idx, arr) => {
-        const isLast = idx === arr.length - 1;
+      .map(([key, val], idx) => {
+        const isLast = idx === entries.length - 1;
         const symbol = isLast ? last : branch;
-        const line = prefix + grad(`${symbol} ${key}: `);
+        const line = `${prefix}${grad(`${symbol} ${formatKey(key)}:`)}`;
         const nextPrefix = prefix + (isLast ? space : vertical);
 
-        // Se val è un oggetto (e non null, né Date, né Error) O un array, continua la ricorsione
-        if (
-          val &&
-          typeof val === "object" &&
-          !(val instanceof Date) &&
-          !(val instanceof Error)
-        ) {
+        if (isPrimitive(val) || val instanceof Date || val instanceof Error) {
+          return `${line} ${this.formatValue(val, type)}`;
+        } else {
           return `${line}\n${this.formatTree(val, type, nextPrefix)}`;
         }
-        return line + this.formatValue(val, type);
       })
       .join("\n");
   }
