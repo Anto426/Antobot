@@ -1,10 +1,8 @@
-// In ../../../../class/embed/PresetEmbed.js
-
 import { EmbedBuilder } from "discord.js";
-import DynamicColor from "../color/DynamicColor.js"; // Assicurati che il percorso sia corretto
-import ColorFunctions from "../color/ColorFunctions.js"; // Assicurati che il percorso sia corretto
+import DynamicColor from "../color/DynamicColor.js";
+import ColorFunctions from "../color/ColorFunctions.js";
+import BotConsole from "../console/BotConsole.js";
 
-// Definisci i tuoi colori di stato
 const STATUS_COLORS = {
   SUCCESS: "#57F287", // Verde Discord
   WARNING: "#FEE75C", // Giallo Discord
@@ -27,8 +25,6 @@ export default class PresetEmbed extends EmbedBuilder {
     this.#guild = guild;
     this.#member = member;
     this.#image = image;
-    // this.setColor(PresetEmbed.DEFAULT_COLOR); // Imposta il colore nel costruttore o in init()
-    // this.setTimestamp(); // Può essere chiamato qui o in init()
   }
 
   async init(useDynamicColor = true) {
@@ -74,7 +70,7 @@ export default class PresetEmbed extends EmbedBuilder {
     const url =
       this.#image ??
       this.data.thumbnail?.url ??
-      this.#guild?.client?.user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS);
+      client?.user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS);
 
     if (!url) {
       BotConsole.debug(

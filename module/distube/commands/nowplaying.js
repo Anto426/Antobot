@@ -67,7 +67,7 @@ export default {
         },
       ])
       .setFooter({ text: `Posizione in coda: 1/${queue.songs.length}` })
-      ._applyColorFromImage();
+      await embed._applyColorFromImage();
 
     await interaction.editReply({ embeds: [embed], content: "" });
   },

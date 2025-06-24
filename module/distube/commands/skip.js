@@ -46,8 +46,8 @@ export default {
         "🧑‍🎤 Artista",
         currentSong.uploader?.name || "Sconosciuto",
         true
-      )
-      ._applyColorFromImage();
+      );
+    await embed._applyColorFromImage();
 
     await interaction.editReply({ embeds: [embed] });
   },

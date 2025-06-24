@@ -45,7 +45,7 @@ export default {
       ])
       .addFieldInline("📎 Link", `[Apri traccia](${song.url})`)
       .addFieldInline("🔊 Volume", `${queue.volume}%`)
-      ._applyColorFromImage();
+      await embed._applyColorFromImage();
 
     await interaction.editReply({ embeds: [embed], content: "" });
   },
