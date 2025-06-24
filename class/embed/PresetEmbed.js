@@ -95,6 +95,12 @@ export default class PresetEmbed extends EmbedBuilder {
     this.setColor(hex);
   }
 
+  setThumbnailclient() {
+    return this.setThumbnail(
+      client?.user.displayAvatarURL(PresetEmbed.AVATAR_OPTIONS)
+    );
+  }
+
   setAuthorFromUser(userOrMember) {
     const user = userOrMember?.user ?? userOrMember;
     if (user) {

@@ -85,8 +85,6 @@ export default class serverupdate {
 
     const embed = await new PresetEmbed().init();
 
-
-
     embed
       .setAuthor({
         name: repoName,
@@ -124,7 +122,8 @@ export default class serverupdate {
       .setFooter({
         text: client.user.username,
         iconURL: client.user.displayAvatarURL(),
-      });
+      })
+      .setThumbnailclient();
 
     return embed;
   }

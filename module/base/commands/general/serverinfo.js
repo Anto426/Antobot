@@ -24,17 +24,17 @@ export default {
 
     embed
       .setMainContent(
-      "🏠 Informazioni Server",
-      `✨ Benvenuto nelle info di **${guild.name}**!\nEcco tutti i dettagli:`
+        "🏠 Informazioni Server",
+        `✨ Benvenuto nelle info di **${guild.name}**!\nEcco tutti i dettagli:`
       )
       .setThumbnailUrl(guild.iconURL({ dynamic: true }))
       .addFieldInline("🆔 ID Server", `\`${guild.id}\``)
       .addFieldInline("👑 Proprietario", `<@${guild.ownerId}>`)
       .addFieldInline(
-      "📅 Creato",
-      `<t:${Math.floor(guild.createdTimestamp / 1000)}:F> (<t:${Math.floor(
-        guild.createdTimestamp / 1000
-      )}:R>)`
+        "📅 Creato",
+        `<t:${Math.floor(guild.createdTimestamp / 1000)}:F> (<t:${Math.floor(
+          guild.createdTimestamp / 1000
+        )}:R>)`
       )
       .addFieldInline("👥 Membri", `\`${guild.memberCount}\``)
       .addFieldInline("📁 Canali", `\`${guild.channels.cache.size}\``)
@@ -42,25 +42,25 @@ export default {
       .addFieldInline("🌍 Regione", `\`${guild.preferredLocale}\``)
       .addFieldInline("🔒 Verifica", `\`${guild.verificationLevel}\``)
       .addFieldInline(
-      "📝 Descrizione",
-      guild.description ? guild.description : "Nessuna"
+        "📝 Descrizione",
+        guild.description ? guild.description : "Nessuna"
       )
       .addFieldInline("📜 Boost Livello", `\`${guild.premiumTier}\``)
       .addFieldInline(
-      "🚀 Boost Totali",
-      `\`${guild.premiumSubscriptionCount ?? 0}\``
+        "🚀 Boost Totali",
+        `\`${guild.premiumSubscriptionCount ?? 0}\``
       )
       .addFieldInline("🤝 Partner", guild.partnered ? "Sì" : "No")
       .addFieldInline("✅ Verificato", guild.verified ? "Sì" : "No")
       .addFieldInline(
-      "🖼️ Banner",
-      guild.bannerURL()
-        ? `[Visualizza banner](${guild.bannerURL({ size: 512 })})`
-        : "Nessuno"
+        "🖼️ Banner",
+        guild.bannerURL()
+          ? `[Visualizza banner](${guild.bannerURL({ size: 512 })})`
+          : "Nessuno"
       )
       .addFieldInline(
-      "🔗 Invito",
-      guild.vanityURLCode ? `discord.gg/${guild.vanityURLCode}` : "Nessuno"
+        "🔗 Invito",
+        guild.vanityURLCode ? `discord.gg/${guild.vanityURLCode}` : "Nessuno"
       );
     await interaction.editReply({ embeds: [embed] });
   },
