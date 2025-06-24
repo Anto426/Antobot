@@ -180,6 +180,12 @@ class SqlManager {
     return { ...result, operation: "updated" };
   }
 
+  async getGuildsWithLogChannel() {
+    const query =
+      "SELECT ID, LOG_ID FROM `GUILD` WHERE LOG_ID IS NOT NULL AND LOG_ID <> ''";
+    return this._getAllRows(query);
+  }
+
   async synchronizeGuild(guildData) {
     const { id, name, ...otherFields } = guildData;
     const existingGuild = await this.getGuildById(id);

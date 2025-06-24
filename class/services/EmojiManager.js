@@ -1,62 +1,86 @@
-import sharp from 'sharp';
-import BotConsole from '../console/BotConsole.js';
+import sharp from "sharp";
+import BotConsole from "../console/BotConsole.js";
 
+class EmojiManager {
+  async upsertEmoji(name, imageUrl) {
+    try {
+      const emojis = client.application?.emojis;
+      if (!emojis) {
+        throw new Error(
+          "Impossibile accedere al gestore di emoji dell'applicazione (client.application.emojis)."
+        );
+      }
 
-export default class EmojiManager {
-    #targetGuildId;
+      const imageBuffer = await this.#processImage(imageUrl);
+      if (!imageBuffer) {
+        throw new Error(
+          `Elaborazione dell'immagine fallita per l'URL: ${imageUrl}`
+        );
+      }
 
+      // Forza l'aggiornamento della cache per avere la lista più recente
+      await emojis.fetch();
 
-    constructor({ targetGuildId }) {
-        if (!targetGuildId) {
-            throw new Error("EmojiManager richiede un targetGuildId.");
-        }
-        this.#targetGuildId = targetGuildId;
+      const existingEmoji = emojis.cache.find((e) => e.name === name);
+
+      if (existingEmoji) {
+        await existingEmoji.delete(
+          "Webhook: Sostituzione con avatar aggiornato"
+        );
+        BotConsole.info(
+          `[EmojiManager] Vecchio emoji globale :${name}: eliminato.`
+        );
+      }
+
+      const newOrUpdatedEmoji = await emojis.create({
+        attachment: imageBuffer,
+        name,
+        reason: existingEmoji
+          ? "Webhook: Avatar aggiornato"
+          : "Webhook: Nuovo collaboratore",
+      });
+
+      if (existingEmoji) {
+        BotConsole.success(
+          `[EmojiManager] Emoji globale :${name}: è stato aggiornato (ricreato).`
+        );
+      } else {
+        BotConsole.success(
+          `[EmojiManager] Emoji globale :${name}: è stato creato con successo.`
+        );
+      }
+
+      return newOrUpdatedEmoji;
+    } catch (error) {
+      BotConsole.error(
+        `[EmojiManager] Fallito processo di upsert per l'emoji "${name}":`,
+        error
+      );
+      return null;
     }
+  }
 
+  async #processImage(url) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(
+          `HTTP ${response.status} durante il fetch dell'immagine.`
+        );
+      }
 
-    async upsertEmoji(name, imageUrl) {
-        try {
-            const guild = await client.guilds.fetch(this.#targetGuildId);
-            if (!guild) throw new Error(`Gilda ${this.#targetGuildId} non trovata.`);
+      const arrayBuffer = await response.arrayBuffer();
+      const imageBuffer = Buffer.from(arrayBuffer);
 
-            const imageBuffer = await this.#processImage(imageUrl);
-            if (!imageBuffer) throw new Error("Elaborazione immagine fallita.");
-
-            const existingEmoji = guild.emojis.cache.find(e => e.name === name);
-
-            if (existingEmoji) {
-                await existingEmoji.edit({ image: imageBuffer, reason: "Aggiornamento automatico via webhook" });
-                BotConsole.info(`[EmojiManager] Emoji :${name}: aggiornato su ${guild.name}.`);
-                return existingEmoji;
-            } else {
-                const newEmoji = await guild.emojis.create({ attachment: imageBuffer, name: name, reason: "Nuovo collaboratore via webhook" });
-                BotConsole.success(`[EmojiManager] Emoji :${name}: creato su ${guild.name}.`);
-                return newEmoji;
-            }
-        } catch (error) {
-            BotConsole.error(`[EmojiManager] Fallito processo di upsert per l'emoji ${name}:`, error);
-            return null;
-        }
+      return await sharp(imageBuffer).resize(128, 128).png().toBuffer();
+    } catch (error) {
+      BotConsole.error(
+        `[EmojiManager] Fallito processing dell'immagine da ${url}`,
+        error
+      );
+      return null;
     }
-
-    async #processImage(url) {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP ${response.status} durante il fetch dell'immagine.`);
-            
-            const imageBuffer = Buffer.from(await response.arrayBuffer());
-            
-            if (imageBuffer.length > 256 * 1024) {
-                BotConsole.debug(`[EmojiManager] Immagine troppo grande (${(imageBuffer.length / 1024).toFixed(1)}KB). Ridimensionamento...`);
-                return await sharp(imageBuffer)
-                    .resize(128, 128)
-                    .png()
-                    .toBuffer();
-            }
-            return imageBuffer;
-        } catch (error) {
-            BotConsole.error(`[EmojiManager] Fallito scaricamento o processing immagine da ${url}`, error);
-            return null;
-        }
-    }
+  }
 }
+
+export default new EmojiManager();

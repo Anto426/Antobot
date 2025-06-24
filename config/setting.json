@@ -52,6 +52,7 @@
         "status": true,
         "captcha": false,
         "holiday": true,
+        "serverupdate": true,
         "music": true,
         "openai": {
             "enabled": false,
