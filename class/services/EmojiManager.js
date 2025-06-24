@@ -2,6 +2,9 @@ import sharp from "sharp";
 import BotConsole from "../console/BotConsole.js";
 
 class EmojiManager {
+  
+  
+  
   async upsertEmoji(name, imageUrl) {
     try {
       const emojis = client.application?.emojis;
@@ -50,7 +53,7 @@ class EmojiManager {
         );
       }
 
-      return newOrUpdatedEmoji;
+      return newOrUpdatedEmoji ;
     } catch (error) {
       BotConsole.error(
         `[EmojiManager] Fallito processo di upsert per l'emoji "${name}":`,
