@@ -67,6 +67,12 @@ class SqlManager {
       throw new Error("Pool MySQL non inizializzata in getConnection.");
     return this.pool.getConnection();
   }
+  async addLog(logData) {
+    if (logData.DETAILS && typeof logData.DETAILS !== "string") {
+      logData.DETAILS = JSON.stringify(logData.DETAILS, null, 2);
+    }
+    return this._genericInsert("LOGS", logData);
+  }
 
   async _executeQuery(query, params = []) {
     if (!this.pool)
@@ -513,32 +519,47 @@ class SqlManager {
     );
   }
 
-  async addLog(data) {
-    return this._genericInsert("LOG", data, ["ID"]);
-  }
   async getLogById(id) {
-    return this._getByIdGeneric("LOG", "ID", id);
+    return this._getByIdGeneric("LOGS", "ID", id);
   }
+
   async getAllLogs() {
-    return this._getAllGeneric("LOG");
+    return this._getAllGeneric("LOGS");
   }
+
   async getLogsByGuild(
     guildId,
-    { limit = 50, offset = 0, orderBy = "ID", orderDirection = "DESC" } = {}
+    {
+      limit = 50,
+      offset = 0,
+      orderBy = "CREATED_AT",
+      orderDirection = "DESC",
+    } = {}
   ) {
-    const validCols = ["ID", "TYPE"];
-    const safeOB = validCols.includes(orderBy.toUpperCase()) ? orderBy : "ID";
+    const validCols = ["ID", "LOG_TYPE", "CREATED_AT"];
+    const safeOB = validCols.includes(orderBy.toUpperCase())
+      ? orderBy
+      : "CREATED_AT";
     const safeOD = orderDirection.toUpperCase() === "ASC" ? "ASC" : "DESC";
-    return this._getAllRows(
-      `SELECT * FROM \`LOG\` WHERE \`ID_GUILD\` = ? ORDER BY \`${safeOB}\` ${safeOD} LIMIT ? OFFSET ?`,
-      [guildId, limit, offset]
-    );
+
+    const query = `
+            SELECT * FROM \`LOGS\` 
+            WHERE \`ID_GUILD\` = ? 
+            ORDER BY \`${safeOB}\` ${safeOD} 
+            LIMIT ? OFFSET ?
+        `;
+    return this._getAllRows(query, [guildId, limit, offset]);
   }
+
   async updateLog(id, fields) {
-    return this._updateByIdGeneric("LOG", "ID", id, fields);
+    if (fields.DETAILS && typeof fields.DETAILS !== "string") {
+      fields.DETAILS = JSON.stringify(fields.DETAILS, null, 2);
+    }
+    return this._updateByIdGeneric("LOGS", "ID", id, fields);
   }
+
   async deleteLog(id) {
-    return this._deleteByIdGeneric("LOG", "ID", id);
+    return this._deleteByIdGeneric("LOGS", "ID", id);
   }
 
   async beginTransaction() {
