@@ -49,6 +49,6 @@ export default {
       );
     await embed._applyColorFromImage();
 
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };

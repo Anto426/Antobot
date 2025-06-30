@@ -85,6 +85,6 @@ export default {
 
     embed.addFieldInline("👤 Creatore", author, true);
 
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };

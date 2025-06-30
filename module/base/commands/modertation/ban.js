@@ -47,6 +47,6 @@ export default {
       .addField("Moderatore", interaction.user.tag, false)
       .setThumbnailUrl(target.displayAvatarURL({ dynamic: true }));
 
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };

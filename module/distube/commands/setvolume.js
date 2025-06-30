@@ -63,6 +63,6 @@ export default {
         inline: false,
       });
 
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };

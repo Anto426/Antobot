@@ -35,6 +35,6 @@ export default {
       "Le tracce nella coda sono state mischiate."
     );
 
-    await interaction.editReply({ embeds: [embed], content: "" });
+    return({ embeds: [embed], content: "" });
   },
 };

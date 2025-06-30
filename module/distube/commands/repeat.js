@@ -52,6 +52,7 @@ export default {
     ];
     embed.setMainContent("⚙️ Modalità Repeat", modeText[repeatMap[mode]]);
 
-    await interaction.editReply({ embeds: [embed], content: "" });
+    return { embeds: [embed], content: "" };
   },
 };
+

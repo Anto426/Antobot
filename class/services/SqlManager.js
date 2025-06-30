@@ -77,7 +77,6 @@ class SqlManager {
   async _executeQuery(query, params = []) {
     if (!this.pool)
       throw new Error("Pool MySQL non inizializzata in _executeQuery.");
-    BotConsole.debug(`SQL Exec: ${query} -- PARAMS: ${JSON.stringify(params)}`);
     try {
       const [results, fields] = await this.pool.query(query, params);
       return [results, fields];
@@ -211,7 +210,7 @@ class SqlManager {
     }
 
     if (!existingGuild) {
-      BotConsole.debug(
+      BotConsole.info(
         `[Sync] Gilda ${name} (${id}) non trovata. Aggiunta: ${JSON.stringify(
           guildRecordData
         )}`
@@ -237,14 +236,14 @@ class SqlManager {
         }
       }
       if (Object.keys(fieldsToUpdate).length > 0) {
-        BotConsole.debug(
+        BotConsole.info(
           `[Sync] Gilda ${id}. Aggiornamento con: ${JSON.stringify(
             fieldsToUpdate
           )}`
         );
         return this.updateGuild(id, fieldsToUpdate);
       }
-      BotConsole.debug(`[Sync] Gilda ${name} (${id}) senza modifiche.`);
+      BotConsole.info(`[Sync] Gilda ${name} (${id}) senza modifiche.`);
       return { operation: "no_change", data: existingGuild, id: id };
     }
   }

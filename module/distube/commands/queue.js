@@ -50,6 +50,6 @@ export default {
           : "Off"
       );
 
-    await interaction.editReply({ embeds: [embed], content: "" });
+    return { embeds: [embed], content: "" };
   },
 };

@@ -33,6 +33,6 @@ export default {
       `Autoplay ${newAutoplayState ? "✅ Attivato" : "❌ Disattivato"}`
     );
 
-    await interaction.editReply({ embeds: [embed], content: "" });
+    return { embeds: [embed] };
   },
 };

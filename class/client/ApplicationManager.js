@@ -5,12 +5,8 @@ import BotConsole from "../console/BotConsole.js";
 import ClientInitializer from "./ClientInitializer.js";
 import ModuleLoader from "../Loader/ModuleLoader.js";
 import ConfigManager from "../services/ConfigManager.js";
-import StartupLogger from "../console/LogStartup.js";
-import CommandGuildUpdate from "../Guild/CommandGuildUpdate.js";
 import SystemCheck from "./SystemCheck.js";
 import dotenv from "dotenv";
-import IntitialOtherModules from "../Loader/IntitialOtherModules.js";
-import SynchronizationManager from "../services/SynchronizationManager.js";
 dotenv.config();
 
 class BotApplication {
@@ -84,15 +80,6 @@ class BotApplication {
     const token = await this.fetchToken();
     await client.login(token);
     BotConsole.success(`Connesso come ${client.user.tag}`);
-  }
-
-  async launch() {
-    BotConsole.success("Bot pronto all’uso!");
-    (await ModuleLoader.initAll?.()) || Promise.resolve();
-    await CommandGuildUpdate.updateGuildsOnStartup();
-    await SynchronizationManager.synchronizeAll();
-    await IntitialOtherModules.Init();
-    await StartupLogger.run();
   }
 
   async run() {

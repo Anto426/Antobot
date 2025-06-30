@@ -62,6 +62,6 @@ export default {
         "🔗 Invito",
         guild.vanityURLCode ? `discord.gg/${guild.vanityURLCode}` : "Nessuno"
       );
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };

@@ -87,7 +87,7 @@ export default {
 
       embed.setMainContent("Messaggi Cancellati", responseDescription);
       await embed._applyColorFromImage();
-      await interaction.editReply({ embeds: [embed] });
+      return({ embeds: [embed] });
     } catch (error) {
       BotConsole.error(
         `[ClearCommand] Errore durante la cancellazione dei messaggi:`,
@@ -97,7 +97,7 @@ export default {
         "Errore",
         "Si è verificato un errore durante la cancellazione. I messaggi potrebbero essere troppo vecchi (più di 14 giorni)."
       );
-      await interaction.editReply({ embeds: [embed] });
+      return({ embeds: [embed] });
     }
   },
 };

@@ -57,6 +57,6 @@ export default {
           : "`Nessun ruolo`"
       );
 
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };
