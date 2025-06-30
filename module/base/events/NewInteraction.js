@@ -110,7 +110,7 @@ function getHandler(interaction) {
     interaction.isModalSubmit()
   ) {
     const handlerName = interaction.customId.split("-")[0];
-    return client.components.get(handlerName);
+    return client.buttons.get(handlerName);
   }
   return null;
 }
