@@ -109,7 +109,7 @@ class SqlManager {
 
     const row = await this._getOne(query, params);
 
-    return !!row; // Restituisce true se la riga esiste, false altrimenti
+    return !!row;  
   }
 
   async _genericInsert(table, data, uniqueKeyFields = ["ID"]) {

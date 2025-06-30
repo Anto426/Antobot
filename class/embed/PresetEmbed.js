@@ -4,11 +4,11 @@ import ColorFunctions from "../color/ColorFunctions.js";
 import BotConsole from "../console/BotConsole.js";
 
 const STATUS_COLORS = {
-  SUCCESS: "#57F287", // Verde Discord
-  WARNING: "#FEE75C", // Giallo Discord
-  DANGER: "#ED4245", // Rosso Discord
-  INFO: "#5865F2", // Blu Discord / Blurple
-  DEFAULT: "#8A0303", // Il tuo colore di default
+  SUCCESS: "#57F287",
+  WARNING: "#FEE75C",
+  DANGER: "#ED4245",
+  INFO: "#5865F2",
+  DEFAULT: "#8A0303",
 };
 
 export default class PresetEmbed extends EmbedBuilder {
@@ -87,7 +87,6 @@ export default class PresetEmbed extends EmbedBuilder {
         "PresetEmbed: Palette vuota da _applyColorFromImage, uso colore default."
       );
       this.setColor(PresetEmbed.DEFAULT_COLOR);
-      // throw new Error("Palette vuota"); // Forse non lanciare un errore, ma usa un default
       return;
     }
 
@@ -117,7 +116,7 @@ export default class PresetEmbed extends EmbedBuilder {
   }
 
   setImageUrl(url) {
-    this.#image = url; // Potrebbe servire per _applyColorFromImage se chiamato dopo
+    this.#image = url;
     return this.setImage(url);
   }
 
@@ -135,8 +134,8 @@ export default class PresetEmbed extends EmbedBuilder {
   }
 
   setMainContent(title, description) {
-    if (title) this.setTitle(title); // Controlla se title è fornito
-    if (description) this.setDescription(description); // Controlla se description è fornita
+    if (title) this.setTitle(title);
+    if (description) this.setDescription(description);
     return this;
   }
 
@@ -179,13 +178,6 @@ export default class PresetEmbed extends EmbedBuilder {
     return this.setColor(ColorFunctions.rgbToHex(nr, ng, nb));
   }
 
-  // --- METODI DI STATO K (KDanger, KSuccess, etc.) ---
-  /**
-   * Imposta l'embed per uno stato di successo.
-   * @param {string} [title] Il titolo dell'embed.
-   * @param {string} [description] La descrizione dell'embed.
-   * @returns {this} L'istanza dell'embed per concatenazione.
-   */
   KSuccess(title, description) {
     this.setColor(STATUS_COLORS.SUCCESS);
     if (title) this.setTitle(title);
@@ -193,12 +185,6 @@ export default class PresetEmbed extends EmbedBuilder {
     return this;
   }
 
-  /**
-   * Imposta l'embed per uno stato di avvertimento.
-   * @param {string} [title] Il titolo dell'embed.
-   * @param {string} [description] La descrizione dell'embed.
-   * @returns {this} L'istanza dell'embed per concatenazione.
-   */
   KWarning(title, description) {
     this.setColor(STATUS_COLORS.WARNING);
     if (title) this.setTitle(title);
@@ -206,12 +192,6 @@ export default class PresetEmbed extends EmbedBuilder {
     return this;
   }
 
-  /**
-   * Imposta l'embed per uno stato di pericolo/errore.
-   * @param {string} [title] Il titolo dell'embed.
-   * @param {string} [description] La descrizione dell'embed.
-   * @returns {this} L'istanza dell'embed per concatenazione.
-   */
   KDanger(title, description) {
     this.setColor(STATUS_COLORS.DANGER);
     if (title) this.setTitle(title);
@@ -219,12 +199,6 @@ export default class PresetEmbed extends EmbedBuilder {
     return this;
   }
 
-  /**
-   * Imposta l'embed per uno stato informativo.
-   * @param {string} [title] Il titolo dell'embed.
-   * @param {string} [description] La descrizione dell'embed.
-   * @returns {this} L'istanza dell'embed per concatenazione.
-   */
   KInfo(title, description) {
     this.setColor(STATUS_COLORS.INFO);
     if (title) this.setTitle(title);
