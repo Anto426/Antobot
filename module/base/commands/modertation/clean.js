@@ -3,11 +3,11 @@ import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
 import BotConsole from "../../../../class/console/BotConsole.js";
 
 export default {
-  name: "clear",
+  name: "clean",
   permissions: [PermissionsBitField.Flags.ManageMessages],
   isActive: true,
   data: {
-    name: "clear",
+    name: "clean",
     description: "Cancella un numero specificato di messaggi da un canale.",
     options: [
       {
@@ -16,7 +16,7 @@ export default {
         type: ApplicationCommandOptionType.Integer,
         required: true,
         min_value: 1,
-        max_value: 100, // Limite imposto dall'API di Discord
+        max_value: 100,
       },
       {
         name: "utente",
@@ -30,17 +30,13 @@ export default {
   async execute(interaction) {
     const amount = interaction.options.getInteger("quantità");
     const targetUser = interaction.options.getUser("utente");
-    const channel = interaction.channel;
+    const { channel, client, guild, member } = interaction;
 
-    const embed = await new PresetEmbed({
-      guild: interaction.guild,
-      member: interaction.member,
-    }).init();
+    const embed = await new PresetEmbed({ guild, member }).init();
 
-    // Controllo se il bot ha i permessi nel canale specifico
     if (
       !channel
-        .permissionsFor(interaction.client.user)
+        .permissionsFor(client.user)
         .has(PermissionsBitField.Flags.ManageMessages)
     ) {
       embed.KDanger(
@@ -51,34 +47,36 @@ export default {
     }
 
     try {
-      // Scarica i messaggi da cancellare
       const messages = await channel.messages.fetch({ limit: amount });
-
       let messagesToDelete = messages;
 
-      // Se è stato specificato un utente, filtra i messaggi
       if (targetUser) {
         messagesToDelete = messages.filter(
           (m) => m.author.id === targetUser.id
         );
       }
 
-      // Filtra i messaggi più vecchi di 14 giorni, che non possono essere cancellati in massa
-      const fourteenDaysAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
       messagesToDelete = messagesToDelete.filter(
-        (m) => m.createdTimestamp > fourteenDaysAgo
+        (m) => m.interaction?.id !== interaction.id
       );
 
       if (messagesToDelete.size === 0) {
         embed.KWarning(
-          "Nessun Messaggio da Cancellare",
-          "Non sono stati trovati messaggi recenti (ultimi 14 giorni) che corrispondono ai tuoi criteri."
+          "Nessun Messaggio Trovato",
+          "Non sono stati trovati messaggi che corrispondono ai tuoi criteri."
         );
-        return interaction.editReply({ embeds: [embed] });
+        return { embeds: [embed], ephemeral: true };
       }
 
-      // Esegui la cancellazione di massa
       const deletedMessages = await channel.bulkDelete(messagesToDelete, true);
+
+      if (deletedMessages.size === 0) {
+        embed.KWarning(
+          "Nessun Messaggio Cancellato",
+          "Non è stato possibile cancellare alcun messaggio. Potrebbero essere più vecchi di 14 giorni."
+        );
+        return { embeds: [embed], ephemeral: true };
+      }
 
       let responseDescription = `Ho cancellato con successo **${deletedMessages.size}** messaggi.`;
       if (targetUser) {
@@ -87,17 +85,17 @@ export default {
 
       embed.setMainContent("Messaggi Cancellati", responseDescription);
       await embed._applyColorFromImage();
-      return({ embeds: [embed] });
+      return { embeds: [embed], ephemeral: true };
     } catch (error) {
       BotConsole.error(
-        `[ClearCommand] Errore durante la cancellazione dei messaggi:`,
+        `[CleanCommand] Errore durante la cancellazione dei messaggi:`,
         error
       );
       embed.KDanger(
         "Errore",
-        "Si è verificato un errore durante la cancellazione. I messaggi potrebbero essere troppo vecchi (più di 14 giorni)."
+        "Si è verificato un errore. I messaggi potrebbero essere troppo vecchi (più di 14 giorni)."
       );
-      return({ embeds: [embed] });
+      return { embeds: [embed], ephemeral: true };
     }
   },
 };
