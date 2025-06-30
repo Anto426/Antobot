@@ -9,12 +9,16 @@ export default {
   eventType: "ready",
   isActive: true,
   async execute() {
-    client.botready = true;
     BotConsole.success("Bot pronto all’uso!");
     (await ModuleLoader.initAll?.()) || Promise.resolve();
+    BotConsole.success("Tutti i moduli sono stati caricati correttamente.");
     await CommandGuildUpdate.updateGuildsOnStartup();
+    BotConsole.success("Tutte le gilde sono state aggiornate con i comandi.");
     await SynchronizationManager.synchronizeAll();
+    BotConsole.success("Tutte le gilde sono state sincronizzate.");
     await IntitialOtherModules.Init();
+    BotConsole.success("Tutti i moduli secondari sono stati inizializzati.");
     await StartupLogger.run();
+    client.botready = true;
   },
 };

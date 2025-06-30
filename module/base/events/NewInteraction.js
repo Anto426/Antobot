@@ -29,12 +29,11 @@ async function sendReply({
   const send = async (messagePayload) => {
     try {
       if (interaction.replied || interaction.deferred) {
-        console.log(messagePayload.ephemeral);
         if (!messagePayload.ephemeral) {
           await interaction.editReply(messagePayload);
         } else {
           BotConsole.warning(
-            "ephemeral reply found in sendReply, using followUp."
+            "Interaction is ephemeral, using followUp instead of editReply."
           );
 
           try {
@@ -168,6 +167,20 @@ export default {
   isActive: true,
 
   async execute(interaction) {
+    
+    
+    if (!client.botready) {
+      await sendReply({
+        interaction,
+        title: "Bot Non Pronto",
+        description: "Il bot non è ancora pronto. Riprova tra qualche istante.",
+        type: "warning",
+      });
+      return;
+    }
+
+
+
     const handler = getHandler(interaction);
 
     if (!handler) {
