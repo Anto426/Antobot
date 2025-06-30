@@ -1,4 +1,4 @@
-# Antobot (Beta)
+# Antobot
 
 Antobot is a customizable Discord bot built with [discord.js](https://discord.js.org/) featuring commands, music playback (via Distube), user permissions, and interaction security. This is the **Beta** branch, used for testing new features and improvements.
 
