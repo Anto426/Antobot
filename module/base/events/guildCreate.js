@@ -52,13 +52,14 @@ export default {
       }
     }
 
-    const embed = new PresetEmbed({ guild }).KSuccess(
-      `Grazie per avermi aggiunto a ${guild.name}!`,
-      "Sono il tuo assistente multifunzione, pronto ad aiutarti a gestire il server.\n\n" +
-        "Per iniziare, ecco alcuni comandi utili:\n" +
-        "• Usa `/help` per vedere la lista completa dei miei comandi.\n" +
-        "• Usa `/setup` per configurare le varie funzionalità.\n\n" +
-        "Sono felice di essere qui!"
+    const embed = await new PresetEmbed({ guild }).init();
+
+    embed.setMainContent(
+      `Grazie per avermi aggiunto a ${guild.name}! 🎉`,
+      "Sono il tuo assistente multifunzione 🤖, pronto ad aiutarti a gestire il server.\n\n" +
+        "Per iniziare, ecco alcuni comandi utili: 🚀\n" +
+        "• Usa `/help` 📖 per vedere la lista completa dei miei comandi.\n" +
+        "• Usa `/setup` ⚙️ per configurare le varie funzionalità.\n\n"
     );
 
     if (channelToSend) {
