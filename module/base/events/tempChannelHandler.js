@@ -3,6 +3,7 @@ import SqlManager from "../../../class/services/SqlManager.js";
 import { Events, ChannelType, PermissionsBitField } from "discord.js";
 
 const pendingDeletions = new Map();
+const originalLimits = new Map(); // NUOVO: Mappa per salvare i limiti originali
 
 export default {
   name: "PersonalVoiceChannelManager",
@@ -10,10 +11,7 @@ export default {
   isActive: true,
 
   async execute(oldState, newState) {
-    if (
-      newState.member?.user.bot ||
-      oldState.channelId === newState.channelId
-    ) {
+    if (oldState.channelId === newState.channelId) {
       return;
     }
 
@@ -32,9 +30,27 @@ export default {
 
     try {
       const tempChannelConfig = await this.getTempChannelConfig(guild.id);
-      if (!tempChannelConfig) return;
+      if (!tempChannelConfig) return; // --- NUOVA LOGICA: Gestione dell'ingresso del BOT in un canale ---
 
-      // --- Logica per determinare se l'utente è entrato in un canale generatore ---
+      if (member.id === newState.client.user.id) {
+        if (this.isPersonalChannel(joinedChannel, tempChannelConfig)) {
+          const currentLimit = joinedChannel.userLimit;
+          if (currentLimit > 0) {
+            originalLimits.set(joinedChannel.id, currentLimit);
+            const newLimit = currentLimit + 1;
+            await joinedChannel.setUserLimit(
+              newLimit,
+              "Aumento limite per ingresso del bot"
+            );
+            BotConsole.info(
+              `[PersonalVC - ${guild.name}] Bot è entrato in "${joinedChannel.name}", limite aumentato a ${newLimit}.`
+            );
+          }
+        }
+        return; // Termina l'esecuzione per il bot qui
+      } // --- FINE NUOVA LOGICA ---
+      if (member.user.bot) return; // Ignora gli altri bot // --- Logica per determinare se l'utente è entrato in un canale generatore ---
+
       const generatorChannels = {
         2: tempChannelConfig.DUO_CH,
         3: tempChannelConfig.TRIO_CH,
@@ -71,7 +87,6 @@ export default {
               }.`
             );
           }
-          // Spostiamo l'utente nella sua stanza (aggiornata o meno).
           await member.voice.setChannel(existingPersonalChannel);
         } else {
           const newChannel = await guild.channels.create({
@@ -96,9 +111,7 @@ export default {
             `${logPrefix} ha creato la sua stanza personale "${newChannel.name}".`
           );
         }
-      }
-      // Se l'utente non è in un generatore, controlliamo se è rientrato in una stanza in attesa di cancellazione.
-      else if (pendingDeletions.has(joinedChannel.id)) {
+      } else if (pendingDeletions.has(joinedChannel.id)) {
         clearTimeout(pendingDeletions.get(joinedChannel.id));
         pendingDeletions.delete(joinedChannel.id);
         BotConsole.info(
@@ -111,18 +124,32 @@ export default {
   },
 
   async handleChannelLeave(oldState) {
-    const { guild, channel: leftChannel } = oldState;
+    const { guild, channel: leftChannel, member } = oldState; // Aggiunto member
     if (!leftChannel) return;
+    const logPrefix = `[PersonalVC - ${guild.name}]`;
 
     try {
       const tempChannelConfig = await this.getTempChannelConfig(guild.id);
-      if (!tempChannelConfig) return;
+      if (!tempChannelConfig) return; // --- NUOVA LOGICA: Gestione dell'uscita del BOT da un canale ---
 
+      if (member.id === oldState.client.user.id) {
+        if (originalLimits.has(leftChannel.id)) {
+          const originalLimit = originalLimits.get(leftChannel.id);
+          await leftChannel.setUserLimit(
+            originalLimit,
+            "Ripristino limite per uscita del bot"
+          );
+          BotConsole.info(
+            `[PersonalVC - ${guild.name}] Bot è uscito da "${leftChannel.name}", limite ripristinato a ${originalLimit}.`
+          );
+          originalLimits.delete(leftChannel.id);
+        }
+        return; // Termina l'esecuzione per il bot qui
+      } // --- FINE NUOVA LOGICA ---
       if (
         this.isPersonalChannel(leftChannel, tempChannelConfig) &&
         leftChannel.members.size === 0
       ) {
-        const logPrefix = `[PersonalVC - ${guild.name}]`;
         BotConsole.warning(
           `${logPrefix} Il canale "${leftChannel.name}" è vuoto. Avvio timer di cancellazione (5 min)...`
         );
@@ -146,11 +173,14 @@ export default {
 
         pendingDeletions.set(leftChannel.id, timeoutId);
       }
-    } catch (error) {}
+    } catch (error) {
+      BotConsole.error(`${logPrefix} Errore in handleChannelLeave.`, error);
+    }
   },
 
   isPersonalChannel(channel, config) {
     if (
+      !channel || // Aggiunto controllo per evitare errori se il canale non esiste
       channel.type !== ChannelType.GuildVoice ||
       channel.parentId !== config.CATEGORY_CH
     ) {

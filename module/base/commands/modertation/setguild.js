@@ -433,7 +433,7 @@ export default {
         }
       }
 
-      await interaction.editReply({ embeds: [embed] });
+      return({ embeds: [embed] });
     } catch (error) {
       BotConsole.error(`[SetGuild - ${guildId}] Errore critico:`, error);
 
@@ -452,7 +452,7 @@ export default {
       }
       try {
         if (interaction.replied || interaction.deferred)
-          await interaction.editReply({
+          return({
             embeds: [errorReplyEmbed],
             components: [],
           });

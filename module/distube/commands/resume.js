@@ -47,6 +47,6 @@ export default {
       .addFieldInline("🔊 Volume", `${queue.volume}%`)
       await embed._applyColorFromImage();
 
-    await interaction.editReply({ embeds: [embed], content: "" });
+    return({ embeds: [embed], content: "" });
   },
 };

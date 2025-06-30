@@ -59,7 +59,7 @@ export default class Status {
         status: "online",
       });
 
-      BotConsole.warning(`Status updated: ${randomStatus.description}`);
+      BotConsole.info(`Status updated: ${randomStatus.description}`);
       return true;
     } catch (error) {
       throw new Error("Failed to update status", error);

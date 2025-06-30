@@ -49,6 +49,6 @@ export default {
       .addFieldInline("💾 Memory Used", `\`${memoryMb} MB\``)
       .addFieldInline("📦 Node.js", `\`${nodeVersion}\``)
       .addFieldInline("🤖 Discord.js", `\`${discordJsVersion}\``);
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };

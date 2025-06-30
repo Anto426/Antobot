@@ -17,7 +17,7 @@ export default {
     const helpBuilder = new HelpMenuBuilder();
     const { embed, components } = await helpBuilder.buildMainMenu(interaction);
 
-    await interaction.editReply({
+    return({
       embeds: [embed],
       components: components,
     });

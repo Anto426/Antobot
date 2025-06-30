@@ -44,6 +44,7 @@ class ClientInitializer {
           repliedUser: true,
         },
       });
+      client.botready = false;
       BotConsole.success("Base client initialized successfully");
       return true;
     } catch (error) {

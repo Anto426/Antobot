@@ -50,6 +50,6 @@ export default {
         : "La riproduzione è stata messa in pausa. Puoi riprendere con `/resume`."
     );
 
-    await interaction.editReply({ embeds: [embed], content: "" });
+    return({ embeds: [embed], content: "" });
   },
 };

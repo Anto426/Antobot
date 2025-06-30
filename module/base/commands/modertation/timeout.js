@@ -66,6 +66,6 @@ export default {
       .addFieldInline("⏱️ Durata", durationStr, true)
       .addFieldInline("📄 Motivo", reason, true);
 
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };

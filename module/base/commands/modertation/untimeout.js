@@ -54,6 +54,6 @@ export default {
       .addFieldInline("👤 Utente", `${member.user.tag}`, true)
       .addFieldInline("📄 Motivo", reason, true);
 
-    await interaction.editReply({ embeds: [embed] });
+    return({ embeds: [embed] });
   },
 };
