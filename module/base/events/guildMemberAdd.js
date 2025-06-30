@@ -175,7 +175,11 @@ export default {
       .addFields(
         { name: "📅 Account Creato", value: accountCreationDate, inline: true },
         { name: "🆔 ID Utente", value: user.id, inline: true },
-        { name: "👥 Membri Totali", value: `${guild.memberCount}`, inline: true }
+        {
+          name: "👥 Membri Totali",
+          value: `${guild.memberCount}`,
+          inline: true,
+        }
       )
       .setColor("#00ADEF");
 
