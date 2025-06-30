@@ -30,21 +30,9 @@ export default {
   async execute(interaction) {
     const amount = interaction.options.getInteger("quantità");
     const targetUser = interaction.options.getUser("utente");
-    const { channel, client, guild, member } = interaction;
+    const { channel, guild, member } = interaction;
 
     const embed = await new PresetEmbed({ guild, member }).init();
-
-    if (
-      !channel
-        .permissionsFor(client.user)
-        .has(PermissionsBitField.Flags.ManageMessages)
-    ) {
-      embed.KDanger(
-        "Permessi Mancanti",
-        "Non ho il permesso di `Gestire Messaggi` in questo canale."
-      );
-      return interaction.editReply({ embeds: [embed] });
-    }
 
     try {
       const messages = await channel.messages.fetch({ limit: amount });
@@ -78,13 +66,14 @@ export default {
         return { embeds: [embed], ephemeral: true };
       }
 
-      let responseDescription = `Ho cancellato con successo **${deletedMessages.size}** messaggi.`;
+      const successTitle = "Pulizia Completata! ✨";
+      let successDescription = `Ho spazzato via con successo **${deletedMessages.size}** messaggi.`;
+
       if (targetUser) {
-        responseDescription += ` inviati da ${targetUser}.`;
+        successDescription += ` inviati da ${targetUser}.`;
       }
 
-      embed.setMainContent("Messaggi Cancellati", responseDescription);
-      await embed._applyColorFromImage();
+      embed.KSuccess(successTitle, successDescription);
       return { embeds: [embed], ephemeral: true };
     } catch (error) {
       BotConsole.error(
