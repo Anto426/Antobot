@@ -1,8 +1,6 @@
 import chalk from "chalk";
 import gradient from "gradient-string";
 import boxen from "boxen";
-// Assumiamo che util sia disponibile o importato se si vuole usare util.inspect per oggetti molto complessi
-// import util from "util";
 
 const DEFAULT_CONFIG = {
   showTimestamp: true,
@@ -17,8 +15,8 @@ const DEFAULT_CONFIG = {
       tree: {
         branch: "╠═▶",
         last: "╚═▶",
-        vertical: "║   ", // Spazio leggermente aumentato per un possibile miglior allineamento
-        space: "    ", // Spazio leggermente aumentato
+        vertical: "║   ",
+        space: "    ",
       },
     },
     gradients: {
@@ -42,10 +40,9 @@ const DEFAULT_CONFIG = {
     padding: 0,
     margin: 0,
     borderStyle: "round",
-    borderColor: "cyan", // Default, ma verrà sovrascritto in formatMessage
+    borderColor: "cyan",
     dimBorder: false,
     backgroundColor: "#000011",
-    // width: 115, // Manteniamo questo se era nelle tue intenzioni
   },
 };
 
@@ -59,9 +56,8 @@ class BotConsole {
       ...config,
       theme: {
         ...DEFAULT_CONFIG.theme,
-        ...(config.theme || {}), // Assicura che config.theme esista
+        ...(config.theme || {}),
         symbols: {
-          // Unisci symbols specificamente se necessario
           ...DEFAULT_CONFIG.theme.symbols,
           ...(config.theme?.symbols || {}),
           tree: {
@@ -80,7 +76,7 @@ class BotConsole {
 
   _getGradient(type) {
     return gradient(
-      this.config.theme.gradients[type] || DEFAULT_CONFIG.theme.gradients.info // Fallback a info
+      this.config.theme.gradients[type] || DEFAULT_CONFIG.theme.gradients.info
     );
   }
 
@@ -107,7 +103,6 @@ class BotConsole {
   }
 
   _centerText(text) {
-    // La tua implementazione originale
     const width = 60;
     const len = stripAnsi(text).length;
     if (len >= width) return text;
@@ -116,13 +111,12 @@ class BotConsole {
   }
 
   formatHeader(text) {
-    // La tua implementazione originale
     const width = 60;
     const gradBorder = gradient(["#6a11cb", "#2575fc"]);
     const gradText = gradient(["#f7971e", "#ffd200"]);
 
     const line = gradBorder("═".repeat(width - 4));
-    const paddedText = this._centerText(`   ${text.toUpperCase()}   `); // Corretto lo spazio extra
+    const paddedText = this._centerText(`   ${text.toUpperCase()}   `);
 
     return [
       "",
@@ -139,24 +133,22 @@ class BotConsole {
   formatMessage(type, messageParts = []) {
     const gradColors =
       this.config.theme.gradients[type] || DEFAULT_CONFIG.theme.gradients.info;
-    const grad = gradient(gradColors); // Il gradiente per il contenuto del box
+    const grad = gradient(gradColors);
     const style = this._getStyle(type);
     const ts = this._timestamp();
     const label = chalk.bold(
-      gradient(gradColors)(` ${this._getSymbol(type)}  ${style.label} `) // Applica gradiente anche al label
+      gradient(gradColors)(` ${this._getSymbol(type)}  ${style.label} `)
     );
 
-    // Unisci le parti del messaggio in una singola stringa.
-    // Applica il gradiente all'intera stringa risultante per il box.
     const contentJoined = messageParts.join(" ");
-    const contentForBox = grad(contentJoined); // Applica gradiente qui
+    const contentForBox = grad(contentJoined);
 
     const boxOptions = {
       ...this.config.boxenOptions,
-      borderColor: gradColors[0], // Usa il primo colore del gradiente del tipo di messaggio
-      width: 115, // Manteniamo la larghezza fissa originale
-      padding: this.config.boxenOptions.padding, // Usa il padding dalla config (originale era 0)
-      margin: this.config.boxenOptions.margin, // Usa il margin dalla config (originale era 0)
+      borderColor: gradColors[0],
+      width: 115,
+      padding: this.config.boxenOptions.padding,
+      margin: this.config.boxenOptions.margin,
     };
 
     const box = boxen(contentForBox, boxOptions);
@@ -164,7 +156,6 @@ class BotConsole {
     return `${ts} ${label}\n${box}`;
   }
 
-  // La tua formatValue originale
   formatValue(value, type) {
     const grad = this._getGradient(type);
 
@@ -297,11 +288,6 @@ class BotConsole {
       .join("\n");
   }
 
-  /**
-   * Metodo write modificato per gestire "n parametri".
-   * Le stringhe e i primitivi vengono uniti per il messaggio principale nel box.
-   * Gli oggetti, Errori, Date vengono stampati dopo, usando formatTree.
-   */
   write(type, ...args) {
     const mainMessageParts = [];
     const complexArgsToTree = [];
@@ -318,32 +304,26 @@ class BotConsole {
           arg === null ? "null" : arg === undefined ? "undefined" : String(arg)
         );
       } else {
-        // Oggetti, Array, Errori, Date verranno gestiti da formatTree
         complexArgsToTree.push(arg);
       }
     }
 
-    // Stampa il messaggio principale (stringhe/primitivi) dentro il box
     console.log(this.formatMessage(type, mainMessageParts));
 
-    // Stampa ogni argomento complesso usando formatTree
     if (complexArgsToTree.length > 0) {
       complexArgsToTree.forEach((obj) => {
-        // Non aggiungo un'intestazione extra qui, lascio che formatTree produca la sua struttura
         console.log(
           this.formatTree(obj, type, this.config.theme.symbols.tree.space)
-        ); // Inizia l'albero con un indent
+        );
       });
     }
-    console.log(); // Riga vuota finale per spaziatura
+    console.log();
   }
 }
 
 function stripAnsi(str) {
-  // La tua funzione originale
-  if (typeof str !== "string") return ""; // Aggiunto controllo per robustezza
+  if (typeof str !== "string") return "";
   return str.replace(
-    // eslint-disable-next-line no-control-regex
     /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
     ""
   );
