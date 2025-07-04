@@ -3,12 +3,6 @@ import SystemCheck from "../client/SystemCheck.js";
 import BotConsole from "../console/BotConsole.js";
 
 class Security {
-  /**
-   * @param {import('discord.js').Interaction} interaction The interaction object.
-   * @param {object} command The command configuration object.
-   * @param {string[]} [owners=[]] An array of owner user IDs.
-   * @param {string[]} [allowedChannels=[]] An array of allowed channel IDs.
-   */
   constructor(interaction, command, owners = [], allowedChannels = []) {
     if (!interaction || !interaction.member || !interaction.guild) {
       throw new Error("A valid 'interaction' object is required.");
@@ -143,7 +137,7 @@ class Security {
     if (requireBotInVoiceChannel && !botChannel) {
       throw new Error("The bot must be in a voice channel for this command.");
     }
-    if (requireSameVoiceChannel && userChannel?.id !== botChannel?.id) {
+    if (requireSameVoiceChannel && userChannel && botChannel && userChannel?.id !== botChannel?.id) {
       throw new Error("You must be in the same voice channel as the bot.");
     }
     if (requireTrackInQueue && !queue) {

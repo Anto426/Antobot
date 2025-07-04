@@ -108,6 +108,31 @@ class ColorFunctions {
       ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()
     );
   }
+
+  getLightness(color) {
+    const [r, g, b] = color;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    return (max + min) / 2 / 255; // Normalize to [0, 1]
+  }
+
+  setLightness(color, l) {
+    const [r, g, b] = color;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const delta = max - min;
+
+    if (delta === 0) return color; // Grayscale
+
+    const newMax = l * 255 + (max - l * 255);
+    const newMin = l * 255 - (max - l * 255);
+
+    return [
+      Math.min(255, Math.max(0, r + (newMax - max))),
+      Math.min(255, Math.max(0, g + (newMax - max))),
+      Math.min(255, Math.max(0, b + (newMax - max))),
+    ];
+  }
 }
 
 export default new ColorFunctions();

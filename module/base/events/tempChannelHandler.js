@@ -130,7 +130,7 @@ export default {
 
     try {
       const tempChannelConfig = await this.getTempChannelConfig(guild.id);
-      if (!tempChannelConfig) return; // --- NUOVA LOGICA: Gestione dell'uscita del BOT da un canale ---
+      if (!tempChannelConfig) return;
 
       if (member.id === oldState.client.user.id) {
         if (originalLimits.has(leftChannel.id)) {
@@ -144,8 +144,8 @@ export default {
           );
           originalLimits.delete(leftChannel.id);
         }
-        return; // Termina l'esecuzione per il bot qui
-      } // --- FINE NUOVA LOGICA ---
+        return;
+      }
       if (
         this.isPersonalChannel(leftChannel, tempChannelConfig) &&
         leftChannel.members.size === 0

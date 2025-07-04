@@ -167,8 +167,6 @@ export default {
   isActive: true,
 
   async execute(interaction) {
-    
-    
     if (!client.botready) {
       await sendReply({
         interaction,
@@ -178,8 +176,6 @@ export default {
       });
       return;
     }
-
-
 
     const handler = getHandler(interaction);
 
