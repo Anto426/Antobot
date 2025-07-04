@@ -206,8 +206,8 @@ class WelcomeImageService {
       );
 
       ctx.save();
-      ctx.globalAlpha = 0.3; // Slightly more visible watermark
-      const iconSize = 140; // Increased icon size for better visibility
+      ctx.globalAlpha = 0.3;  
+      const iconSize = 140;  
       const guildIconImg = await loadImage(
         guild.iconURL({ extension: "png", size: 128 })
       );
