@@ -133,6 +133,38 @@ class ColorFunctions {
       Math.min(255, Math.max(0, b + (newMax - max))),
     ];
   }
+
+  getHue(color) {
+    const [r, g, b] = color;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h;
+
+    if (max === min) {
+      h = 0; // achromatic
+    } else {
+      const d = max - min;
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6; 
+    }
+
+    return h;
+  }
+
+  getBrightness(color) {
+    const [r, g, b] = color;
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255; 
+  }
 }
 
 export default new ColorFunctions();
