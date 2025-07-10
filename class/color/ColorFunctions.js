@@ -80,10 +80,10 @@ class ColorFunctions {
 
   averageBrightness(colors) {
     const total = colors.reduce(
-      (sum, [r, g, b]) => sum + (0.299 * r + 0.587 * g + 0.114 * b),
+      (sum, color) => sum + this.getBrightness(color),
       0
     );
-    return total / colors.length / 255;
+    return total / colors.length;
   }
 
   colorDistance(c1, c2) {
@@ -114,20 +114,14 @@ class ColorFunctions {
     return (Math.max(r, g, b) + Math.min(r, g, b)) / 2;
   }
 
-  setLightness(color, newL) {
-    const [h, s] = this.rgbToHsl(...color);
-    return this.hslToRgb(h, s, newL);
-  }
-
   getHue(color) {
     const [h] = this.rgbToHsl(...color);
     return h;
   }
 
   getBrightness([r, g, b]) {
-    return (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return Math.sqrt(0.299 * r ** 2 + 0.587 * g ** 2 + 0.114 * b ** 2) / 255;
   }
 }
-
 
 export default new ColorFunctions();

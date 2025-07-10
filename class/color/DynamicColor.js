@@ -214,28 +214,39 @@ class DynamicColor {
     return filtered;
   }
 
-  adjustLightness(color, avgBrightness, options = {}) {
-    const {
-      lightnessThreshold = 0.5,
-      targetContrastLight = 0.8,
-      targetContrastDark = 0.2,
-    } = options;
+  adjustLightness(color, avgBrightness) {
+    const [r, g, b] = color;
+    const [h, s, l] = ColorFunctions.rgbToHsl(r, g, b);
 
-    const currentLightness = ColorFunctions.getLightness(color);
+    const BRIGHTNESS_THRESHOLD = 128;
+    const TARGET_LIGHTNESS_DARK_BG = 0.85; // Light text for dark backgrounds
+    const TARGET_LIGHTNESS_LIGHT_BG = 0.15; // Dark text for light backgrounds
+    const SATURATION_THRESHOLD = 0.1;
+    const LIGHTNESS_ADJUST_THRESHOLD_DARK = 0.65;
+    const LIGHTNESS_ADJUST_THRESHOLD_LIGHT = 0.35;
 
-    let targetLightness;
-    if (avgBrightness < lightnessThreshold) {
-      targetLightness = Math.max(currentLightness, targetContrastLight);
-    } else {
-      targetLightness = Math.min(currentLightness, targetContrastDark);
+    const isDarkBg = avgBrightness < BRIGHTNESS_THRESHOLD;
+
+    // For very low saturation colors (grays), return pure white or black for max contrast.
+    if (s < SATURATION_THRESHOLD) {
+      return isDarkBg ? [255, 255, 255] : [0, 0, 0];
     }
 
-    const newLightness =
-      currentLightness + (targetLightness - currentLightness) * 0.8;
+    let newLightness = l;
+    if (isDarkBg) {
+      // If background is dark, make text lighter if it's not already light enough.
+      if (l < LIGHTNESS_ADJUST_THRESHOLD_DARK) {
+        newLightness = TARGET_LIGHTNESS_DARK_BG;
+      }
+    } else {
+      // If background is light, make text darker if it's not already dark enough.
+      if (l > LIGHTNESS_ADJUST_THRESHOLD_LIGHT) {
+        newLightness = TARGET_LIGHTNESS_LIGHT_BG;
+      }
+    }
 
-    const clampedLightness = Math.max(0, Math.min(1, newLightness));
-
-    return ColorFunctions.setLightness(color, clampedLightness);
+    const [newR, newG, newB] = ColorFunctions.hslToRgb(h, s, newLightness);
+    return [Math.round(newR), Math.round(newG), Math.round(newB)];
   }
 
   calculateTextColor(palette) {
@@ -244,16 +255,30 @@ class DynamicColor {
       throw new Error("Palette must be a non-empty array.");
     }
 
+    const darkestColor = palette[0];
+    const lightestColor = palette[palette.length - 1];
+
     const avgBrightness = ColorFunctions.averageBrightness(palette);
-    const textColor = palette[palette.length - 1];
-    const adjustedTextColor = this.adjustLightness(textColor, avgBrightness);
+    const BRIGHTNESS_THRESHOLD = 128;
 
-    const brightnessString = avgBrightness < 0.5 ? "light text" : "dark text";
-    BotConsole.debug(
-      `Brightness: ${avgBrightness.toFixed(2)}. Chosen ${brightnessString}.`
-    );
+    let baseTextColor;
+    if (avgBrightness > BRIGHTNESS_THRESHOLD) {
+      BotConsole.debug(
+        `Bright palette (avg: ${avgBrightness.toFixed(
+          2
+        )}), using darkest color for text.`
+      );
+      baseTextColor = darkestColor;
+    } else {
+      BotConsole.debug(
+        `Dark palette (avg: ${avgBrightness.toFixed(
+          2
+        )}), using lightest color for text.`
+      );
+      baseTextColor = lightestColor;
+    }
 
-    return adjustedTextColor;
+    return this.adjustLightness(baseTextColor, avgBrightness);
   }
 
   async getPaletteAndTextColor() {
