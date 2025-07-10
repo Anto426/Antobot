@@ -16,12 +16,20 @@ export default class serverupdate {
 
   run() {
     this.#app.post("/webhook", (req, res) => {
-      if (!req.body || !req.body.repository || !req.body.commits) {
+      const { repository, commits, ref } = req.body;
+
+      if (!repository || !commits || !ref) {
         BotConsole.error("[Webhook] Ricevuto payload non valido:", req.body);
         return res.status(400).send("Payload non valido");
-      } else if (req.body.branch !== "host") {
+      }
+
+      // Estrai il nome del branch da 'ref'
+      const branch = ref.replace("refs/heads/", "");
+      const expectedBranch = repository.master_branch;
+
+      if (branch !== expectedBranch) {
         BotConsole.warning(
-          "[Webhook] Ricevuto push su un branch diverso da 'host'. Ignorato."
+          `[Webhook] Ricevuto push su '${branch}', ma il branch monitorato è '${expectedBranch}'. Ignorato.`
         );
         return res.status(204).send("Branch non monitorato");
       }
