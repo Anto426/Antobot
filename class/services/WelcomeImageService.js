@@ -248,11 +248,11 @@ class WelcomeImageService {
         Math.PI * 2
       );
       ctx.clip();
-      
+
       try {
         // Draw avatar with improved quality
         const avatarImg = await loadImage(avatarUrl);
-        
+
         // Apply subtle sharpening/enhancement to avatar
         ctx.imageSmoothingQuality = "high";
         ctx.drawImage(
@@ -262,17 +262,17 @@ class WelcomeImageService {
           layout.avatarSize,
           layout.avatarSize
         );
-        
+
         // Add subtle inner shadow for depth
         ctx.save();
         ctx.globalCompositeOperation = "source-atop";
         const innerShadow = ctx.createRadialGradient(
-          layout.avatarX + layout.avatarSize/2, 
-          layout.avatarY + layout.avatarSize/2, 
+          layout.avatarX + layout.avatarSize / 2,
+          layout.avatarY + layout.avatarSize / 2,
           layout.avatarSize * 0.4,
-          layout.avatarX + layout.avatarSize/2, 
-          layout.avatarY + layout.avatarSize/2, 
-          layout.avatarSize/2
+          layout.avatarX + layout.avatarSize / 2,
+          layout.avatarY + layout.avatarSize / 2,
+          layout.avatarSize / 2
         );
         innerShadow.addColorStop(0, "rgba(0,0,0,0)");
         innerShadow.addColorStop(1, "rgba(0,0,0,0.15)");
@@ -287,36 +287,36 @@ class WelcomeImageService {
       } catch (error) {
         BotConsole.warning("[WelcomeImg] Errore caricamento avatar", error);
       }
-      
+
       ctx.restore();
 
       // Enhanced avatar border with gradient
       ctx.save();
       const borderWidth = welcomeSettings.avatarBorderSize || 4;
       const borderGradient = ctx.createLinearGradient(
-        layout.avatarX, 
-        layout.avatarY, 
-        layout.avatarX + layout.avatarSize, 
+        layout.avatarX,
+        layout.avatarY,
+        layout.avatarX + layout.avatarSize,
         layout.avatarY + layout.avatarSize
       );
-      
+
       // Create gradient using palette colors and text color
       borderGradient.addColorStop(0, textColorRgb);
       borderGradient.addColorStop(0.5, `rgba(${palette[0].join(",")}, 1)`);
       borderGradient.addColorStop(1, textColorRgb);
-      
+
       ctx.strokeStyle = borderGradient;
       ctx.lineWidth = borderWidth;
       ctx.beginPath();
       ctx.arc(
-        layout.avatarX + layout.avatarSize/2,
-        layout.avatarY + layout.avatarSize/2,
-        layout.avatarSize/2 + borderWidth/2,
+        layout.avatarX + layout.avatarSize / 2,
+        layout.avatarY + layout.avatarSize / 2,
+        layout.avatarSize / 2 + borderWidth / 2,
         0,
         Math.PI * 2
       );
       ctx.stroke();
-      
+
       // Add subtle glow
       ctx.shadowColor = textColorRgb;
       ctx.shadowBlur = 15;
@@ -335,129 +335,207 @@ class WelcomeImageService {
 
       // Improved font selection with better Unicode character support
       let fontFamily = "Arial, 'Noto Sans', 'Segoe UI', Helvetica, sans-serif"; // Base reliable fonts
-      
+
       if (fontSettings?.files && fontSettings.files.length > 0) {
         try {
           // Get all custom font names without extensions for font stack
-          const customFonts = fontSettings.files.map(file => `"${file.split(".")[0]}"`).join(", ");
-          
+          const customFonts = fontSettings.files
+            .map((file) => `"${file.split(".")[0]}"`)
+            .join(", ");
+
           // Custom fonts first, then system fonts with good Unicode coverage
           fontFamily = `${customFonts}, ${fontFamily}, 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'`;
-          
+
           BotConsole.info(`[WelcomeImg] Utilizzo font: ${customFonts}`);
         } catch (error) {
-          BotConsole.warning("[WelcomeImg] Errore nel caricamento dei font personalizzati, uso font di sistema", error);
+          BotConsole.warning(
+            "[WelcomeImg] Errore nel caricamento dei font personalizzati, uso font di sistema",
+            error
+          );
         }
       }
 
-      // Improved text layout with better space management
-      // Calculate responsive text sizes based on canvas dimensions - INCREASED sizes
-      const fontSize = {
-        name: Math.max(70, Math.min(90, canvas.width * 0.09)),        // Larger name size
-        welcome: Math.max(52, Math.min(68, canvas.width * 0.067)),    // Larger welcome message
-        count: Math.max(40, Math.min(55, canvas.width * 0.052))       // Larger count text
+      // --- TYPOGRAPHY & TEXT RENDERING ---
+
+      // Helper function to draw text, handling truncation and styling
+      const drawText = (
+        text,
+        x,
+        y,
+        { font, style, color, maxWidth, align = "left", baseline = "middle" }
+      ) => {
+        ctx.font = `${style} ${font.size}px ${font.family}`;
+        ctx.fillStyle = color;
+        ctx.textAlign = align;
+        ctx.textBaseline = baseline;
+
+        let textToDraw = text;
+        if (maxWidth && ctx.measureText(text).width > maxWidth) {
+          while (
+            ctx.measureText(textToDraw + "…").width > maxWidth &&
+            textToDraw.length > 0
+          ) {
+            textToDraw = textToDraw.slice(0, -1);
+          }
+          textToDraw = textToDraw.trim() + "…";
+        }
+        ctx.fillText(textToDraw, x, y, maxWidth);
       };
 
-      // Better vertical centering calculation
-      const totalTextHeight = fontSize.name * 1.2 + fontSize.welcome + fontSize.count + 50; 
-      
-      const textArea = {
-        // Center the text block vertically in the available space
-        top: (canvas.height - totalTextHeight) / 2,
-        left: layout.textStartX,
-        width: canvas.width - layout.textStartX - layout.padding,
-        maxWidth: Math.min(800, canvas.width - layout.textStartX - layout.padding * 1.5)
+      // --- TEXT CONTENT & LAYOUT CONFIGURATION ---
+      const textContent = {
+        welcome: "Benvenuto",
+        name: member.user.globalName || member.displayName || "Nuovo Membro",
+        server: `nel server ${guild.name}`,
+        count: `Sei il membro #${guild.memberCount}`,
       };
-      
-      // Member name - with proper truncation and handling
-      const memberName = member.user.globalName || member.displayName || "Nuovo Membro";
-      const displayName = memberName.length > 18 ? memberName.slice(0, 18) + "..." : memberName;
-      
-      // Enhanced name display`
-      ctx.shadowOffsetY = 3;
-      ctx.fillText(displayName, textArea.left, textArea.top, textArea.maxWidth);
-      ctx.restore();
-      
-      // Calculate text metrics for precise spacing
-      ctx.font = `bold ${fontSize.name}px ${fontFamily}`;
-      const nameMetrics = ctx.measureText(displayName);
-      const lineHeight = fontSize.name * 1.2; // Normal line spacing
-      
-      // Elegant divider
-      const dividerY = textArea.top + lineHeight * 0.9;
-      const dividerWidth = Math.min(nameMetrics.width * 1.2, textArea.maxWidth * 0.8);
-      
-      const dividerGradient = ctx.createLinearGradient(
-        textArea.left, dividerY,
-        textArea.left + dividerWidth, dividerY
-      );
-      dividerGradient.addColorStop(0, textColorRgb);
-      dividerGradient.addColorStop(1, `rgba(${textColor.join(",")}, 0)`);
-      
-      ctx.fillStyle = dividerGradient;
-      ctx.fillRect(textArea.left, dividerY, dividerWidth, 4); // Thinner, more elegant line
-      
-      // Welcome message with balanced styling
-      const welcomeY = dividerY + lineHeight * 0.6;
-      const welcomeText = `Benvenuto su ${guild.name}`;
-      
+
+      const textAreaWidth =
+        canvas.width - layout.textStartX - layout.padding - 20;
+      const fonts = {
+        welcome: {
+          size: Math.max(65, Math.min(90, canvas.width * 0.09)),
+          family: fontFamily,
+        },
+        name: {
+          size: Math.max(85, Math.min(125, canvas.width * 0.12)),
+          family: fontFamily,
+        },
+        server: {
+          size: Math.max(48, Math.min(65, canvas.width * 0.065)),
+          family: fontFamily,
+        },
+        count: {
+          size: Math.max(40, Math.min(50, canvas.width * 0.05)),
+          family: fontFamily,
+        },
+      };
+      const lineSpacing = {
+        welcomeToName: 15,
+        nameToServer: 45,
+        serverToCount: 25,
+      };
+
+      // Calculate total height for precise vertical centering
+      const totalTextHeight =
+        fonts.welcome.size +
+        fonts.name.size +
+        fonts.server.size +
+        fonts.count.size +
+        lineSpacing.welcomeToName +
+        lineSpacing.nameToServer +
+        lineSpacing.serverToCount;
+
+      const cardInnerHeight = canvas.height - layout.padding * 2;
+      let currentY = layout.padding + (cardInnerHeight - totalTextHeight) / 2;
+
+      // 1. "Benvenuto" text - Elegant and welcoming
+      currentY += fonts.welcome.size / 2;
+      drawText(textContent.welcome, layout.textStartX, currentY, {
+        font: fonts.welcome,
+        style: "300", // Light weight for a refined look
+        color: `rgba(${textColor.join(",")}, 0.8)`,
+        maxWidth: textAreaWidth,
+      });
+      currentY += fonts.welcome.size / 2 + lineSpacing.welcomeToName;
+
+      // 2. Member Name - The main focus, bold and impactful
+      currentY += fonts.name.size / 2;
       ctx.save();
-      ctx.font = `600 ${fontSize.welcome}px ${fontFamily}`;
-      ctx.fillStyle = textColorRgb;
-      ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
-      ctx.shadowBlur = 6;
-      ctx.shadowOffsetY = 2;
-      ctx.fillText(welcomeText, textArea.left, welcomeY, textArea.maxWidth);
-      ctx.restore();
-      
-      // Member count with subtle styling
-      const countY = welcomeY + fontSize.welcome * 1.2;
-      ctx.font = `500 ${fontSize.count}px ${fontFamily}`;
-      ctx.fillStyle = `rgba(${textColor.join(",")}, 0.8)`;
-      ctx.shadowColor = "rgba(0, 0, 0, 0.2)";
-      ctx.shadowBlur = 4;
-      ctx.shadowOffsetY = 1;
-      ctx.fillText(`Membro #${guild.memberCount}`, textArea.left, countY, textArea.maxWidth);
-      
-      // Subtle decorative accent
-      const accentY = countY + fontSize.count * 0.7;
-      const accentWidth = textArea.maxWidth * 0.6;
-      const accentGradient = ctx.createLinearGradient(
-        textArea.left, accentY,
-        textArea.left + accentWidth, accentY
-      );
-      
-      accentGradient.addColorStop(0, `rgba(${textColor.join(",")}, 0.6)`);
-      accentGradient.addColorStop(1, `rgba(${textColor.join(",")}, 0)`);
-      
-      ctx.fillStyle = accentGradient;
-      ctx.fillRect(textArea.left, accentY, accentWidth, 2); // Thin, elegant line
+      // Add a subtle glow behind the name for emphasis
+      ctx.shadowColor = `rgba(${palette[1].join(",")}, 0.7)`;
+      ctx.shadowBlur = 25;
+      drawText(textContent.name, layout.textStartX, currentY, {
+        font: fonts.name,
+        style: "800", // Extra bold
+        color: textColorRgb,
+        maxWidth: textAreaWidth,
+      });
+      ctx.restore(); // Restore from shadow effect
+      currentY += fonts.name.size / 2 + lineSpacing.nameToServer;
 
-      // Subtle server icon
+      // --- Elegant Divider ---
+      ctx.save();
+      const dividerY = currentY - lineSpacing.nameToServer / 2;
+      const dividerWidth = textAreaWidth * 0.4; // Shorter for a more subtle look
+      const dividerX = layout.textStartX; // Align to the left of the text block
+      const dividerGradient = ctx.createLinearGradient(
+        dividerX,
+        0,
+        dividerX + dividerWidth,
+        0
+      );
+      dividerGradient.addColorStop(0, `rgba(${textColor.join(",")}, 0.5)`);
+      dividerGradient.addColorStop(1, `rgba(${textColor.join(",")}, 0)`);
+      ctx.strokeStyle = dividerGradient;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(dividerX, dividerY);
+      ctx.lineTo(dividerX + dividerWidth, dividerY);
+      ctx.stroke();
+      ctx.restore();
+
+      // 3. Server Name
+      currentY += fonts.server.size / 2;
+      drawText(textContent.server, layout.textStartX, currentY, {
+        font: fonts.server,
+        style: "500", // Medium weight
+        color: `rgba(${textColor.join(",")}, 0.9)`,
+        maxWidth: textAreaWidth,
+      });
+      currentY += fonts.server.size / 2 + lineSpacing.serverToCount;
+
+      // 4. Member Count
+      currentY += fonts.count.size / 2;
+      drawText(textContent.count, layout.textStartX, currentY, {
+        font: fonts.count,
+        style: "400", // Regular weight
+        color: `rgba(${textColor.join(",")}, 0.7)`,
+        maxWidth: textAreaWidth,
+      });
+
       if (guild.iconURL()) {
-        ctx.save();
-        ctx.globalAlpha = 0.15;
-        const iconSize = 100;
-        const guildIconImg = await loadImage(
-          guild.iconURL({ extension: "png", size: 128 })
-        );
-        ctx.beginPath();
-        ctx.arc(
-          canvas.width - iconSize / 2 - 40,
-          canvas.height - iconSize / 2 - 40,
-          iconSize / 2,
-          0,
-          Math.PI * 2
-        );
-        ctx.clip();
-        ctx.drawImage(
-          guildIconImg,
-          canvas.width - iconSize - 40,
-          canvas.height - iconSize - 40,
-          iconSize,
-          iconSize
-        );
-        ctx.restore();
+        try {
+          ctx.save();
+
+          const iconSize = 90; // A slightly smaller, more subtle size
+          // Position the icon inside the card, respecting the main padding
+          const iconX = canvas.width - layout.padding - iconSize - 25;
+          const iconY = canvas.height - layout.padding - iconSize - 25;
+
+          // Load the guild icon
+          const guildIconImg = await loadImage(
+            guild.iconURL({ extension: "png", size: 128 })
+          );
+
+          // Create a circular clipping path for the icon
+          ctx.beginPath();
+          ctx.arc(
+            iconX + iconSize / 2,
+            iconY + iconSize / 2,
+            iconSize / 2,
+            0,
+            Math.PI * 2
+          );
+          ctx.clip();
+
+          // Draw the icon with standard blending but increased opacity for more visibility
+          ctx.globalAlpha = 0.4; // Increased from 0.25 for better visibility
+          ctx.drawImage(guildIconImg, iconX, iconY, iconSize, iconSize);
+
+          // Add a more defined border that matches the card's aesthetic
+          ctx.globalAlpha = 1.0; // Reset alpha for the border
+          ctx.strokeStyle = `rgba(${textColor.join(",")}, 0.3)`; // Increased opacity from 0.15
+          ctx.lineWidth = 2; // Increased from 1.5
+          ctx.stroke(); // This will stroke the clipped circle path
+
+          ctx.restore();
+        } catch (iconError) {
+          BotConsole.warning(
+            "[WelcomeImg] Impossibile caricare l'icona del server.",
+            iconError
+          );
+        }
       }
 
       // --- OUTPUT ---
