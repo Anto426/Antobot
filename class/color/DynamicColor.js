@@ -128,7 +128,6 @@ class DynamicColor {
       const ratio = i / intervals;
       const color = this.interpolateColor(startColor, endColor, ratio);
 
-      // Verifica che il colore sia abbastanza simile al precedente
       if (
         palette.length === 0 ||
         ColorFunctions.colorDistance(palette[palette.length - 1], color) <=
@@ -215,17 +214,28 @@ class DynamicColor {
     return filtered;
   }
 
-  adjustLightness(color, avgBrightness) {
-    const l = ColorFunctions.getLightness(color);
-    const adjustedL =
-      avgBrightness < 0.5 ? Math.min(1, l + 0.2) : Math.max(0, l - 0.2);
+  adjustLightness(color, avgBrightness, options = {}) {
+    const {
+      lightnessThreshold = 0.5,
+      targetContrastLight = 0.8,
+      targetContrastDark = 0.2,
+    } = options;
 
-    BotConsole.debug(
-      `Adjusting lightness: avg=${avgBrightness.toFixed(2)} ` +
-        `original=${l.toFixed(2)} -> adjusted=${adjustedL.toFixed(2)}`
-    );
+    const currentLightness = ColorFunctions.getLightness(color);
 
-    return ColorFunctions.setLightness(color, adjustedL);
+    let targetLightness;
+    if (avgBrightness < lightnessThreshold) {
+      targetLightness = Math.max(currentLightness, targetContrastLight);
+    } else {
+      targetLightness = Math.min(currentLightness, targetContrastDark);
+    }
+
+    const newLightness =
+      currentLightness + (targetLightness - currentLightness) * 0.8;
+
+    const clampedLightness = Math.max(0, Math.min(1, newLightness));
+
+    return ColorFunctions.setLightness(color, clampedLightness);
   }
 
   calculateTextColor(palette) {
