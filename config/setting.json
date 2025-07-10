@@ -33,7 +33,8 @@
                     "num_colors": 3,
                     "welcomeTextSize": "150px",
                     "nameTextSize": "100px",
-                    "countTextSize": "70px"
+                    "countTextSize": "70px",
+                    "splashCount": 40
                 },
                 "fonts": {
                     "directory": "assets/canvas/fonts",
@@ -41,8 +42,7 @@
                         "Roboto.ttf",
                         "Huninn-Regular.ttf",
                         "NotoColorEmoji-Regular.ttf",
-                        "NotoSansJP-VariableFont_wght.ttf",
-                        "NotoSansJP-VariableFont_wght.ttf"
+                        "NotoSansJP.ttf"
                     ]
                 }
             }

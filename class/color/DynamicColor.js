@@ -5,8 +5,8 @@ import BotConsole from "../console/BotConsole.js";
 class DynamicColor {
   constructor(options = {}) {
     this.img = null;
-    this.threshold = options.threshold ?? 7;
-    this.numColors = options.numColors ?? 5;
+    this.threshold = options.threshold ?? 70;
+    this.numColors = options.numColors ?? 8;
     this.requiredFilter = options.requiredFilter ?? true;
     this.cachedPalette = null;
 
@@ -34,7 +34,7 @@ class DynamicColor {
       throw new TypeError("Image must be a valid Buffer.");
     }
     this.img = buffer;
-    this.cachedPalette = null; // Invalida cache
+    this.cachedPalette = null;
     BotConsole.info("Image buffer manually set");
   }
 
@@ -84,68 +84,158 @@ class DynamicColor {
     }
   }
 
-  sortPalette(palette, reference = [0, 0, 0]) {
-    BotConsole.debug(
-      `Sorting palette by distance from reference: ${reference}`
-    );
-    const sorted = [...palette].sort(
-      (a, b) =>
-        ColorFunctions.colorDistance(reference, a) -
-        ColorFunctions.colorDistance(reference, b)
-    );
-    return sorted;
+  sortPalette(palette) {
+    return palette.slice().sort((a, b) => {
+      const brightnessA = ColorFunctions.getBrightness(a);
+      const brightnessB = ColorFunctions.getBrightness(b);
+      return brightnessA - brightnessB;
+    });
+  }
+
+  interpolateColor(colorA, colorB, ratio = 0.5) {
+    if (
+      !Array.isArray(colorA) ||
+      !Array.isArray(colorB) ||
+      colorA.length !== 3 ||
+      colorB.length !== 3
+    ) {
+      throw new Error("Invalid colors provided to interpolateColor");
+    }
+
+    const clamp = (v) => Math.min(1, Math.max(0, v));
+    ratio = clamp(ratio);
+
+    return [
+      Math.round(colorA[0] + (colorB[0] - colorA[0]) * ratio),
+      Math.round(colorA[1] + (colorB[1] - colorA[1]) * ratio),
+      Math.round(colorA[2] + (colorB[2] - colorA[2]) * ratio),
+    ];
+  }
+
+  _generateGradientPalette(startColor, endColor, steps) {
+    if (!Array.isArray(startColor) || !Array.isArray(endColor) || steps < 1) {
+      throw new Error("Invalid input to _generateGradientPalette");
+    }
+
+    if (steps === 1) return [startColor.map(Math.round)];
+    if (steps === 2)
+      return [startColor.map(Math.round), endColor.map(Math.round)];
+
+    const palette = [];
+    const intervals = steps - 1;
+
+    for (let i = 0; i <= intervals; i++) {
+      const ratio = i / intervals;
+      const color = this.interpolateColor(startColor, endColor, ratio);
+
+      if (
+        palette.length === 0 ||
+        ColorFunctions.colorDistance(palette[palette.length - 1], color) <=
+          this.threshold ||
+        i === intervals
+      ) {
+        palette.push(color);
+      }
+    }
+
+    // Se la palette è troppo corta, riempi con copie del colore finale
+    while (palette.length < steps) {
+      palette.push(endColor.map(Math.round));
+    }
+
+    // Se troppo lunga, riduci equamente
+    if (palette.length > steps) {
+      const reduced = [];
+      const step = (palette.length - 1) / (steps - 1);
+      for (let i = 0; i < steps; i++) {
+        reduced.push(palette[Math.round(i * step)]);
+      }
+      return reduced;
+    }
+
+    return palette;
   }
 
   filterPalette(palette) {
     if (!Array.isArray(palette) || palette.length === 0) {
+      BotConsole.error("Invalid or empty palette provided for filtering.");
       throw new Error("Invalid or empty palette provided for filtering");
     }
 
-    const sortedPalette = this.sortPalette(palette);
+    const sorted = this.sortPalette(palette);
 
     if (!this.requiredFilter) {
-      BotConsole.debug("Filtering not required, returning sorted palette.");
-      return sortedPalette;
+      BotConsole.debug("Filtering disabled, returning sorted palette.");
+      return sorted;
     }
 
     BotConsole.debug(`Filtering palette with threshold: ${this.threshold}`);
-    const filtered = sortedPalette.reduce((acc, color, index, arr) => {
-      if (index === 0) {
-        acc.push(color);
-        return acc;
-      }
-      const distance = ColorFunctions.colorDistance(arr[index - 1], color);
-      if (distance > this.threshold) {
-        acc.push(color);
+    const filtered = [sorted[0]];
+
+    for (let i = 1; i < sorted.length; i++) {
+      const prev = filtered[filtered.length - 1];
+      const current = sorted[i];
+      const distance = ColorFunctions.colorDistance(prev, current);
+
+      if (distance < this.threshold) {
+        BotConsole.debug(
+          `Distance ${distance.toFixed(2)} < threshold, keeping color.`
+        );
+        filtered.push(current);
       } else {
         BotConsole.debug(
-          `Filtered out color ${color}. Distance to previous: ${distance.toFixed(
-            2
-          )}`
+          `Distance ${distance.toFixed(2)} >= threshold, interpolating...`
         );
+        const mid = this.interpolateColor(prev, current);
+        filtered.push(mid);
       }
-      return acc;
-    }, []);
+    }
 
-    if (filtered.length === 0) {
-      BotConsole.warn("Filtering removed all colors, using dominant one.");
-      return [sortedPalette[0]];
+    if (filtered.length < this.numColors) {
+      const needed = this.numColors - filtered.length;
+      const fill = this._generateGradientPalette(
+        filtered[0],
+        filtered[filtered.length - 1],
+        needed + 2
+      ).slice(1, -1);
+      return [...filtered, ...fill.slice(0, needed)];
+    }
+
+    if (filtered.length > this.numColors) {
+      const reduced = [];
+      const step = (filtered.length - 1) / (this.numColors - 1);
+      for (let i = 0; i < this.numColors; i++) {
+        reduced.push(filtered[Math.round(i * step)]);
+      }
+      BotConsole.debug(`Reduced palette to ${this.numColors} colors.`);
+      return reduced;
     }
 
     return filtered;
   }
 
-  adjustLightness(color, avgBrightness) {
-    const l = ColorFunctions.getLightness(color);
-    const adjustedL =
-      avgBrightness < 0.5 ? Math.min(1, l + 0.2) : Math.max(0, l - 0.2);
+  adjustLightness(color, avgBrightness, options = {}) {
+    const {
+      lightnessThreshold = 0.5,
+      targetContrastLight = 0.8,
+      targetContrastDark = 0.2,
+    } = options;
 
-    BotConsole.debug(
-      `Adjusting lightness: avg=${avgBrightness.toFixed(2)} ` +
-        `original=${l.toFixed(2)} -> adjusted=${adjustedL.toFixed(2)}`
-    );
+    const currentLightness = ColorFunctions.getLightness(color);
 
-    return ColorFunctions.setLightness(color, adjustedL);
+    let targetLightness;
+    if (avgBrightness < lightnessThreshold) {
+      targetLightness = Math.max(currentLightness, targetContrastLight);
+    } else {
+      targetLightness = Math.min(currentLightness, targetContrastDark);
+    }
+
+    const newLightness =
+      currentLightness + (targetLightness - currentLightness) * 0.8;
+
+    const clampedLightness = Math.max(0, Math.min(1, newLightness));
+
+    return ColorFunctions.setLightness(color, clampedLightness);
   }
 
   calculateTextColor(palette) {

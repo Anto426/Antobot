@@ -43,12 +43,15 @@ export default {
             `${logPrefix} L'utente non aveva ruoli specifici da salvare.`
           );
 
-          const result = await SqlManager.removeMemberFromGuild(
+          const result = [];
+          result[0] = await SqlManager.removeMemberFromGuild(
             guild.id,
             member.id
           );
 
-          if (result.affectedRows > 0) {
+          result[1] = await SqlManager.removeMemberRoles(member.id);
+
+          if (result[0].affectedRows > 0 && result[1].affectedRows > 0) {
             BotConsole.success(
               `${logPrefix} Associazione gilda-membro rimossa correttamente.`
             );

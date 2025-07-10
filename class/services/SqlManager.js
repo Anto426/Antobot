@@ -109,7 +109,7 @@ class SqlManager {
 
     const row = await this._getOne(query, params);
 
-    return !!row;  
+    return !!row;
   }
 
   async _genericInsert(table, data, uniqueKeyFields = ["ID"]) {
@@ -467,6 +467,15 @@ class SqlManager {
     );
     return r;
   }
+
+  async removeMemberRoles(memberId) {
+    const [r] = await this._executeQuery(
+      "DELETE FROM `MEMBER_ROLE` WHERE `MEMBER_ID` = ?",
+      [memberId]
+    );
+    return r;
+  }
+
   async getMembersOfGuild(guildId) {
     return this._getAllRows(
       `SELECT m.* FROM \`MEMBER\` m JOIN \`GUILD_MEMBER\` gm ON m.ID = gm.MEMBER_ID WHERE gm.GUILD_ID = ?`,
