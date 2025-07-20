@@ -81,8 +81,9 @@ export default class PresetEmbed extends EmbedBuilder {
     }
 
     await this.#colorizer.setImgUrl(url);
-    const { palette } = await this.#colorizer.getPaletteAndTextColor();
-    if (!palette?.length) {
+    const { averageColorRgb } = await this.#colorizer.getPaletteAndTextColor();
+
+    if (!averageColorRgb) {
       BotConsole.debug(
         "PresetEmbed: Palette vuota da _applyColorFromImage, uso colore default."
       );
@@ -90,7 +91,11 @@ export default class PresetEmbed extends EmbedBuilder {
       return;
     }
 
-    const hex = ColorFunctions.rgbToHex(...palette[0]);
+    const hex = ColorFunctions.rgbToHex(
+      averageColorRgb[0],
+      averageColorRgb[1],
+      averageColorRgb[2]
+    );
     this.setColor(hex);
   }
 

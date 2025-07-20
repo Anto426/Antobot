@@ -294,9 +294,14 @@ class DynamicColor {
 
       const filteredPalette = this.filterPalette(rawPalette);
       const textColor = this.calculateTextColor(filteredPalette);
+      let averageColorRgb = ColorFunctions.averageColor(filteredPalette);
 
       BotConsole.success("Palette and text color generated.");
-      return { palette: filteredPalette, textColor };
+      return {
+        palette: filteredPalette,
+        textColor,
+        averageColorRgb,
+      };
     } catch (err) {
       BotConsole.error("getPaletteAndTextColor failed", err);
       throw err;

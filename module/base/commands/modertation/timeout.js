@@ -26,6 +26,15 @@ export default {
         description: "Durata del timeout (es. 1m, 30m, 1h, 1d)",
         type: ApplicationCommandOptionType.String,
         required: true,
+        choices: [
+          { name: "1 Minuto", value: "1m" },
+          { name: "5 Minuti", value: "5m" },
+          { name: "10 Minuti", value: "10m" },
+          { name: "30 Minuti", value: "30m" },
+          { name: "1 Ora", value: "1h" },
+          { name: "1 Giorno", value: "1d" },
+          { name: "1 Settimana", value: "7d" },
+        ],
       },
       {
         name: "motivo",
@@ -39,7 +48,17 @@ export default {
   execute: async (interaction) => {
     const time = new Time();
     const member = interaction.options.getMember("utente");
-    const durationStr = interaction.options.getString("durata");
+    let durationStr = interaction.options.getString("durata");
+    const durationInt = {
+      "1m": 60 * 1000,
+      "5m": 5 * 60 * 1000,
+      "10m": 10 * 60 * 1000,
+      "30m": 30 * 60 * 1000,
+      "1h": 60 * 60 * 1000,
+      "1d": 24 * 60 * 60 * 1000,
+      "7d": 7 * 24 * 60 * 60 * 1000,
+    };
+
     const reason =
       interaction.options.getString("motivo") || "Nessun motivo fornito.";
 
@@ -49,11 +68,11 @@ export default {
       });
     }
 
-    const ms = time.formatDuration(durationStr);
+    const ms = durationInt[durationStr];
     await member.timeout(ms, reason);
 
     const expiresTimestamp = Math.floor(
-      member.communicationDisabledUntilTimestamp / 1000
+      (Date.now() + ms) / 1000
     );
 
     const embed = await new PresetEmbed({
