@@ -58,34 +58,34 @@ class Security {
 
   async allow() {
     BotConsole.info(
-      `[Security] Verifying permissions for command: ${this.command.name}`
+      `[Security] Verifica dei permessi per il comando: ${this.command.name}`
     );
 
     if (this.command.isActive === false) {
-      throw new Error("This command is not currently active.");
+      throw new Error("Questo comando non è attualmente attivo.");
     }
 
     this._gatherFlags();
 
     if (this.isBotUser && !this.command.isBotAllowed) {
-      throw new Error("Bots cannot execute this command.");
+      throw new Error("I bot non possono eseguire questo comando.");
     }
     if (this.isSelf) {
-      throw new Error("You cannot use this command on yourself.");
+      throw new Error("Non puoi usare questo comando su te stesso.");
     }
     if (!this.inAllowedChannel) {
-      throw new Error("This command is not allowed in this channel.");
+      throw new Error("Questo comando non è consentito in questo canale.");
     }
     if (this.command.isTestCommand && !this.isOwner) {
-      throw new Error("This is a test-only command.");
+      throw new Error("Questo è un comando di solo test.");
     }
 
     const isPrivilegedUser = this.isOwner || this.isServerOwner || this.isStaff;
     if (this.command.isOwnerOnly && !this.isOwner) {
-      throw new Error("Only the bot owner can use this command.");
+      throw new Error("Solo il proprietario del bot può usare questo comando.");
     }
     if (!this.command.isOwnerOnly && !isPrivilegedUser) {
-      throw new Error("You do not have permission to use this command.");
+      throw new Error("Non hai il permesso di usare questo comando.");
     }
 
     if (this.interaction.isButton()) {
@@ -106,13 +106,15 @@ class Security {
     const customId = this.interaction.customId;
     const userIdFromButton = customId.split("-")[1];
     if (userIdFromButton && userIdFromButton !== this.interaction.user.id) {
-      throw new Error("You are not authorized to use this button.");
+      throw new Error("Non sei autorizzato a usare questo pulsante.");
     }
   }
 
   async _checkDistube() {
     if (!this.command.disTube) {
-      throw new Error("DisTube configuration is missing for this command.");
+      throw new Error(
+        "La configurazione di DisTube è mancante per questo comando."
+      );
     }
 
     const { member, guild } = this.interaction;
@@ -132,28 +134,39 @@ class Security {
     } = this.command.disTube;
 
     if (requireUserInVoiceChannel && !userChannel) {
-      throw new Error("You must be in a voice channel to use this command.");
+      throw new Error(
+        "Devi essere in un canale vocale per usare questo comando."
+      );
     }
     if (requireBotInVoiceChannel && !botChannel) {
-      throw new Error("The bot must be in a voice channel for this command.");
+      throw new Error(
+        "Il bot deve essere in un canale vocale per questo comando."
+      );
     }
-    if (requireSameVoiceChannel && userChannel && botChannel && userChannel?.id !== botChannel?.id) {
-      throw new Error("You must be in the same voice channel as the bot.");
+    if (
+      requireSameVoiceChannel &&
+      userChannel &&
+      botChannel &&
+      userChannel?.id !== botChannel?.id
+    ) {
+      throw new Error("Devi essere nello stesso canale vocale del bot.");
     }
     if (requireTrackInQueue && !queue) {
-      throw new Error("There are no tracks in the queue.");
+      throw new Error("Non ci sono brani in coda.");
     }
     if (requireAdditionalTracks && (!queue || queue.songs.length < 2)) {
-      throw new Error("There must be at least one more track in the queue.");
+      throw new Error("Deve esserci almeno un altro brano in coda.");
     }
     if (disallowIfPaused && queue?.paused) {
-      throw new Error("Command not allowed while playback is paused.");
+      throw new Error(
+        "Comando non consentito mentre la riproduzione è in pausa."
+      );
     }
     if (disallowIfPlaying && queue && !queue.paused) {
-      throw new Error("Command not allowed during playback.");
+      throw new Error("Comando non consentito durante la riproduzione.");
     }
     if (requireSeekable && !queue?.songs[0]?.isSeekable) {
-      throw new Error("The current track is not seekable.");
+      throw new Error("Il brano corrente non è ricercabile.");
     }
 
     return [userChannel, botChannel];
