@@ -1,6 +1,5 @@
 import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
-import { version as discordJsVersion } from "discord.js";
-import { version as nodeVersion } from "process";
+import Time from "../../../../class/services/time.js";
 
 export default {
   name: "ping",
