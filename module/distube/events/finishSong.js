@@ -12,32 +12,18 @@ export default {
     }).init();
 
     embed
-      .setAuthor({
-        name: "🎶  Traccia Terminata",
-        iconURL: queue.textChannel.guild.iconURL() ?? undefined,
-      })
-      .setTitle(song.name)
-      .setURL(song.url)
+      .setTitle("🎶 Traccia Terminata")
       .setThumbnail(song.thumbnail)
-      .setDescription(
-        `**Artista:** [${song.uploader?.name || "Sconosciuto"}](${
-          song.uploader?.url || song.url
-        })`
-      )
+      .setDescription(`**[${song.name}](${song.url})** ha finito di suonare.`)
       .addFields(
         {
-          name: "⏱️ Durata",
-          value: song.formattedDuration || "N/A",
+          name: "Artista",
+          value: song.uploader?.name ?? "Sconosciuto",
           inline: true,
         },
         {
-          name: "📀 Posizione in coda",
-          value: `${queue.songs.indexOf(song) + 1}/${queue.songs.length}`,
-          inline: true,
-        },
-        {
-          name: "🔊 Volume",
-          value: `${queue.volume}%`,
+          name: "Durata",
+          value: song.formattedDuration ?? "N/A",
           inline: true,
         }
       );

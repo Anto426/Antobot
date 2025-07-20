@@ -26,27 +26,46 @@ export default {
     const song = queue.songs[0];
     await queue.resume();
 
-    const embed = await new PresetEmbed({
+    const embed = new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
-      image: song.thumbnail,
-    }).init(false);
+    });
+
+    embed.setThumbnail(song.thumbnail);
+    await embed.init();
 
     embed
-      .setMainContent(
-        "▶️ Riproduzione Ripresa",
-        `**${song.name}** è ora in riproduzione.`
+      .setTitle(`▶️ ${song.name}`)
+      .setURL(song.url)
+      .setDescription(
+        `*Caricata da **${
+          song.uploader?.name ?? "Sconosciuto"
+        }** • Richiesta da ${song.user}*`
       )
-      .setThumbnailUrl(song.thumbnail)
-      .addInlineFields([
-        { name: "🧑‍🎤 Autore", value: song.uploader?.name ?? "Sconosciuto" },
-        { name: "⏱️ Durata", value: song.formattedDuration ?? "N/A" },
-        { name: "🎵 Posizione", value: `1/${queue.songs.length}` },
-      ])
-      .addFieldInline("📎 Link", `[Apri traccia](${song.url})`)
-      .addFieldInline("🔊 Volume", `${queue.volume}%`)
-      await embed._applyColorFromImage();
+      .addFields(
+        {
+          name: "⏱️ Durata",
+          value: song.formattedDuration ?? "N/A",
+          inline: true,
+        },
+        {
+          name: "#️⃣ Posizione",
+          value: `**1** di **${queue.songs.length}**`,
+          inline: true,
+        },
+        {
+          name: "🔁 Loop",
+          value:
+            queue.repeatMode === 2
+              ? "Coda"
+              : queue.repeatMode === 1
+              ? "Traccia"
+              : "Off",
+          inline: true,
+        },
+        { name: "🔊 Volume", value: `${queue.volume}%`, inline: true }
+      );
 
-    return({ embeds: [embed], content: "" });
+    return { embeds: [embed] };
   },
 };

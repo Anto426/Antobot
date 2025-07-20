@@ -31,27 +31,38 @@ export default {
   execute: async (interaction) => {
     const target = interaction.options.getUser("utente");
     const reason =
-      interaction.options.getString("motivo") || "Nessun motivo fornito";
+      interaction.options.getString("motivo") || "Nessun motivo fornito.";
     const member = interaction.guild.members.cache.get(target.id);
-
-    if (!member)
-      return interaction.editReply("❌ Utente non trovato nel server.");
-    if (!member.kickable)
-      return interaction.editReply("❌ Non posso espellere questo utente.");
 
     await member.kick(reason);
 
     const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
+      image: target.displayAvatarURL({ dynamic: true }),
     }).init();
 
     embed
-      .setMainContent("👢 Utente Espulso", `**${target.tag}** è stato espulso.`)
-      .addField("Motivo", reason, false)
-      .addField("Moderatore", interaction.user.tag, false)
-      .setThumbnailUrl(target.displayAvatarURL({ dynamic: true }));
+      .setTitle("👢 Utente Espulso")
+      .setThumbnail(target.displayAvatarURL({ dynamic: true }))
+      .addFields(
+        {
+          name: "👤 Utente",
+          value: `${target.tag}\n\`${target.id}\``,
+          inline: true,
+        },
+        {
+          name: "👮 Moderatore",
+          value: `${interaction.user.tag}\n\`${interaction.user.id}\``,
+          inline: true,
+        },
+        {
+          name: "📄 Motivo",
+          value: reason,
+          inline: false,
+        }
+      );
 
-    return({ embeds: [embed] });
+    return { embeds: [embed] };
   },
 };

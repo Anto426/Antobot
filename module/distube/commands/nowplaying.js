@@ -24,34 +24,36 @@ export default {
     const queue = global.distube.getQueue(interaction);
     const song = queue.songs[0];
 
-    const embed = await new PresetEmbed({
+    const embed = new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
-      image: song.thumbnail,
-    }).init(false);
+    });
+
+    embed.setThumbnail(song.thumbnail);
+    await embed.init(); 
 
     embed
-      .setMainContent("🎧 In Riproduzione", `**[${song.name}](${song.url})**`)
-      .setThumbnailUrl(song.thumbnail)
-      .addInlineFields([
-        {
-          name: "🧑‍🎤 Autore",
-          value: song.uploader?.name ?? "Sconosciuto",
-          inline: true,
-        },
+      .setTitle(song.name)
+      .setURL(song.url) 
+      .setDescription(
+
+        `*Caricata da **${
+          song.uploader?.name ?? "Sconosciuto"
+        }** • Richiesta da ${song.user}*`
+      )
+      .addFields(
         {
           name: "⏱️ Durata",
           value: song.formattedDuration ?? "N/A",
           inline: true,
         },
         {
-          name: "👤 Richiesto da",
-          value: song.user?.toString() ?? "N/A",
+          name: "#️⃣ Posizione",
+          value: `**1** di **${queue.songs.length}**`,
           inline: true,
         },
-        { name: "🔊 Volume", value: `${queue.volume}%`, inline: true },
         {
-          name: "🔁 Modalità Loop",
+          name: "🔁 Loop",
           value:
             queue.repeatMode === 2
               ? "Coda"
@@ -60,15 +62,9 @@ export default {
               : "Off",
           inline: true,
         },
-        {
-          name: "📎 Link",
-          value: `[Vai alla traccia](${song.url})`,
-          inline: true,
-        },
-      ])
-      .setFooter({ text: `Posizione in coda: 1/${queue.songs.length}` });
-    await embed._applyColorFromImage();
+        { name: "🔊 Volume", value: `${queue.volume}%`, inline: true }
+      );
 
-    return { embeds: [embed], content: "" };
+    return { embeds: [embed] };
   },
 };

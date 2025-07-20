@@ -34,22 +34,50 @@ export default {
     const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
-      image: queue.songs[0].thumbnail,
+      image: queue.songs[0]?.thumbnail,
     }).init();
 
+    const currentSong = queue.songs[0];
+    const nextSongs = queue.songs.slice(1, 6);
+
+    let description = "Nessuna traccia in coda.";
+    if (currentSong) {
+      description = `**▶️ In Riproduzione**\n[${currentSong.name}](${currentSong.url}) - \`${currentSong.formattedDuration}\`\n`;
+      if (nextSongs.length > 0) {
+        description += `\n**🔼 Prossime Tracce**\n`;
+        description += nextSongs
+          .map((song, i) => `**${i + 2}.** [${song.name}](${song.url})`)
+          .join("\n");
+      }
+    }
+
     embed
-      .setMainContent("📃 Coda Attuale", songList || "Nessuna traccia in coda.")
-      .addFieldInline("🔢 Tracce totali", `${queue.songs.length}`)
-      .addFieldInline("🔊 Volume", `${queue.volume}%`)
-      .addFieldInline(
-        "🔁 Loop",
-        queue.repeatMode === 2
-          ? "Coda"
-          : queue.repeatMode === 1
-          ? "Traccia"
-          : "Off"
+      .setTitle(`🎶 Coda Musicale di ${interaction.guild.name}`)
+      .setThumbnail(currentSong?.thumbnail)
+      .setDescription(description)
+      .addFields(
+        {
+          name: "Tracce Totali",
+          value: `**${queue.songs.length}**`,
+          inline: true,
+        },
+        {
+          name: "Durata Totale",
+          value: `**${queue.formattedDuration}**`,
+          inline: true,
+        },
+        {
+          name: "Loop",
+          value:
+            queue.repeatMode === 2
+              ? "Coda"
+              : queue.repeatMode === 1
+              ? "Traccia"
+              : "Off",
+          inline: true,
+        }
       );
 
-    return { embeds: [embed], content: "" };
+    return { embeds: [embed] };
   },
 };

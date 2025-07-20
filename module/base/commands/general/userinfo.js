@@ -25,6 +25,7 @@ export default {
   execute: async (interaction) => {
     const user = interaction.options?.getUser("utente") || interaction.user;
     const member = interaction.guild.members.cache.get(user.id);
+    await user.fetch();
 
     const embed = await new PresetEmbed({
       guild: interaction.guild,
@@ -32,31 +33,62 @@ export default {
       image: user.displayAvatarURL({ format: "png", size: 512 }),
     }).init();
 
+    const roles = member?.roles.cache
+      .filter((role) => role.id !== interaction.guild.id)
+      .sort((a, b) => b.position - a.position)
+      .map((role) => role.toString());
+
+    let roleDisplay = "Nessun ruolo specifico.";
+    if (roles && roles.length > 0) {
+      const maxRolesToShow = 8;
+      const displayedRoles = roles.slice(0, maxRolesToShow);
+      roleDisplay = displayedRoles.join(" ");
+      if (roles.length > maxRolesToShow) {
+        roleDisplay += ` **e altri ${roles.length - maxRolesToShow}...**`;
+      }
+    }
+
     embed
-      .setMainContent(
-        "👤 Informazioni Utente",
-        `Ecco i dettagli su **${user.username}**:`
-      )
-      .setThumbnailUrl(user.displayAvatarURL({ dynamic: true }))
-      .addFieldInline("🆔 ID", `\`${user.id}\``)
-      .addFieldInline("📛 Username", `\`${user.tag}\``)
-      .addFieldInline(
-        "🕒 Account Creato",
-        `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`
-      )
-      .addFieldInline(
-        "🗓️ Entrato nel server",
-        member
-          ? `<t:${Math.floor(member.joinedTimestamp / 1000)}:R>`
-          : "`Non disponibile`"
-      )
-      .addFieldInline(
-        "🎭 Ruoli",
-        member
-          ? `${member.roles.cache.map((r) => r).join(" ")}`
-          : "`Nessun ruolo`"
+      .setTitle(`👤 Profilo di ${user.tag}`)
+      .setThumbnail(user.displayAvatarURL({ dynamic: true, size: 512 }))
+      .addFields(
+        {
+          name: "Identità",
+          value: `<@${user.id}>\n\`${user.id}\``,
+          inline: true,
+        },
+        {
+          name: "Stato",
+          value: `\`${member?.presence?.status ?? "offline"}\``,
+          inline: true,
+        },
+        { name: "\u200B", value: "\u200B" },
+
+        {
+          name: "Account Creato",
+          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:F>`,
+          inline: true,
+        },
+        {
+          name: "Entrato nel Server",
+          value: member
+            ? `<t:${Math.floor(member.joinedTimestamp / 1000)}:F>`
+            : "N/A",
+          inline: true,
+        },
+        { name: "\u200B", value: "\u200B" },
+
+        {
+          name: `Ruoli [${roles?.length ?? 0}]`,
+          value: roleDisplay,
+          inline: false,
+        }
       );
 
-    return({ embeds: [embed] });
+    if (user.banner) {
+      embed.setImage(user.bannerURL({ dynamic: true, size: 512 }));
+    }
+
+    return { embeds: [embed] };
   },
 };

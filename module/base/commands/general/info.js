@@ -20,26 +20,12 @@ export default {
   execute: async (interaction) => {
     const client = interaction.client;
 
-    const time = new Time();
     const uptimeMs = process.uptime() * 1000;
-    const uptimeFormatted = time.formatDuration(uptimeMs);
+    const uptimeFormatted = new Time().formatDuration(uptimeMs);
 
-    const servers = client.guilds.cache.size;
-    const users = client.users.cache.size;
-
-    const embed = await new PresetEmbed({
-      guild: interaction.guild,
-      member: interaction.member,
-      image: client.user.displayAvatarURL({ format: "png", size: 512 }),
-    }).init();
-
-    const memory = process.memoryUsage();
-    const heapUsed = (memory.heapUsed / 1024 / 1024).toFixed(2);
-    const heapTotal = (memory.heapTotal / 1024 / 1024).toFixed(2);
-    const cpu = process.cpuUsage();
-    const cpuUser = (cpu.user / 1_000_000).toFixed(2);
-    const cpuSystem = (cpu.system / 1_000_000).toFixed(2);
-    const ping = client.ws.ping;
+    const memoryUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(
+      2
+    );
 
     const botVersion =
       typeof SystemCheck.getVersion === "function"
@@ -52,39 +38,44 @@ export default {
         ? SystemCheck.getAuthor()
         : "Sconosciuto";
 
+    const embed = await new PresetEmbed({
+      guild: interaction.guild,
+      member: interaction.member,
+      image: client.user.displayAvatarURL(),
+    }).init();
+
     embed
-      .setMainContent(
-        "ℹ️ Info Bot",
-        "Ecco alcune statistiche dettagliate sul bot e sull'ambiente:"
+      .setTitle(`📈 Statistiche di ${client.user.username}`)
+      .setThumbnail(client.user.displayAvatarURL())
+      .setDescription(
+        "Ecco una panoramica delle mie statistiche operative e di sistema."
       )
-      .setThumbnailUrl(client.user.displayAvatarURL({ dynamic: true }))
-      .addFieldInline("📛 Nome", client.user.tag, true)
-      .addFieldInline("🆔 ID", client.user.id, true)
-      .addFieldInline(
-        "🗓️ Creato il",
-        `<t:${Math.floor(client.user.createdTimestamp / 1000)}:D>`,
-        true
-      )
-      .addFieldInline("📈 Uptime", uptimeFormatted, true)
-      .addFieldInline("🌐 Server", `${servers}`, true)
-      .addFieldInline("👥 Utenti", `${users}`, true)
-      .addFieldInline("📦 Versione Bot", botVersion, true)
-      .addFieldInline("📦 Node.js", `v${nodeVersion}`, true)
-      .addFieldInline("🤖 Discord.js", `v${discordJsVersion}`, true)
-      .addFieldInline("⏳ Ping WS", `${ping} ms`, true)
-      .addFieldInline("💾 Heap Usata", `${heapUsed} MB`, true)
-      .addFieldInline("📊 Heap Totale", `${heapTotal} MB`, true)
-      .addFieldInline("⚙️ CPU (user)", `${cpuUser} ms`, true)
-      .addFieldInline("⚙️ CPU (system)", `${cpuSystem} ms`, true)
-      .addFieldInline("🔧 Architettura", process.arch, true)
-      .addFieldInline("🖥️ Piattaforma", process.platform, true);
+      .addFields(
+        { name: "Creatore", value: author, inline: true },
+        { name: "Versione", value: `\`${botVersion}\``, inline: true },
+        { name: "Uptime", value: uptimeFormatted, inline: true },
+
+        {
+          name: "🌐 Server",
+          value: `${client.guilds.cache.size}`,
+          inline: true,
+        },
+        {
+          name: "👥 Utenti",
+          value: `${client.guilds.cache.size.toLocaleString("it-IT")}`,
+          inline: true,
+        },
+        { name: "⏳ Ping", value: `${client.ws.ping}ms`, inline: true },
+
+        { name: "🧠 Memoria", value: `${memoryUsed} MB`, inline: true },
+        { name: "📦 Node.js", value: process.version, inline: true },
+        { name: "🤖 Discord.js", value: `v${discordJsVersion}`, inline: true }
+      );
 
     if (repoLink) {
-      embed.addFieldInline("🔗 Repository", `[GitHub](${repoLink})`, true);
+      embed.setURL(repoLink);
     }
 
-    embed.addFieldInline("👤 Creatore", author, true);
-
-    return({ embeds: [embed] });
+    return { embeds: [embed] };
   },
 };

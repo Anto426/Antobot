@@ -43,13 +43,36 @@ export default {
       member: interaction.member,
     }).init();
 
-    embed.setMainContent(
-      clearQueue ? "🛑 Riproduzione Terminata" : "⏸️ Riproduzione Pausata",
-      clearQueue
-        ? "La musica è stata fermata e la coda è stata svuotata."
-        : "La riproduzione è stata messa in pausa. Puoi riprendere con `/resume`."
-    );
+    if (clearQueue) {
+      const tracksRemoved = queue.songs.length;
+      embed
+        .setTitle("🛑 Riproduzione Terminata")
+        .setThumbnail(interaction.client.user.displayAvatarURL())
+        .setDescription(
+          "La musica è stata fermata e tutte le tracce in coda sono state rimosse."
+        )
+        .addFields({
+          name: "Tracce Rimosse",
+          value: `**${tracksRemoved}**`,
+          inline: true,
+        });
+    } else {
+      const currentSong = queue.songs[0];
+      embed
+        .setTitle("⏸️ Riproduzione in Pausa")
+        .setThumbnail(currentSong?.thumbnail)
+        .setDescription(
+          `La riproduzione di **[${currentSong?.name ?? "traccia attuale"}](${
+            currentSong?.url
+          })** è in pausa.`
+        )
+        .addFields({
+          name: "Consiglio",
+          value: "Usa il comando `/resume` per riprendere.",
+          inline: false,
+        });
+    }
 
-    return({ embeds: [embed], content: "" });
+    return { embeds: [embed] };
   },
 };

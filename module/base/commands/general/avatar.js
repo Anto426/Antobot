@@ -30,17 +30,31 @@ export default {
       image: user.displayAvatarURL({ size: 512, dynamic: true }),
     }).init();
 
+    const avatarUrl = user.displayAvatarURL({ size: 4096, dynamic: true });
+    const downloadLinks = `[PNG](${user.displayAvatarURL({
+      format: "png",
+      size: 4096,
+    })}) | [JPG](${user.displayAvatarURL({
+      format: "jpg",
+      size: 4096,
+    })}) | [WEBP](${user.displayAvatarURL({ format: "webp", size: 4096 })})`;
+
     embed
-      .setMainContent(
-        `👤 Avatar di ${user.username}`,
-        `[Link all'avatar](${user.displayAvatarURL({
-          size: 4096,
-          dynamic: true,
-        })})`
-      )
-      .setThumbnail(user.displayAvatarURL({ size: 512, dynamic: true }))
-      .addFieldInline("ID Utente", user.id, true)
-      .addFieldInline("Tag Utente", user.tag, true);
+      .setTitle(`👤 Avatar di ${user.tag}`)
+      .setDescription(`**Link per il download:**\n${downloadLinks}`)
+      .setImage(avatarUrl)
+      .addFields(
+        {
+          name: "ID Utente",
+          value: `\`${user.id}\``,
+          inline: true,
+        },
+        {
+          name: "Account Creato",
+          value: `<t:${Math.floor(user.createdTimestamp / 1000)}:R>`,
+          inline: true,
+        }
+      );
 
     return { embeds: [embed] };
   },
