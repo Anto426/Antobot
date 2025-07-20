@@ -88,7 +88,11 @@ class Security {
       throw new Error("Non hai il permesso di usare questo comando.");
     }
 
-    if (this.interaction.isButton()) {
+    if (
+      this.interaction.isButton() ||
+      this.interaction.isAnySelectMenu() ||
+      this.interaction.isModalSubmit()
+    ) {
       this._checkButtonPermissions();
     }
 

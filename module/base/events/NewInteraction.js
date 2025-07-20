@@ -4,10 +4,10 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 import ConfigManager from "../../../class/services/ConfigManager.js";
 
 const EMBED_STYLES = {
-  error: { color: "#e74c3c", emoji: "❌" },
-  success: { color: "#2ecc71", emoji: "✅" },
-  warning: { color: "#f1c40f", emoji: "⚠️" },
-  info: { color: "#3498db", emoji: "ℹ️" },
+  error: { emoji: "❌" },
+  success: { emoji: "✅" },
+  warning: { emoji: "⚠️" },
+  info: { emoji: "ℹ️" },
 };
 
 async function sendReply({
@@ -35,12 +35,9 @@ async function sendReply({
           BotConsole.warning(
             "Interaction is ephemeral, using followUp instead of editReply."
           );
-
           try {
             await interaction.deleteReply();
-
             await new Promise((resolve) => setTimeout(resolve, 500));
-
             await interaction.followUp(messagePayload);
           } catch (fallbackErr) {
             BotConsole.error(
@@ -72,25 +69,20 @@ async function sendReply({
     }
 
     const style = EMBED_STYLES[type] || EMBED_STYLES.info;
-    const embed = new PresetEmbed({
+    const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
-    });
+      image: interaction.client.user.displayAvatarURL(),
+    }).init();
 
-    await embed.init(false);
-
-    embed
-      .setColor(style.color)
-      .setMainContent(`${style.emoji} **${title}**`, description)
-      .setTimestamp()
-      .setFooter({
-        text: footer || `Antobot • ${interaction.user.username}`,
-        iconURL: interaction.user.displayAvatarURL(),
-      });
+    embed.setTitle(`${style.emoji} ${title}`).setDescription(description);
 
     if (fields?.length > 0) {
       embed.addFields(fields);
     }
+
+    // Il footer viene ora gestito automaticamente dalla classe PresetEmbed
+    // Non è più necessario impostarlo qui manualmente
 
     await send({ embeds: [embed], ephemeral: true });
   } catch (err) {
