@@ -1,4 +1,5 @@
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+
 export default {
   name: "autoplay",
   permissions: [],
@@ -21,7 +22,9 @@ export default {
 
   async execute(interaction) {
     const queue = global.distube.getQueue(interaction);
-    const newAutoplayState = queue.toggleAutoplay();
+
+    queue.toggleAutoplay();
+    const newAutoplayState = queue.autoplay;
 
     const embed = await new PresetEmbed({
       guild: interaction.guild,
