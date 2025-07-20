@@ -1,3 +1,4 @@
 /node_modules
 /.env
-/Database/
+package-lock.json
+/.dist

@@ -41,7 +41,7 @@ export default {
     const member = interaction.options.getMember("utente");
     const durationStr = interaction.options.getString("durata");
     const reason =
-      interaction.options.getString("motivo") || "Nessun motivo fornito";
+      interaction.options.getString("motivo") || "Nessun motivo fornito.";
 
     if (member.communicationDisabledUntilTimestamp > Date.now()) {
       return interaction.editReply({
@@ -52,20 +52,48 @@ export default {
     const ms = time.formatDuration(durationStr);
     await member.timeout(ms, reason);
 
+    const expiresTimestamp = Math.floor(
+      member.communicationDisabledUntilTimestamp / 1000
+    );
+
     const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
+      image: member.user.displayAvatarURL({ dynamic: true }),
     }).init();
 
     embed
-      .setMainContent(
-        "⏳ Timeout Applicato",
-        "Il timeout è stato applicato correttamente."
-      )
-      .addFieldInline("👤 Utente", member.user.tag, true)
-      .addFieldInline("⏱️ Durata", durationStr, true)
-      .addFieldInline("📄 Motivo", reason, true);
+      .setTitle("⏳ Timeout Applicato")
+      .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+      .addFields(
+        {
+          name: "👤 Utente",
+          value: `${member.user.tag}\n\`${member.id}\``,
+          inline: true,
+        },
+        {
+          name: "👮 Moderatore",
+          value: `${interaction.user.tag}\n\`${interaction.user.id}\``,
+          inline: true,
+        },
+        { name: "\u200B", value: "\u200B" },
+        {
+          name: "Durata",
+          value: durationStr,
+          inline: true,
+        },
+        {
+          name: "Scade",
+          value: `<t:${expiresTimestamp}:R>`,
+          inline: true,
+        },
+        {
+          name: "📄 Motivo",
+          value: reason,
+          inline: false,
+        }
+      );
 
-    return({ embeds: [embed] });
+    return { embeds: [embed] };
   },
 };

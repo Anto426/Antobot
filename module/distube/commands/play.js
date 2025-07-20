@@ -44,33 +44,38 @@ export default {
     const queue = global.distube.getQueue(interaction);
     const song = queue.songs[queue.songs.length - 1];
 
-    const embed = await new PresetEmbed({
+    const embed = new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
-      image: song.thumbnail,
-    }).init(false);
+    });
+
+    embed.setThumbnail(song.thumbnail);
+    await embed.init();
+
+    const songPosition = queue.songs.indexOf(song);
+    const songsAhead = songPosition > 0 ? songPosition : 0;
 
     embed
-      .setMainContent(
-        "🎶 Traccia Aggiunta",
-        `**${song.name}** è stata aggiunta alla coda!`
-      )
-      .setThumbnail(song.thumbnail)
-      .addFieldInline("⏱️ Durata", song.formattedDuration ?? "N/A", true)
-      .addFieldInline("🧑‍🎤 Autore", song.uploader?.name ?? "Sconosciuto", true)
-      .addFieldInline("📎 Link", `[Vai alla traccia](${song.url})`, true)
-      .addFieldInline(
-        "📀 Posizione in coda",
-        `${queue.songs.indexOf(song) + 1}/${queue.songs.length}`,
-        true
-      )
-      .addFieldInline("🔊 Volume", `${queue.volume}%`, true)
-      .addFieldInline(
-        "🔊 Canale vocale",
-        interaction.member.voice.channel?.name ?? "N/A",
-        true
+      .setTitle("✅ Aggiunto alla Coda")
+      .setDescription(`**[${song.name}](${song.url})**`)
+      .addFields(
+        {
+          name: "Artista",
+          value: song.uploader?.name ?? "Sconosciuto",
+          inline: true,
+        },
+        {
+          name: "Durata",
+          value: song.formattedDuration ?? "N/A",
+          inline: true,
+        },
+        {
+          name: "Posizione in Coda",
+          value: `**#${songPosition + 1}**`,
+          inline: true,
+        },
+        { name: "Brani Prima di Questo", value: `${songsAhead}`, inline: true }
       );
-    await embed._applyColorFromImage();
 
     return {
       embeds: [embed],
@@ -78,4 +83,3 @@ export default {
     };
   },
 };
-

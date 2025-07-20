@@ -32,23 +32,39 @@ export default {
     const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
-      image: currentSong.thumbnail,
-    }).init(false);
+    });
 
-    embed
-      .setMainContent(
-        "⏭️ Traccia Saltata",
-        "Hai saltato la traccia corrente con successo!"
-      )
-      .addFieldInline("🎵 Titolo", currentSong.name, true)
-      .addFieldInline("⏱️ Durata", currentSong.formattedDuration || "N/A", true)
-      .addFieldInline(
-        "🧑‍🎤 Artista",
-        currentSong.uploader?.name || "Sconosciuto",
-        true
+    const newSong = queue.songs[0];
+
+    embed.setThumbnail(newSong?.thumbnail);
+    await embed.init();
+
+    let description = "La traccia precedente è stata saltata.";
+    if (newSong) {
+      description += `\n\n**▶️ Ora in Riproduzione:**\n[${newSong.name}](${newSong.url})`;
+    } else {
+      description += "\n\nLa coda ora è vuota.";
+    }
+
+    embed.setTitle("⏭️ Traccia Saltata").setDescription(description);
+
+    if (newSong) {
+      embed.addFields(
+        {
+          name: "Artista",
+          value: newSong.uploader?.name ?? "Sconosciuto",
+          inline: true,
+        },
+        {
+          name: "Durata",
+          value: newSong.formattedDuration ?? "N/A",
+          inline: true,
+        }
       );
-    await embed._applyColorFromImage();
+    }
 
-    return({ embeds: [embed] });
+    return {
+      embeds: [embed],
+    };
   },
 };

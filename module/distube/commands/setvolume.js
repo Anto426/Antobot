@@ -45,24 +45,24 @@ export default {
       image: queue.songs[0]?.thumbnail,
     }).init();
 
-    const barLength = 10;
+    const barLength = 12;
     const filledUnits = Math.round((queue.volume / 100) * barLength);
     const emptyUnits = barLength - filledUnits;
-    const volumeBar = "▇".repeat(filledUnits) + "—".repeat(emptyUnits);
+    const volumeBar = `**\`${"█".repeat(filledUnits)}${"-".repeat(
+      emptyUnits
+    )}\`**`;
+
+    const currentSong = queue.songs[0];
 
     embed
-      .setColor("#5865F2") // colore Discord blurple
-      .setTitle("🔊 Volume Aggiornato")
-      .setDescription(`**${queue.volume}%**\n\`${volumeBar}\``) // mostra la barra
-      .setThumbnail(queue.songs[0]?.thumbnail) // miniatura del brano corrente
-      .addFields({
-        name: "🎶 Brano in riproduzione",
-        value: queue.songs[0]
-          ? `[${queue.songs[0].name}](${queue.songs[0].url})`
-          : "Nessun brano in coda",
-        inline: false,
-      });
+      .setTitle(`🔊 Volume Impostato al ${queue.volume}%`)
+      .setThumbnail(currentSong?.thumbnail)
+      .setDescription(
+        `Il volume per **[${currentSong?.name ?? "la traccia attuale"}](${
+          currentSong?.url
+        })** è stato aggiornato.\n${volumeBar}`
+      );
 
-    return({ embeds: [embed] });
+    return { embeds: [embed] };
   },
 };

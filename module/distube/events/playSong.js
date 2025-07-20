@@ -12,30 +12,36 @@ export default {
     }).init();
 
     embed
-      .setAuthor({
-        name: "🎶 Ora in riproduzione",
-        iconURL: queue.textChannel.guild.iconURL() || undefined,
-      })
-      .setTitle(song.name)
+      .setTitle(`▶️ ${song.name}`)
       .setURL(song.url)
       .setThumbnail(song.thumbnail)
-      .setDescription(`**Artista:** ${song.uploader?.name || "Sconosciuto"}`)
+      .setDescription(
+        `*Caricata da **${
+          song.uploader?.name ?? "Sconosciuto"
+        }** • Richiesta da ${song.user}*`
+      )
       .addFields(
         {
           name: "⏱️ Durata",
-          value: song.formattedDuration || "N/A",
+          value: song.formattedDuration ?? "N/A",
           inline: true,
         },
         {
-          name: "📀 Posizione in coda",
-          value: `${queue.songs.indexOf(song) + 1}/${queue.songs.length}`,
+          name: "#️⃣ Posizione",
+          value: `**1** di **${queue.songs.length}**`,
           inline: true,
         },
         {
-          name: "🔊 Volume",
-          value: `${queue.volume}%`,
+          name: "🔁 Loop",
+          value:
+            queue.repeatMode === 2
+              ? "Coda"
+              : queue.repeatMode === 1
+              ? "Traccia"
+              : "Off",
           inline: true,
-        }
+        },
+        { name: "🔊 Volume", value: `${queue.volume}%`, inline: true }
       );
 
     await queue.textChannel.send({ embeds: [embed] });

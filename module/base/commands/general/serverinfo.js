@@ -22,46 +22,78 @@ export default {
       image: guild.iconURL({ format: "png", size: 512 }),
     }).init();
 
+    const owner = await guild.fetchOwner();
+    const links = [];
+    if (guild.vanityURLCode) {
+      links.push(`[Invito Vanity](https://discord.gg/${guild.vanityURLCode})`);
+    }
+    if (guild.bannerURL()) {
+      links.push(`[Banner](${guild.bannerURL({ size: 1024 })})`);
+    }
+
     embed
-      .setMainContent(
-        "🏠 Informazioni Server",
-        `✨ Benvenuto nelle info di **${guild.name}**!\nEcco tutti i dettagli:`
-      )
-      .setThumbnailUrl(guild.iconURL({ dynamic: true }))
-      .addFieldInline("🆔 ID Server", `\`${guild.id}\``)
-      .addFieldInline("👑 Proprietario", `<@${guild.ownerId}>`)
-      .addFieldInline(
-        "📅 Creato",
-        `<t:${Math.floor(guild.createdTimestamp / 1000)}:F> (<t:${Math.floor(
-          guild.createdTimestamp / 1000
-        )}:R>)`
-      )
-      .addFieldInline("👥 Membri", `\`${guild.memberCount}\``)
-      .addFieldInline("📁 Canali", `\`${guild.channels.cache.size}\``)
-      .addFieldInline("🎭 Ruoli", `\`${guild.roles.cache.size}\``)
-      .addFieldInline("🌍 Regione", `\`${guild.preferredLocale}\``)
-      .addFieldInline("🔒 Verifica", `\`${guild.verificationLevel}\``)
-      .addFieldInline(
-        "📝 Descrizione",
-        guild.description ? guild.description : "Nessuna"
-      )
-      .addFieldInline("📜 Boost Livello", `\`${guild.premiumTier}\``)
-      .addFieldInline(
-        "🚀 Boost Totali",
-        `\`${guild.premiumSubscriptionCount ?? 0}\``
-      )
-      .addFieldInline("🤝 Partner", guild.partnered ? "Sì" : "No")
-      .addFieldInline("✅ Verificato", guild.verified ? "Sì" : "No")
-      .addFieldInline(
-        "🖼️ Banner",
-        guild.bannerURL()
-          ? `[Visualizza banner](${guild.bannerURL({ size: 512 })})`
-          : "Nessuno"
-      )
-      .addFieldInline(
-        "🔗 Invito",
-        guild.vanityURLCode ? `discord.gg/${guild.vanityURLCode}` : "Nessuno"
+      .setTitle(`✨ Informazioni su ${guild.name}`)
+      .setThumbnail(guild.iconURL({ dynamic: true }))
+      .addFields(
+        { name: "👑 Proprietario", value: owner.toString(), inline: true },
+        {
+          name: "📅 Creazione",
+          value: `<t:${Math.floor(guild.createdTimestamp / 1000)}:D>`,
+          inline: true,
+        },
+        { name: "🆔 ID Server", value: `\`${guild.id}\``, inline: true },
+
+        {
+          name: "👥 Membri",
+          value: `\`${guild.memberCount.toLocaleString("it-IT")}\``,
+          inline: true,
+        },
+        {
+          name: "🎭 Ruoli",
+          value: `\`${guild.roles.cache.size}\``,
+          inline: true,
+        },
+        {
+          name: "📁 Canali",
+          value: `\`${guild.channels.cache.size}\``,
+          inline: true,
+        },
+
+        {
+          name: "🚀 Livello Boost",
+          value: `Livello ${guild.premiumTier}`,
+          inline: true,
+        },
+        {
+          name: "✨ Boost Totali",
+          value: `\`${guild.premiumSubscriptionCount ?? 0}\``,
+          inline: true,
+        },
+        {
+          name: "🔒 Verifica",
+          value: `Livello ${guild.verificationLevel}`,
+          inline: true,
+        }
       );
-    return({ embeds: [embed] });
+
+    if (guild.description) {
+      embed.setDescription(
+        `**Descrizione del server:**\n*${guild.description}*`
+      );
+    }
+
+    if (links.length > 0) {
+      embed.addFields({
+        name: "🔗 Link Utili",
+        value: links.join(" • "),
+        inline: false,
+      });
+    }
+
+    if (guild.bannerURL()) {
+      embed.setImage(guild.bannerURL({ size: 512 }));
+    }
+
+    return { embeds: [embed] };
   },
 };

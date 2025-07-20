@@ -17,38 +17,51 @@ export default {
   },
   execute: async (interaction) => {
     const now = Date.now();
-    const created = interaction.createdTimestamp;
-    const clientLatency = now - created;
+    const clientLatency = now - interaction.createdTimestamp;
     const apiLatency = Math.round(interaction.client.ws.ping);
 
-    const uptime = new Date(process.uptime() * 1000)
-      .toISOString()
-      .substr(11, 8);
+    const uptimeFormatted = new Time().formatDuration(process.uptime() * 1000);
     const memoryMb = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
+
+    const getStatusIndicator = (ping) => {
+      if (ping < 150) return "🟢";
+      if (ping < 300) return "🟡";
+      return "🔴";
+    };
 
     const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
-      image: interaction.client.user.displayAvatarURL({
-        format: "png",
-        size: 512,
-      }),
+      image: interaction.client.user.displayAvatarURL(),
     }).init();
 
     embed
-      .setMainContent(
-        "🏓 Pong!",
-        "Ecco tutti i dettagli sulla latenza e lo stato del bot:"
-      )
-      .setThumbnailUrl(
-        interaction.client.user.displayAvatarURL({ dynamic: true })
-      )
-      .addFieldInline("🖥️ Client Latency", `\`${clientLatency} ms\``)
-      .addFieldInline("🌐 API Latency", `\`${apiLatency} ms\``)
-      .addFieldInline("⏱️ Uptime", `\`${uptime}\``)
-      .addFieldInline("💾 Memory Used", `\`${memoryMb} MB\``)
-      .addFieldInline("📦 Node.js", `\`${nodeVersion}\``)
-      .addFieldInline("🤖 Discord.js", `\`${discordJsVersion}\``);
-    return({ embeds: [embed] });
+      .setTitle("🏓 Pong!")
+      .setThumbnail(interaction.client.user.displayAvatarURL())
+      .addFields(
+        {
+          name: "Latenza Bot 🤖",
+          value: `${getStatusIndicator(clientLatency)} \`${clientLatency}ms\``,
+          inline: true,
+        },
+        {
+          name: "Latenza API 🌐",
+          value: `${getStatusIndicator(apiLatency)} \`${apiLatency}ms\``,
+          inline: true,
+        },
+        { name: "\u200B", value: "\u200B", inline: false },
+        {
+          name: "Uptime",
+          value: uptimeFormatted,
+          inline: true,
+        },
+        {
+          name: "Memoria",
+          value: `${memoryMb} MB`,
+          inline: true,
+        }
+      );
+
+    return { embeds: [embed] };
   },
 };

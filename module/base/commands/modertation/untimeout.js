@@ -1,7 +1,4 @@
-import {
-  ApplicationCommandOptionType,
-  PermissionsBitField,
-} from "discord.js";
+import { ApplicationCommandOptionType, PermissionsBitField } from "discord.js";
 import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
 
 export default {
@@ -34,7 +31,8 @@ export default {
 
   execute: async (interaction) => {
     const member = interaction.options.getMember("utente");
-    const reason = interaction.options.getString("motivo") || "Nessun motivo fornito";
+    const reason =
+      interaction.options.getString("motivo") || "Nessun motivo fornito.";
 
     if (!member.communicationDisabledUntilTimestamp) {
       return interaction.editReply({
@@ -47,13 +45,30 @@ export default {
     const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
+      image: member.user.displayAvatarURL({ dynamic: true }),
     }).init();
 
     embed
-      .setMainContent("🔓 Timeout Rimosso", "Il timeout dell'utente è stato rimosso correttamente.")
-      .addFieldInline("👤 Utente", `${member.user.tag}`, true)
-      .addFieldInline("📄 Motivo", reason, true);
+      .setTitle("🔓 Timeout Rimosso")
+      .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+      .addFields(
+        {
+          name: "👤 Utente",
+          value: `${member.user.tag}\n\`${member.id}\``,
+          inline: true,
+        },
+        {
+          name: "👮 Moderatore",
+          value: `${interaction.user.tag}\n\`${interaction.user.id}\``,
+          inline: true,
+        },
+        {
+          name: "📄 Motivo della Rimozione",
+          value: reason,
+          inline: false,
+        }
+      );
 
-    return({ embeds: [embed] });
+    return { embeds: [embed] };
   },
 };

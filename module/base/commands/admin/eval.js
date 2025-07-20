@@ -23,22 +23,43 @@ export default {
   },
   execute: async (interaction) => {
     const expression = interaction.options.getString("espressione");
-    let embed = await new PresetEmbed({
+
+    let result = await eval(expression);
+
+    const embed = await new PresetEmbed({
       guild: interaction.guild,
       member: interaction.member,
     }).init();
 
-    let result = await eval(expression);
+    const resultString =
+      typeof result === "object" && result !== null
+        ? JSON.stringify(result, null, 2)
+        : String(result);
 
-    embed
-      .setMainContent(
-        `Esecuzione di: \`${expression}\``,
-        `**Risultato:**\n\`\`\`js\n${result}\n\`\`\``
-      )
-      .setFooter(
-        `Richiesto da ${interaction.user.tag}`,
-        interaction.user.displayAvatarURL({ size: 512, dynamic: true })
-      );
+    const maxLen = 1000;
+    const cleanResult =
+      resultString.length > maxLen
+        ? resultString.substring(0, maxLen) + "..."
+        : resultString;
+
+    embed.setTitle("✅ Valutazione Eseguita").addFields(
+      {
+        name: "Input 📥",
+        value: `\`\`\`js\n${expression}\n\`\`\``,
+        inline: false,
+      },
+      {
+        name: "Output 📤",
+        value: `\`\`\`js\n${cleanResult}\n\`\`\``,
+        inline: false,
+      },
+      {
+        name: "Tipo Restituito",
+        value: `\`${typeof result}\``,
+        inline: true,
+      }
+    );
+
     return { embeds: [embed] };
   },
 };
