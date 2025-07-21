@@ -1,7 +1,7 @@
 import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
 
 export default {
-  name: "skip",
+  name: "toggleplay",
   permissions: [],
   isActive: true,
   isBotAllowed: true,
@@ -20,15 +20,18 @@ export default {
     requireSeekable: false,
   },
   data: {
-    name: "skip",
-    description: "Salta la traccia corrente",
+    name: "toggleplay",
+    description: "Attiva o disattiva la riproduzione corrente",
   },
-
   async execute(interaction) {
     const { guild } = interaction;
     const queue = global.distube.getQueue(guild);
 
-    await queue.skip();
+    if (queue.paused) {
+      queue.resume();
+    } else {
+      queue.pause();
+    }
 
     queue.lastPlayingMessage.edit(
       await new NowPlayingPanelBuilder(queue).build()

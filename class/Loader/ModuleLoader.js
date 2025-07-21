@@ -130,18 +130,6 @@ class LoadModules {
     ]);
     client.other = new Collection([...this.#otherModules]);
 
-    BotConsole.debug(
-      `Commands: ${client.commands.size} | Buttons: ${client.buttons.size}`,
-      {
-        type: "debug",
-        data: {
-          commands: client.commands.size,
-          buttons: client.buttons.size,
-          timestamp: new Date().toISOString(),
-        },
-      }
-    );
-
     BotConsole.success("All modules loaded successfully");
     BotConsole.info(
       "Temporary collections are kept private and not attached to client"

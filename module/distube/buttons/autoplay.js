@@ -4,11 +4,6 @@ export default {
   name: "autoplay",
   permissions: [],
   isActive: true,
-  isBotAllowed: true,
-  isOwnerOnly: false,
-  requiresPositionArgument: false,
-  isTestCommand: false,
-  isVisibleInHelp: true,
   disTube: {
     requireUserInVoiceChannel: true,
     requireSameVoiceChannel: true,
@@ -19,21 +14,14 @@ export default {
     disallowIfPlaying: false,
     requireSeekable: false,
   },
-  data: {
-    name: "autoplay",
-    description: "Attiva o disattiva la modalità autoplay",
-  },
+  response: false,
 
   async execute(interaction) {
-    const { guild } = interaction;
-    const queue = global.distube.getQueue(guild);
+    const queue = global.distube.getQueue(interaction.guild);
 
     await queue.toggleAutoplay();
 
-    queue.lastPlayingMessage.edit(
-      await new NowPlayingPanelBuilder(queue).build()
-    );
-
-    interaction.deleteReply().catch(() => {});
+    const panel = await new NowPlayingPanelBuilder(queue).build();
+    await interaction.update(panel);
   },
 };

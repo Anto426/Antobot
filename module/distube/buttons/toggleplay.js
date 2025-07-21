@@ -1,7 +1,7 @@
 import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
 
 export default {
-  name: "repeat",
+  name: "toggleplay",
   permissions: [],
   isActive: true,
   disTube: {
@@ -9,9 +9,9 @@ export default {
     requireSameVoiceChannel: true,
     requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
-    requireAdditionalTracks: false,
     disallowIfPaused: false,
     disallowIfPlaying: false,
+    requireAdditionalTracks: false,
     requireSeekable: false,
   },
   response: false,
@@ -19,8 +19,11 @@ export default {
   async execute(interaction) {
     const queue = global.distube.getQueue(interaction.guild);
 
-    const newMode = (queue.repeatMode + 1) % 3;
-    queue.setRepeatMode(newMode);
+    if (queue.paused) {
+      await queue.resume();
+    } else {
+      await queue.pause();
+    }
 
     const panel = await new NowPlayingPanelBuilder(queue).build();
     await interaction.update(panel);

@@ -1,8 +1,7 @@
-import { ApplicationCommandOptionType } from "discord.js";
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
 
 export default {
-  name: "setvolume",
+  name: "resume",
   permissions: [],
   isActive: true,
   isBotAllowed: true,
@@ -13,56 +12,28 @@ export default {
   disTube: {
     requireUserInVoiceChannel: true,
     requireSameVoiceChannel: true,
-    requireBotInVoiceChannel: false,
+    requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
     requireAdditionalTracks: false,
     disallowIfPaused: false,
-    disallowIfPlaying: false,
+    disallowIfPlaying: true,
     requireSeekable: false,
   },
   data: {
-    name: "setvolume",
-    description: "Imposta il volume della riproduzione (0–100)",
-    options: [
-      {
-        name: "volume",
-        description: "Valore del volume da 0 a 100",
-        type: ApplicationCommandOptionType.Integer,
-        required: true,
-        minValue: 0,
-        maxValue: 100,
-      },
-    ],
+    name: "resume",
+    description: "Riprendi la riproduzione corrente",
   },
 
   async execute(interaction) {
-    const volume = interaction.options.getInteger("volume");
-    const queue = await global.distube.setVolume(interaction.guildId, volume);
+    const { guild } = interaction;
+    const queue = global.distube.getQueue(guild);
 
-    const embed = await new PresetEmbed({
-      guild: interaction.guild,
-      member: interaction.member,
-      image: queue.songs[0]?.thumbnail,
-    }).init();
+    await queue.resume();
 
-    const barLength = 12;
-    const filledUnits = Math.round((queue.volume / 100) * barLength);
-    const emptyUnits = barLength - filledUnits;
-    const volumeBar = `**\`${"█".repeat(filledUnits)}${"-".repeat(
-      emptyUnits
-    )}\`**`;
+    queue.lastPlayingMessage.edit(
+      await new NowPlayingPanelBuilder(queue).build()
+    );
 
-    const currentSong = queue.songs[0];
-
-    embed
-      .setTitle(`🔊 Volume Impostato al ${queue.volume}%`)
-      .setThumbnail(currentSong?.thumbnail)
-      .setDescription(
-        `Il volume per **[${currentSong?.name ?? "la traccia attuale"}](${
-          currentSong?.url
-        })** è stato aggiornato.\n${volumeBar}`
-      );
-
-    return { embeds: [embed] };
+    interaction.deleteReply().catch(() => {});
   },
 };

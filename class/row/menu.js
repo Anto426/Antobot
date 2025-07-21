@@ -1,50 +1,50 @@
-import { ButtonBuilder, ButtonStyle, ActionRowBuilder } from "discord.js";
+import { ButtonBuilder, ButtonStyle, ActionRowBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 
-class Menu {
-  createMenu(list, id, field, idUser, type, npage) {
-    const row = new ActionRowBuilder();
-    const row0 = new ActionRowBuilder();
+export default class Menu {
+    createMenu(list, id, field, idUser, type, npage = 0) {
+        const pageSize = 15;
+        const pageNumber = parseInt(npage, 10);
 
-    const pageSize = 25;
-    const offset = pageSize * npage;
-    const listsize = list.length;
-    const components = [];
 
-    let tlist = list;
 
-    const bup = new ButtonBuilder()
-      .setCustomId(`${id}-${idUser}-${type}-${parseInt(npage) + 1}`)
-      .setLabel("Pagina Successiva")
-      .setEmoji("🔼")
-      .setStyle(ButtonStyle.Success)
-      .setDisabled(true);
+        const startIndex = pageNumber * pageSize;
+        const totalPages = list.length / pageSize
+        const pageList = list.slice(startIndex, startIndex + pageSize);
 
-    const bdown = new ButtonBuilder()
-      .setCustomId(`${id}-${idUser}-${type}-${parseInt(npage) - 1}`)
-      .setLabel("Pagina Precedente")
-      .setEmoji("🔽")
-      .setStyle(ButtonStyle.Success)
-      .setDisabled(true);
+        if (pageList.length > 0) {
+            field.setOptions(pageList);
+        } else {
+            field.setPlaceholder("Nessuna opzione disponibile")
+                .setDisabled(true)
+                .setOptions([
+                    new StringSelectMenuOptionBuilder()
+                        .setLabel("N/A")
+                        .setValue("placeholder_option")
+                ]);
+        }
 
-    if (listsize >= pageSize) {
-      tlist = list.slice(offset, offset + pageSize);
-      if (Math.floor(listsize / pageSize) > npage) {
-        bup.setDisabled(false);
-      }
-      if (npage !== 0) {
-        bdown.setDisabled(false);
-      }
+        const menuRow = new ActionRowBuilder().addComponents(field);
+        const components = [menuRow];
+
+        if (totalPages > 1) {
+            const prevButton = new ButtonBuilder()
+                .setCustomId(`${id}-${idUser}-${type}-${pageNumber - 1}`)
+                .setLabel("Pagina Precedente")
+                .setEmoji("⬅️")
+                .setStyle(ButtonStyle.Success)
+                .setDisabled(pageNumber === 0);
+
+            const nextButton = new ButtonBuilder()
+                .setCustomId(`${id}-${idUser}-${type}-${pageNumber + 1}`)
+                .setLabel("Pagina Successiva")
+                .setEmoji("➡️")
+                .setStyle(ButtonStyle.Success)
+                .setDisabled(pageNumber >= totalPages - 1);
+            
+            const buttonRow = new ActionRowBuilder().addComponents(prevButton, nextButton);
+            components.push(buttonRow);
+        }
+
+        return components;
     }
-
-    tlist.forEach((element) => field.addOptions(element));
-
-    row.addComponents(field);
-    row0.addComponents(bdown, bup);
-
-    components.push(row, row0);
-
-    return components;
-  }
 }
-
-export default Menu;

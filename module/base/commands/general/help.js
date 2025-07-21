@@ -17,9 +17,9 @@ export default {
     const helpBuilder = new HelpMenuBuilder();
     const { embed, components } = await helpBuilder.buildMainMenu(interaction);
 
-    return({
+    return {
       embeds: [embed],
       components: components,
-    });
+    };
   },
 };

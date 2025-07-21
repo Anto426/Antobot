@@ -1,49 +1,51 @@
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
+import BotConsole from "../../../class/console/BotConsole.js";
+
+const UPDATES_PER_SONG = 3;
 
 export default {
   name: "PlaySong",
   eventType: "playSong",
   isActive: true,
+
   async execute(queue, song) {
-    const embed = await new PresetEmbed({
-      guild: queue.textChannel.guild,
-      member: null,
-      image: song.thumbnail,
-    }).init();
+    if (queue.updateTimeouts) {
+      queue.updateTimeouts.forEach((timeout) => clearTimeout(timeout));
+    }
+    if (queue.lastPlayingMessage) {
+      try {
+        await queue.lastPlayingMessage.delete();
+      } catch (e) {}
+    }
 
-    embed
-      .setTitle(`▶️ ${song.name}`)
-      .setURL(song.url)
-      .setThumbnail(song.thumbnail)
-      .setDescription(
-        `*Caricata da **${
-          song.uploader?.name ?? "Sconosciuto"
-        }** • Richiesta da ${song.user}*`
-      )
-      .addFields(
-        {
-          name: "⏱️ Durata",
-          value: song.formattedDuration ?? "N/A",
-          inline: true,
-        },
-        {
-          name: "#️⃣ Posizione",
-          value: `**1** di **${queue.songs.length}**`,
-          inline: true,
-        },
-        {
-          name: "🔁 Loop",
-          value:
-            queue.repeatMode === 2
-              ? "Coda"
-              : queue.repeatMode === 1
-              ? "Traccia"
-              : "Off",
-          inline: true,
-        },
-        { name: "🔊 Volume", value: `${queue.volume}%`, inline: true }
+    try {
+      const panel = await new NowPlayingPanelBuilder(queue).build();
+      const message = await queue.textChannel.send(panel);
+      queue.lastPlayingMessage = message;
+
+      const durationMs = song.duration * 1000;
+      if (song.isLive || durationMs < 30000) return;
+
+      queue.updateTimeouts = [];
+      for (let i = 1; i <= UPDATES_PER_SONG; i++) {
+        const delay = (durationMs / (UPDATES_PER_SONG + 1)) * i;
+
+        const timeoutId = setTimeout(() => {
+          const currentQueue = global.distube.getQueue(queue.id);
+          if (!currentQueue || !currentQueue.lastPlayingMessage) return;
+
+          new NowPlayingPanelBuilder(currentQueue)
+            .build()
+            .then((newPanel) => currentQueue.lastPlayingMessage.edit(newPanel))
+            .catch(() => {});
+        }, delay);
+
+        queue.updateTimeouts.push(timeoutId);
+      }
+    } catch (e) {
+      BotConsole.error(
+        `[Event: PlaySong] Impossibile creare o inviare il pannello: ${e}`
       );
-
-    await queue.textChannel.send({ embeds: [embed] });
+    }
   },
 };

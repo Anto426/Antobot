@@ -286,7 +286,7 @@ class DynamicColor {
     try {
       const rawPalette = await this.extractPalette();
       if (rawPalette.length < 3) {
-        BotConsole.warn(
+        BotConsole.warning(
           `Palette has only ${rawPalette.length} colors. Disabling filtering.`
         );
         this.requiredFilter = false;
