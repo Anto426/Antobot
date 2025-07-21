@@ -1,5 +1,4 @@
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
-import BotConsole from "../../../class-sistemata/console/BotConsole.js";
 
 export default {
   name: "FinishSong",
