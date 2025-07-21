@@ -172,7 +172,7 @@ export default {
     const handler = getHandler(interaction);
 
     if (!handler) {
-      BotConsole.warn(
+      BotConsole.warning(
         `No handler found for interaction: ${interaction.type} | ${
           interaction.customId || interaction.commandName
         }`
