@@ -9,7 +9,6 @@ export default {
   eventType: "ready",
   isActive: true,
   async execute() {
-    BotConsole.success("Bot pronto all’uso!");
     (await ModuleLoader.initAll?.()) || Promise.resolve();
     BotConsole.success("Tutti i moduli sono stati caricati correttamente.");
     await CommandGuildUpdate.updateGuildsOnStartup();
@@ -20,5 +19,6 @@ export default {
     BotConsole.success("Tutti i moduli secondari sono stati inizializzati.");
     await StartupLogger.run();
     client.botready = true;
+    BotConsole.success("Bot pronto all’uso!");
   },
 };
