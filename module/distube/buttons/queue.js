@@ -6,7 +6,7 @@ export default {
   isActive: true,
   disTube: {
     requireUserInVoiceChannel: true,
-    requireSameVoiceChannel: true,
+    requireSameVoiceChannel: false,
     requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
     requireAdditionalTracks: false,
@@ -14,6 +14,7 @@ export default {
     disallowIfPlaying: false,
     requireSeekable: false,
   },
+  response: false,
 
   async execute(interaction) {
     const { guild, member } = interaction;
@@ -35,7 +36,6 @@ export default {
       member,
       image: currentSong.thumbnail,
     }).init();
-
     embed
       .setTitle(`🎶 Coda Musicale`)
       .setThumbnail(currentSong.thumbnail)

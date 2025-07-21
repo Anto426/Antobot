@@ -1,4 +1,4 @@
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
 
 export default {
   name: "toggleplay",
@@ -14,34 +14,18 @@ export default {
     requireAdditionalTracks: false,
     requireSeekable: false,
   },
+  response: false,
 
   async execute(interaction) {
-    const { guild, member } = interaction;
-    const queue = global.distube.getQueue(guild);
-    const song = queue.songs[0];
-
-    const embed = await new PresetEmbed({
-      guild,
-      member,
-      image: song.thumbnail,
-    }).init();
+    const queue = global.distube.getQueue(interaction.guild);
 
     if (queue.paused) {
-      queue.resume();
-      embed
-        .setTitle("▶️ Riproduzione Ripresa")
-        .setDescription(
-          `La riproduzione di **[${song.name}](${song.url})** è ripresa.`
-        );
+      await queue.resume();
     } else {
-      queue.pause();
-      embed
-        .setTitle("⏸️ Riproduzione in Pausa")
-        .setDescription(
-          `La riproduzione di **[${song.name}](${song.url})** è stata messa in pausa.`
-        );
+      await queue.pause();
     }
 
-    return { embeds: [embed], ephemeral: true };
+    const panel = await new NowPlayingPanelBuilder(queue).build();
+    await interaction.update(panel);
   },
 };

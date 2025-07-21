@@ -1,33 +1,35 @@
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import BotConsole from "../../../class-sistemata/console/BotConsole.js";
 
 export default {
   name: "FinishSong",
   eventType: "finishSong",
   isActive: true,
+
   async execute(queue, song) {
+    if (queue.songs.length > 0) return;
+
     const embed = await new PresetEmbed({
       guild: queue.textChannel.guild,
-      member: song.member,
-      image: song.thumbnail,
+      member: queue.textChannel.guild.members.me,
+      image: queue.songs[0]?.thumbnail,
     }).init();
 
     embed
-      .setTitle("🎶 Traccia Terminata")
-      .setThumbnail(song.thumbnail)
-      .setDescription(`**[${song.name}](${song.url})** ha finito di suonare.`)
-      .addFields(
-        {
-          name: "Artista",
-          value: song.uploader?.name ?? "Sconosciuto",
-          inline: true,
-        },
-        {
-          name: "Durata",
-          value: song.formattedDuration ?? "N/A",
-          inline: true,
-        }
-      );
+      .setTitle("🎶 Coda Terminata!")
+      .setDescription(
+        "La musica si è fermata. Spero ti sia piaciuto l'ascolto!\nUsa `/play` per aggiungere nuove canzoni."
+      )
+      .setThumbnail(queue.songs[0]?.thumbnail)
+      .setFooter({
+        text: `Bot offerto da ${queue.client.user.username}`,
+        iconURL: queue.client.user.displayAvatarURL(),
+      })
+      .setTimestamp();
 
-    queue.textChannel.send({ embeds: [embed] });
+    await queue.lastPlayingMessage.edit({
+      embeds: [embed],
+      components: [],
+    });
   },
 };

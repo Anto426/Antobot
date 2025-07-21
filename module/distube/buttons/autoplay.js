@@ -1,4 +1,4 @@
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
 
 export default {
   name: "autoplay",
@@ -9,23 +9,19 @@ export default {
     requireSameVoiceChannel: true,
     requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
+    requireAdditionalTracks: false,
+    disallowIfPaused: false,
+    disallowIfPlaying: false,
+    requireSeekable: false,
   },
+  response: false,
 
   async execute(interaction) {
-    const { guild, member } = interaction;
-    const queue = global.distube.getQueue(guild);
+    const queue = global.distube.getQueue(interaction.guild);
 
-    const newAutoplayState = await queue.toggleAutoplay();
+    await queue.toggleAutoplay();
 
-    const embed = await new PresetEmbed({ guild, member }).init();
-    embed
-      .setTitle("♾️ Modalità Autoplay")
-      .setDescription(
-        `La riproduzione automatica è ora ${
-          newAutoplayState ? "✅ **Attivata**" : "❌ **Disattivata**"
-        }.`
-      );
-
-    return { embeds: [embed], ephemeral: true };
+    const panel = await new NowPlayingPanelBuilder(queue).build();
+    await interaction.update(panel);
   },
 };

@@ -1,4 +1,4 @@
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
 
 export default {
   name: "repeat",
@@ -9,40 +9,20 @@ export default {
     requireSameVoiceChannel: true,
     requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
+    requireAdditionalTracks: false,
     disallowIfPaused: false,
     disallowIfPlaying: false,
-    requireAdditionalTracks: false,
     requireSeekable: false,
   },
+  response: false,
 
   async execute(interaction) {
-    const { guild, member } = interaction;
-    const queue = global.distube.getQueue(guild);
+    const queue = global.distube.getQueue(interaction.guild);
 
     const newMode = (queue.repeatMode + 1) % 3;
     queue.setRepeatMode(newMode);
 
-    const modeInfo = {
-      0: {
-        title: "❌ Loop Disattivato",
-        desc: "La ripetizione è stata disattivata.",
-      },
-      1: {
-        title: "🔂 Loop Traccia",
-        desc: "La traccia attuale verrà ripetuta.",
-      },
-      2: { title: "🔁 Loop Coda", desc: "L'intera coda verrà ripetuta." },
-    };
-
-    const embed = await new PresetEmbed({
-      guild,
-      member,
-      image: queue.songs[0].thumbnail,
-    }).init();
-    embed
-      .setTitle(modeInfo[newMode].title)
-      .setDescription(modeInfo[newMode].desc);
-
-    return { embeds: [embed], ephemeral: true };
+    const panel = await new NowPlayingPanelBuilder(queue).build();
+    await interaction.update(panel);
   },
 };
