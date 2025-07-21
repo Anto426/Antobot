@@ -37,7 +37,7 @@ class HelpMenuBuilder {
       .sort()
       .forEach((tag) => {
         const group = commandsByModule[tag]
-          .filter((cmd) => cmd.isActive && cmd.isVisibleInHelp)
+          .filter((cmd) => cmd.isVisibleInHelp)
           .sort((a, b) => a.data.name.localeCompare(b.data.name))
           .map((cmd) => {
             const cmdConfig = config[cmd.name] || {};
@@ -45,7 +45,8 @@ class HelpMenuBuilder {
             const name = String(cmd.data.name || "Sconosciuto");
             let description =
               cmd.data.description || "Nessuna descrizione disponibile";
-            if (description.length > 90) description = description.slice(0, 87) + "...";
+            if (description.length > 90)
+              description = description.slice(0, 87) + "...";
             return {
               label: `${emoji} ${name}`.slice(0, 100),
               description,
@@ -75,10 +76,11 @@ class HelpMenuBuilder {
     }
 
     const selectMenu = new StringSelectMenuBuilder()
-      .setCustomId(`help-${interaction.member.id}-main`)
+      .setCustomId(`help-${interaction.member.id}-command-${interaction.customId.split("-")[3] || 0}`)
       .setPlaceholder("📂 Seleziona un comando");
 
     const menu = new Menu();
+
     const components = menu.createMenu(
       commandOptions
         .filter((opt) => !opt.isGroup)
@@ -88,11 +90,11 @@ class HelpMenuBuilder {
             .setDescription(opt.description)
             .setValue(opt.value)
         ),
-      `help-${interaction.member.id}-main`,
+      `help`,
       selectMenu,
       interaction.member.id,
       "main",
-      0
+      parseInt(interaction?.customId?.split("-")[3] || "0", 10)
     );
 
     const embed = await new PresetEmbed({
@@ -118,7 +120,9 @@ class HelpMenuBuilder {
       )
       .setThumbnail(interaction.client.user.displayAvatarURL({ size: 256 }))
       .setFooter({
-        text: `Richiesto da ${interaction.user.tag} • ${new Date().toLocaleDateString("it-IT")}`,
+        text: `Richiesto da ${
+          interaction.user.tag
+        } • ${new Date().toLocaleDateString("it-IT")}`,
         iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
       });
 
@@ -182,9 +186,13 @@ class HelpMenuBuilder {
             9: "Booleano",
           };
           const typeName =
-            typeof opt.type === "number" ? typeMap[opt.type] || `Tipo: ${opt.type}` : "Tipo sconosciuto";
+            typeof opt.type === "number"
+              ? typeMap[opt.type] || `Tipo: ${opt.type}`
+              : "Tipo sconosciuto";
 
-          return `• \`${opt.name}\` — ${opt.description || "Nessuna descrizione"}\n   ↳ ${isRequired}, Tipo: \`${typeName}\``;
+          return `• \`${opt.name}\` — ${
+            opt.description || "Nessuna descrizione"
+          }\n   ↳ ${isRequired}, Tipo: \`${typeName}\``;
         })
         .join("\n\n");
     }

@@ -10,26 +10,14 @@ export default {
   isOwnerOnly: false,
   requiresPositionArgument: false,
   isTestCommand: false,
-  isVisibleInHelp: true,
   response: false,
 
   execute: async (interaction) => {
     const action = interaction.customId.split("-")[2];
     const helpBuilder = new HelpMenuBuilder();
+
     switch (action) {
       case "command": {
-        const { embed, components } = await helpBuilder.buildMainMenu(
-          interaction
-        );
-
-        await interaction.update({
-          embeds: [embed],
-          components: components,
-        });
-
-        break;
-      }
-      case "main": {
         const selectedValue = interaction.values?.[0];
         if (!selectedValue) return;
 
@@ -39,7 +27,9 @@ export default {
         );
 
         const customIdParts = interaction.customId.split("-");
-        const customId = `${customIdParts[0]}-${customIdParts[1]}-command`;
+        const customId = `${customIdParts[0]}-${customIdParts[1]}-main-${
+          customIdParts[3] || 0
+        }`;
 
         const backButton = new ButtonBuilder()
           .setCustomId(customId)
@@ -53,6 +43,18 @@ export default {
           embeds: [menu.embed],
           components,
         });
+        break;
+      }
+      case "main": {
+        const { embed, components } = await helpBuilder.buildMainMenu(
+          interaction
+        );
+
+        await interaction.update({
+          embeds: [embed],
+          components: components,
+        });
+
         break;
       }
       default: {
