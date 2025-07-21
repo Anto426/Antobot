@@ -55,6 +55,6 @@ export default {
         { name: "Brano Attuale", value: "Non modificato", inline: true }
       );
 
-    return { embeds: [embed] };
+    return { embeds: [embed], ephemeral: true };
   },
 };

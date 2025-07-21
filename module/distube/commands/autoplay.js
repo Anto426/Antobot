@@ -1,4 +1,4 @@
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
+import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
 
 export default {
   name: "autoplay",
@@ -14,6 +14,10 @@ export default {
     requireSameVoiceChannel: true,
     requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
+    requireAdditionalTracks: false,
+    disallowIfPaused: false,
+    disallowIfPlaying: false,
+    requireSeekable: false,
   },
   data: {
     name: "autoplay",
@@ -21,49 +25,15 @@ export default {
   },
 
   async execute(interaction) {
-    const queue = global.distube.getQueue(interaction);
+    const { guild } = interaction;
+    const queue = global.distube.getQueue(guild);
 
-    queue.toggleAutoplay();
-    const newAutoplayState = queue.autoplay;
+    await queue.toggleAutoplay();
 
-    const embed = await new PresetEmbed({
-      guild: interaction.guild,
-      member: interaction.member,
-    }).init();
+    queue.lastPlayingMessage.edit(
+      await new NowPlayingPanelBuilder(queue).build()
+    );
 
-    const statoAttuale = newAutoplayState
-      ? "✅ **Attivato**"
-      : "❌ **Disattivato**";
-    const spiegazione = newAutoplayState
-      ? "Alla fine della coda, aggiungerò automaticamente brani simili per non interrompere la musica."
-      : "Il bot lascerà il canale vocale al termine dell'ultimo brano in coda.";
-
-    embed
-      .setTitle("🔁 Impostazioni Autoplay")
-      .setThumbnail(
-        interaction.client.user.displayAvatarURL({ dynamic: true, size: 512 })
-      )
-      .setDescription(
-        "La modalità di riproduzione automatica è stata aggiornata."
-      )
-      .addFields(
-        {
-          name: "Stato Attuale",
-          value: statoAttuale,
-          inline: true,
-        },
-        {
-          name: "Consiglio",
-          value: "Usa di nuovo `/autoplay` per cambiare.",
-          inline: true,
-        },
-        {
-          name: "Cosa Succede Ora?",
-          value: spiegazione,
-          inline: false,
-        }
-      );
-
-    return { embeds: [embed] };
+    interaction.deleteReply().catch(() => {});
   },
 };

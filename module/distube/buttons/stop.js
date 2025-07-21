@@ -17,15 +17,15 @@ export default {
   response: false,
 
   async execute(interaction) {
-    const { guild, member, client } = interaction;
-    const queue = client.distube.getQueue(guild);
+    const { guild, member } = interaction;
+    const queue = global.distube.getQueue(guild);
     const song = queue.songs[0];
 
     await queue.stop();
 
     const embed = await new PresetEmbed({
-      guild,
-      member,
+      guild : guild,
+      member : member,
       image: song.thumbnail,
     }).init();
 

@@ -14,65 +14,59 @@ export default {
     requireSameVoiceChannel: true,
     requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
+    requireAdditionalTracks: false,
+    disallowIfPaused: false,
+    disallowIfPlaying: false,
+    requireSeekable: false,
   },
   data: {
     name: "stop",
-    description: "Ferma la riproduzione, con possibilità di svuotare la coda",
-    options: [
-      {
-        name: "clear",
-        type: 5,
-        description: "Svuota la coda oltre a fermare la musica",
-        required: false,
-      },
-    ],
+    description: "Ferma la riproduzione e svuota la coda.",
   },
 
   async execute(interaction) {
-    const clearQueue = interaction.options.getBoolean("clear") ?? false;
-    const queue = global.distube.getQueue(interaction);
+    const { guild } = interaction;
+    const queue = global.distube.getQueue(guild);
+    const song = queue.songs[0];
 
-    if (clearQueue) {
-      await queue.stop();
-    } else {
-      await queue.pause();
-    }
+    await queue.stop();
 
     const embed = await new PresetEmbed({
-      guild: interaction.guild,
+      guild: guild,
       member: interaction.member,
+      image: song.thumbnail,
     }).init();
 
-    if (clearQueue) {
-      const tracksRemoved = queue.songs.length;
-      embed
-        .setTitle("🛑 Riproduzione Terminata")
-        .setThumbnail(interaction.client.user.displayAvatarURL())
-        .setDescription(
-          "La musica è stata fermata e tutte le tracce in coda sono state rimosse."
-        )
-        .addFields({
-          name: "Tracce Rimosse",
-          value: `**${tracksRemoved}**`,
+    embed
+      .setTitle("🛑 Riproduzione Terminata")
+      .setThumbnail(song.thumbnail)
+      .setDescription(
+        `La riproduzione di **[${song.name}](${song.url})** è stata interrotta.`
+      )
+      .addFields(
+        { name: "Richiesta da", value: song.user.toString(), inline: true },
+        {
+          name: "Artista",
+          value: song.uploader?.name ?? "Sconosciuto",
           inline: true,
-        });
-    } else {
-      const currentSong = queue.songs[0];
-      embed
-        .setTitle("⏸️ Riproduzione in Pausa")
-        .setThumbnail(currentSong?.thumbnail)
-        .setDescription(
-          `La riproduzione di **[${currentSong?.name ?? "traccia attuale"}](${
-            currentSong?.url
-          })** è in pausa.`
-        )
-        .addFields({
-          name: "Consiglio",
-          value: "Usa il comando `/resume` per riprendere.",
-          inline: false,
-        });
-    }
+        },
+        {
+          name: "Durata",
+          value: `\`${song.formattedDuration}\``,
+          inline: true,
+        },
+        {
+          name: "Interrotto da",
+          value: interaction.user.toString(),
+          inline: true,
+        }
+      );
 
-    return { embeds: [embed] };
+    queue.lastPlayingMessage.edit({
+      embeds: [embed],
+      components: [],
+    });
+
+    interaction.deleteReply().catch(() => {});
   },
 };
