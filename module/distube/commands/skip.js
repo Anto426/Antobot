@@ -14,7 +14,7 @@ export default {
     requireSameVoiceChannel: true,
     requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
-    requireAdditionalTracks: false,
+    requireAdditionalTracks: true,
     disallowIfPaused: false,
     disallowIfPlaying: false,
     requireSeekable: false,
