@@ -1,7 +1,7 @@
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 
 export default {
-  name: "repeat",
+  name: "toggleplay",
   permissions: [],
   isActive: true,
   disTube: {
@@ -18,30 +18,29 @@ export default {
   async execute(interaction) {
     const { guild, member } = interaction;
     const queue = global.distube.getQueue(guild);
-
-    const newMode = (queue.repeatMode + 1) % 3;
-    queue.setRepeatMode(newMode);
-
-    const modeInfo = {
-      0: {
-        title: "❌ Loop Disattivato",
-        desc: "La ripetizione è stata disattivata.",
-      },
-      1: {
-        title: "🔂 Loop Traccia",
-        desc: "La traccia attuale verrà ripetuta.",
-      },
-      2: { title: "🔁 Loop Coda", desc: "L'intera coda verrà ripetuta." },
-    };
+    const song = queue.songs[0];
 
     const embed = await new PresetEmbed({
       guild,
       member,
-      image: queue.songs[0].thumbnail,
+      image: song.thumbnail,
     }).init();
-    embed
-      .setTitle(modeInfo[newMode].title)
-      .setDescription(modeInfo[newMode].desc);
+
+    if (queue.paused) {
+      queue.resume();
+      embed
+        .setTitle("▶️ Riproduzione Ripresa")
+        .setDescription(
+          `La riproduzione di **[${song.name}](${song.url})** è ripresa.`
+        );
+    } else {
+      queue.pause();
+      embed
+        .setTitle("⏸️ Riproduzione in Pausa")
+        .setDescription(
+          `La riproduzione di **[${song.name}](${song.url})** è stata messa in pausa.`
+        );
+    }
 
     return { embeds: [embed], ephemeral: true };
   },

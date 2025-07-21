@@ -1,7 +1,7 @@
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 
 export default {
-  name: "stop",
+  name: "resume",
   permissions: [],
   isActive: true,
   disTube: {
@@ -9,27 +9,30 @@ export default {
     requireSameVoiceChannel: true,
     requireBotInVoiceChannel: true,
     requireTrackInQueue: true,
-    disallowIfPaused: false,
-    disallowIfPlaying: false,
     requireAdditionalTracks: false,
+    disallowIfPaused: false,
+    disallowIfPlaying: true,
     requireSeekable: false,
   },
 
   async execute(interaction) {
     const { guild, member } = interaction;
     const queue = global.distube.getQueue(guild);
+    const song = queue.songs[0];
 
-    await queue.stop();
-    
+    queue.resume();
+
     const embed = await new PresetEmbed({
       guild,
       member,
-      image: client.user.displayAvatarURL(),
+      image: song.thumbnail,
     }).init();
     embed
-      .setTitle("🛑 Riproduzione Terminata")
-      .setDescription("La coda è stata svuotata.");
+      .setTitle("▶️ Riproduzione Ripresa")
+      .setDescription(
+        `La riproduzione di **[${song.name}](${song.url})** è ripresa.`
+      );
 
-    return { embeds: [embed], ephemeral: true };
+    return { embeds: [embed] };
   },
 };
