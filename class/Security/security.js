@@ -98,7 +98,7 @@ class Security {
 
     if (
       SystemCheck.isFeatureEnabled("music") &&
-      this.command.moduleTag === "musicCommands"
+      (this.command.moduleTag === "musicCommands" || this.command.disTube)
     ) {
       return this._checkDistube();
     }
