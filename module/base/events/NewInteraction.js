@@ -81,9 +81,6 @@ async function sendReply({
       embed.addFields(fields);
     }
 
-    // Il footer viene ora gestito automaticamente dalla classe PresetEmbed
-    // Non è più necessario impostarlo qui manualmente
-
     await send({ embeds: [embed], ephemeral: true });
   } catch (err) {
     BotConsole.error(`Failed to send reply: ${err.stack || err}`);
