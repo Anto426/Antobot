@@ -23,7 +23,7 @@ export default {
   async execute(queue, song) {
     if (queue.lastPlayingMessage) {
       try {
-        (await queue.lastPlaying) - message.delete();
+        await queue.lastPlayingMessage.delete();
       } catch (e) {}
     }
 
@@ -79,6 +79,11 @@ export default {
         .setLabel("Loop")
         .setStyle(ButtonStyle.Secondary)
         .setEmoji("🔁"),
+      new ButtonBuilder()
+        .setCustomId("autoplay")
+        .setLabel("Autoplay")
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji("♾️"),
       new ButtonBuilder()
         .setCustomId("queue")
         .setLabel("Coda")
