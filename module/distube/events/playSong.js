@@ -1,7 +1,7 @@
 import NowPlayingPanelBuilder from "../../../class/services/NowPlayingPanelBuilder.js";
 import BotConsole from "../../../class/console/BotConsole.js";
 
-const UPDATES_PER_SONG = 2;
+const UPDATES_PER_SONG = 3;
 
 export default {
   name: "PlaySong",
@@ -31,7 +31,7 @@ export default {
         const delay = (durationMs / (UPDATES_PER_SONG + 1)) * i;
 
         const timeoutId = setTimeout(() => {
-          const currentQueue = client.distube.getQueue(queue.id);
+          const currentQueue = global.distube.getQueue(queue.id);
           if (!currentQueue || !currentQueue.lastPlayingMessage) return;
 
           new NowPlayingPanelBuilder(currentQueue)
