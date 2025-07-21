@@ -6,12 +6,7 @@ export default {
   name: "help",
   permissions: [],
   isActive: true,
-  isBotAllowed: true,
-  isOwnerOnly: false,
-  requiresPositionArgument: false,
-  isTestCommand: false,
-  response: false,
-
+  
   execute: async (interaction) => {
     const action = interaction.customId.split("-")[2];
     const helpBuilder = new HelpMenuBuilder();
