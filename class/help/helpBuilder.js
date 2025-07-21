@@ -76,7 +76,7 @@ class HelpMenuBuilder {
     }
 
     const selectMenu = new StringSelectMenuBuilder()
-      .setCustomId(`help-${interaction.member.id}-command-${interaction.customId.split("-")[3] || 0}`)
+      .setCustomId(`help-${interaction.member.id}-command-${interaction.customId?.split("-")[3] || 0}`)
       .setPlaceholder("📂 Seleziona un comando");
 
     const menu = new Menu();

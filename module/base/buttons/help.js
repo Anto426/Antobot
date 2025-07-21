@@ -6,7 +6,8 @@ export default {
   name: "help",
   permissions: [],
   isActive: true,
-  
+  response: false,
+
   execute: async (interaction) => {
     const action = interaction.customId.split("-")[2];
     const helpBuilder = new HelpMenuBuilder();
