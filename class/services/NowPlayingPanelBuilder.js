@@ -132,7 +132,7 @@ export default class NowPlayingPanelBuilder {
         .setStyle(ButtonStyle.Secondary)
         .setEmoji("🔊"),
       new ButtonBuilder()
-        .setCustomId("list")
+        .setCustomId("queue")
         .setLabel("Coda")
         .setStyle(ButtonStyle.Secondary)
         .setEmoji("📜")
