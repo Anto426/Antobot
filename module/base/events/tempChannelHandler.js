@@ -191,8 +191,6 @@ export default {
   },
 
   async getTempChannelConfig(guildId) {
-    const guildConfig = await SqlManager.getGuildById(guildId);
-    if (!guildConfig?.TEMPCHANNEL_ID) return null;
-    return SqlManager.getTempChannelById(guildConfig.TEMPCHANNEL_ID);
+    return SqlManager.getTempChannelByGuildId(guildId);
   },
 };

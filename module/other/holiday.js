@@ -180,17 +180,12 @@ export default class Holiday {
   }
 
   async #getAndValidateGuildConfig(guild) {
-    const guildConfigDb = await SqlManager.getGuildById(guild.id);
-    if (!guildConfigDb?.HOLYDAY_ID)
-      return { error: "HOLYDAY_ID non configurato." };
-
-    const holydaySetup = await SqlManager.getHollydayById(
-      guildConfigDb.HOLYDAY_ID
-    );
-    if (!holydaySetup)
+    const holydaySetup = await SqlManager.getHollydayByGuildId(guild.id);
+    if (!holydaySetup) {
       return {
-        error: `Record HOLYDAY ${guildConfigDb.HOLYDAY_ID} non trovato.`,
+        error: "Configurazione festività non trovata per questa gilda.",
       };
+    }
 
     const nameChannel = await guild.channels
       .fetch(holydaySetup.NAME_CHANNEL)

@@ -194,11 +194,11 @@ class SqlManager {
   async synchronizeGuild(guildData) {
     const { id, name, ...otherFields } = guildData;
     const existingGuild = await this.getGuildById(id);
+
+    // **MODIFICATO**: Rimosse le chiavi TEMPCHANNEL_ID e HOLYDAY_ID che non esistono più nella tabella GUILD.
     const guildRecordData = { ID: id, NOME: name };
 
     for (const key of [
-      "TEMPCHANNEL_ID",
-      "HOLYDAY_ID",
       "WELCOME_ID",
       "LOG_ID",
       "ROLEDEFAULT_ID",
@@ -220,9 +220,9 @@ class SqlManager {
       const fieldsToUpdate = {};
       if (guildRecordData.NOME !== existingGuild.NOME)
         fieldsToUpdate.NOME = guildRecordData.NOME;
+
+      // **MODIFICATO**: Rimosse le chiavi TEMPCHANNEL_ID e HOLYDAY_ID dal ciclo di aggiornamento.
       for (const key of [
-        "TEMPCHANNEL_ID",
-        "HOLYDAY_ID",
         "WELCOME_ID",
         "LOG_ID",
         "ROLEDEFAULT_ID",
@@ -249,7 +249,6 @@ class SqlManager {
   }
 
   async synchronizeRole(roleDataInput) {
-    /* ... come ultima versione ... */
     const { id, name, color, guildId } = roleDataInput;
     const hexColor = color
       ? `#${color.toString(16).padStart(6, "0").toUpperCase()}`
@@ -363,6 +362,7 @@ class SqlManager {
     };
   }
 
+  // --- GUILD ---
   async addGuild(data) {
     return this._genericInsert("GUILD", data, ["ID"]);
   }
@@ -382,38 +382,44 @@ class SqlManager {
     return !!(await this.getGuildById(id));
   }
 
+  // --- TEMP_CHANNEL ---
+  // **MODIFICATO**: I metodi ora usano GUILD_ID come chiave primaria, non più un ID separato.
   async addTempChannel(data) {
-    return this._genericInsert("TEMP_CHANNEL", data, ["ID"]);
+    // La chiave primaria è GUILD_ID
+    return this._genericInsert("TEMP_CHANNEL", data, ["GUILD_ID"]);
   }
-  async getTempChannelById(id) {
-    return this._getByIdGeneric("TEMP_CHANNEL", "ID", id);
+  async getTempChannelByGuildId(guildId) {
+    return this._getByIdGeneric("TEMP_CHANNEL", "GUILD_ID", guildId);
   }
   async getAllTempChannels() {
     return this._getAllGeneric("TEMP_CHANNEL");
   }
-  async updateTempChannel(id, fields) {
-    return this._updateByIdGeneric("TEMP_CHANNEL", "ID", id, fields);
+  async updateTempChannel(guildId, fields) {
+    return this._updateByIdGeneric("TEMP_CHANNEL", "GUILD_ID", guildId, fields);
   }
-  async deleteTempChannel(id) {
-    return this._deleteByIdGeneric("TEMP_CHANNEL", "ID", id);
+  async deleteTempChannel(guildId) {
+    return this._deleteByIdGeneric("TEMP_CHANNEL", "GUILD_ID", guildId);
   }
 
+  // --- HOLYDAY ---
+  // **MODIFICATO**: I metodi ora usano GUILD_ID come chiave primaria.
   async addHollyday(data) {
-    return this._genericInsert("HOLYDAY", data, ["ID"]);
+    return this._genericInsert("HOLYDAY", data, ["GUILD_ID"]);
   }
-  async getHollydayById(id) {
-    return this._getByIdGeneric("HOLYDAY", "ID", id);
+  async getHollydayByGuildId(guildId) {
+    return this._getByIdGeneric("HOLYDAY", "GUILD_ID", guildId);
   }
   async getAllHollydays() {
     return this._getAllGeneric("HOLYDAY");
   }
-  async updateHollyday(id, fields) {
-    return this._updateByIdGeneric("HOLYDAY", "ID", id, fields);
+  async updateHollyday(guildId, fields) {
+    return this._updateByIdGeneric("HOLYDAY", "GUILD_ID", guildId, fields);
   }
-  async deleteHollyday(id) {
-    return this._deleteByIdGeneric("HOLYDAY", "ID", id);
+  async deleteHollyday(guildId) {
+    return this._deleteByIdGeneric("HOLYDAY", "GUILD_ID", guildId);
   }
 
+  // --- ROLE ---
   async addRole(data) {
     return this._genericInsert("ROLE", data, ["ID"]);
   }
@@ -438,6 +444,7 @@ class SqlManager {
     return !!(await this.getRoleById(id));
   }
 
+  // --- MEMBER ---
   async addMember(data) {
     return this._genericInsert("MEMBER", data, ["ID"]);
   }
@@ -457,6 +464,7 @@ class SqlManager {
     return !!(await this.getMemberById(id));
   }
 
+  // --- GUILD_MEMBER ---
   async addGuildMember(data) {
     return this._genericInsert("GUILD_MEMBER", data, ["GUILD_ID", "MEMBER_ID"]);
   }
@@ -467,7 +475,6 @@ class SqlManager {
     );
     return r;
   }
-
   async removeMemberRoles(memberId) {
     const [r] = await this._executeQuery(
       "DELETE FROM `MEMBER_ROLE` WHERE `MEMBER_ID` = ?",
@@ -475,7 +482,6 @@ class SqlManager {
     );
     return r;
   }
-
   async getMembersOfGuild(guildId) {
     return this._getAllRows(
       `SELECT m.* FROM \`MEMBER\` m JOIN \`GUILD_MEMBER\` gm ON m.ID = gm.MEMBER_ID WHERE gm.GUILD_ID = ?`,
@@ -495,6 +501,7 @@ class SqlManager {
     ));
   }
 
+  // --- MEMBER_ROLE ---
   async addMemberRole(data) {
     return this._genericInsert("MEMBER_ROLE", data, ["MEMBER_ID", "ROLE_ID"]);
   }
@@ -527,14 +534,13 @@ class SqlManager {
     );
   }
 
+  // --- LOGS ---
   async getLogById(id) {
     return this._getByIdGeneric("LOGS", "ID", id);
   }
-
   async getAllLogs() {
     return this._getAllGeneric("LOGS");
   }
-
   async getLogsByGuild(
     guildId,
     {
@@ -550,26 +556,26 @@ class SqlManager {
       : "CREATED_AT";
     const safeOD = orderDirection.toUpperCase() === "ASC" ? "ASC" : "DESC";
 
+    // **CORRETTO**: Cambiato `ID_GUILD` in `GUILD_ID` per corrispondere allo schema.
     const query = `
             SELECT * FROM \`LOGS\` 
-            WHERE \`ID_GUILD\` = ? 
+            WHERE \`GUILD_ID\` = ? 
             ORDER BY \`${safeOB}\` ${safeOD} 
             LIMIT ? OFFSET ?
         `;
     return this._getAllRows(query, [guildId, limit, offset]);
   }
-
   async updateLog(id, fields) {
     if (fields.DETAILS && typeof fields.DETAILS !== "string") {
       fields.DETAILS = JSON.stringify(fields.DETAILS, null, 2);
     }
     return this._updateByIdGeneric("LOGS", "ID", id, fields);
   }
-
   async deleteLog(id) {
     return this._deleteByIdGeneric("LOGS", "ID", id);
   }
 
+  // --- TRANSACTIONS ---
   async beginTransaction() {
     try {
       const c = await this.getConnection();
