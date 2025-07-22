@@ -1,0 +1,7 @@
+{
+    "host": "your_host",
+    "user": "your_username",
+    "password": "your_password",
+    "database": "nome_of_your_database",
+    "port": 3306
+}
