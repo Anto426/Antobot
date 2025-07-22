@@ -149,10 +149,11 @@ export default {
 
       const fieldsToUpdateInGuild = {};
       let changesMadeSummary = [];
+      let actionsTaken = false;
 
       // Temp Channels
       if (manageTempChannelsFlag !== null) {
-        const cfg = await SqlManager.getTempChannelById(guildId);
+        const cfg = await SqlManager.getTempChannelByGuildId(guildId);
         if (manageTempChannelsFlag) {
           if (cfg) changesMadeSummary.push(`ℹ️ Canali Temporanei già attivi.`);
           else {
@@ -187,15 +188,15 @@ export default {
               reason: r,
             });
             await SqlManager.addTempChannel({
-              ID: guildId,
+              GUILD_ID: guildId,
               CATEGORY_CH: cat.id,
               DUO_CH: vc1.id,
               TRIO_CH: vc2.id,
               QUARTET_CH: vc3.id,
               NOLIMIT_CH: vc4.id,
             });
-            fieldsToUpdateInGuild.TEMPCHANNEL_ID = guildId;
             changesMadeSummary.push("✅ Canali Temporanei CREATI.");
+            actionsTaken = true;
           }
         } else {
           if (cfg) {
@@ -214,8 +215,8 @@ export default {
               }
             }
             await SqlManager.deleteTempChannel(guildId);
-            fieldsToUpdateInGuild.TEMPCHANNEL_ID = null;
             changesMadeSummary.push("🗑️ Canali Temporanei DISABILITATI.");
+            actionsTaken = true;
           } else
             changesMadeSummary.push("ℹ️ Canali Temporanei già disabilitati.");
         }
@@ -223,7 +224,7 @@ export default {
 
       // Hollyday Channels
       if (manageHollydayChannelsFlag !== null) {
-        const cfg = await SqlManager.getHollydayById(guildId);
+        const cfg = await SqlManager.getHollydayByGuildId(guildId);
         const reason = `Setup /setguild Eventi da ${interaction.user.tag}`;
         const lockedPerms = [
           {
@@ -254,15 +255,15 @@ export default {
               reason,
             });
             await SqlManager.addHollyday({
-              ID: guildId,
+              GUILD_ID: guildId,
               CATEGORY_CH: cat.id,
               NAME_CHANNEL: tc.id,
               HOLYDAY_CHANNEL: vc.id,
             });
-            fieldsToUpdateInGuild.HOLYDAY_ID = guildId;
             changesMadeSummary.push(
               "✅ Canali Eventi CREATI (vocale bloccato)."
             );
+            actionsTaken = true;
           }
         } else {
           if (cfg) {
@@ -279,8 +280,8 @@ export default {
               }
             }
             await SqlManager.deleteHollyday(guildId);
-            fieldsToUpdateInGuild.HOLYDAY_ID = null;
             changesMadeSummary.push("🗑️ Canali Eventi DISABILITATI.");
+            actionsTaken = true;
           } else changesMadeSummary.push("ℹ️ Canali Eventi già disabilitati.");
         }
       }
@@ -333,10 +334,7 @@ export default {
         finalMessageTitle = "Impostazioni Gilda Aggiornate";
         finalMessageDescr = `Le configurazioni per **${guildName}** sono state elaborate:`;
         finalThumb = STATUS_THUMBNAILS.SUCCESS;
-      } else if (
-        changesMadeSummary.some((s) => s.startsWith("✅") || s.startsWith("🗑️"))
-      ) {
-        // Azioni intraprese anche se non c'è update diretto a GUILD
+      } else if (actionsTaken) {
         finalMessageTitle = "Impostazioni Gilda Elaborate";
         finalMessageDescr = `Le configurazioni per **${guildName}** sono state processate:`;
         finalThumb = STATUS_THUMBNAILS.SUCCESS;
@@ -369,6 +367,11 @@ export default {
       }
 
       const finalGuildData = await SqlManager.getGuildById(guildId);
+      const finalTempChannelData = await SqlManager.getTempChannelByGuildId(
+        guildId
+      );
+      const finalHolidayData = await SqlManager.getHollydayByGuildId(guildId);
+
       if (
         !finalGuildData &&
         (Object.keys(fieldsToUpdateInGuild).length > 0 ||
@@ -386,11 +389,11 @@ export default {
           .addFieldBlock("--- Stato Finale Configurazione ---", "\u200B")
           .addFieldInline(
             "⏱️ Canali Temporanei",
-            finalGuildData.TEMPCHANNEL_ID ? `✅ Attivo` : "❌ Non attivo"
+            finalTempChannelData ? `✅ Attivo` : "❌ Non attivo"
           )
           .addFieldInline(
             "🎉 Canali Festività",
-            finalGuildData.HOLYDAY_ID ? `✅ Attivo` : "❌ Non attivo"
+            finalHolidayData ? `✅ Attivo` : "❌ Non attivo"
           )
           .addFieldInline("\u200B", "\u200B")
           .addFieldInline(
@@ -433,7 +436,7 @@ export default {
         }
       }
 
-      return({ embeds: [embed] });
+      await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       BotConsole.error(`[SetGuild - ${guildId}] Errore critico:`, error);
 
@@ -452,7 +455,7 @@ export default {
       }
       try {
         if (interaction.replied || interaction.deferred)
-          return({
+          await interaction.editReply({
             embeds: [errorReplyEmbed],
             components: [],
           });
