@@ -2,8 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "host" ]
-
+    branches: ["host"]
 
 jobs:
   build:
@@ -12,31 +11,31 @@ jobs:
       TOKEN: ${{ vars.TOKEN }}
       GITTOKEN: ${{ vars.GITTOKEN }}
       OPENAITOKEN: ${{ vars.OPENAITOKEN }}
+      SUDO_PASSWORD: ${{ vars.SUDO_PASSWORD }}
 
     strategy:
       matrix:
         node-version: [22.x]
     steps:
+      - name: Sleep for 20 Seconds
+        run: sleep 20
 
-    - name: Sleep for 20 Seconds
-      run: sleep 20 
+      - name: Stop Systemctl module "Antobot"
+        run: echo ${{ vars.SUDO_PASSWORD }} | sudo -S systemctl stop antobot
 
-    - name: Stop Systemctl module "Antobot"
-      run: sudo systemctl stop antobot
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Install dependencies
+        run: npm install
 
-    - name: Install dependencies
-      run: npm install
+      - name: Start Systemctl module "Antobot"
+        run: echo ${{ vars.SUDO_PASSWORD }} | sudo -S systemctl start antobot
 
-    - name: Start Systemctl module "Antobot"
-      run: sudo systemctl start antobot
-
-    - name: Complete task
-      run: echo "Task completed successfully."
+      - name: Complete task
+        run: echo "Task completed successfully."
