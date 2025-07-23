@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [23.x]
+        node-version: [22.x]
     steps:
 
     - name: Sleep for 20 Seconds
