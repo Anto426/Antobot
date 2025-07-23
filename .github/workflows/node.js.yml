@@ -8,10 +8,10 @@ jobs:
   build:
     runs-on: self-hosted
     env:
-      TOKEN: ${{ vars.TOKEN }}
-      GITTOKEN: ${{ vars.GITTOKEN }}
-      OPENAITOKEN: ${{ vars.OPENAITOKEN }}
-      SUDO_PASSWORD: ${{ vars.SUDO_PASSWORD }}
+      TOKEN: ${{ secrets.TOKEN }}
+      GITTOKEN: ${{ secrets.GITTOKEN }}
+      OPENAITOKEN: ${{ secrets.OPENAITOKEN }}
+      SUDO_PASSWORD: ${{ secrets.SUDO_PASSWORD }}
 
     strategy:
       matrix:
@@ -21,7 +21,7 @@ jobs:
         run: sleep 20
 
       - name: Stop Systemctl module "Antobot"
-        run: echo ${{ vars.SUDO_PASSWORD }} | sudo -S systemctl stop antobot
+        run: echo ${{ secrets.SUDO_PASSWORD }} | sudo -S systemctl stop antobot
 
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -36,12 +36,13 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "TOKEN=${{ vars.TOKEN }}" > .env
-          echo "GITTOKEN=${{ vars.GITTOKEN }}" >> .env
-          echo "OPENAITOKEN=${{ vars.OPENAITOKEN }}" >> .env
+          echo "TOKEN=${{ secrets.TOKEN }}" > .env
+          echo "GITTOKEN=${{ secrets.GITTOKEN }}" >> .env
+          echo "OPENAITOKEN=${{ secrets.OPENAITOKEN }}" >> .env
 
       - name: Start Systemctl module "Antobot"
-        run: echo ${{ vars.SUDO_PASSWORD }} | sudo -S systemctl start antobot
+        run: echo ${{ secrets.SUDO_PASSWORD }} | sudo -S systemctl start antobot
 
       - name: Complete task
         run: echo "Task completed successfully."
+
