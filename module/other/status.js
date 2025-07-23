@@ -1,4 +1,4 @@
-import JsonHandler from "../../class/json/JsonHandler.js";
+import JsonHandler from "../../class/Json/JsonHandler.js";
 import SystemCheck from "../../class/client/SystemCheck.js";
 import BotConsole from "../../class/console/BotConsole.js";
 

@@ -1,4 +1,4 @@
-import JsonHandler from "../json/JsonHandler.js";
+import JsonHandler from "../Json/JsonHandler.js";
 
 class SystemCheck {
   #config;

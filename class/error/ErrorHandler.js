@@ -1,5 +1,5 @@
 import BotConsole from "../console/BotConsole.js";
-import JsonHandler from "../json/JsonHandler.js";
+import JsonHandler from "../Json/JsonHandler.js";
 
 class ErrorHandler {
   #json;
