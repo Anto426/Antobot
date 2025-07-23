@@ -294,7 +294,7 @@ class SqlManager {
   }
 
   async ensureGuildMemberAssociation(guildId, memberId) {
-    const alreadyExists = await this._exists("GUILD_MEMBER", {
+    const alreadyExists = await this._exists("guild_member", {
       GUILD_ID: guildId,
       MEMBER_ID: memberId,
     });
@@ -306,7 +306,7 @@ class SqlManager {
       };
     }
 
-    return this._genericInsert("GUILD_MEMBER", {
+    return this._genericInsert("guild_member", {
       GUILD_ID: guildId,
       MEMBER_ID: memberId,
     });
@@ -401,22 +401,22 @@ class SqlManager {
     return this._deleteByIdGeneric("TEMP_CHANNEL", "GUILD_ID", guildId);
   }
 
-  // --- HOLYDAY ---
+  // --- holyday ---
   // **MODIFICATO**: I metodi ora usano GUILD_ID come chiave primaria.
   async addHollyday(data) {
-    return this._genericInsert("HOLYDAY", data, ["GUILD_ID"]);
+    return this._genericInsert("holyday", data, ["GUILD_ID"]);
   }
   async getHollydayByGuildId(guildId) {
-    return this._getByIdGeneric("HOLYDAY", "GUILD_ID", guildId);
+    return this._getByIdGeneric("holyday", "GUILD_ID", guildId);
   }
   async getAllHollydays() {
-    return this._getAllGeneric("HOLYDAY");
+    return this._getAllGeneric("holyday");
   }
   async updateHollyday(guildId, fields) {
-    return this._updateByIdGeneric("HOLYDAY", "GUILD_ID", guildId, fields);
+    return this._updateByIdGeneric("holyday", "GUILD_ID", guildId, fields);
   }
   async deleteHollyday(guildId) {
-    return this._deleteByIdGeneric("HOLYDAY", "GUILD_ID", guildId);
+    return this._deleteByIdGeneric("holyday", "GUILD_ID", guildId);
   }
 
   // --- role ---
@@ -464,13 +464,13 @@ class SqlManager {
     return !!(await this.getMemberById(id));
   }
 
-  // --- GUILD_MEMBER ---
+  // --- guild_member ---
   async addGuildMember(data) {
-    return this._genericInsert("GUILD_MEMBER", data, ["GUILD_ID", "MEMBER_ID"]);
+    return this._genericInsert("guild_member", data, ["GUILD_ID", "MEMBER_ID"]);
   }
   async removeMemberFromGuild(guildId, memberId) {
     const [r] = await this._executeQuery(
-      "DELETE FROM `GUILD_MEMBER` WHERE `GUILD_ID` = ? AND `MEMBER_ID` = ?",
+      "DELETE FROM `guild_member` WHERE `GUILD_ID` = ? AND `MEMBER_ID` = ?",
       [guildId, memberId]
     );
     return r;
@@ -484,19 +484,19 @@ class SqlManager {
   }
   async getMembersOfGuild(guildId) {
     return this._getAllRows(
-      `SELECT m.* FROM \`member\` m JOIN \`GUILD_MEMBER\` gm ON m.ID = gm.MEMBER_ID WHERE gm.GUILD_ID = ?`,
+      `SELECT m.* FROM \`member\` m JOIN \`guild_member\` gm ON m.ID = gm.MEMBER_ID WHERE gm.GUILD_ID = ?`,
       [guildId]
     );
   }
   async getGuildsOfMember(memberId) {
     return this._getAllRows(
-      `SELECT g.* FROM \`guild\` g JOIN \`GUILD_MEMBER\` gm ON g.ID = gm.GUILD_ID WHERE gm.MEMBER_ID = ?`,
+      `SELECT g.* FROM \`guild\` g JOIN \`guild_member\` gm ON g.ID = gm.GUILD_ID WHERE gm.MEMBER_ID = ?`,
       [memberId]
     );
   }
   async isMemberInGuild(guildId, memberId) {
     return !!(await this._getOne(
-      "SELECT 1 FROM `GUILD_MEMBER` WHERE `GUILD_ID` = ? AND `MEMBER_ID` = ? LIMIT 1",
+      "SELECT 1 FROM `guild_member` WHERE `GUILD_ID` = ? AND `MEMBER_ID` = ? LIMIT 1",
       [guildId, memberId]
     ));
   }
