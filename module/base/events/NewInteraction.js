@@ -1,4 +1,4 @@
-import Security from "../../../class/security/security.js";
+import Security from "../../../class/Security/security.js";
 import BotConsole from "../../../class/console/BotConsole.js";
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 import ConfigManager from "../../../class/services/ConfigManager.js";
