@@ -1,6 +1,6 @@
 import SystemCheck from "../client/SystemCheck.js";
 import BotConsole from "../console/BotConsole.js";
-import JsonHandler from "../json/JsonHandler.js";
+import JsonHandler from "../Json/JsonHandler.js";
 import { EventEmitter } from "events";
 
 class ConfigManager extends EventEmitter {
