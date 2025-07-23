@@ -71,7 +71,7 @@ class SqlManager {
     if (logData.DETAILS && typeof logData.DETAILS !== "string") {
       logData.DETAILS = JSON.stringify(logData.DETAILS, null, 2);
     }
-    return this._genericInsert("LOGS", logData);
+    return this._genericInsert("logs", logData);
   }
 
   async _executeQuery(query, params = []) {
@@ -187,7 +187,7 @@ class SqlManager {
 
   async getGuildsWithLogChannel() {
     const query =
-      "SELECT ID, LOG_ID FROM `GUILD` WHERE LOG_ID IS NOT NULL AND LOG_ID <> ''";
+      "SELECT ID, LOG_ID FROM `guild` WHERE LOG_ID IS NOT NULL AND LOG_ID <> ''";
     return this._getAllRows(query);
   }
 
@@ -195,7 +195,7 @@ class SqlManager {
     const { id, name, ...otherFields } = guildData;
     const existingGuild = await this.getGuildById(id);
 
-    // **MODIFICATO**: Rimosse le chiavi TEMPCHANNEL_ID e HOLYDAY_ID che non esistono più nella tabella GUILD.
+    // **MODIFICATO**: Rimosse le chiavi TEMPCHANNEL_ID e HOLYDAY_ID che non esistono più nella tabella guild.
     const guildRecordData = { ID: id, NOME: name };
 
     for (const key of [
@@ -283,7 +283,7 @@ class SqlManager {
     const memberDataForDb = { ID: id, NOME: globalName };
 
     if (!existingMember) {
-      return this._genericInsert("MEMBER", memberDataForDb);
+      return this._genericInsert("member", memberDataForDb);
     }
 
     if (existingMember.NOME !== globalName) {
@@ -362,21 +362,21 @@ class SqlManager {
     };
   }
 
-  // --- GUILD ---
+  // --- guild ---
   async addGuild(data) {
-    return this._genericInsert("GUILD", data, ["ID"]);
+    return this._genericInsert("guild", data, ["ID"]);
   }
   async getGuildById(id) {
-    return this._getByIdGeneric("GUILD", "ID", id);
+    return this._getByIdGeneric("guild", "ID", id);
   }
   async getAllGuilds() {
-    return this._getAllGeneric("GUILD");
+    return this._getAllGeneric("guild");
   }
   async updateGuild(id, fields) {
-    return this._updateByIdGeneric("GUILD", "ID", id, fields);
+    return this._updateByIdGeneric("guild", "ID", id, fields);
   }
   async deleteGuild(id) {
-    return this._deleteByIdGeneric("GUILD", "ID", id);
+    return this._deleteByIdGeneric("guild", "ID", id);
   }
   async guildExists(id) {
     return !!(await this.getGuildById(id));
@@ -419,46 +419,46 @@ class SqlManager {
     return this._deleteByIdGeneric("HOLYDAY", "GUILD_ID", guildId);
   }
 
-  // --- ROLE ---
+  // --- role ---
   async addRole(data) {
-    return this._genericInsert("ROLE", data, ["ID"]);
+    return this._genericInsert("role", data, ["ID"]);
   }
   async getRoleById(id) {
-    return this._getByIdGeneric("ROLE", "ID", id);
+    return this._getByIdGeneric("role", "ID", id);
   }
   async getAllRoles() {
-    return this._getAllGeneric("ROLE");
+    return this._getAllGeneric("role");
   }
   async getRolesByGuild(guildId) {
-    return this._getAllRows("SELECT * FROM `ROLE` WHERE `IDGUILD` = ?", [
+    return this._getAllRows("SELECT * FROM `role` WHERE `IDGUILD` = ?", [
       guildId,
     ]);
   }
   async updateRole(id, fields) {
-    return this._updateByIdGeneric("ROLE", "ID", id, fields);
+    return this._updateByIdGeneric("role", "ID", id, fields);
   }
   async deleteRole(id) {
-    return this._deleteByIdGeneric("ROLE", "ID", id);
+    return this._deleteByIdGeneric("role", "ID", id);
   }
   async roleExists(id) {
     return !!(await this.getRoleById(id));
   }
 
-  // --- MEMBER ---
+  // --- member ---
   async addMember(data) {
-    return this._genericInsert("MEMBER", data, ["ID"]);
+    return this._genericInsert("member", data, ["ID"]);
   }
   async getMemberById(id) {
-    return this._getByIdGeneric("MEMBER", "ID", id);
+    return this._getByIdGeneric("member", "ID", id);
   }
   async getAllMembers() {
-    return this._getAllGeneric("MEMBER");
+    return this._getAllGeneric("member");
   }
   async updateMember(id, fields) {
-    return this._updateByIdGeneric("MEMBER", "ID", id, fields);
+    return this._updateByIdGeneric("member", "ID", id, fields);
   }
   async deleteMember(id) {
-    return this._deleteByIdGeneric("MEMBER", "ID", id);
+    return this._deleteByIdGeneric("member", "ID", id);
   }
   async memberExists(id) {
     return !!(await this.getMemberById(id));
@@ -477,20 +477,20 @@ class SqlManager {
   }
   async removeMemberRoles(memberId) {
     const [r] = await this._executeQuery(
-      "DELETE FROM `MEMBER_ROLE` WHERE `MEMBER_ID` = ?",
+      "DELETE FROM `member_role` WHERE `MEMBER_ID` = ?",
       [memberId]
     );
     return r;
   }
   async getMembersOfGuild(guildId) {
     return this._getAllRows(
-      `SELECT m.* FROM \`MEMBER\` m JOIN \`GUILD_MEMBER\` gm ON m.ID = gm.MEMBER_ID WHERE gm.GUILD_ID = ?`,
+      `SELECT m.* FROM \`member\` m JOIN \`GUILD_MEMBER\` gm ON m.ID = gm.MEMBER_ID WHERE gm.GUILD_ID = ?`,
       [guildId]
     );
   }
   async getGuildsOfMember(memberId) {
     return this._getAllRows(
-      `SELECT g.* FROM \`GUILD\` g JOIN \`GUILD_MEMBER\` gm ON g.ID = gm.GUILD_ID WHERE gm.MEMBER_ID = ?`,
+      `SELECT g.* FROM \`guild\` g JOIN \`GUILD_MEMBER\` gm ON g.ID = gm.GUILD_ID WHERE gm.MEMBER_ID = ?`,
       [memberId]
     );
   }
@@ -501,45 +501,45 @@ class SqlManager {
     ));
   }
 
-  // --- MEMBER_ROLE ---
+  // --- member_role ---
   async addMemberRole(data) {
-    return this._genericInsert("MEMBER_ROLE", data, ["MEMBER_ID", "ROLE_ID"]);
+    return this._genericInsert("member_role", data, ["MEMBER_ID", "ROLE_ID"]);
   }
   async getMemberRole(memberId, roleId) {
     return this._getOne(
-      "SELECT * FROM `MEMBER_ROLE` WHERE `MEMBER_ID` = ? AND `ROLE_ID` = ?",
+      "SELECT * FROM `member_role` WHERE `MEMBER_ID` = ? AND `ROLE_ID` = ?",
       [memberId, roleId]
     );
   }
   async getAllMemberRoles() {
-    return this._getAllGeneric("MEMBER_ROLE");
+    return this._getAllGeneric("member_role");
   }
   async deleteMemberRole(memberId, roleId) {
     const [r] = await this._executeQuery(
-      "DELETE FROM `MEMBER_ROLE` WHERE `MEMBER_ID` = ? AND `ROLE_ID` = ?",
+      "DELETE FROM `member_role` WHERE `MEMBER_ID` = ? AND `ROLE_ID` = ?",
       [memberId, roleId]
     );
     return r;
   }
   async getRolesOfMember(memberId) {
     return this._getAllRows(
-      `SELECT r.* FROM \`ROLE\` r JOIN \`MEMBER_ROLE\` mr ON r.ID = mr.ROLE_ID WHERE mr.MEMBER_ID = ?`,
+      `SELECT r.* FROM \`role\` r JOIN \`member_role\` mr ON r.ID = mr.ROLE_ID WHERE mr.MEMBER_ID = ?`,
       [memberId]
     );
   }
   async getMembersWithRole(roleId) {
     return this._getAllRows(
-      `SELECT m.* FROM \`MEMBER\` m JOIN \`MEMBER_ROLE\` mr ON m.ID = mr.MEMBER_ID WHERE mr.ROLE_ID = ?`,
+      `SELECT m.* FROM \`member\` m JOIN \`member_role\` mr ON m.ID = mr.MEMBER_ID WHERE mr.ROLE_ID = ?`,
       [roleId]
     );
   }
 
-  // --- LOGS ---
+  // --- logs ---
   async getLogById(id) {
-    return this._getByIdGeneric("LOGS", "ID", id);
+    return this._getByIdGeneric("logs", "ID", id);
   }
   async getAllLogs() {
-    return this._getAllGeneric("LOGS");
+    return this._getAllGeneric("logs");
   }
   async getLogsByGuild(
     guildId,
@@ -558,7 +558,7 @@ class SqlManager {
 
     // **CORRETTO**: Cambiato `ID_GUILD` in `GUILD_ID` per corrispondere allo schema.
     const query = `
-            SELECT * FROM \`LOGS\` 
+            SELECT * FROM \`logs\` 
             WHERE \`GUILD_ID\` = ? 
             ORDER BY \`${safeOB}\` ${safeOD} 
             LIMIT ? OFFSET ?
@@ -569,10 +569,10 @@ class SqlManager {
     if (fields.DETAILS && typeof fields.DETAILS !== "string") {
       fields.DETAILS = JSON.stringify(fields.DETAILS, null, 2);
     }
-    return this._updateByIdGeneric("LOGS", "ID", id, fields);
+    return this._updateByIdGeneric("logs", "ID", id, fields);
   }
   async deleteLog(id) {
-    return this._deleteByIdGeneric("LOGS", "ID", id);
+    return this._deleteByIdGeneric("logs", "ID", id);
   }
 
   // --- TRANSACTIONS ---
