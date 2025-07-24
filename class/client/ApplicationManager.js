@@ -68,7 +68,7 @@ class BotApplication {
 
   async bootstrap() {
     await SystemCheck.initialize();
-    await this.configManager.startAutoReload();
+    await this.configManager.loadConfig();
     this.clientInitializer.setCookies(
       this.configManager.getConfig("cookies").youtube
     );
