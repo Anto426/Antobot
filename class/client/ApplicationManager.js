@@ -2,16 +2,17 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import readline from "readline";
 import BotConsole from "../console/BotConsole.js";
-import ClientInitializer from "./ClientInitializer.js";
 import ModuleLoader from "../Loader/ModuleLoader.js";
 import ConfigManager from "../services/ConfigManager.js";
 import SystemCheck from "./SystemCheck.js";
+import clientInitializer from "./ClientInitializer.js";
 import dotenv from "dotenv";
 dotenv.config();
 
 class BotApplication {
   constructor() {
     this.ModuleLoader = new ModuleLoader();
+    this.clientInitializer = new clientInitializer();
 
     const { promptToken } = yargs(hideBin(process.argv))
       .option("promptToken", {
@@ -25,7 +26,6 @@ class BotApplication {
 
     this.promptToken = promptToken;
     this.configManager = ConfigManager;
-    this.clientInitializer = new ClientInitializer();
 
     this._token = this.promptToken ? null : process.env.TOKEN || null;
     this.botClient = null;
@@ -91,6 +91,21 @@ class BotApplication {
       BotConsole.error("Errore durante l’avvio:", err.message);
       process.exit(1);
     }
+  }
+
+  async reloadAllApplications() {
+    BotConsole.info("🚀 Riavvio del bot in corso...");
+
+    if (global.distube) {
+      BotConsole.info("Disconnessione di Distube...");
+      global.distube = null;
+    }
+
+    BotConsole.info("Disconnessione del client Discord...");
+    await client.destroy();
+
+    BotConsole.success("Processo terminato.Si occuperà del riavvio.");
+    process.exit(0);
   }
 }
 
