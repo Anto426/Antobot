@@ -1,16 +1,13 @@
-import JsonHandler from "../../class/Json/JsonHandler.js";
 import BotConsole from "../../class/console/BotConsole.js";
 import ConfigManager from "../../class/services/ConfigManager.js";
 
 export default class Status {
-  #jsonHandler;
   #statusUpdateInterval;
   #client;
   static #DEFAULT_INTERVAL = 5 * 60 * 1000;
 
   constructor() {
     this.#client = client;
-    this.#jsonHandler = new JsonHandler();
     this.#statusUpdateInterval = Status.#DEFAULT_INTERVAL;
   }
 
@@ -24,7 +21,9 @@ export default class Status {
 
   async updateStatus() {
     try {
-      const statusData = await ConfigManager.getConfig("status").status;
+      const statusData = await ConfigManager.getConfig("status");
+
+      console.log("Status data:", statusData);
 
       if (!this.#validateStatusData(statusData)) {
         throw new Error("Invalid status data");
@@ -45,7 +44,7 @@ export default class Status {
       BotConsole.info(`Status updated: ${randomStatus.description}`);
       return true;
     } catch (error) {
-      throw new Error("Failed to update status", error);
+      throw new Error(error);
     }
   }
 
@@ -57,12 +56,12 @@ export default class Status {
 
   run() {
     this.updateStatus().catch((error) =>
-      BotConsole.error("Initial status update failed")
+      BotConsole.error("Initial status update failed", error)
     );
 
     return setInterval(() => {
       this.updateStatus().catch((error) =>
-        BotConsole.error("Status update failed")
+        BotConsole.error("Status update failed", error)
       );
     }, this.#statusUpdateInterval);
   }
