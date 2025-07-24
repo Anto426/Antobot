@@ -58,9 +58,7 @@ export default class serverupdate {
   async #handleWebhook(body) {
     const CONFIG_REPO_NAME = "Anto426/Configsbot";
 
-    console.log(
-      `[Webhook] Rilevato push su ${body.repository.full_name}.`
-    );
+    console.log(`[Webhook] Rilevato push su ${body.repository.full_name}.`);
 
     if (body.repository.full_name === CONFIG_REPO_NAME) {
       await this.#handleConfigsUpdate(body);
@@ -83,15 +81,13 @@ export default class serverupdate {
     for (const file of changedFiles) {
       BotConsole.info(`[Webhook Configs] File modificato: ${file}`);
       BotConsole.info(
-        `[Webhook Configs] Rilevata modifica a ${file}. Avvio ricarica configurazione...`
+        `[Webhook Configs] Rilevata modifica a ${file}. programmazione riavvio del bot tra 10 minuti per applicare le modifiche...`
       );
 
-      BotConsole.success(
-        `[Webhook Configs] Configurazione ricaricata con successo dopo la modifica di ${file}.`
-      );
+      await sleep(600000);
 
       BotConsole.info(
-        `[Webhook Configs] Riavvio dei processi che dipendono dalla configurazione...`
+        `[Webhook Configs] Riavvio del bot per applicare le modifiche a ${file}...`
       );
 
       ApplicationManager.reloadAllApplications();
