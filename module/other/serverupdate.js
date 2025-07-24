@@ -86,8 +86,6 @@ export default class serverupdate {
         `[Webhook Configs] Rilevata modifica a ${file}. Avvio ricarica configurazione...`
       );
 
-      ConfigManager.loadConfig();
-
       BotConsole.success(
         `[Webhook Configs] Configurazione ricaricata con successo dopo la modifica di ${file}.`
       );
