@@ -23,8 +23,6 @@ export default class Status {
     try {
       const statusData = await ConfigManager.getConfig("status");
 
-      console.log("Status data:", statusData);
-
       if (!this.#validateStatusData(statusData)) {
         throw new Error("Invalid status data");
       }
