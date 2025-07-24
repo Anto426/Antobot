@@ -1,6 +1,6 @@
 import JsonHandler from "../../class/Json/JsonHandler.js";
-import SystemCheck from "../../class/client/SystemCheck.js";
 import BotConsole from "../../class/console/BotConsole.js";
+import ConfigManager from "../../class/services/ConfigManager.js";
 
 export default class Status {
   #jsonHandler;
@@ -14,23 +14,6 @@ export default class Status {
     this.#statusUpdateInterval = Status.#DEFAULT_INTERVAL;
   }
 
-  async #fetchStatusData() {
-    try {
-      const githubConfig = SystemCheck.getGithubConfig("urlrepo");
-      if (!githubConfig) {
-        throw new Error("Invalid GitHub config");
-      }
-
-      const statusUrl = `${githubConfig}/status.json`;
-      return await this.#jsonHandler.readFromUrl(
-        statusUrl,
-        process.env.GITTOKEN
-      );
-    } catch (error) {
-      throw new Error("Failed to fetch status data", error);
-    }
-  }
-
   #validateStatusData(statusData) {
     return statusData?.status?.length > 0;
   }
@@ -41,7 +24,7 @@ export default class Status {
 
   async updateStatus() {
     try {
-      const statusData = await this.#fetchStatusData();
+      const statusData = await ConfigManager.getConfig("status").status;
 
       if (!this.#validateStatusData(statusData)) {
         throw new Error("Invalid status data");

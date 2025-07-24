@@ -3,7 +3,8 @@ import BotConsole from "../../class/console/BotConsole.js";
 import SqlManager from "../../class/services/SqlManager.js";
 import PresetEmbed from "../../class/embed/PresetEmbed.js";
 import emojiManager from "../../class/services/EmojiManager.js";
-
+import ConfigManager from "../../class/services/ConfigManager.js";
+import ApplicationManager from "../../class/client/ApplicationManager.js";
 export default class serverupdate {
   #app;
   #port;
@@ -23,7 +24,6 @@ export default class serverupdate {
         return res.status(400).send("Payload non valido");
       }
 
-      // Estrai il nome del branch da 'ref'
       const branch = ref.replace("refs/heads/", "");
       const expectedBranch = repository.master_branch;
 
@@ -35,7 +35,7 @@ export default class serverupdate {
       }
 
       BotConsole.info(
-        `[Webhook] Ricevuto push su "${req.body.repository.full_name}" (${req.body.ref}).`
+        `[Webhook] Ricevuto push su "${repository.full_name}" (${ref}).`
       );
 
       res.status(202).send("Webhook Accettato");
@@ -56,13 +56,58 @@ export default class serverupdate {
   }
 
   async #handleWebhook(body) {
+    const CONFIG_REPO_NAME = "Anto426/Configsbot";
+
+    console.log(
+      `[Webhook] Rilevato push su ${body.repository.full_name}.`
+    );
+
+    if (body.repository.full_name === CONFIG_REPO_NAME) {
+      await this.#handleConfigsUpdate(body);
+    } else {
+      await this.#handleGenericUpdate(body);
+    }
+  }
+
+  async #handleConfigsUpdate(body) {
+    BotConsole.info(
+      `[Webhook] Rilevato push sul repository di configurazione: ${body.repository.full_name}.`
+    );
+
+    const changedFiles = new Set();
+    body.commits.forEach((commit) => {
+      commit.added.forEach((file) => changedFiles.add(file));
+      commit.modified.forEach((file) => changedFiles.add(file));
+    });
+
+    for (const file of changedFiles) {
+      BotConsole.info(`[Webhook Configs] File modificato: ${file}`);
+      BotConsole.info(
+        `[Webhook Configs] Rilevata modifica a ${file}. Avvio ricarica configurazione...`
+      );
+
+      ConfigManager.loadConfig();
+
+      BotConsole.success(
+        `[Webhook Configs] Configurazione ricaricata con successo dopo la modifica di ${file}.`
+      );
+
+      BotConsole.info(
+        `[Webhook Configs] Riavvio dei processi che dipendono dalla configurazione...`
+      );
+
+      ApplicationManager.reloadAllApplications();
+    }
+  }
+
+  async #handleGenericUpdate(body) {
     if (!body.repository || !body.commits?.length) return;
 
     const targetGuilds = await SqlManager.getGuildsWithLogChannel();
     if (targetGuilds.length === 0) return;
 
     BotConsole.info(
-      `[Webhook] Ricevuto push su "${body.repository.full_name}". Invio notifiche a ${targetGuilds.length} server...`
+      `[Webhook] Invio notifiche di aggiornamento per "${body.repository.full_name}" a ${targetGuilds.length} server...`
     );
 
     const notificationEmbed = await this.#createPushNotificationEmbed(body);
@@ -79,7 +124,12 @@ export default class serverupdate {
     try {
       const channel = await client.channels.fetch(channelId);
       if (channel?.isTextBased()) await channel.send({ embeds: [embed] });
-    } catch {}
+    } catch (error) {
+      BotConsole.error(
+        `[Webhook] Impossibile inviare messaggio al canale ${channelId}:`,
+        error
+      );
+    }
   }
 
   async #createPushNotificationEmbed(body) {

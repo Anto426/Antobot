@@ -25,7 +25,7 @@ export default {
       const errorEmbed = await new PresetEmbed({ member }).init();
       errorEmbed
         .setTitle("❌ Errore")
-        .setDescription("Devi inserire un numero valido tra 0 e 200.");
+        .setDescription("Devi inserire un numero valido tra 0 e 100.");
       return { embeds: [errorEmbed], ephemeral: true };
     }
 
