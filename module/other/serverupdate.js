@@ -3,11 +3,12 @@ import BotConsole from "../../class/console/BotConsole.js";
 import SqlManager from "../../class/services/SqlManager.js";
 import PresetEmbed from "../../class/embed/PresetEmbed.js";
 import emojiManager from "../../class/services/EmojiManager.js";
-import ConfigManager from "../../class/services/ConfigManager.js";
 import ApplicationManager from "../../class/client/ApplicationManager.js";
-export default class serverupdate {
+
+export default class ServerUpdate {
   #app;
   #port;
+  #reloadScheduled = false;
 
   constructor() {
     this.#app = express();
@@ -20,7 +21,7 @@ export default class serverupdate {
       const { repository, commits, ref } = req.body;
 
       if (!repository || !commits || !ref) {
-        BotConsole.error("[Webhook] Ricevuto payload non valido:", req.body);
+        BotConsole.error("[Webhook] Payload non valido:", req.body);
         return res.status(400).send("Payload non valido");
       }
 
@@ -29,18 +30,18 @@ export default class serverupdate {
 
       if (branch !== expectedBranch) {
         BotConsole.warning(
-          `[Webhook] Ricevuto push su '${branch}', ma il branch monitorato è '${expectedBranch}'. Ignorato.`
+          `[Webhook] Push ricevuto su '${branch}', ma il branch monitorato è '${expectedBranch}'. Ignorato.`
         );
         return res.status(204).send("Branch non monitorato");
       }
 
       BotConsole.info(
-        `[Webhook] Ricevuto push su "${repository.full_name}" (${ref}).`
+        `[Webhook] Push su "${repository.full_name}" (${ref}) accettato.`
       );
 
-      res.status(202).send("Webhook Accettato");
+      res.status(202).send("Webhook accettato");
       this.#handleWebhook(req.body).catch((err) =>
-        BotConsole.error("[Webhook] Errore non gestito:", err)
+        BotConsole.error("[Webhook] Errore durante la gestione:", err)
       );
     });
 
@@ -51,14 +52,12 @@ export default class serverupdate {
         );
       })
       .on("error", (err) => {
-        BotConsole.error("[Webhook] Errore avvio server:", err);
+        BotConsole.error("[Webhook] Errore di avvio:", err);
       });
   }
 
   async #handleWebhook(body) {
     const CONFIG_REPO_NAME = "Anto426/Configsbot";
-
-    console.log(`[Webhook] Rilevato push su ${body.repository.full_name}.`);
 
     if (body.repository.full_name === CONFIG_REPO_NAME) {
       await this.#handleConfigsUpdate(body);
@@ -69,7 +68,7 @@ export default class serverupdate {
 
   async #handleConfigsUpdate(body) {
     BotConsole.info(
-      `[Webhook] Rilevato push sul repository di configurazione: ${body.repository.full_name}.`
+      `[Webhook Configs] Push rilevato da ${body.repository.full_name}`
     );
 
     const changedFiles = new Set();
@@ -78,20 +77,35 @@ export default class serverupdate {
       commit.modified.forEach((file) => changedFiles.add(file));
     });
 
+    if (changedFiles.size === 0) {
+      BotConsole.info("[Webhook Configs] Nessun file modificato.");
+      return;
+    }
+
     for (const file of changedFiles) {
       BotConsole.info(`[Webhook Configs] File modificato: ${file}`);
-      BotConsole.info(
-        `[Webhook Configs] Rilevata modifica a ${file}. programmazione riavvio del bot tra 10 minuti per applicare le modifiche...`
-      );
-
-      await sleep(600000);
-
-      BotConsole.info(
-        `[Webhook Configs] Riavvio del bot per applicare le modifiche a ${file}...`
-      );
-
-      ApplicationManager.reloadAllApplications();
     }
+
+    if (this.#reloadScheduled) {
+      BotConsole.info(
+        "[Webhook Configs] Riavvio già programmato. Nessuna nuova azione."
+      );
+      return;
+    }
+
+    this.#reloadScheduled = true;
+    BotConsole.info(
+      "[Webhook Configs] Riavvio del bot programmato tra 10 minuti..."
+    );
+
+    await this.#sleep(10 * 60 * 1000);
+
+    BotConsole.info(
+      "[Webhook Configs] Riavvio in corso per applicare le modifiche..."
+    );
+    ApplicationManager.reloadAllApplications();
+
+    this.#reloadScheduled = false;
   }
 
   async #handleGenericUpdate(body) {
@@ -101,28 +115,24 @@ export default class serverupdate {
     if (targetGuilds.length === 0) return;
 
     BotConsole.info(
-      `[Webhook] Invio notifiche di aggiornamento per "${body.repository.full_name}" a ${targetGuilds.length} server...`
+      `[Webhook] Notifica inviata a ${targetGuilds.length} server per ${body.repository.full_name}`
     );
 
-    const notificationEmbed = await this.#createPushNotificationEmbed(body);
+    const embed = await this.#createPushNotificationEmbed(body);
 
     for (const guildConfig of targetGuilds) {
-      await this.#sendMessageToGuildLogChannel(
-        guildConfig.LOG_ID,
-        notificationEmbed
-      );
+      await this.#sendMessageToGuildLogChannel(guildConfig.LOG_ID, embed);
     }
   }
 
   async #sendMessageToGuildLogChannel(channelId, embed) {
     try {
       const channel = await client.channels.fetch(channelId);
-      if (channel?.isTextBased()) await channel.send({ embeds: [embed] });
-    } catch (error) {
-      BotConsole.error(
-        `[Webhook] Impossibile inviare messaggio al canale ${channelId}:`,
-        error
-      );
+      if (channel?.isTextBased()) {
+        await channel.send({ embeds: [embed] });
+      }
+    } catch (err) {
+      BotConsole.error(`[Webhook] Errore invio messaggio a ${channelId}:`, err);
     }
   }
 
@@ -137,7 +147,7 @@ export default class serverupdate {
     const commitDescriptions = body.commits
       .slice(0, 5)
       .map((commit) => {
-        const shortId = commit.id.substring(0, 7);
+        const shortId = commit.id.slice(0, 7);
         const message = commit.message.split("\n")[0].slice(0, 60);
         return `> [\`${shortId}\`](${commit.url}) ${message}`;
       })
@@ -150,7 +160,6 @@ export default class serverupdate {
         : commitDescriptions;
 
     const embed = await new PresetEmbed().init();
-
     embed
       .setAuthor({
         name: repoName,
@@ -160,12 +169,12 @@ export default class serverupdate {
       })
       .setTitle("✨ Aggiornamento Rilasciato!")
       .setDescription(
-        "Ciao a tutti! È stato appena rilasciato un nuovo aggiornamento per il bot. Ecco le principali novità:"
+        "È stato appena rilasciato un nuovo aggiornamento per il bot. Ecco i dettagli:"
       )
       .addFields(
         {
-          name: "📝 Modifiche Principali",
-          value: commitFieldText || "Nessun messaggio di commit disponibile.",
+          name: "📝 Modifiche",
+          value: commitFieldText || "Nessun messaggio di commit.",
           inline: false,
         },
         {
@@ -174,12 +183,12 @@ export default class serverupdate {
           inline: true,
         },
         {
-          name: "Commit Totali",
+          name: "Totale Commit",
           value: `**${totalCommits}**`,
           inline: true,
         },
         {
-          name: "Inviato da",
+          name: "Autore",
           value: `${pusherEmoji || "👤"} ${pusherName}`,
           inline: true,
         }
@@ -189,24 +198,29 @@ export default class serverupdate {
         text: client.user.username,
         iconURL: client.user.displayAvatarURL(),
       })
-      .setThumbnailclient();
+      .setThumbnailclient()
 
     return embed;
   }
 
   async #getAuthorEmoji(username) {
     try {
-      const response = await fetch(`https://api.github.com/users/${username}`);
-      if (!response.ok) return null;
-      const userData = await response.json();
-      if (!userData?.login || !userData.avatar_url) return null;
+      const res = await fetch(`https://api.github.com/users/${username}`);
+      if (!res.ok) return null;
+
+      const data = await res.json();
+      if (!data?.login || !data.avatar_url) return null;
 
       return await emojiManager.upsertEmoji(
-        `dev_${userData.login}`,
-        userData.avatar_url
+        `dev_${data.login}`,
+        data.avatar_url
       );
     } catch {
       return "👤";
     }
+  }
+
+  #sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
