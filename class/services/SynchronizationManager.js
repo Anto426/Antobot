@@ -43,7 +43,14 @@ class SynchronizationManager {
     const guildLogPrefix = logPrefix || `[Sync Guild][${guild.name}]`;
     BotConsole.info(`${guildLogPrefix} Inizio sincronizzazione completa.`);
 
-    await SqlManager.synchronizeGuild({ id: guild.id, name: guild.name });
+    await SqlManager.synchronizeGuild({
+      id: guild.id,
+      name: guild.name,
+      WELCOME_ID: guild.systemChannelId,
+      LOG_ID: guild.publicUpdatesChannelId,
+      RULES_CH_ID: guild.rulesChannelId,
+    });
+    
     await this.#synchronizeRolesForGuild(guild, guildLogPrefix);
     await this.#synchronizeMembersForGuild(guild, guildLogPrefix);
 
