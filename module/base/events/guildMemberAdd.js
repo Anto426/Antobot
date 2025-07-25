@@ -156,8 +156,13 @@ export default {
 
   async sendWelcomeMessage(member, isReturningMember, logPrefix) {
     const { guild, user } = member;
+    const guildConfig = await SqlManager.getGuildById(guild.id);
 
-    const channel = await this._getWelcomeChannel(guild, logPrefix);
+    const channel = await this._getWelcomeChannel(
+      guild,
+      guildConfig,
+      logPrefix
+    );
     if (!channel) return;
 
     const welcomeEmbed = new PresetEmbed({ guild });
@@ -166,7 +171,13 @@ export default {
     const welcomeTitle = isReturningMember
       ? `🎉 Bentornato/a, ${member.displayName}!`
       : `🎉 Benvenuto/a, ${member.displayName}!`;
-    const description = `🎊 ${member} si è unito/a a **${guild.name}**!\nOra siamo in **${guild.memberCount}** membri!`;
+
+    let description = `🎊 ${member} si è unito/a a **${guild.name}**!\nOra siamo in **${guild.memberCount}** membri!`;
+
+    if (guildConfig?.RULES_CH_ID) {
+      description += `\n\nTi invitiamo a leggere il nostro <#${guildConfig.RULES_CH_ID}> per una buona permanenza!`;
+    }
+
     const accountCreationDate = time(user.createdAt, "R");
 
     welcomeEmbed
@@ -202,7 +213,7 @@ export default {
           `${logPrefix} Generazione immagine fallita, invio embed di fallback sofisticato.`
         );
 
-      welcomeEmbed.setThumbnailUrl(
+      welcomeEmbed.setThumbnail(
         user.displayAvatarURL({ dynamic: true, size: 256 })
       );
     }
@@ -211,8 +222,7 @@ export default {
     BotConsole.success(`${logPrefix} Messaggio di benvenuto inviato.`);
   },
 
-  async _getWelcomeChannel(guild, logPrefix) {
-    const guildConfig = await SqlManager.getGuildById(guild.id);
+  async _getWelcomeChannel(guild, guildConfig, logPrefix) {
     if (!guildConfig?.WELCOME_ID) {
       BotConsole.info(`${logPrefix} Canale di benvenuto non configurato.`);
       return null;
