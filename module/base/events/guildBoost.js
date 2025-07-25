@@ -9,7 +9,7 @@ export default {
   isActive: true,
 
   async execute(message) {
-    if (!message.guild || !this.#isBoostMessage(message)) {
+    if (!message.guild || !this.isBoostMessage(message)) {
       return;
     }
 
@@ -44,7 +44,6 @@ export default {
     const { guild } = member;
     const guildConfig = await SqlManager.getGuildById(guild.id);
 
-    // Controlla se il canale per i boost è configurato
     if (!guildConfig?.BOOST_CH_ID) {
       BotConsole.info(
         `${logPrefix} Canale per i boost non configurato. Nessun messaggio inviato.`
