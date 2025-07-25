@@ -15,12 +15,24 @@ export default {
     BotConsole.info(`${logPrefix} Si è unito al server.`);
 
     try {
-      const syncResult = await this.synchronizeMember(member, logPrefix);
-      const isRejoiningMember = syncResult.operation === "exists";
+      const memberName =
+        member.user.globalName || member.displayName || member.user.username;
+
+      const globalSyncResult = await SqlManager.synchronizeGlobalMember({
+        id: member.id,
+        globalName: memberName,
+      });
+
+      const isRejoiningMember = globalSyncResult.operation !== "inserted";
 
       if (isRejoiningMember) {
         BotConsole.info(`${logPrefix} Rilevato come membro che rientra.`);
       }
+
+      await SqlManager.ensureGuildMemberAssociation(guild.id, member.id);
+      BotConsole.debug(
+        `${logPrefix} Sincronizzazione DB utente/gilda completata.`
+      );
 
       const rolesWereRestored = await this.handleRoleAssignment(
         member,
@@ -38,23 +50,6 @@ export default {
         error
       );
     }
-  },
-
-  async synchronizeMember(member, logPrefix) {
-    const memberName =
-      member.user.globalName || member.displayName || member.user.username;
-    await SqlManager.synchronizeGlobalMember({
-      id: member.id,
-      globalName: memberName,
-    });
-    const result = await SqlManager.ensureGuildMemberAssociation(
-      member.guild.id,
-      member.id
-    );
-    BotConsole.debug(
-      `${logPrefix} Sincronizzazione DB utente/gilda completata.`
-    );
-    return result;
   },
 
   async handleRoleAssignment(member, logPrefix, isRejoiningMember) {
@@ -82,6 +77,8 @@ export default {
       return true;
     }
 
+    // Assegna il ruolo di default solo se è un membro veramente nuovo
+    // (non uno di ritorno che magari non aveva ruoli).
     if (!isRejoiningMember) {
       await this.assignDefaultRole(member, "user", logPrefix);
     }

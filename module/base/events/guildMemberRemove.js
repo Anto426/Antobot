@@ -8,64 +8,60 @@ export default {
   isActive: true,
 
   async execute(member) {
+    if (member.partial) {
+      try {
+        await member.fetch();
+      } catch (error) {
+        BotConsole.error(
+          `[MemberLeave] Impossibile recuperare membro parziale ${member.id}.`,
+          error
+        );
+        return; // Interrompe se non si possono ottenere dati completi
+      }
+    }
+
     const { guild, user } = member;
     const logPrefix = `[MemberLeave - ${guild.name}][${user.tag}]`;
     BotConsole.info(`${logPrefix} Ha lasciato il server.`);
 
     try {
-      if (member.partial) {
-        BotConsole.warning(
-          `${logPrefix} Oggetto membro parziale. Non è possibile salvare la cronologia dei ruoli.`
-        );
-      } else {
-        const rolesToSave = member.roles.cache.filter(
-          (role) => role.id !== guild.id
-        );
-
-        if (rolesToSave.size > 0) {
-          BotConsole.info(
-            `${logPrefix} L'utente aveva ${rolesToSave.size} ruoli specifici. Salvataggio in corso...`
-          );
-
-          for (const role of rolesToSave.values()) {
-            try {
-              await SqlManager.addMemberRole({
-                MEMBER_ID: member.id,
-                ROLE_ID: role.id,
-              });
-            } catch (error) {}
-          }
-          BotConsole.success(
-            `${logPrefix} Stato finale dei ruoli memorizzato.`
-          );
-        } else {
-          BotConsole.info(
-            `${logPrefix} L'utente non aveva ruoli specifici da salvare.`
-          );
-
-          const result = [];
-          result[0] = await SqlManager.removeMemberFromGuild(
-            guild.id,
-            member.id
-          );
-
-          result[1] = await SqlManager.removeMemberRoles(member.id);
-
-          if (result[0].affectedRows > 0 && result[1].affectedRows > 0) {
-            BotConsole.success(
-              `${logPrefix} Associazione gilda-membro rimossa correttamente.`
-            );
-          } else {
-            BotConsole.warning(
-              `${logPrefix} Associazione gilda-membro non trovata (potrebbe essere già stata rimossa).`
-            );
-          }
-        }
-      }
+      await this.synchronizeFinalRoles(member, logPrefix);
+      await this.removeGuildAssociation(guild.id, member.id, logPrefix);
     } catch (error) {
       BotConsole.error(
         `${logPrefix} Errore durante l'evento guildMemberRemove.`,
         error
+      );
+    }
+  },
+
+  async synchronizeFinalRoles(member, logPrefix) {
+    const rolesToSave = new Set(
+      member.roles.cache
+        .filter((r) => r.id !== member.guild.id)
+        .map((r) => r.id)
+    );
+
+    BotConsole.info(
+      `${logPrefix} Sincronizzazione finale di ${rolesToSave.size} ruoli...`
+    );
+    await SqlManager.synchronizeMemberRolesForGuild(
+      member.id,
+      member.guild.id,
+      rolesToSave
+    );
+    BotConsole.success(`${logPrefix} Stato finale dei ruoli memorizzato.`);
+  },
+
+  async removeGuildAssociation(guildId, memberId, logPrefix) {
+    const result = await SqlManager.removeMemberFromGuild(guildId, memberId);
+    if (result.affectedRows > 0) {
+      BotConsole.success(
+        `${logPrefix} Associazione gilda-membro rimossa correttamente.`
+      );
+    } else {
+      BotConsole.warning(
+        `${logPrefix} Associazione gilda-membro non trovata (potrebbe essere già stata rimossa).`
       );
     }
   },
