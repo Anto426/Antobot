@@ -6,8 +6,6 @@ export default {
   isActive: true,
 
   async execute(queue, song) {
-    if (queue.songs.length > 0) return;
-
     const embed = await new PresetEmbed({
       guild: queue.textChannel.guild,
       member: queue.textChannel.guild.members.me,
