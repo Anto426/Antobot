@@ -1,17 +1,15 @@
 import BotConsole from "../../class/console/BotConsole.js";
 import SynchronizationManager from "../../class/services/SynchronizationManager.js";
 
-
 export default class Synchronize {
   #intervalId;
   #synchronizationInterval;
-  static #DEFAULT_INTERVAL = 60 * 60 * 1000; 
+  static #DEFAULT_INTERVAL = 60 * 60 * 1000;
 
   constructor() {
     this.#intervalId = null;
     this.#synchronizationInterval = Synchronize.#DEFAULT_INTERVAL;
   }
-
 
   setSynchronizationInterval(milliseconds) {
     if (typeof milliseconds === "number" && milliseconds > 0) {
@@ -38,13 +36,6 @@ export default class Synchronize {
 
     BotConsole.info(
       "[Synchronize] Avvio del processo di sincronizzazione periodica..."
-    );
-
-    SynchronizationManager.synchronizeAll().catch((error) =>
-      BotConsole.error(
-        "[Synchronize] Sincronizzazione iniziale fallita.",
-        error
-      )
     );
 
     this.#intervalId = setInterval(() => {
