@@ -1,6 +1,6 @@
-import BotConsole from "../console/BotConsole.js";
-import SqlManager from "../services/SqlManager.js";
-import ConfigManager from "../services/ConfigManager.js";
+import BotConsole from "../../class/console/BotConsole.js";
+import SqlManager from "../../class/services/SqlManager.js";
+import ConfigManager from "../../class/services/ConfigManager.js";
 
 class SynchronizationManager {
   async synchronizeAll() {
@@ -43,16 +43,28 @@ class SynchronizationManager {
     const guildLogPrefix = logPrefix || `[Sync Guild][${guild.name}]`;
     BotConsole.info(`${guildLogPrefix} Inizio sincronizzazione completa.`);
 
+    // 1. Sincronizza l'esistenza e il nome della gilda
     await SqlManager.synchronizeGuild({
       id: guild.id,
       name: guild.name,
-      WELCOME_ID: guild.systemChannelId,
-      LOG_ID: guild.publicUpdatesChannelId,
-      RULES_CH_ID: guild.rulesChannelId,
     });
-    
-    await this.#synchronizeRolesForGuild(guild, guildLogPrefix);
-    await this.#synchronizeMembersForGuild(guild, guildLogPrefix);
+
+    // 2. Sincronizza i membri e le loro associazioni con la gilda
+    const fetchedMembers = await this.#synchronizeGuildMemberships(
+      guild,
+      guildLogPrefix
+    );
+    if (!fetchedMembers) return; // Interrompi se il fetch dei membri fallisce
+
+    // 3. Sincronizza i ruoli della gilda
+    await this.#synchronizeGuildRoles(guild, guildLogPrefix);
+
+    // 4. Sincronizza le associazioni tra membri e ruoli
+    await this.#synchronizeAllMemberRoles(
+      guild,
+      fetchedMembers,
+      guildLogPrefix
+    );
 
     BotConsole.success(
       `${guildLogPrefix} Sincronizzazione completa terminata.`
@@ -69,15 +81,59 @@ class SynchronizationManager {
         BotConsole.warning(
           `[Prune] Gilda "${dbGuild.NOME}" (${dbGuild.ID}) non più accessibile. Rimozione dati...`
         );
-        // Grazie a ON DELETE CASCADE, questa chiamata è sufficiente
         await SqlManager.deleteGuild(dbGuild.ID);
       }
     }
     BotConsole.info("[Prune] Pulizia gilde obsolete completata.");
   }
 
-  async #synchronizeRolesForGuild(guild, logPrefix) {
-    BotConsole.info(`${logPrefix} Sincronizzazione Ruoli...`);
+  async #synchronizeGuildMemberships(guild, logPrefix) {
+    BotConsole.info(
+      `${logPrefix} Sincronizzazione Membri e Associazioni Gilda...`
+    );
+    let fetchedMembers;
+    try {
+      fetchedMembers = await guild.members.fetch();
+    } catch (fetchError) {
+      BotConsole.error(
+        `${logPrefix} Errore recupero membri. Sincronizzazione per questa gilda interrotta.`,
+        fetchError
+      );
+      return null;
+    }
+
+    const clientMemberIds = new Set(fetchedMembers.map((m) => m.id));
+    const dbMembersInGuild = await SqlManager.getMembersOfGuild(guild.id);
+
+    for (const dbMember of dbMembersInGuild) {
+      if (!clientMemberIds.has(dbMember.ID)) {
+        await SqlManager.removeMemberFromGuild(guild.id, dbMember.ID);
+      }
+    }
+
+    for (const member of fetchedMembers.values()) {
+      if (member.user.bot && member.user.id !== client.user.id) continue;
+
+      const memberLogName =
+        member.user.globalName ||
+        member.user.displayName ||
+        member.user.username;
+
+      await SqlManager.synchronizeGlobalMember({
+        id: member.id,
+        globalName: memberLogName,
+      });
+      await SqlManager.ensureGuildMemberAssociation(guild.id, member.id);
+    }
+
+    BotConsole.info(
+      `${logPrefix} Sincronizzazione Membri e Associazioni Gilda COMPLETATA.`
+    );
+    return fetchedMembers;
+  }
+
+  async #synchronizeGuildRoles(guild, logPrefix) {
+    BotConsole.info(`${logPrefix} Sincronizzazione Ruoli della Gilda...`);
     const clientRoleIds = new Set(
       guild.roles.cache.filter((r) => r.id !== guild.id).map((r) => r.id)
     );
@@ -98,40 +154,15 @@ class SynchronizationManager {
         guildId: guild.id,
       });
     }
-    BotConsole.info(`${logPrefix} Sincronizzazione Ruoli COMPLETATA.`);
+    BotConsole.info(
+      `${logPrefix} Sincronizzazione Ruoli della Gilda COMPLETATA.`
+    );
   }
 
-  async #synchronizeMembersForGuild(guild, logPrefix) {
-    BotConsole.info(`${logPrefix} Sincronizzazione Membri...`);
-    let fetchedMembers;
-    try {
-      fetchedMembers = await guild.members.fetch();
-    } catch (fetchError) {
-      BotConsole.error(`${logPrefix} Errore recupero membri.`, fetchError);
-      return;
-    }
-
-    const clientMemberIds = new Set(fetchedMembers.map((m) => m.id));
-    const dbMembersInGuild = await SqlManager.getMembersOfGuild(guild.id);
-
-    for (const dbMember of dbMembersInGuild) {
-      if (!clientMemberIds.has(dbMember.ID)) {
-        await SqlManager.removeMemberFromGuild(guild.id, dbMember.ID);
-      }
-    }
-
+  async #synchronizeAllMemberRoles(guild, fetchedMembers, logPrefix) {
+    BotConsole.info(`${logPrefix} Sincronizzazione Ruoli dei Membri...`);
     for (const member of fetchedMembers.values()) {
       if (member.user.bot && member.user.id !== client.user.id) continue;
-
-      const memberLogName =
-        member.user.globalName ||
-        member.user.displayName ||
-        member.user.username;
-      await SqlManager.synchronizeGlobalMember({
-        id: member.id,
-        globalName: memberLogName,
-      });
-      await SqlManager.ensureGuildMemberAssociation(guild.id, member.id);
 
       const roleIdsSet = new Set(
         member.roles.cache.filter((r) => r.id !== guild.id).map((r) => r.id)
@@ -143,7 +174,7 @@ class SynchronizationManager {
       );
     }
     BotConsole.info(
-      `${logPrefix} Sincronizzazione Membri (${fetchedMembers.size}) COMPLETATA.`
+      `${logPrefix} Sincronizzazione Ruoli dei Membri (${fetchedMembers.size}) COMPLETATA.`
     );
   }
 
