@@ -15,12 +15,24 @@ export default {
     BotConsole.info(`${logPrefix} Si è unito al server.`);
 
     try {
-      const syncResult = await this.synchronizeMember(member, logPrefix);
-      const isRejoiningMember = syncResult.operation === "exists";
+      const memberName =
+        member.user.globalName || member.displayName || member.user.username;
+
+      const globalSyncResult = await SqlManager.synchronizeGlobalMember({
+        id: member.id,
+        globalName: memberName,
+      });
+
+      const isRejoiningMember = globalSyncResult.operation !== "inserted";
 
       if (isRejoiningMember) {
         BotConsole.info(`${logPrefix} Rilevato come membro che rientra.`);
       }
+
+      await SqlManager.ensureGuildMemberAssociation(guild.id, member.id);
+      BotConsole.debug(
+        `${logPrefix} Sincronizzazione DB utente/gilda completata.`
+      );
 
       const rolesWereRestored = await this.handleRoleAssignment(
         member,
@@ -38,23 +50,6 @@ export default {
         error
       );
     }
-  },
-
-  async synchronizeMember(member, logPrefix) {
-    const memberName =
-      member.user.globalName || member.displayName || member.user.username;
-    await SqlManager.synchronizeGlobalMember({
-      id: member.id,
-      globalName: memberName,
-    });
-    const result = await SqlManager.ensureGuildMemberAssociation(
-      member.guild.id,
-      member.id
-    );
-    BotConsole.debug(
-      `${logPrefix} Sincronizzazione DB utente/gilda completata.`
-    );
-    return result;
   },
 
   async handleRoleAssignment(member, logPrefix, isRejoiningMember) {
@@ -82,6 +77,8 @@ export default {
       return true;
     }
 
+    // Assegna il ruolo di default solo se è un membro veramente nuovo
+    // (non uno di ritorno che magari non aveva ruoli).
     if (!isRejoiningMember) {
       await this.assignDefaultRole(member, "user", logPrefix);
     }
@@ -156,8 +153,13 @@ export default {
 
   async sendWelcomeMessage(member, isReturningMember, logPrefix) {
     const { guild, user } = member;
+    const guildConfig = await SqlManager.getGuildById(guild.id);
 
-    const channel = await this._getWelcomeChannel(guild, logPrefix);
+    const channel = await this._getWelcomeChannel(
+      guild,
+      guildConfig,
+      logPrefix
+    );
     if (!channel) return;
 
     const welcomeEmbed = new PresetEmbed({ guild });
@@ -166,7 +168,13 @@ export default {
     const welcomeTitle = isReturningMember
       ? `🎉 Bentornato/a, ${member.displayName}!`
       : `🎉 Benvenuto/a, ${member.displayName}!`;
-    const description = `🎊 ${member} si è unito/a a **${guild.name}**!\nOra siamo in **${guild.memberCount}** membri!`;
+
+    let description = `🎊 ${member} si è unito/a a **${guild.name}**!\nOra siamo in **${guild.memberCount}** membri!`;
+
+    if (guildConfig?.RULES_CH_ID) {
+      description += `\n\nTi invitiamo a leggere il nostro <#${guildConfig.RULES_CH_ID}> per una buona permanenza!`;
+    }
+
     const accountCreationDate = time(user.createdAt, "R");
 
     welcomeEmbed
@@ -202,7 +210,7 @@ export default {
           `${logPrefix} Generazione immagine fallita, invio embed di fallback sofisticato.`
         );
 
-      welcomeEmbed.setThumbnailUrl(
+      welcomeEmbed.setThumbnail(
         user.displayAvatarURL({ dynamic: true, size: 256 })
       );
     }
@@ -211,8 +219,7 @@ export default {
     BotConsole.success(`${logPrefix} Messaggio di benvenuto inviato.`);
   },
 
-  async _getWelcomeChannel(guild, logPrefix) {
-    const guildConfig = await SqlManager.getGuildById(guild.id);
+  async _getWelcomeChannel(guild, guildConfig, logPrefix) {
     if (!guildConfig?.WELCOME_ID) {
       BotConsole.info(`${logPrefix} Canale di benvenuto non configurato.`);
       return null;

@@ -196,12 +196,16 @@ class SqlManager {
     const existingGuild = await this.getGuildById(id);
     const guildRecordData = { ID: id, NOME: name };
 
-    for (const key of [
+    const fieldsToSync = [
       "WELCOME_ID",
       "LOG_ID",
       "ROLEDEFAULT_ID",
       "ROLEBOTDEFAULT_ID",
-    ]) {
+      "RULES_CH_ID", // Aggiunto
+      "BOOST_CH_ID", // Aggiunto
+    ];
+
+    for (const key of fieldsToSync) {
       if (otherFields[key] !== undefined) {
         guildRecordData[key] = otherFields[key];
       }
@@ -218,12 +222,8 @@ class SqlManager {
       const fieldsToUpdate = {};
       if (guildRecordData.NOME !== existingGuild.NOME)
         fieldsToUpdate.NOME = guildRecordData.NOME;
-      for (const key of [
-        "WELCOME_ID",
-        "LOG_ID",
-        "ROLEDEFAULT_ID",
-        "ROLEBOTDEFAULT_ID",
-      ]) {
+
+      for (const key of fieldsToSync) {
         if (
           guildRecordData[key] !== undefined &&
           guildRecordData[key] !== existingGuild[key]
@@ -231,6 +231,7 @@ class SqlManager {
           fieldsToUpdate[key] = guildRecordData[key];
         }
       }
+
       if (Object.keys(fieldsToUpdate).length > 0) {
         BotConsole.info(
           `[Sync] Gilda ${id}. Aggiornamento con: ${JSON.stringify(
@@ -542,11 +543,11 @@ class SqlManager {
     const safeOD = orderDirection.toUpperCase() === "ASC" ? "ASC" : "DESC";
 
     const query = `
-             SELECT * FROM \`logs\` 
-             WHERE \`GUILD_ID\` = ? 
-             ORDER BY \`${safeOB}\` ${safeOD} 
-             LIMIT ? OFFSET ?
- `;
+                      SELECT * FROM \`logs\` 
+                      WHERE \`GUILD_ID\` = ? 
+                      ORDER BY \`${safeOB}\` ${safeOD} 
+                      LIMIT ? OFFSET ?
+   `;
     return this._getAllRows(query, [guildId, limit, offset]);
   }
   async updateLog(id, fields) {
