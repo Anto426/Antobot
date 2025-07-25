@@ -28,7 +28,7 @@ export default {
     BotConsole.info(
       `${logPrefix} ha potenziato il server (rilevato da messaggio di sistema).`
     );
-    await this.#sendBoostThankYouMessage(member, logPrefix);
+    await this.sendBoostThankYouMessage(member, logPrefix);
   },
 
   isBoostMessage(message) {
@@ -51,7 +51,7 @@ export default {
       return;
     }
 
-    const channel = await this.#getBoostChannel(
+    const channel = await this.getBoostChannel(
       guild,
       guildConfig.BOOST_CH_ID,
       logPrefix
@@ -68,7 +68,7 @@ export default {
       .setTitle("🚀 Nuovo Boost Ricevuto!")
       .setDescription(description)
       .setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
-      .setColor("#f47fff");
+      .setColor("f47fff");
 
     try {
       await channel.send({ embeds: [boostEmbed] });
