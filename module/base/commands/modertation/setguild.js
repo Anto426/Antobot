@@ -17,7 +17,7 @@ const STATUS_THUMBNAILS = {
 
 export default {
   name: "setguild",
-  permissions: [PermissionsBitField.Flags.Administrator], // Cambiato a Administrator per più coerenza
+  permissions: [PermissionsBitField.Flags.Administrator],
   isActive: true,
   isBotAllowed: false,
   isOwnerOnly: false,
@@ -61,6 +61,32 @@ export default {
         name: "clear_log_channel",
         type: ApplicationCommandOptionType.Boolean,
         description: "Rimuovi canale log.",
+        required: false,
+      },
+      {
+        name: "rules_channel",
+        type: ApplicationCommandOptionType.Channel,
+        description: "Imposta canale regolamento.",
+        required: false,
+        channel_types: [ChannelType.GuildText],
+      },
+      {
+        name: "clear_rules_channel",
+        type: ApplicationCommandOptionType.Boolean,
+        description: "Rimuovi canale regolamento.",
+        required: false,
+      },
+      {
+        name: "boost_channel",
+        type: ApplicationCommandOptionType.Channel,
+        description: "Imposta canale per i boost del server.",
+        required: false,
+        channel_types: [ChannelType.GuildText, ChannelType.GuildAnnouncement],
+      },
+      {
+        name: "clear_boost_channel",
+        type: ApplicationCommandOptionType.Boolean,
+        description: "Rimuovi canale per i boost.",
         required: false,
       },
       {
@@ -122,6 +148,8 @@ export default {
     const welcomeChannelInput =
       interaction.options.getChannel("welcome_channel");
     const logChannelInput = interaction.options.getChannel("log_channel");
+    const rulesChannelInput = interaction.options.getChannel("rules_channel");
+    const boostChannelInput = interaction.options.getChannel("boost_channel");
     const defaultUserRoleInput =
       interaction.options.getRole("default_user_role");
     const defaultBotRoleInput = interaction.options.getRole("default_bot_role");
@@ -130,6 +158,12 @@ export default {
       "clear_welcome_channel"
     );
     const clearLogChannel = interaction.options.getBoolean("clear_log_channel");
+    const clearRulesChannel = interaction.options.getBoolean(
+      "clear_rules_channel"
+    );
+    const clearBoostChannel = interaction.options.getBoolean(
+      "clear_boost_channel"
+    );
     const clearDefaultUserRole = interaction.options.getBoolean(
       "clear_default_user_role"
     );
@@ -304,6 +338,24 @@ export default {
         changesMadeSummary.push(`✅ Canale Log: ${logChannelInput}`);
       }
 
+      // Rules Channel
+      if (clearRulesChannel) {
+        fieldsToUpdateInGuild.RULES_CH_ID = null;
+        changesMadeSummary.push("🗑️ Canale Regolamento RIMOSSO.");
+      } else if (rulesChannelInput) {
+        fieldsToUpdateInGuild.RULES_CH_ID = rulesChannelInput.id;
+        changesMadeSummary.push(`✅ Canale Regolamento: ${rulesChannelInput}`);
+      }
+
+      // Boost Channel
+      if (clearBoostChannel) {
+        fieldsToUpdateInGuild.BOOST_CH_ID = null;
+        changesMadeSummary.push("🗑️ Canale Boost RIMOSSO.");
+      } else if (boostChannelInput) {
+        fieldsToUpdateInGuild.BOOST_CH_ID = boostChannelInput.id;
+        changesMadeSummary.push(`✅ Canale Boost: ${boostChannelInput}`);
+      }
+
       // Default User Role
       if (clearDefaultUserRole) {
         fieldsToUpdateInGuild.ROLEDEFAULT_ID = null;
@@ -348,7 +400,11 @@ export default {
         !clearWelcomeChannel &&
         !clearLogChannel &&
         !clearDefaultUserRole &&
-        !clearDefaultBotRole
+        !clearDefaultBotRole &&
+        !rulesChannelInput &&
+        !clearRulesChannel &&
+        !boostChannelInput &&
+        !clearBoostChannel
       ) {
         finalMessageTitle = "Nessuna Operazione";
         finalMessageDescr =
@@ -419,6 +475,19 @@ export default {
             "🤖 Ruolo Bot",
             finalGuildData.ROLEBOTDEFAULT_ID
               ? `✅ <@&${finalGuildData.ROLEBOTDEFAULT_ID}>`
+              : "❌ Non impostato"
+          )
+          .addFieldInline("\u200B", "\u200B")
+          .addFieldInline(
+            "📜 Regolamento",
+            finalGuildData.RULES_CH_ID
+              ? `✅ <#${finalGuildData.RULES_CH_ID}>`
+              : "❌ Non impostato"
+          )
+          .addFieldInline(
+            "🚀 Boost",
+            finalGuildData.BOOST_CH_ID
+              ? `✅ <#${finalGuildData.BOOST_CH_ID}>`
               : "❌ Non impostato"
           );
 
