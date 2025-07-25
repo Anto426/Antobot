@@ -26,7 +26,7 @@ export default {
       {
         name: "mode",
         description: "Scegli il tipo di ripetizione",
-        type: 3, // String type
+        type: 3, 
         required: true,
         choices: [
           { name: "❌ Off", value: "0" },
