@@ -83,6 +83,7 @@ class ClientInitializer {
       global.distube = new DisTube(global.client, {
         emitNewSongOnly: false,
         emitAddSongWhenCreatingQueue: false,
+        nsfw: true,
         plugins: [
           new YouTubePlugin({ cookies: this.cookies.youtube }),
           new SoundCloudPlugin(),
