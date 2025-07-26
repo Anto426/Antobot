@@ -16,49 +16,30 @@ async function sendReply({
   description,
   type = "info",
   fields,
-  footer,
   payload,
 }) {
+
   if (!interaction || !interaction.isRepliable()) {
-    BotConsole.error(
-      "sendReply was called with an invalid or non-repliable interaction."
-    );
+    BotConsole.error("sendReply: Interaction non valida o non rispondibile.");
     return;
   }
 
   const send = async (messagePayload) => {
     try {
       if (interaction.replied || interaction.deferred) {
-        if (!messagePayload.ephemeral) {
-          await interaction.editReply(messagePayload);
-        } else {
-          BotConsole.warning(
-            "Interaction is ephemeral, using followUp instead of editReply."
-          );
-          try {
-            await interaction.deleteReply();
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            await interaction.followUp(messagePayload);
-          } catch (fallbackErr) {
-            BotConsole.error(
-              `Fallback reply after delete failed: ${
-                fallbackErr.stack || fallbackErr
-              }`
-            );
-          }
-        }
+        await interaction.editReply(messagePayload);
       } else {
         await interaction.reply(messagePayload);
       }
     } catch (error) {
-      BotConsole.warning(
-        `Initial reply failed. Trying followUp. Error: ${error.message}`
-      );
-      await interaction
-        .followUp(messagePayload)
-        .catch((err) =>
-          BotConsole.error(`Follow-up reply also failed: ${err.stack || err}`)
+      BotConsole.warn(`Reply fallito, tento il followUp: ${error.message}`);
+      try {
+        await interaction.followUp(messagePayload);
+      } catch (followUpError) {
+        BotConsole.error(
+          `Anche il followUp è fallito: ${followUpError.stack || followUpError}`
         );
+      }
     }
   };
 
@@ -98,7 +79,7 @@ function getHandler(interaction) {
     interaction.isModalSubmit()
   ) {
     const handlerName = interaction.customId.split("-")[0];
-    return client.buttons.get(handlerName);
+    return client.buttons.get(handlerName) || client.commands.get(handlerName);
   }
   return null;
 }
@@ -112,23 +93,23 @@ async function executeHandler(interaction, handler) {
     ConfigManager.getConfig("owner").owner
   );
 
-  const securityResult = await security.allow().catch((err) => {
-    return err;
-  });
+  const securityResult = await security.allow().catch((err) => err);
 
   if (securityResult instanceof Error) {
     await sendReply({
       interaction,
-      title: "Permesso Negato",
+      type: "error",
+      title: "Accesso Negato",
       description:
-        securityResult?.message || "Non hai il permesso di fare questo.",
-      type: "warning",
-      isEphemeral: true,
+        "Non possiedi i permessi necessari per eseguire questa azione.",
+      fields: [{ name: "Dettaglio", value: `\`${securityResult.message}\`` }],
+      ephemeral: true,
     });
     return;
   }
 
-  const shouldDefer = handler.response !== false;
+  const shouldDefer =
+    handler.response !== false && handler.response !== "update";
   if (shouldDefer && !interaction.replied && !interaction.deferred) {
     await interaction.deferReply({ ephemeral: isEphemeral });
   }
@@ -137,16 +118,40 @@ async function executeHandler(interaction, handler) {
   const responsePayload = await handler.execute(interaction, args);
 
   if (responsePayload) {
-    await sendReply({
-      interaction,
-      payload: responsePayload,
-    });
+    if (
+      handler.response === "update" &&
+      (interaction.isButton() || interaction.isAnySelectMenu())
+    ) {
+      try {
+        await interaction.update(responsePayload);
+      } catch (updateError) {
+        BotConsole.error(
+          "Fallito l'aggiornamento del componente:",
+          updateError
+        );
+        await interaction.followUp({
+          content: "❌ Si è verificato un errore durante l'aggiornamento.",
+          ephemeral: true,
+        });
+      }
+    } else {
+      await sendReply({
+        interaction,
+        payload: responsePayload,
+      });
+    }
+  } else {
+    if (interaction.deferred && !interaction.replied) {
+      try {
+        await interaction.deleteReply();
+      } catch {}
+    }
   }
 
   BotConsole.success(
-    `Handler executed: ${handler.name} | User: ${
-      interaction.user.tag
-    } | Guild: ${interaction.guild?.name || "DM"}`
+    `Eseguito: ${handler.name} | Utente: ${interaction.user.tag} | Server: ${
+      interaction.guild?.name || "DM"
+    }`
   );
 }
 
@@ -159,9 +164,10 @@ export default {
     if (!client.botready) {
       await sendReply({
         interaction,
-        title: "Bot Non Pronto",
-        description: "Il bot non è ancora pronto. Riprova tra qualche istante.",
         type: "warning",
+        title: "⏳ Bot in Avvio",
+        description:
+          "Il bot non ha ancora completato la sequenza di avvio. Riprova tra qualche istante.",
       });
       return;
     }
@@ -169,18 +175,24 @@ export default {
     const handler = getHandler(interaction);
 
     if (!handler) {
-      BotConsole.warning(
-        `No handler found for interaction: ${interaction.type} | ${
+      BotConsole.warn(
+        `Nessun handler trovato per l'interazione: ${interaction.type} | ${
           interaction.customId || interaction.commandName
         }`
       );
       if (interaction.isRepliable()) {
         await sendReply({
           interaction,
-          title: "Unknown Interaction",
-          description:
-            "Questa interazione è sconosciuta. Potrebbe essere stata rimossa o non esiste.",
           type: "error",
+          title: "❓ Interazione Sconosciuta",
+          description:
+            "Non è stato trovato un gestore per questa interazione. Potrebbe trattarsi di un componente di un vecchio messaggio.",
+          fields: [
+            {
+              name: "ID Interazione",
+              value: `\`${interaction.customId || interaction.commandName}\``,
+            },
+          ],
         });
       }
       return;
@@ -195,10 +207,18 @@ export default {
       if (interaction.isRepliable()) {
         await sendReply({
           interaction,
-          title: "Si è verificato un errore",
-          description:
-            "Si è verificato un errore durante l'esecuzione di questo comando. Controlla i log per maggiori dettagli.",
           type: "error",
+          title: "🔥 Errore Inaspettato",
+          description:
+            "Si è verificato un errore critico durante l'esecuzione. L'incidente è stato registrato per la revisione.",
+          fields: [
+            { name: "Comando", value: `\`/${handler.name}\``, inline: true },
+            { name: "ID Errore", value: `\`${interaction.id}\``, inline: true },
+            {
+              name: "Messaggio",
+              value: `\`\`\`${error.message.slice(0, 1000)}\`\`\``,
+            },
+          ],
         });
       }
     }
