@@ -16,7 +16,7 @@ export default {
           `[MemberLeave] Impossibile recuperare membro parziale ${member.id}.`,
           error
         );
-        return; // Interrompe se non si possono ottenere dati completi
+        return;
       }
     }
 
