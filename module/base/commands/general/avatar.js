@@ -31,13 +31,7 @@ export default {
     }).init();
 
     const avatarUrl = user.displayAvatarURL({ size: 4096, dynamic: true });
-    const downloadLinks = `[PNG](${user.displayAvatarURL({
-      format: "png",
-      size: 4096,
-    })}) | [JPG](${user.displayAvatarURL({
-      format: "jpg",
-      size: 4096,
-    })}) | [WEBP](${user.displayAvatarURL({ format: "webp", size: 4096 })})`;
+    const downloadLinks = `[PNG](${user.displayAvatarURL().replace("webp", "png")}) | [JPG](${user.displayAvatarURL().replace("webp", "jpg")}) | [WEBP](${user.displayAvatarURL().replace("webp", "webp")})`;
 
     embed
       .setTitle(`👤 Avatar di ${user.tag}`)
