@@ -14,19 +14,40 @@ async function sendStartupNotification() {
 
   const botVersion = SystemCheck.getVersion() || "N/A";
   const serverCount = client.guilds.cache.size;
+  const commandCount = client.commands.size;
+  const uptimeFormatted = new Date(process.uptime() * 1000)
+    .toISOString()
+    .substr(11, 8);
+  const memoryUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
 
   const embed = await new PresetEmbed({
     image: client.user.displayAvatarURL(),
   }).init();
+
   embed
-    .setTitle("✅ Avvio Completato")
-    .setDescription(`**${client.user.username}** è ora online e operativo!`)
+    .setAuthor({
+      name: `${client.user.username} è Online`,
+      iconURL: "https://i.imgur.com/B6f5s2s.gif",
+    })  
+    .setTitle("✅ Avvio del Sistema Completato")
+    .setDescription(
+      `Il bot è stato avviato o riavviato con successo ed è ora pienamente operativo.`
+    )
     .setThumbnail(client.user.displayAvatarURL())
     .addFields(
-      { name: "Versione", value: `\`${botVersion}\``, inline: true },
-      { name: "Server Connessi", value: `\`${serverCount}\``, inline: true }
+      {
+        name: "Stato Operativo",
+        value: `\`\`\`ini\n[ Versione = ${botVersion} ]\n[ Comandi  = ${commandCount} ]\n[ Server   = ${serverCount} ]\`\`\``,
+        inline: false,
+      },
+      {
+        name: "Risorse di Sistema",
+        value: `\`\`\`prolog\nUptime: ${uptimeFormatted}\nMemoria: ${memoryUsed} MB\`\`\``,
+        inline: false,
+      }
     )
-    .setTimestamp();
+    .setTimestamp()
+    .setFooter({ text: "Bot Operativo" });
 
   for (const guildConfig of targetGuilds) {
     try {
