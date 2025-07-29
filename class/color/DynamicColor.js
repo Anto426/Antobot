@@ -7,13 +7,11 @@ class DynamicColor {
     this.img = null;
     this.threshold = options.threshold ?? 70;
     this.numColors = options.numColors ?? 8;
-    this.requiredFilter = options.requiredFilter ?? true;
     this.cachedPalette = null;
 
     BotConsole.debug("DynamicColor instance created with options:", {
       threshold: this.threshold,
       numColors: this.numColors,
-      requiredFilter: this.requiredFilter,
     });
   }
 
@@ -138,7 +136,6 @@ class DynamicColor {
       }
     }
 
-    // Se la palette è troppo corta, riempi con copie del colore finale
     while (palette.length < steps) {
       palette.push(endColor.map(Math.round));
     }
@@ -164,18 +161,13 @@ class DynamicColor {
 
     const sorted = this.sortPalette(palette);
 
-    if (!this.requiredFilter) {
-      BotConsole.debug("Filtering disabled, returning sorted palette.");
-      return sorted;
-    }
-
     BotConsole.debug(`Filtering palette with threshold: ${this.threshold}`);
     const filtered = [sorted[0]];
 
     for (let i = 1; i < sorted.length; i++) {
       const prev = filtered[filtered.length - 1];
       const current = sorted[i];
-      const distance = ColorFunctions.colorDistance(prev, current);
+      const distance = Math.abs(ColorFunctions.colorDistance(current, prev));
 
       if (distance < this.threshold) {
         BotConsole.debug(
@@ -289,7 +281,6 @@ class DynamicColor {
         BotConsole.warning(
           `Palette has only ${rawPalette.length} colors. Disabling filtering.`
         );
-        this.requiredFilter = false;
       }
 
       const filteredPalette = this.filterPalette(rawPalette);
