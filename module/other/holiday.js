@@ -238,7 +238,7 @@ export default class Holiday {
       for (const holiday of this.#holidays) {
         const holidayDate = new Date(
           currentYear,
-          holiday.date.month - 1,
+          holiday.date.month,
           holiday.date.day
         );
         const holidayTimestamp = holidayDate.getTime();
