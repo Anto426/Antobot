@@ -7,6 +7,7 @@ import SynchronizationManager from "../../../class/services/SynchronizationManag
 import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 import SqlManager from "../../../class/services/SqlManager.js";
 import SystemCheck from "../../../class/client/SystemCheck.js";
+import { version as djsVersion } from "discord.js";
 
 async function sendStartupNotification() {
   const targetGuilds = await SqlManager.getGuildsWithLogChannel();
@@ -15,10 +16,8 @@ async function sendStartupNotification() {
   const botVersion = SystemCheck.getVersion() || "N/A";
   const serverCount = client.guilds.cache.size;
   const commandCount = client.commands.size;
-  const uptimeFormatted = new Date(process.uptime() * 1000)
-    .toISOString()
-    .substr(11, 8);
   const memoryUsed = (process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2);
+  const nodeVersion = process.version;
 
   const embed = await new PresetEmbed({
     image: client.user.displayAvatarURL(),
@@ -26,34 +25,40 @@ async function sendStartupNotification() {
 
   embed
     .setAuthor({
-      name: `${client.user.username} è Online`,
-      iconURL: "https://i.imgur.com/B6f5s2s.gif",
-    })  
-    .setTitle("✅ Avvio del Sistema Completato")
+      name: `${client.user.username}`,
+      iconURL: client.user.displayAvatarURL(),
+    })
+    .setTitle("✨ Sono di nuovo Online! ✨")
     .setDescription(
-      `Il bot è stato avviato o riavviato con successo ed è ora pienamente operativo.`
+      "Ciao! Ho appena finito di svegliarmi e sono pronta a servire. Tutti i miei sistemi sono operativi!"
     )
-    .setThumbnail(client.user.displayAvatarURL())
+    .setThumbnailclient()
     .addFields(
       {
-        name: "Stato Operativo",
-        value: `\`\`\`ini\n[ Versione = ${botVersion} ]\n[ Comandi  = ${commandCount} ]\n[ Server   = ${serverCount} ]\`\`\``,
-        inline: false,
+        name: "📊 Statistiche",
+        value: `> 🏠 Server: **${serverCount}**\n> 🤖 Comandi: **${commandCount}**`,
+        inline: true,
       },
       {
-        name: "Risorse di Sistema",
-        value: `\`\`\`prolog\nUptime: ${uptimeFormatted}\nMemoria: ${memoryUsed} MB\`\`\``,
+        name: "⚙️ Sistema",
+        value: `> 🧠 Memoria: **${memoryUsed} MB**\n> 🟩 Node.js: **${nodeVersion}**`,
+        inline: true,
+      },
+      {
+        name: "📚 Versioni",
+        value: `> 🤖 Bot: **v${botVersion}**\n> 💬 Discord.js: **v${djsVersion}**`,
         inline: false,
       }
     )
     .setTimestamp()
-    .setFooter({ text: "Bot Operativo" });
 
+  let sentCount = 0;
   for (const guildConfig of targetGuilds) {
     try {
       const channel = await client.channels.fetch(guildConfig.LOG_ID);
       if (channel?.isTextBased()) {
         await channel.send({ embeds: [embed] });
+        sentCount++;
       }
     } catch (err) {
       BotConsole.error(
@@ -62,9 +67,12 @@ async function sendStartupNotification() {
       );
     }
   }
-  BotConsole.success(
-    `[StartupNotify] Notifica di avvio inviata a ${targetGuilds.length} server.`
-  );
+
+  if (sentCount > 0) {
+    BotConsole.success(
+      `[StartupNotify] Notifica di avvio inviata a ${sentCount} server.`
+    );
+  }
 }
 
 export default {
@@ -72,17 +80,19 @@ export default {
   eventType: "ready",
   isActive: true,
   async execute() {
+    BotConsole.info("Avvio del bot in corso...");
+
     await ModuleLoader.initAll?.();
-    BotConsole.success("Tutti i moduli sono stati caricati correttamente.");
+    BotConsole.success("Tutti i moduli sono stati caricati.");
 
     await CommandGuildUpdate.updateGuildsOnStartup();
-    BotConsole.success("Tutte le gilde sono state aggiornate con i comandi.");
+    BotConsole.success("Comandi globali e di gilda aggiornati.");
 
     await SynchronizationManager.synchronizeAll();
-    BotConsole.success("Tutte le gilde sono state sincronizzate.");
+    BotConsole.success("Sincronizzazione dati completata.");
 
     await IntitialOtherModules.Init();
-    BotConsole.success("Tutti i moduli secondari sono stati inizializzati.");
+    BotConsole.success("Moduli secondari inizializzati.");
 
     await StartupLogger.run();
 
