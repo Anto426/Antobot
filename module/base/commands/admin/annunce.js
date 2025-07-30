@@ -61,7 +61,6 @@ async function sendAnnouncementToGuild(
 
     if (imageUrl) announcementEmbed.setImage(imageUrl);
     if (thumbnailUrl) announcementEmbed.setThumbnail(thumbnailUrl);
-    // Non è più necessario impostare il colore manualmente.
 
     await channel.send({ embeds: [announcementEmbed] });
     BotConsole.success(`${logPrefix} Annuncio inviato con successo.`);
@@ -191,6 +190,6 @@ export default {
       }
     }
 
-    return { embeds: [summaryEmbed] };
+    return { embeds: [summaryEmbed], ephemeral: true};
   },
 };
