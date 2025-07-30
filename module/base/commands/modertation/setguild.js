@@ -15,6 +15,151 @@ const STATUS_THUMBNAILS = {
   INFO: "https://cdn-icons-png.flaticon.com/512/565/565547.png",
 };
 
+/**
+ * Gestisce la creazione/eliminazione dei canali temporanei.
+ * @returns {Promise<{summary: string|null, taken: boolean}>}
+ */
+async function handleTempChannels(interaction, guild, guildId) {
+  const manageFlag = interaction.options.getBoolean("manage_temp_channels");
+  if (manageFlag === null) return { summary: null, taken: false };
+
+  const cfg = await SqlManager.getTempChannelByGuildId(guildId);
+  if (manageFlag) {
+    if (cfg)
+      return { summary: "ℹ️ Canali Temporanei già attivi.", taken: false };
+
+    const reason = `Setup /setguild da ${interaction.user.tag}`;
+    const category = await guild.channels.create({
+      name: "🔊 VOCALI TEMPORANEI 🔊",
+      type: ChannelType.GuildCategory,
+      reason,
+    });
+    const duo = await guild.channels.create({
+      name: "➕ Crea Duo",
+      type: ChannelType.GuildVoice,
+      parent: category.id,
+      reason,
+    });
+    const trio = await guild.channels.create({
+      name: "➕ Crea Trio",
+      type: ChannelType.GuildVoice,
+      parent: category.id,
+      reason,
+    });
+    const quartet = await guild.channels.create({
+      name: "➕ Crea Quartetto",
+      type: ChannelType.GuildVoice,
+      parent: category.id,
+      reason,
+    });
+    const nolimit = await guild.channels.create({
+      name: "➕ Crea Libera",
+      type: ChannelType.GuildVoice,
+      parent: category.id,
+      reason,
+    });
+
+    await SqlManager.addTempChannel({
+      GUILD_ID: guildId,
+      CATEGORY_CH: category.id,
+      DUO_CH: duo.id,
+      TRIO_CH: trio.id,
+      QUARTET_CH: quartet.id,
+      NOLIMIT_CH: nolimit.id,
+    });
+    return { summary: "✅ Canali Temporanei CREATI.", taken: true };
+  } else {
+    if (!cfg)
+      return {
+        summary: "ℹ️ Canali Temporanei già disabilitati.",
+        taken: false,
+      };
+
+    const ids = [
+      cfg.DUO_CH,
+      cfg.TRIO_CH,
+      cfg.QUARTET_CH,
+      cfg.NOLIMIT_CH,
+      cfg.CATEGORY_CH,
+    ].filter(Boolean);
+    for (const id of ids) {
+      try {
+        (await guild.channels.fetch(id).catch(() => null))?.delete();
+      } catch (e) {
+        BotConsole.warning(`Del TempCh ${id} err: ${e.message}`);
+      }
+    }
+    await SqlManager.deleteTempChannel(guildId);
+    return { summary: "🗑️ Canali Temporanei DISABILITATI.", taken: true };
+  }
+}
+
+/**
+ * Gestisce la creazione/eliminazione dei canali per le festività.
+ * @returns {Promise<{summary: string|null, taken: boolean}>}
+ */
+async function handleHolidayChannels(interaction, guild, guildId) {
+  const manageFlag = interaction.options.getBoolean("manage_hollyday_channels");
+  if (manageFlag === null) return { summary: null, taken: false };
+
+  const cfg = await SqlManager.getHollydayByGuildId(guildId);
+  const reason = `Setup /setguild Eventi da ${interaction.user.tag}`;
+  const lockedPerms = [
+    { id: guild.roles.everyone.id, deny: [PermissionsBitField.Flags.Connect] },
+  ];
+
+  if (manageFlag) {
+    if (cfg) return { summary: "ℹ️ Canali Eventi già attivi.", taken: false };
+
+    const category = await guild.channels.create({
+      name: "🎉 Eventi Speciali 🎉",
+      type: ChannelType.GuildCategory,
+      reason,
+    });
+    const textChannel = await guild.channels.create({
+      name: "📢 annunci-evento",
+      type: ChannelType.GuildVoice,
+      parent: category.id,
+      permissionOverwrites: lockedPerms,
+      reason,
+    });
+    const voiceChannel = await guild.channels.create({
+      name: "🥳 sala-evento",
+      type: ChannelType.GuildVoice,
+      parent: category.id,
+      permissionOverwrites: lockedPerms,
+      reason,
+    });
+
+    await SqlManager.addHollyday({
+      GUILD_ID: guildId,
+      CATEGORY_CH: category.id,
+      NAME_CHANNEL: textChannel.id,
+      HOLYDAY_CHANNEL: voiceChannel.id,
+    });
+    return {
+      summary: "✅ Canali Eventi CREATI (vocale bloccato).",
+      taken: true,
+    };
+  } else {
+    if (!cfg)
+      return { summary: "ℹ️ Canali Eventi già disabilitati.", taken: false };
+
+    const ids = [cfg.NAME_CHANNEL, cfg.HOLYDAY_CHANNEL, cfg.CATEGORY_CH].filter(
+      Boolean
+    );
+    for (const id of ids) {
+      try {
+        (await guild.channels.fetch(id).catch(() => null))?.delete();
+      } catch (e) {
+        BotConsole.warning(`Del HollyCh ${id} err: ${e.message}`);
+      }
+    }
+    await SqlManager.deleteHollyday(guildId);
+    return { summary: "🗑️ Canali Eventi DISABILITATI.", taken: true };
+  }
+}
+
 export default {
   name: "setguild",
   permissions: [PermissionsBitField.Flags.Administrator],
@@ -90,6 +235,19 @@ export default {
         required: false,
       },
       {
+        name: "announcement_channel",
+        type: ApplicationCommandOptionType.Channel,
+        description: "Imposta canale per gli annunci importanti.",
+        required: false,
+        channel_types: [ChannelType.GuildText, ChannelType.GuildAnnouncement],
+      },
+      {
+        name: "clear_announcement_channel",
+        type: ApplicationCommandOptionType.Boolean,
+        description: "Rimuovi canale per gli annunci.",
+        required: false,
+      },
+      {
         name: "default_user_role",
         type: ApplicationCommandOptionType.Role,
         description: "Imposta ruolo default per nuovi utenti.",
@@ -135,46 +293,10 @@ export default {
       }
     }
 
-    const guild = interaction.guild;
-    const guildId = guild.id;
+    const { guild, guildId, member } = interaction;
     const guildName = guild.name;
 
-    const manageTempChannelsFlag = interaction.options.getBoolean(
-      "manage_temp_channels"
-    );
-    const manageHollydayChannelsFlag = interaction.options.getBoolean(
-      "manage_hollyday_channels"
-    );
-    const welcomeChannelInput =
-      interaction.options.getChannel("welcome_channel");
-    const logChannelInput = interaction.options.getChannel("log_channel");
-    const rulesChannelInput = interaction.options.getChannel("rules_channel");
-    const boostChannelInput = interaction.options.getChannel("boost_channel");
-    const defaultUserRoleInput =
-      interaction.options.getRole("default_user_role");
-    const defaultBotRoleInput = interaction.options.getRole("default_bot_role");
-
-    const clearWelcomeChannel = interaction.options.getBoolean(
-      "clear_welcome_channel"
-    );
-    const clearLogChannel = interaction.options.getBoolean("clear_log_channel");
-    const clearRulesChannel = interaction.options.getBoolean(
-      "clear_rules_channel"
-    );
-    const clearBoostChannel = interaction.options.getBoolean(
-      "clear_boost_channel"
-    );
-    const clearDefaultUserRole = interaction.options.getBoolean(
-      "clear_default_user_role"
-    );
-    const clearDefaultBotRole = interaction.options.getBoolean(
-      "clear_default_bot_role"
-    );
-
-    const embed = await new PresetEmbed({
-      guild,
-      member: interaction.member,
-    }).init();
+    const embed = await new PresetEmbed({ guild, member }).init();
 
     try {
       if (!SqlManager.pool)
@@ -185,195 +307,57 @@ export default {
       let changesMadeSummary = [];
       let actionsTaken = false;
 
-      // Temp Channels
-      if (manageTempChannelsFlag !== null) {
-        const cfg = await SqlManager.getTempChannelByGuildId(guildId);
-        if (manageTempChannelsFlag) {
-          if (cfg) changesMadeSummary.push(`ℹ️ Canali Temporanei già attivi.`);
-          else {
-            const r = `Setup /setguild da ${interaction.user.tag}`;
-            const cat = await guild.channels.create({
-              name: "🔊 VOCALI TEMPORANEI 🔊",
-              type: ChannelType.GuildCategory,
-              reason: r,
-            });
-            const vc1 = await guild.channels.create({
-              name: "➕ Crea Duo",
-              type: ChannelType.GuildVoice,
-              parent: cat.id,
-              reason: r,
-            });
-            const vc2 = await guild.channels.create({
-              name: "➕ Crea Trio",
-              type: ChannelType.GuildVoice,
-              parent: cat.id,
-              reason: r,
-            });
-            const vc3 = await guild.channels.create({
-              name: "➕ Crea Quartetto",
-              type: ChannelType.GuildVoice,
-              parent: cat.id,
-              reason: r,
-            });
-            const vc4 = await guild.channels.create({
-              name: "➕ Crea Libera",
-              type: ChannelType.GuildVoice,
-              parent: cat.id,
-              reason: r,
-            });
-            await SqlManager.addTempChannel({
-              GUILD_ID: guildId,
-              CATEGORY_CH: cat.id,
-              DUO_CH: vc1.id,
-              TRIO_CH: vc2.id,
-              QUARTET_CH: vc3.id,
-              NOLIMIT_CH: vc4.id,
-            });
-            changesMadeSummary.push("✅ Canali Temporanei CREATI.");
-            actionsTaken = true;
-          }
-        } else {
-          if (cfg) {
-            const ids = [
-              cfg.DUO_CH,
-              cfg.TRIO_CH,
-              cfg.QUARTET_CH,
-              cfg.NOLIMIT_CH,
-              cfg.CATEGORY_CH,
-            ].filter(Boolean);
-            for (const id of ids) {
-              try {
-                (await guild.channels.fetch(id).catch(() => null))?.delete();
-              } catch (e) {
-                BotConsole.warning(`Del TempCh ${id} err: ${e.message}`);
-              }
-            }
-            await SqlManager.deleteTempChannel(guildId);
-            changesMadeSummary.push("🗑️ Canali Temporanei DISABILITATI.");
-            actionsTaken = true;
-          } else
-            changesMadeSummary.push("ℹ️ Canali Temporanei già disabilitati.");
+      // --- Gestione Moduli Complessi ---
+      const tempResult = await handleTempChannels(interaction, guild, guildId);
+      if (tempResult.summary) changesMadeSummary.push(tempResult.summary);
+      if (tempResult.taken) actionsTaken = true;
+
+      const holidayResult = await handleHolidayChannels(
+        interaction,
+        guild,
+        guildId
+      );
+      if (holidayResult.summary) changesMadeSummary.push(holidayResult.summary);
+      if (holidayResult.taken) actionsTaken = true;
+
+      // --- Gestione Canali e Ruoli Semplici ---
+      const optionsMap = {
+        WELCOME_ID: "welcome_channel",
+        LOG_ID: "log_channel",
+        RULES_CH_ID: "rules_channel",
+        BOOST_CH_ID: "boost_channel",
+        ANNOUNCEMENT_CH_ID: "announcement_channel",
+        ROLEDEFAULT_ID: "default_user_role",
+        ROLEBOTDEFAULT_ID: "default_bot_role",
+      };
+
+      const optionLabels = {
+        WELCOME_ID: "Benvenuto",
+        LOG_ID: "Log",
+        RULES_CH_ID: "Regolamento",
+        BOOST_CH_ID: "Boost",
+        ANNOUNCEMENT_CH_ID: "Annunci",
+        ROLEDEFAULT_ID: "Ruolo Utenti",
+        ROLEBOTDEFAULT_ID: "Ruolo Bot",
+      };
+
+      for (const [field, optionName] of Object.entries(optionsMap)) {
+        const clearFlag = interaction.options.getBoolean(`clear_${optionName}`);
+        const input = interaction.options.get(optionName);
+
+        if (clearFlag) {
+          fieldsToUpdateInGuild[field] = null;
+          changesMadeSummary.push(`🗑️ ${optionLabels[field]} RIMOSSO.`);
+        } else if (input) {
+          fieldsToUpdateInGuild[field] = input.id;
+          changesMadeSummary.push(`✅ ${optionLabels[field]}: ${input}`);
         }
       }
 
-      // Hollyday Channels
-      if (manageHollydayChannelsFlag !== null) {
-        const cfg = await SqlManager.getHollydayByGuildId(guildId);
-        const reason = `Setup /setguild Eventi da ${interaction.user.tag}`;
-        const lockedPerms = [
-          {
-            id: guild.roles.everyone.id,
-            deny: [PermissionsBitField.Flags.Connect],
-          },
-        ];
-        if (manageHollydayChannelsFlag) {
-          if (cfg) changesMadeSummary.push(`ℹ️ Canali Eventi già attivi.`);
-          else {
-            const cat = await guild.channels.create({
-              name: "🎉 Eventi Speciali 🎉",
-              type: ChannelType.GuildCategory,
-              reason,
-            });
-            const tc = await guild.channels.create({
-              name: "📢 annunci-evento",
-              type: ChannelType.GuildVoice,
-              parent: cat.id,
-              permissionOverwrites: lockedPerms,
-              reason,
-            });
-            const vc = await guild.channels.create({
-              name: "🥳 sala-evento",
-              type: ChannelType.GuildVoice,
-              parent: cat.id,
-              permissionOverwrites: lockedPerms,
-              reason,
-            });
-            await SqlManager.addHollyday({
-              GUILD_ID: guildId,
-              CATEGORY_CH: cat.id,
-              NAME_CHANNEL: tc.id,
-              HOLYDAY_CHANNEL: vc.id,
-            });
-            changesMadeSummary.push(
-              "✅ Canali Eventi CREATI (vocale bloccato)."
-            );
-            actionsTaken = true;
-          }
-        } else {
-          if (cfg) {
-            const ids = [
-              cfg.NAME_CHANNEL,
-              cfg.HOLYDAY_CHANNEL,
-              cfg.CATEGORY_CH,
-            ].filter(Boolean);
-            for (const id of ids) {
-              try {
-                (await guild.channels.fetch(id).catch(() => null))?.delete();
-              } catch (e) {
-                BotConsole.warning(`Del HollyCh ${id} err: ${e.message}`);
-              }
-            }
-            await SqlManager.deleteHollyday(guildId);
-            changesMadeSummary.push("🗑️ Canali Eventi DISABILITATI.");
-            actionsTaken = true;
-          } else changesMadeSummary.push("ℹ️ Canali Eventi già disabilitati.");
-        }
-      }
-
-      // Welcome Channel
-      if (clearWelcomeChannel) {
-        fieldsToUpdateInGuild.WELCOME_ID = null;
-        changesMadeSummary.push("🗑️ Canale Benvenuto RIMOSSO.");
-      } else if (welcomeChannelInput) {
-        fieldsToUpdateInGuild.WELCOME_ID = welcomeChannelInput.id;
-        changesMadeSummary.push(`✅ Canale Benvenuto: ${welcomeChannelInput}`);
-      }
-
-      // Log Channel
-      if (clearLogChannel) {
-        fieldsToUpdateInGuild.LOG_ID = null;
-        changesMadeSummary.push("🗑️ Canale Log RIMOSSO.");
-      } else if (logChannelInput) {
-        fieldsToUpdateInGuild.LOG_ID = logChannelInput.id;
-        changesMadeSummary.push(`✅ Canale Log: ${logChannelInput}`);
-      }
-
-      // Rules Channel
-      if (clearRulesChannel) {
-        fieldsToUpdateInGuild.RULES_CH_ID = null;
-        changesMadeSummary.push("🗑️ Canale Regolamento RIMOSSO.");
-      } else if (rulesChannelInput) {
-        fieldsToUpdateInGuild.RULES_CH_ID = rulesChannelInput.id;
-        changesMadeSummary.push(`✅ Canale Regolamento: ${rulesChannelInput}`);
-      }
-
-      // Boost Channel
-      if (clearBoostChannel) {
-        fieldsToUpdateInGuild.BOOST_CH_ID = null;
-        changesMadeSummary.push("🗑️ Canale Boost RIMOSSO.");
-      } else if (boostChannelInput) {
-        fieldsToUpdateInGuild.BOOST_CH_ID = boostChannelInput.id;
-        changesMadeSummary.push(`✅ Canale Boost: ${boostChannelInput}`);
-      }
-
-      // Default User Role
-      if (clearDefaultUserRole) {
-        fieldsToUpdateInGuild.ROLEDEFAULT_ID = null;
-        changesMadeSummary.push("🗑️ Ruolo Default Utenti RIMOSSO.");
-      } else if (defaultUserRoleInput) {
-        fieldsToUpdateInGuild.ROLEDEFAULT_ID = defaultUserRoleInput.id;
-        changesMadeSummary.push(
-          `✅ Ruolo Default Utenti: ${defaultUserRoleInput}`
-        );
-      }
-
-      // Default Bot Role
-      if (clearDefaultBotRole) {
-        fieldsToUpdateInGuild.ROLEBOTDEFAULT_ID = null;
-        changesMadeSummary.push("🗑️ Ruolo Default Bot RIMOSSO.");
-      } else if (defaultBotRoleInput) {
-        fieldsToUpdateInGuild.ROLEBOTDEFAULT_ID = defaultBotRoleInput.id;
-        changesMadeSummary.push(`✅ Ruolo Default Bot: ${defaultBotRoleInput}`);
+      // --- Aggiornamento e Risposta ---
+      if (Object.keys(fieldsToUpdateInGuild).length > 0) {
+        await SqlManager.updateGuild(guildId, fieldsToUpdateInGuild);
+        actionsTaken = true;
       }
 
       let finalMessageTitle = "Nessuna Modifica Necessaria";
@@ -381,31 +365,11 @@ export default {
         "Le impostazioni richieste erano già quelle correnti o nessuna azione specificata.";
       let finalThumb = STATUS_THUMBNAILS.INFO;
 
-      if (Object.keys(fieldsToUpdateInGuild).length > 0) {
-        await SqlManager.updateGuild(guildId, fieldsToUpdateInGuild);
-        finalMessageTitle = "Impostazioni Gilda Aggiornate";
-        finalMessageDescr = `Le configurazioni per **${guildName}** sono state elaborate:`;
-        finalThumb = STATUS_THUMBNAILS.SUCCESS;
-      } else if (actionsTaken) {
+      if (actionsTaken || changesMadeSummary.some((s) => !s.startsWith("ℹ️"))) {
         finalMessageTitle = "Impostazioni Gilda Elaborate";
         finalMessageDescr = `Le configurazioni per **${guildName}** sono state processate:`;
         finalThumb = STATUS_THUMBNAILS.SUCCESS;
-      } else if (
-        manageTempChannelsFlag === null &&
-        manageHollydayChannelsFlag === null &&
-        !welcomeChannelInput &&
-        !logChannelInput &&
-        !defaultUserRoleInput &&
-        !defaultBotRoleInput &&
-        !clearWelcomeChannel &&
-        !clearLogChannel &&
-        !clearDefaultUserRole &&
-        !clearDefaultBotRole &&
-        !rulesChannelInput &&
-        !clearRulesChannel &&
-        !boostChannelInput &&
-        !clearBoostChannel
-      ) {
+      } else if (interaction.options.data.length === 0) {
         finalMessageTitle = "Nessuna Operazione";
         finalMessageDescr =
           "Non hai specificato alcuna configurazione da modificare.";
@@ -416,91 +380,45 @@ export default {
         .setThumbnail(finalThumb);
 
       if (changesMadeSummary.length > 0) {
-        const summaryText = changesMadeSummary
-          .map((msg) => msg.replace(/^- /g, "• "))
-          .join("\n");
-        embed.addFieldBlock("📝 Riepilogo Azioni", summaryText);
+        embed.addFieldBlock(
+          "📝 Riepilogo Azioni",
+          changesMadeSummary.map((msg) => msg.replace(/^- /g, "• ")).join("\n")
+        );
       }
 
       const finalGuildData = await SqlManager.getGuildById(guildId);
-      const finalTempChannelData = await SqlManager.getTempChannelByGuildId(
-        guildId
-      );
-      const finalHolidayData = await SqlManager.getHollydayByGuildId(guildId);
+      if (finalGuildData) {
+        embed.addFieldBlock("--- Stato Finale Configurazione ---", "\u200B");
+        const finalTempData = await SqlManager.getTempChannelByGuildId(guildId);
+        const finalHolidayData = await SqlManager.getHollydayByGuildId(guildId);
 
-      if (
-        !finalGuildData &&
-        (Object.keys(fieldsToUpdateInGuild).length > 0 ||
-          changesMadeSummary.length > 0)
-      ) {
-        BotConsole.error(
-          `[SetGuild - ${guildId}] CRITICO: Impossibile recuperare finalGuildData DOPO operazioni.`
+        embed.addFieldInline(
+          "⏱️ Canali Temporanei",
+          finalTempData ? `✅ Attivo` : "❌ Non attivo"
         );
-        embed.KDanger(
-          "Errore Interno Grave",
-          "Impossibile caricare stato finale."
+        embed.addFieldInline(
+          "🎉 Canali Festività",
+          finalHolidayData ? `✅ Attivo` : "❌ Non attivo"
         );
-      } else if (finalGuildData) {
-        embed
-          .addFieldBlock("--- Stato Finale Configurazione ---", "\u200B")
-          .addFieldInline(
-            "⏱️ Canali Temporanei",
-            finalTempChannelData ? `✅ Attivo` : "❌ Non attivo"
-          )
-          .addFieldInline(
-            "🎉 Canali Festività",
-            finalHolidayData ? `✅ Attivo` : "❌ Non attivo"
-          )
-          .addFieldInline("\u200B", "\u200B")
-          .addFieldInline(
-            "👋 Benvenuto",
-            finalGuildData.WELCOME_ID
-              ? `✅ <#${finalGuildData.WELCOME_ID}>`
-              : "❌ Non impostato"
-          )
-          .addFieldInline(
-            "📜 Log",
-            finalGuildData.LOG_ID
-              ? `✅ <#${finalGuildData.LOG_ID}>`
-              : "❌ Non impostato"
-          )
-          .addFieldInline("\u200B", "\u200B")
-          .addFieldInline(
-            "👤 Ruolo Utenti",
-            finalGuildData.ROLEDEFAULT_ID
-              ? `✅ <@&${finalGuildData.ROLEDEFAULT_ID}>`
-              : "❌ Non impostato"
-          )
-          .addFieldInline(
-            "🤖 Ruolo Bot",
-            finalGuildData.ROLEBOTDEFAULT_ID
-              ? `✅ <@&${finalGuildData.ROLEBOTDEFAULT_ID}>`
-              : "❌ Non impostato"
-          )
-          .addFieldInline("\u200B", "\u200B")
-          .addFieldInline(
-            "📜 Regolamento",
-            finalGuildData.RULES_CH_ID
-              ? `✅ <#${finalGuildData.RULES_CH_ID}>`
-              : "❌ Non impostato"
-          )
-          .addFieldInline(
-            "🚀 Boost",
-            finalGuildData.BOOST_CH_ID
-              ? `✅ <#${finalGuildData.BOOST_CH_ID}>`
-              : "❌ Non impostato"
-          );
+        embed.addFieldInline("\u200B", "\u200B");
 
+        for (const [field, label] of Object.entries(optionLabels)) {
+          const value = finalGuildData[field];
+          const isRole = field.includes("ROLE");
+          const status = value
+            ? `✅ ${isRole ? "<@&" : "<#"}${value}>`
+            : "❌ Non impostato";
+          embed.addFieldInline(label, status);
+        }
+      }
+
+      // Riavvia il modulo Holiday se è stato toccato
+      if (holidayResult.taken) {
         const holidayModule = guild.client.other?.get("Holiday");
-
         if (holidayModule) {
           holidayModule.restart();
           BotConsole.info(
             `[SetGuild - ${guildId}] Processamento Holiday avviato per la gilda.`
-          );
-        } else {
-          BotConsole.warning(
-            `[SetGuild - ${guildId}] Modulo Holiday non trovato, non avviato il processo di configurazione eventi.`
           );
         }
       }
@@ -508,38 +426,14 @@ export default {
       await interaction.editReply({ embeds: [embed] });
     } catch (error) {
       BotConsole.error(`[SetGuild - ${guildId}] Errore critico:`, error);
-
-      const errorReplyEmbed = new PresetEmbed({ guild: interaction.guild });
-      if (error.code === 50013) {
-        errorReplyEmbed
-          .KWarning(
-            "Permessi Discord Mancanti",
-            "Il bot non ha i permessi necessari."
-          )
-          .setThumbnail(STATUS_THUMBNAILS.WARNING);
-      } else {
-        errorReplyEmbed
-          .KDanger("Errore Inaspettato ❌", "Controlla la console.")
-          .setThumbnail(STATUS_THUMBNAILS.ERROR);
-      }
-      try {
-        if (interaction.replied || interaction.deferred)
-          await interaction.editReply({
-            embeds: [errorReplyEmbed],
-            components: [],
-          });
-        else if (interaction.isRepliable())
-          await interaction.reply({
-            embeds: [errorReplyEmbed],
-            ephemeral: true,
-            components: [],
-          });
-      } catch (replyError) {
-        BotConsole.error(
-          "[SetGuild] Errore rispondendo con errore fallback:",
-          replyError
-        );
-      }
+      const errorReplyEmbed = new PresetEmbed({ guild });
+      errorReplyEmbed
+        .KDanger("Errore Inaspettato ❌", "Controlla la console.")
+        .setThumbnail(STATUS_THUMBNAILS.ERROR);
+      await interaction.editReply({
+        embeds: [errorReplyEmbed],
+        components: [],
+      });
     }
   },
 };

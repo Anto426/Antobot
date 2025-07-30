@@ -201,8 +201,9 @@ class SqlManager {
       "LOG_ID",
       "ROLEDEFAULT_ID",
       "ROLEBOTDEFAULT_ID",
-      "RULES_CH_ID", // Aggiunto
-      "BOOST_CH_ID", // Aggiunto
+      "RULES_CH_ID",
+      "BOOST_CH_ID",
+      "ANNOUNCEMENT_CH_ID", // Aggiunto
     ];
 
     for (const key of fieldsToSync) {

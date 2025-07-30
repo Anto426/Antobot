@@ -8,6 +8,7 @@ CREATE TABLE
         `ROLEBOTDEFAULT_ID` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
         `RULES_CH_ID` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
         `BOOST_CH_ID` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+        'ANNOUNCEMENT_CH_ID' varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
         PRIMARY KEY (`ID`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
