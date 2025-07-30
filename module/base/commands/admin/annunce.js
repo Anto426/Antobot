@@ -158,7 +158,8 @@ export default {
             message,
             imageUrl,
             thumbnailUrl,
-            commandIssuer
+            commandIssuer,
+            tagEveryone
           )
         )
       );
