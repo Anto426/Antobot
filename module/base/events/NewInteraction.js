@@ -18,27 +18,55 @@ async function sendReply({
   fields,
   payload,
 }) {
-
   if (!interaction || !interaction.isRepliable()) {
     BotConsole.error("sendReply: Interaction non valida o non rispondibile.");
     return;
   }
 
   const send = async (messagePayload) => {
-    try {
-      if (interaction.replied || interaction.deferred) {
-        await interaction.editReply(messagePayload);
-      } else {
-        await interaction.reply(messagePayload);
-      }
-    } catch (error) {
-      BotConsole.warn(`Reply fallito, tento il followUp: ${error.message}`);
+    if (messagePayload.ephemeral) {
+      BotConsole.info(
+        "Payload effimero rilevato. Eseguo la logica di cancellazione e follow-up."
+      );
       try {
+        await interaction.deleteReply();
+        BotConsole.success("Risposta precedente cancellata con successo.");
+
         await interaction.followUp(messagePayload);
-      } catch (followUpError) {
-        BotConsole.error(
-          `Anche il followUp è fallito: ${followUpError.stack || followUpError}`
+      } catch (error) {
+        BotConsole.warning(
+          `Impossibile cancellare la risposta precedente: ${error.message}. Tento comunque di inviare il followUp.`
         );
+        try {
+          await interaction.followUp(messagePayload);
+        } catch (followUpError) {
+          BotConsole.error(
+            `Anche il followUp effimero è fallito: ${
+              followUpError.stack || followUpError
+            }`
+          );
+        }
+      }
+    } else {
+      try {
+        if (interaction.replied || interaction.deferred) {
+          await interaction.editReply(messagePayload);
+        } else {
+          await interaction.reply(messagePayload);
+        }
+      } catch (error) {
+        BotConsole.warning(
+          `Risposta/modifica standard fallita: ${error.message}. Tento il followUp.`
+        );
+        try {
+          await interaction.followUp(messagePayload);
+        } catch (followUpError) {
+          BotConsole.error(
+            `Anche il followUp di fallback è fallito: ${
+              followUpError.stack || followUpError
+            }`
+          );
+        }
       }
     }
   };
@@ -85,8 +113,6 @@ function getHandler(interaction) {
 }
 
 async function executeHandler(interaction, handler) {
-  const isEphemeral = handler.isEphemeral || false;
-
   const security = new Security(
     interaction,
     handler,
@@ -108,44 +134,32 @@ async function executeHandler(interaction, handler) {
     return;
   }
 
-  const shouldDefer =
-    handler.response !== false && handler.response !== "update";
+  const shouldDefer = handler.response !== false;
   if (shouldDefer && !interaction.replied && !interaction.deferred) {
-    await interaction.deferReply({ ephemeral: isEphemeral });
+    await interaction.deferReply();
   }
 
   const args = typeof securityResult === "object" ? securityResult : null;
   const responsePayload = await handler.execute(interaction, args);
 
-  if (responsePayload) {
-    if (
-      handler.response === "update" &&
-      (interaction.isButton() || interaction.isAnySelectMenu())
-    ) {
-      try {
-        await interaction.update(responsePayload);
-      } catch (updateError) {
-        BotConsole.error(
-          "Fallito l'aggiornamento del componente:",
-          updateError
-        );
-        await interaction.followUp({
-          content: "❌ Si è verificato un errore durante l'aggiornamento.",
-          ephemeral: true,
-        });
-      }
-    } else {
-      await sendReply({
-        interaction,
-        payload: responsePayload,
-      });
-    }
+  if (
+    responsePayload === undefined ||
+    responsePayload === null ||
+    responsePayload === false ||
+    responsePayload === ""
+  ) {
+    BotConsole.debug(
+      `Handler ${handler.name} ha restituito un payload vuoto, non invio risposta.`
+    );
+    return;
   } else {
-    if (interaction.deferred && !interaction.replied) {
-      try {
-        await interaction.deleteReply();
-      } catch {}
-    }
+    BotConsole.debug(
+      `Handler ${handler.name} ha restituito un payload valido, procedo con l'invio.`
+    );
+    sendReply({
+      interaction,
+      payload: responsePayload,
+    });
   }
 
   BotConsole.success(

@@ -3,7 +3,6 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 
 export default {
   name: "setvolume",
-  response: "update",
   permissions: [],
   isActive: true,
   disTube: {
