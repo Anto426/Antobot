@@ -9,7 +9,8 @@ async function sendAnnouncementToGuild(
   message,
   imageUrl,
   thumbnailUrl,
-  commandIssuer
+  commandIssuer,
+  tagEveryone
 ) {
   const logPrefix = `[Announce - ${guild.name}]`;
   try {
@@ -62,7 +63,12 @@ async function sendAnnouncementToGuild(
     if (imageUrl) announcementEmbed.setImage(imageUrl);
     if (thumbnailUrl) announcementEmbed.setThumbnail(thumbnailUrl);
 
-    await channel.send({ embeds: [announcementEmbed] });
+    if (tagEveryone) {
+      await channel.send({ embeds: [announcementEmbed], content: "@everyone" });
+    } else {
+      await channel.send({ embeds: [announcementEmbed] });
+    }
+
     BotConsole.success(`${logPrefix} Annuncio inviato con successo.`);
     return true;
   } catch (error) {
@@ -79,7 +85,7 @@ export default {
   permissions: [],
   isActive: true,
   isBotAllowed: false,
-  isOwnerOnly: true, 
+  isOwnerOnly: true,
   data: {
     name: "announce",
     description: "Invia un annuncio a uno o a tutti i server.",
@@ -114,16 +120,22 @@ export default {
         description: "URL della thumbnail da includere nell'annuncio.",
         required: false,
       },
+      {
+        name: "tageveryone",
+        type: ApplicationCommandOptionType.Boolean,
+        description: "Tagga @everyone nell'annuncio.",
+        required: false,
+      },
     ],
   },
   execute: async (interaction) => {
-
     const message = interaction.options.getString("messaggio");
     const isGlobal = interaction.options.getBoolean("globale");
     const title = interaction.options.getString("titolo");
     const imageUrl = interaction.options.getString("immagine");
     const thumbnailUrl = interaction.options.getString("thumbnail");
     const commandIssuer = interaction.member;
+    const tagEveryone = interaction.options.getBoolean("tageveryone");
 
     const summaryEmbed = new PresetEmbed({ member: commandIssuer });
     await summaryEmbed.init();
@@ -175,7 +187,8 @@ export default {
         message,
         imageUrl,
         thumbnailUrl,
-        commandIssuer
+        commandIssuer,
+        tagEveryone
       );
       if (success) {
         summaryEmbed.KSuccess(
@@ -190,6 +203,6 @@ export default {
       }
     }
 
-    return { embeds: [summaryEmbed], ephemeral: true};
+    return { embeds: [summaryEmbed], ephemeral: true };
   },
 };
