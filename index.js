@@ -7,7 +7,6 @@ process.removeAllListeners("warning");
 
 class ApplicationBootstrap {
   #isShuttingDown = false;
-
   async initialize() {
     errorhandler.initializeGlobalErrorHandlers();
     try {
