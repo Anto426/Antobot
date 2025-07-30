@@ -1,9 +1,8 @@
 import sharp from "sharp";
+import phash from "sharp-phash"; // <-- 1. Importa la libreria
 import BotConsole from "../console/BotConsole.js";
 
 class EmojiManager {
-  // Configuration: max age in days before an emoji needs updating
-  MAX_EMOJI_AGE_DAYS = 30;
 
   async upsertEmoji(name, imageUrl) {
     try {
@@ -14,38 +13,40 @@ class EmojiManager {
         );
       }
 
-      // Forza l'aggiornamento della cache per avere la lista più recente
       await emojis.fetch();
-
       const existingEmoji = emojis.cache.find((e) => e.name === name);
-
-      // Check if emoji exists and if it's recent enough
-      if (existingEmoji) {
-        const emojiAge = Date.now() - existingEmoji.createdTimestamp;
-        const maxAge = this.MAX_EMOJI_AGE_DAYS * 24 * 60 * 60 * 1000; // Convert days to milliseconds
-
-        if (emojiAge < maxAge) {
-          BotConsole.info(
-            `[EmojiManager] Emoji globale :${name}: esiste già ed è recente. Nessun aggiornamento necessario.`
-          );
-          return existingEmoji;
-        }
-
-        BotConsole.info(
-          `[EmojiManager] Emoji globale :${name}: esiste ma è vecchio (${Math.floor(
-            emojiAge / 86400000
-          )} giorni). Verrà aggiornato.`
-        );
-      }
-
-      const imageBuffer = await this.#processImage(imageUrl);
-      if (!imageBuffer) {
+      
+      const newImageBuffer = await this.#processImage(imageUrl);
+      if (!newImageBuffer) {
         throw new Error(
-          `Elaborazione dell'immagine fallita per l'URL: ${imageUrl}`
+          `Elaborazione della nuova immagine fallita per l'URL: ${imageUrl}`
         );
       }
 
       if (existingEmoji) {
+        BotConsole.info(
+          `[EmojiManager] Emoji :${name}: esiste. Controllo se l'immagine è cambiata.`
+        );
+
+        const oldImageBuffer = await this.#processImage(existingEmoji.url);
+        if (!oldImageBuffer) {
+            BotConsole.warn(`[EmojiManager] Impossibile processare la vecchia immagine per :${name}:. L'emoji verrà aggiornato per sicurezza.`);
+        } else {
+            const newHash = await phash(newImageBuffer);
+            const oldHash = await phash(oldImageBuffer);
+    
+            if (newHash === oldHash) {
+              BotConsole.info(
+                `[EmojiManager] L'immagine per :${name}: è identica. Nessun aggiornamento necessario.`
+              );
+              return existingEmoji; // Le immagini sono uguali, esci
+            }
+        }
+        
+        BotConsole.info(
+          `[EmojiManager] L'immagine per :${name}: è diversa. Verrà aggiornato.`
+        );
+        
         await existingEmoji.delete(
           "Webhook: Sostituzione con avatar aggiornato"
         );
@@ -54,8 +55,9 @@ class EmojiManager {
         );
       }
 
+      // La nuova immagine è già processata e pronta in newImageBuffer
       const newOrUpdatedEmoji = await emojis.create({
-        attachment: imageBuffer,
+        attachment: newImageBuffer, // <-- 3. Usa il buffer già processato
         name,
         reason: existingEmoji
           ? "Webhook: Avatar aggiornato"
@@ -94,7 +96,10 @@ class EmojiManager {
       const arrayBuffer = await response.arrayBuffer();
       const imageBuffer = Buffer.from(arrayBuffer);
 
-      return await sharp(imageBuffer).resize(128, 128).png().toBuffer();
+      return await sharp(imageBuffer)
+        .resize(128, 128)
+        .png() 
+        .toBuffer();
     } catch (error) {
       BotConsole.error(
         `[EmojiManager] Fallito processing dell'immagine da ${url}`,
