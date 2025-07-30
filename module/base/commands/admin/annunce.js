@@ -80,7 +80,7 @@ export default {
   permissions: [],
   isActive: true,
   isBotAllowed: false,
-  isOwnerOnly: true, // <-- Comando riservato al proprietario
+  isOwnerOnly: true, 
   data: {
     name: "announce",
     description: "Invia un annuncio a uno o a tutti i server.",
@@ -118,15 +118,6 @@ export default {
     ],
   },
   execute: async (interaction) => {
-    if (!interaction.inGuild()) {
-      const emb = new PresetEmbed().KDanger(
-        "Comando Non Utilizzabile Qui",
-        "Questo comando può essere usato solo in un server."
-      );
-      return interaction.reply({ embeds: [emb], ephemeral: true });
-    }
-
-    await interaction.deferReply({ ephemeral: true });
 
     const message = interaction.options.getString("messaggio");
     const isGlobal = interaction.options.getBoolean("globale");
