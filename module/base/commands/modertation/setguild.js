@@ -322,13 +322,13 @@ export default {
 
       // --- Gestione Canali e Ruoli Semplici ---
       const optionsMap = {
-        WELCOME_ID: "welcome_channel",
-        LOG_ID: "log_channel",
-        RULES_CH_ID: "rules_channel",
-        BOOST_CH_ID: "boost_channel",
-        ANNOUNCEMENT_CH_ID: "announcement_channel",
-        ROLEDEFAULT_ID: "default_user_role",
-        ROLEBOTDEFAULT_ID: "default_bot_role",
+        WELCOME_ID: { name: "welcome_channel", type: "channel" },
+        LOG_ID: { name: "log_channel", type: "channel" },
+        RULES_CH_ID: { name: "rules_channel", type: "channel" },
+        BOOST_CH_ID: { name: "boost_channel", type: "channel" },
+        ANNOUNCEMENT_CH_ID: { name: "announcement_channel", type: "channel" },
+        ROLEDEFAULT_ID: { name: "default_user_role", type: "role" },
+        ROLEBOTDEFAULT_ID: { name: "default_bot_role", type: "role" },
       };
 
       const optionLabels = {
@@ -341,14 +341,23 @@ export default {
         ROLEBOTDEFAULT_ID: "Ruolo Bot",
       };
 
-      for (const [field, optionName] of Object.entries(optionsMap)) {
-        const clearFlag = interaction.options.getBoolean(`clear_${optionName}`);
-        const input = interaction.options.get(optionName);
+      for (const [field, option] of Object.entries(optionsMap)) {
+        const clearFlag = interaction.options.getBoolean(
+          `clear_${option.name}`
+        );
+
+        // **LA CORREZIONE È QUI**
+        // Usiamo i metodi specifici getChannel/getRole per ottenere l'oggetto corretto
+        const input =
+          option.type === "channel"
+            ? interaction.options.getChannel(option.name)
+            : interaction.options.getRole(option.name);
 
         if (clearFlag) {
           fieldsToUpdateInGuild[field] = null;
           changesMadeSummary.push(`🗑️ ${optionLabels[field]} RIMOSSO.`);
         } else if (input) {
+          // Usiamo l'ID per il database e l'oggetto (che si converte in menzione) per il messaggio
           fieldsToUpdateInGuild[field] = input.id;
           changesMadeSummary.push(`✅ ${optionLabels[field]}: ${input}`);
         }
@@ -412,7 +421,6 @@ export default {
         }
       }
 
-      // Riavvia il modulo Holiday se è stato toccato
       if (holidayResult.taken) {
         const holidayModule = guild.client.other?.get("Holiday");
         if (holidayModule) {
@@ -423,17 +431,14 @@ export default {
         }
       }
 
-      await interaction.editReply({ embeds: [embed] });
+      return { embeds: [embed] };
     } catch (error) {
       BotConsole.error(`[SetGuild - ${guildId}] Errore critico:`, error);
       const errorReplyEmbed = new PresetEmbed({ guild });
       errorReplyEmbed
         .KDanger("Errore Inaspettato ❌", "Controlla la console.")
         .setThumbnail(STATUS_THUMBNAILS.ERROR);
-      await interaction.editReply({
-        embeds: [errorReplyEmbed],
-        components: [],
-      });
+      return { embeds: [errorReplyEmbed] };
     }
   },
 };
