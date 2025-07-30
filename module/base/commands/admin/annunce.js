@@ -1,6 +1,6 @@
-import PresetEmbed from "../../../class/embed/PresetEmbed.js";
-import SqlManager from "../../../class/services/SqlManager.js";
-import BotConsole from "../../../class/console/BotConsole.js";
+import PresetEmbed from "../../../../class/embed/PresetEmbed.js";
+import SqlManager from "../../../../class/services/SqlManager.js";
+import BotConsole from "../../../../class/console/BotConsole.js";
 import { ApplicationCommandOptionType, PermissionsBitField } from "discord.js";
 
 async function sendAnnouncementToGuild(
