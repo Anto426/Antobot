@@ -261,12 +261,10 @@ export default class Holiday {
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
 
-    if (days > 1) return `⏳ ${days}g`;
-    if (days === 1) return `⏳ ${days}g ${hours}h`;
-    if (hours > 0) return `⏳ ${hours}h ${minutes}m`;
-    if (minutes > 1) return `⏳ ${minutes}m`;
-    return `⏳ <1m`;
+    if (days > 1) return `⏳ ${days}g ${hours}h ${minutes}m`;
+    else return `⏳ ${hours}h ${minutes}m ${seconds}s`;
   }
 
   async #sendCongratulations({ channels, holiday, guild }) {
