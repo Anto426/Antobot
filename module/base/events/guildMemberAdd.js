@@ -15,8 +15,7 @@ export default {
     BotConsole.info(`${logPrefix} Si è unito al server.`);
 
     try {
-      const memberName =
-        member.user.globalName || member.displayName || member.user.username;
+      const memberName = member.user.tag;
 
       const globalSyncResult = await SqlManager.synchronizeGlobalMember({
         id: member.id,

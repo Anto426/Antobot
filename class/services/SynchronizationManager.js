@@ -114,10 +114,7 @@ class SynchronizationManager {
     for (const member of fetchedMembers.values()) {
       if (member.user.bot && member.user.id !== client.user.id) continue;
 
-      const memberLogName =
-        member.user.globalName ||
-        member.user.displayName ||
-        member.user.username;
+      const memberLogName = member.user.tag;
 
       await SqlManager.synchronizeGlobalMember({
         id: member.id,
