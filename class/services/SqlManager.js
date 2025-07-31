@@ -277,14 +277,10 @@ class SqlManager {
   }
 
   async synchronizeGlobalMember({ id, globalName, accCreated }) {
-    BotConsole.info({ id, globalName, accCreated });
-
     const existingMember = await this.getMemberById(id);
     const memberDataForDb = {
       ID: id,
       NOME: globalName,
-      PRONOMUS: pronomus,
-      BIO: bio,
       ACCCREATED: accCreated,
     };
 
