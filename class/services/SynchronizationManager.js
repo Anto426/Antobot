@@ -115,10 +115,10 @@ class SynchronizationManager {
       if (member.user.bot && member.user.id !== client.user.id) continue;
 
       const memberLogName = member.user.tag;
-
       await SqlManager.synchronizeGlobalMember({
         id: member.id,
         globalName: memberLogName,
+        accCreated: member.user.createdAt,
       });
       await SqlManager.ensureGuildMemberAssociation(guild.id, member.id);
     }

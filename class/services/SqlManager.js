@@ -276,16 +276,30 @@ class SqlManager {
     return { operation: "no_change", data: existingRole, id: id };
   }
 
-  async synchronizeGlobalMember({ id, globalName }) {
+  async synchronizeGlobalMember({ id, globalName, accCreated }) {
+    BotConsole.info({ id, globalName, accCreated });
+
     const existingMember = await this.getMemberById(id);
-    const memberDataForDb = { ID: id, NOME: globalName };
+    const memberDataForDb = {
+      ID: id,
+      NOME: globalName,
+      PRONOMUS: pronomus,
+      BIO: bio,
+      ACCCREATED: accCreated,
+    };
 
     if (!existingMember) {
       return this._genericInsert("member", memberDataForDb);
     }
 
-    if (existingMember.NOME !== globalName) {
-      return this.updateMember(id, { NOME: globalName });
+    if (
+      existingMember.NOME !== globalName ||
+      existingMember.ACCCREATED !== accCreated
+    ) {
+      return this.updateMember(id, {
+        NOME: globalName,
+        ACCCREATED: accCreated,
+      });
     }
 
     return { operation: "no_change", data: existingMember, id: id };

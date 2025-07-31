@@ -20,6 +20,7 @@ export default {
       const globalSyncResult = await SqlManager.synchronizeGlobalMember({
         id: member.id,
         globalName: memberName,
+        accCreated: member.user.createdAt,
       });
 
       const isRejoiningMember = globalSyncResult.operation !== "inserted";
