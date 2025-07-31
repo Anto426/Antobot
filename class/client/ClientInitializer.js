@@ -89,13 +89,11 @@ class ClientInitializer {
 
       const [musicResult, aiResult] = await Promise.allSettled([
         this.initializeClientDistube(),
-        this.initializeClientAI(),
       ]);
 
       const status = {
         base: true,
         music: musicResult.status === "fulfilled" && musicResult.value,
-        ai: aiResult.status === "fulfilled" && aiResult.value,
       };
 
       BotConsole.info("Client initialization status:", status);
