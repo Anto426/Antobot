@@ -44,7 +44,6 @@
     "openai": "^5.10.2",
     "sharp": "^0.34.3",
     "sharp-phash": "^2.2.0",
-    "sodium-native": "^5.0.6",
-    "yargs": "^18.0.0"
+    "sodium-native": "^5.0.6"
   }
 }

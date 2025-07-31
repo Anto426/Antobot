@@ -3,7 +3,6 @@ import BotConsole from "../../class/console/BotConsole.js";
 import SqlManager from "../../class/services/SqlManager.js";
 import PresetEmbed from "../../class/embed/PresetEmbed.js";
 import emojiManager from "../../class/services/EmojiManager.js";
-import ApplicationManager from "../../class/client/ApplicationManager.js";
 
 export default class ServerUpdate {
   #app;
@@ -103,7 +102,19 @@ export default class ServerUpdate {
     BotConsole.info(
       "[Webhook Configs] Riavvio in corso per applicare le modifiche..."
     );
-    ApplicationManager.reloadAllApplications();
+
+    
+    if (global.distube) {
+      BotConsole.info("Disconnecting Distube...");
+      global.distube = null;
+    }
+
+    if (botClient) {
+      BotConsole.info("Disconnecting the Discord client...");
+      await botClient.destroy();
+    }
+
+    BotConsole.success("Application components shut down.");
 
     this.#reloadScheduled = false;
   }
@@ -198,7 +209,7 @@ export default class ServerUpdate {
         text: client.user.username,
         iconURL: client.user.displayAvatarURL(),
       })
-      .setThumbnailclient()
+      .setThumbnailclient();
 
     return embed;
   }

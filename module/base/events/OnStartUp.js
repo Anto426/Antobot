@@ -1,5 +1,4 @@
 import BotConsole from "../../../class/console/BotConsole.js";
-import ModuleLoader from "../../../class/Loader/ModuleLoader.js";
 import StartupLogger from "../../../class/console/LogStartup.js";
 import CommandGuildUpdate from "../../../class/Guild/CommandGuildUpdate.js";
 import IntitialOtherModules from "../../../class/Loader/IntitialOtherModules.js";
@@ -81,9 +80,6 @@ export default {
   isActive: true,
   async execute() {
     BotConsole.info("Avvio del bot in corso...");
-
-    await ModuleLoader.initAll?.();
-    BotConsole.success("Tutti i moduli sono stati caricati.");
 
     await CommandGuildUpdate.updateGuildsOnStartup();
     BotConsole.success("Comandi globali e di gilda aggiornati.");
