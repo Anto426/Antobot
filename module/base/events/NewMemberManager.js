@@ -32,7 +32,6 @@ export default {
         );
       }
 
-
       await SqlManager.ensureGuildMemberAssociation(guild.id, member.id);
       BotConsole.debug(
         `${logPrefix} Sincronizzazione DB utente/gilda completata.`
@@ -206,7 +205,7 @@ export default {
       welcomeEmbed
         .setImageUrl(`attachment://${imageResult.attachment.name}`)
         .setColor(imageResult.embedColorHex);
-      messagePayload.files = [image.attachment];
+      messagePayload.files = [imageResult.attachment];
     } else {
       if (welcomeImageService)
         BotConsole.warning(
