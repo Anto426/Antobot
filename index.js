@@ -1,10 +1,11 @@
 import BotConsole from "./class/console/BotConsole.js";
-import ModuleLoader from "./class/loader/ModuleLoader.js";
+import ModuleLoader from "./class/Loader/ModuleLoader.js";
 import ClientInitializer from "./class/client/ClientInitializer.js";
 import SystemCheck from "./class/client/SystemCheck.js";
 import ConfigManager from "./class/services/ConfigManager.js";
-import dotenv from "dotenv";
 import SqlManager from "./class/services/SqlManager.js";
+import dotenv from "dotenv";
+
 dotenv.config();
 
 function logError(error, name = "System") {
