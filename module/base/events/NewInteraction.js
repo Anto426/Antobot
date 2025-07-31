@@ -24,7 +24,14 @@ async function sendReply({
   }
 
   const send = async (messagePayload) => {
-    if (messagePayload.ephemeral) {
+    if (
+      messagePayload.ephemeral &&
+      !(
+        interaction.isButton() ||
+        interaction.isAnySelectMenu() ||
+        interaction.isModalSubmit()
+      )
+    ) {
       BotConsole.info(
         "Payload effimero rilevato. Eseguo la logica di cancellazione e follow-up."
       );
