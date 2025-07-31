@@ -31,6 +31,7 @@ function logError(error, name = "System") {
 
 async function bootstrap() {
   const clientInitializer = new ClientInitializer();
+  BotConsole.setLogLevel(process.env.LOG_LEVEL || "info");
   BotConsole.info("Starting bootstrap process...");
   await SystemCheck.initialize();
   await ConfigManager.loadConfig();

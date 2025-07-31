@@ -2,7 +2,19 @@ import chalk from "chalk";
 import gradient from "gradient-string";
 import boxen from "boxen";
 
+// Gerarchia dei livelli di log. Un messaggio viene mostrato solo se il suo livello
+// è maggiore o uguale al logLevel configurato.
+const LOG_LEVELS = {
+  trace: 0,
+  debug: 1,
+  info: 2,
+  success: 2,
+  warning: 3,
+  error: 4,
+};
+
 const DEFAULT_CONFIG = {
+  logLevel: "info", 
   showTimestamp: true,
   theme: {
     symbols: {
@@ -71,7 +83,25 @@ class BotConsole {
         ...(config.boxenOptions || {}),
       },
     };
+    this.levels = LOG_LEVELS;
     BotConsole._instance = this;
+  }
+
+  /**
+   * Imposta il livello di log minimo da visualizzare.
+   * @param {keyof LOG_LEVELS} level Il livello da impostare (es. 'debug', 'info', 'error').
+   */
+  setLogLevel(level) {
+    if (this.levels.hasOwnProperty(level)) {
+      this.config.logLevel = level;
+      this.info(`Log level impostato su: ${level.toUpperCase()}`);
+    } else {
+      this.warning(
+        `Livello di log non valido: "${level}". Verrà ignorato. Livelli validi: ${Object.keys(
+          this.levels
+        ).join(", ")}`
+      );
+    }
   }
 
   _getGradient(type) {
@@ -129,7 +159,6 @@ class BotConsole {
     ].join("\n");
   }
 
-  // Modificato per accettare un array di parti di messaggio già stringhe/primitive
   formatMessage(type, messageParts = []) {
     const gradColors =
       this.config.theme.gradients[type] || DEFAULT_CONFIG.theme.gradients.info;
@@ -200,7 +229,6 @@ class BotConsole {
     );
   }
 
-  // La tua formatTree originale
   formatTree(obj, type, prefix = "") {
     const { branch, last, vertical, space } = this.config.theme.symbols.tree;
     const grad = this._getGradient(type);
@@ -289,6 +317,14 @@ class BotConsole {
   }
 
   write(type, ...args) {
+    const configuredLevel = this.levels[this.config.logLevel];
+    const messageLevel = this.levels[type];
+
+    if (messageLevel < configuredLevel) {
+      return;  
+    }
+
+
     const mainMessageParts = [];
     const complexArgsToTree = [];
 
