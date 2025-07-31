@@ -23,12 +23,13 @@ jobs:
         run: echo ${{ secrets.SUDO_PASSWORD }} | sudo -S systemctl stop antobot
 
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          cache: "npm"
 
       - name: Install dependencies
         run: npm install
@@ -43,4 +44,3 @@ jobs:
 
       - name: Complete task
         run: echo "Task completed successfully."
-
