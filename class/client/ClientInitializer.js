@@ -4,7 +4,6 @@ import { SpotifyPlugin } from "@distube/spotify";
 import { SoundCloudPlugin } from "@distube/soundcloud";
 import { DeezerPlugin } from "@distube/deezer";
 import { YouTubePlugin } from "@distube/youtube";
-import OpenAI from "openai";
 import BotConsole from "../console/BotConsole.js";
 import SystemCheck from "./SystemCheck.js";
 
@@ -49,26 +48,6 @@ class ClientInitializer {
       return true;
     } catch (error) {
       BotConsole.error("Failed to initialize base client:", error);
-      throw error;
-    }
-  }
-
-  async initializeClientAI() {
-    if (!SystemCheck.isFeatureEnabled("openai")) {
-      BotConsole.info("AI client is disabled in config");
-      return false;
-    }
-
-    if (!process.env.OPENAI_API_KEY) {
-      throw new Error("OpenAI token not found");
-    }
-
-    try {
-      global.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-      BotConsole.success("AI client initialized successfully");
-      return true;
-    } catch (error) {
-      BotConsole.error("Failed to initialize AI client:", error);
       throw error;
     }
   }

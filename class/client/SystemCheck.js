@@ -143,16 +143,10 @@ class SystemCheck {
     if (!featureName) return false;
 
     try {
-      return featureName === "openai"
-        ? this.#resolvePath(["features", "openai", "enabled"])
-        : Boolean(this.#resolvePath(["features", featureName]));
+      return Boolean(this.#resolvePath(["features", featureName]));
     } catch {
       return false;
     }
-  }
-
-  getOpenAIModel() {
-    return this.#resolvePath(["features", "openai", "model"]);
   }
 
   getFeatures() {

@@ -53,11 +53,7 @@
         "holiday": true,
         "serverupdate": true,
         "music": true,
-        "synchronize": true,
-        "openai": {
-            "enabled": false,
-            "model": "gpt-turbo-3.5"
-        }
+        "synchronize": true
     },
     "remote": {
         "github": {

@@ -70,7 +70,6 @@ class LogStartup {
       },
       tokens: {
         BOT: this.mask(process.env.TOKEN),
-        OPENAI: this.mask(process.env.OPENAITOKEN),
         GIT: this.mask(process.env.GITTOKEN),
       },
     };
