@@ -15,19 +15,23 @@ export default {
     BotConsole.info(`${logPrefix} Si è unito al server.`);
 
     try {
-      const memberName = member.user.tag;
-
-      const globalSyncResult = await SqlManager.synchronizeGlobalMember({
+      await SqlManager.synchronizeGlobalMember({
         id: member.id,
-        globalName: memberName,
+        globalName: member.user.tag,
         accCreated: member.user.createdAt,
       });
 
-      const isRejoiningMember = globalSyncResult.operation !== "inserted";
+      const previousRoles = await SqlManager.getRolesOfMember(member.id);
+      const isRejoiningMember = previousRoles.some(
+        (r) => r.IDGUILD === guild.id
+      );
 
       if (isRejoiningMember) {
-        BotConsole.info(`${logPrefix} Rilevato come membro che rientra.`);
+        BotConsole.info(
+          `${logPrefix} Rilevato come membro che rientra (aveva ruoli salvati in questo server).`
+        );
       }
+
 
       await SqlManager.ensureGuildMemberAssociation(guild.id, member.id);
       BotConsole.debug(
@@ -52,33 +56,32 @@ export default {
     }
   },
 
+  // ... il resto del file rimane invariato ...
+
   async handleRoleAssignment(member, logPrefix, isRejoiningMember) {
     if (member.user.bot) {
       await this.assignDefaultRole(member, "bot", logPrefix);
       return false;
     }
 
-    const restoredRoles = await this.restorePreviousRoles(member, logPrefix);
-
-    if (restoredRoles.length > 0) {
-      const roleNames = restoredRoles.map((r) => `\`${r.name}\``).join(", ");
-      const dmEmbed = new PresetEmbed({ guild: member.guild });
-      await dmEmbed.init();
-      dmEmbed
-        .setTitle("🎭 Ruoli Ripristinati")
-        .setDescription(
-          `Bentornato/a su **${member.guild.name}**! I tuoi ruoli precedenti sono stati ripristinati:\n${roleNames}`
-        )
-        .setThumbnail(member.guild.iconURL({ dynamic: true, size: 256 }))
-        .setFooter({
-          text: `ID Utente: ${member.id}`,
-        });
-      await member.send({ embeds: [dmEmbed] }).catch(() => {});
-      return true;
+    // Tenta di ripristinare i ruoli solo se è un membro di ritorno
+    if (isRejoiningMember) {
+      const restoredRoles = await this.restorePreviousRoles(member, logPrefix);
+      if (restoredRoles.length > 0) {
+        const roleNames = restoredRoles.map((r) => `\`${r.name}\``).join(", ");
+        const dmEmbed = new PresetEmbed({ guild: member.guild });
+        await dmEmbed.init();
+        dmEmbed
+          .setTitle("🎭 Ruoli Ripristinati")
+          .setDescription(
+            `Bentornato/a su **${member.guild.name}**! I tuoi ruoli precedenti sono stati ripristinati:\n${roleNames}`
+          );
+        await member.send({ embeds: [dmEmbed] }).catch(() => {});
+        return true;
+      }
     }
 
     // Assegna il ruolo di default solo se è un membro veramente nuovo
-    // (non uno di ritorno che magari non aveva ruoli).
     if (!isRejoiningMember) {
       await this.assignDefaultRole(member, "user", logPrefix);
     }
@@ -203,7 +206,7 @@ export default {
       welcomeEmbed
         .setImageUrl(`attachment://${imageResult.attachment.name}`)
         .setColor(imageResult.embedColorHex);
-      messagePayload.files = [imageResult.attachment];
+      messagePayload.files = [image.attachment];
     } else {
       if (welcomeImageService)
         BotConsole.warning(

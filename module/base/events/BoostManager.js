@@ -4,7 +4,7 @@ import PresetEmbed from "../../../class/embed/PresetEmbed.js";
 import { Events, PermissionsBitField, MessageType } from "discord.js";
 
 export default {
-  name: "guildBoost",
+  name: "BoostManager",
   eventType: Events.MessageCreate,
   isActive: true,
 
