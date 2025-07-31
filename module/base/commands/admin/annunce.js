@@ -44,8 +44,8 @@ async function sendAnnouncementToGuild(
 
     const colorSourceUrl =
       imageUrl || thumbnailUrl
-        ? commandIssuer.user.displayAvatarURL({ format: "png", size: 128 }) // Colore dal profilo utente
-        : client.user.displayAvatarURL({ format: "png", size: 128 }); // Colore dal profilo bot
+        ? commandIssuer.user.displayAvatarURL({ format: "png", size: 128 })
+        : client.user.displayAvatarURL({ format: "png", size: 128 });
 
     const announcementEmbed = new PresetEmbed({
       guild,
