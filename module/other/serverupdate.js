@@ -109,9 +109,9 @@ export default class ServerUpdate {
       global.distube = null;
     }
 
-    if (botClient) {
+    if (client) {
       BotConsole.info("Disconnecting the Discord client...");
-      await botClient.destroy();
+      await client.destroy();
     }
 
     BotConsole.success("Application components shut down.");

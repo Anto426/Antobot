@@ -60,7 +60,6 @@ async function main() {
   process.stdout.write("\x1Bc");
   process.removeAllListeners("warning");
 
-  let botClient = null;
   let isShuttingDown = false;
 
   const gracefulShutdown = async (origin, exitCode = 0, error = null) => {
