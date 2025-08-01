@@ -30,7 +30,7 @@ class EmojiManager {
 
         const oldImageBuffer = await this.#processImage(existingEmoji.url);
         if (!oldImageBuffer) {
-            BotConsole.warn(`[EmojiManager] Impossibile processare la vecchia immagine per :${name}:. L'emoji verrà aggiornato per sicurezza.`);
+            BotConsole.warning(`[EmojiManager] Impossibile processare la vecchia immagine per :${name}:. L'emoji verrà aggiornato per sicurezza.`);
         } else {
             const newHash = await phash(newImageBuffer);
             const oldHash = await phash(oldImageBuffer);
