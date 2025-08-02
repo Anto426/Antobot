@@ -171,67 +171,64 @@ class DynamicColor {
     return palette;
   }
 
-  _generateTintPalette(baseColor, threshold = 10) {
+  _generateTintPalette(baseColor, steps) {
     if (!Array.isArray(baseColor) || baseColor.length !== 3) {
-      throw new Error("Input non valido");
-    }
-    if (threshold <= 0) {
-      return [baseColor];
-    }
-
-    // Definiamo un limite massimo di step per prevenire crash di memoria
-    const MAX_ALLOWED_STEPS = 256;
-
-    const [h, startSaturation, startValue] = ColorFunctions.rgbToHsv(
-      ...baseColor
-    );
-    const MAX_BRIGHTNESS = 95;
-    const MIN_SATURATION = 10;
-
-    const endColorRgb = ColorFunctions.hsvToRgb(
-      h,
-      MIN_SATURATION,
-      MAX_BRIGHTNESS
-    );
-    const totalDistance = ColorFunctions.colorDistance(baseColor, endColorRgb);
-
-    if (totalDistance <= threshold) {
-      return [baseColor, endColorRgb.map(Math.round)];
-    }
-
-    let steps = Math.ceil(totalDistance / threshold);
-
-    // --- CONTROLLI DI SICUREZZA FONDAMENTALI ---
-
-    // 1. Se gli step calcolati sono troppi, li limitiamo per evitare crash.
-    if (steps > MAX_ALLOWED_STEPS) {
-      console.warn(
-        `Steps calcolati (${steps}) superano il limite. Limitato a ${MAX_ALLOWED_STEPS}.`
+      throw new Error(
+        "Input 'baseColor' non valido. Deve essere un array RGB [r, g, b]."
       );
-      steps = MAX_ALLOWED_STEPS;
+    }
+    if (typeof steps !== "number" || steps < 2) {
+      return [baseColor.map(Math.round)];
+    }
+    if (typeof this.threshold !== "number" || this.threshold <= 0) {
+      throw new Error("Il 'threshold' deve essere un numero positivo.");
     }
 
-    // 2. Se gli step sono meno di 2, la logica della divisione non funziona.
-    //    Questo previene la divisione per zero.
-    if (steps < 2) {
-      return [baseColor, endColorRgb.map(Math.round)];
+    const roundedBaseColor = baseColor.map(Math.round);
+    const palette = [roundedBaseColor];
+    let currentColor = [...roundedBaseColor];
+
+    for (let i = 0; i < steps - 1; i++) {
+      const [h, s, v] = ColorFunctions.rgbToHsv(...currentColor);
+      const directionTarget = ColorFunctions.hsvToRgb(h, 10, 95);
+      const directionVector = [
+        directionTarget[0] - currentColor[0],
+        directionTarget[1] - currentColor[1],
+        directionTarget[2] - currentColor[2],
+      ];
+      const magnitude = Math.sqrt(
+        directionVector[0] ** 2 +
+          directionVector[1] ** 2 +
+          directionVector[2] ** 2
+      );
+
+      if (magnitude < 1e-6) {
+        palette.push([...palette[palette.length - 1]]);
+        continue;
+      }
+
+      const normalizedVector = [
+        directionVector[0] / magnitude,
+        directionVector[1] / magnitude,
+        directionVector[2] / magnitude,
+      ];
+
+      const randomStepDistance = Math.random() * this.threshold;
+
+      let nextColor = [
+        currentColor[0] + normalizedVector[0] * randomStepDistance,
+        currentColor[1] + normalizedVector[1] * randomStepDistance,
+        currentColor[2] + normalizedVector[2] * randomStepDistance,
+      ];
+
+      const clampedColor = nextColor.map((value) =>
+        Math.max(0, Math.min(255, value))
+      );
+
+      const roundedNextColor = clampedColor.map(Math.round);
+      palette.push(roundedNextColor);
+      currentColor = clampedColor;
     }
-
-    // --- FINE CONTROLLI ---
-
-    const valueStep = (MAX_BRIGHTNESS - startValue) / (steps - 1);
-    const saturationStep = (startSaturation - MIN_SATURATION) / (steps - 1);
-
-    const palette = Array.from({ length: steps }, (_, i) => {
-      const newValue = Math.min(MAX_BRIGHTNESS, startValue + i * valueStep);
-      const newSaturation = Math.max(
-        MIN_SATURATION,
-        startSaturation - i * saturationStep
-      );
-      return ColorFunctions.hsvToRgb(h, newSaturation, newValue).map(
-        Math.round
-      );
-    });
 
     return palette;
   }
@@ -372,4 +369,3 @@ class DynamicColor {
 }
 
 export default DynamicColor;
- 

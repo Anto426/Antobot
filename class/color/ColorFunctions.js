@@ -155,7 +155,7 @@ class ColorFunctions {
     if (max !== 0) {
       s = d / max;
       if (max === min) {
-        h = 0;  
+        h = 0;
       } else {
         switch (max) {
           case r:
@@ -173,6 +173,13 @@ class ColorFunctions {
     }
 
     return [h, s, v];
+  }
+  
+  lerpColor(colorA, colorB, t) {
+    const r = colorA[0] * (1 - t) + colorB[0] * t;
+    const g = colorA[1] * (1 - t) + colorB[1] * t;
+    const b = colorA[2] * (1 - t) + colorB[2] * t;
+    return [r, g, b];
   }
 }
 
