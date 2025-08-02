@@ -5,7 +5,7 @@ import BotConsole from "../console/BotConsole.js";
 class DynamicColor {
   constructor(options = {}) {
     this.img = null;
-    this.threshold = options.threshold ?? 70;
+    this.threshold = options.threshold ?? 120;
     this.numColors = options.numColors ?? 8;
     this.cachedPalette = null;
 
@@ -82,12 +82,30 @@ class DynamicColor {
     }
   }
 
-  sortPalette(palette) {
-    return palette.slice().sort((a, b) => {
-      const brightnessA = ColorFunctions.getBrightness(a);
-      const brightnessB = ColorFunctions.getBrightness(b);
-      return brightnessA - brightnessB;
+  sortPaletteByDistance(palette) {
+    if (!palette || palette.length <= 1) {
+      return palette;
+    }
+    const averageColor = ColorFunctions.averageColor(palette);
+    const sortedPalette = [...palette].sort((colorA, colorB) => {
+      const distanceA = ColorFunctions.colorDistance(colorA, averageColor);
+      const distanceB = ColorFunctions.colorDistance(colorB, averageColor);
+      return distanceA - distanceB;
     });
+    return sortedPalette;
+  }
+
+  sortPaletteByBrightness(palette) {
+    if (!palette || palette.length <= 1) {
+      return palette;
+    }
+    const sortedPalette = [...palette].sort(
+      (colorA, colorB) =>
+        ColorFunctions.getBrightness(colorA) -
+        ColorFunctions.getBrightness(colorB)
+    );
+
+    return sortedPalette;
   }
 
   interpolateColor(colorA, colorB, ratio = 0.5) {
@@ -153,13 +171,78 @@ class DynamicColor {
     return palette;
   }
 
+  _generateTintPalette(baseColor, threshold = 10) {
+    if (!Array.isArray(baseColor) || baseColor.length !== 3) {
+      throw new Error("Input non valido");
+    }
+    if (threshold <= 0) {
+      return [baseColor];
+    }
+
+    // Definiamo un limite massimo di step per prevenire crash di memoria
+    const MAX_ALLOWED_STEPS = 256;
+
+    const [h, startSaturation, startValue] = ColorFunctions.rgbToHsv(
+      ...baseColor
+    );
+    const MAX_BRIGHTNESS = 95;
+    const MIN_SATURATION = 10;
+
+    const endColorRgb = ColorFunctions.hsvToRgb(
+      h,
+      MIN_SATURATION,
+      MAX_BRIGHTNESS
+    );
+    const totalDistance = ColorFunctions.colorDistance(baseColor, endColorRgb);
+
+    if (totalDistance <= threshold) {
+      return [baseColor, endColorRgb.map(Math.round)];
+    }
+
+    let steps = Math.ceil(totalDistance / threshold);
+
+    // --- CONTROLLI DI SICUREZZA FONDAMENTALI ---
+
+    // 1. Se gli step calcolati sono troppi, li limitiamo per evitare crash.
+    if (steps > MAX_ALLOWED_STEPS) {
+      console.warn(
+        `Steps calcolati (${steps}) superano il limite. Limitato a ${MAX_ALLOWED_STEPS}.`
+      );
+      steps = MAX_ALLOWED_STEPS;
+    }
+
+    // 2. Se gli step sono meno di 2, la logica della divisione non funziona.
+    //    Questo previene la divisione per zero.
+    if (steps < 2) {
+      return [baseColor, endColorRgb.map(Math.round)];
+    }
+
+    // --- FINE CONTROLLI ---
+
+    const valueStep = (MAX_BRIGHTNESS - startValue) / (steps - 1);
+    const saturationStep = (startSaturation - MIN_SATURATION) / (steps - 1);
+
+    const palette = Array.from({ length: steps }, (_, i) => {
+      const newValue = Math.min(MAX_BRIGHTNESS, startValue + i * valueStep);
+      const newSaturation = Math.max(
+        MIN_SATURATION,
+        startSaturation - i * saturationStep
+      );
+      return ColorFunctions.hsvToRgb(h, newSaturation, newValue).map(
+        Math.round
+      );
+    });
+
+    return palette;
+  }
+
   filterPalette(palette) {
     if (!Array.isArray(palette) || palette.length === 0) {
       BotConsole.error("Invalid or empty palette provided for filtering.");
       throw new Error("Invalid or empty palette provided for filtering");
     }
 
-    const sorted = this.sortPalette(palette);
+    const sorted = this.sortPaletteByDistance(palette);
 
     BotConsole.debug(`Filtering palette with threshold: ${this.threshold}`);
     const filtered = [sorted[0]];
@@ -167,7 +250,7 @@ class DynamicColor {
     for (let i = 1; i < sorted.length; i++) {
       const prev = filtered[filtered.length - 1];
       const current = sorted[i];
-      const distance = Math.abs(ColorFunctions.colorDistance(current, prev));
+      const distance = Math.abs(ColorFunctions.colorDistance(prev, current));
 
       if (distance < this.threshold) {
         BotConsole.debug(
@@ -176,33 +259,21 @@ class DynamicColor {
         filtered.push(current);
       } else {
         BotConsole.debug(
-          `Distance ${distance.toFixed(2)} >= threshold, interpolating...`
+          `Distance ${distance.toFixed(
+            2
+          )} >= threshold, skipping color all current after ${prev}.`
         );
-        const mid = this.interpolateColor(prev, current);
-        filtered.push(mid);
+
+        let palette = this._generateTintPalette(prev, this.numColors - i - 1);
+
+        BotConsole.debug(`Generated tint palette`, palette);
+        filtered.push(...palette);
+        break;
       }
     }
 
-    if (filtered.length < this.numColors) {
-      const needed = this.numColors - filtered.length;
-      const fill = this._generateGradientPalette(
-        filtered[0],
-        filtered[filtered.length - 1],
-        needed + 2
-      ).slice(1, -1);
-      return [...filtered, ...fill.slice(0, needed)];
-    }
-
-    if (filtered.length > this.numColors) {
-      const reduced = [];
-      const step = (filtered.length - 1) / (this.numColors - 1);
-      for (let i = 0; i < this.numColors; i++) {
-        reduced.push(filtered[Math.round(i * step)]);
-      }
-      BotConsole.debug(`Reduced palette to ${this.numColors} colors.`);
-      return reduced;
-    }
-
+    //let filteredSorted = this.sortPaletteByBrightness(filtered);
+    //BotConsole.debug("Filtered palette sorted by brightness.");
     return filtered;
   }
 
@@ -301,3 +372,4 @@ class DynamicColor {
 }
 
 export default DynamicColor;
+ 
