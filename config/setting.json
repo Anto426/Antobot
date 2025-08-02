@@ -34,7 +34,7 @@
                     "welcomeTextSize": "150px",
                     "nameTextSize": "100px",
                     "countTextSize": "70px",
-                    "splashCount": 40
+                    "splashCount": 20
                 },
                 "fonts": {
                     "directory": "assets/canvas/fonts",

@@ -3,6 +3,7 @@ import { createCanvas, loadImage, registerFont } from "canvas";
 import path from "path";
 import BotConsole from "../../class/console/BotConsole.js";
 import DynamicColor from "../../class/color/DynamicColor.js";
+import ColorFunctions from "../color/ColorFunctions.js";
 import SystemCheck from "../../class/client/SystemCheck.js";
 
 class WelcomeImageService {
@@ -148,7 +149,7 @@ class WelcomeImageService {
 
         // Use a color from the palette with some variation
         const colorIndex = i % palette.length;
-        const color = [...palette[colorIndex]];
+        const color = ColorFunctions.getOppositeColor([...palette[colorIndex]]);
 
         // Add a slight brightness boost to make the splashes more visible
         const brightnessFactor = 1.2;
