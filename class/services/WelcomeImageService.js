@@ -147,15 +147,7 @@ class WelcomeImageService {
         const baseRadius =
           Math.min(canvas.width, canvas.height) / (20 + Math.random() * 15);
 
-        // Use a color from the palette with some variation
-        const colorIndex = i % palette.length;
-        const color = ColorFunctions.getOppositeColor([...palette[colorIndex]]);
-
-        // Add a slight brightness boost to make the splashes more visible
-        const brightnessFactor = 1.2;
-        const brightColor = color.map((c) =>
-          Math.min(255, Math.round(c * brightnessFactor))
-        );
+        const brightColor = textColor;
 
         // Create a soft blob shape
         const vertices = 6 + Math.floor(Math.random() * 6); // 6-12 vertices
