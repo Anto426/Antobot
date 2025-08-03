@@ -26,8 +26,8 @@
         "assets": {
             "canvas": {
                 "welcome_image": {
-                    "width": 2560,
-                    "height": 900,
+                    "width": 3840,
+                    "height": 1350,
                     "avatarSize": 500,
                     "avatarBorderSize": 10,
                     "num_colors": 3,
