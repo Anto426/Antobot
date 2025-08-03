@@ -3,7 +3,6 @@ import { createCanvas, loadImage, registerFont } from "canvas";
 import path from "path";
 import BotConsole from "../../class/console/BotConsole.js";
 import DynamicColor from "../../class/color/DynamicColor.js";
-import ColorFunctions from "../color/ColorFunctions.js";
 import SystemCheck from "../../class/client/SystemCheck.js";
 
 class WelcomeImageService {
