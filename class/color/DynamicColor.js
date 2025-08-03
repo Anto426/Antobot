@@ -315,10 +315,11 @@ class DynamicColor {
       throw new Error("Palette must be a non-empty array.");
     }
 
-    const darkestColor = palette[0];
-    const lightestColor = palette[palette.length - 1];
+    const palettesorted = this.sortPaletteByBrightness(palette);
+    const darkestColor = palettesorted[0];
+    const lightestColor = palettesorted[palettesorted.length - 1];
 
-    const avgBrightness = ColorFunctions.averageBrightness(palette);
+    const avgBrightness = ColorFunctions.averageBrightness(palettesorted);
     const BRIGHTNESS_THRESHOLD = 128;
 
     let baseTextColor;
