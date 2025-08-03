@@ -26,14 +26,14 @@
         "assets": {
             "canvas": {
                 "welcome_image": {
-                    "width": 3840,
-                    "height": 1350,
-                    "avatarSize": 750,
-                    "avatarBorderSize": 15,
+                    "width": 2560,
+                    "height": 900,
+                    "avatarSize": 500,
+                    "avatarBorderSize": 10,
                     "num_colors": 3,
-                    "welcomeTextSize": "225px",
-                    "nameTextSize": "150px",
-                    "countTextSize": "105px",
+                    "welcomeTextSize": "150px",
+                    "nameTextSize": "100px",
+                    "countTextSize": "70px",
                     "splashCount": 20
                 },
                 "fonts": {
