@@ -24,7 +24,7 @@
     "axios": "^1.11.0",
     "boxen": "^8.0.1",
     "canvas": "^3.1.2",
-    "chalk": "^5.4.1",
+    "chalk": "^5.5.0",
     "cli-table3": "^0.6.5",
     "colors": "^1.4.0",
     "colorthief": "^2.6.0",
