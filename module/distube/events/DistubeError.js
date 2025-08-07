@@ -28,6 +28,6 @@ export default {
       });
     }
 
-    await channel.send({ embeds: [embed] });
+    await queue.lastPlayingMessage.edit({ embeds: [embed] });
   },
 };

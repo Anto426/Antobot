@@ -30,7 +30,8 @@ async function sendReply({
         interaction.isButton() ||
         interaction.isAnySelectMenu() ||
         interaction.isModalSubmit()
-      )
+      ) &&
+      (interaction.replied || interaction.deferred)
     ) {
       BotConsole.info(
         "Payload effimero rilevato. Eseguo la logica di cancellazione e follow-up."

@@ -30,6 +30,6 @@ export default {
         }
       );
 
-    await queue.textChannel.send({ embeds: [embed] });
+    await queue.lastPlayingMessage.edit({ embeds: [embed] });
   },
 };
